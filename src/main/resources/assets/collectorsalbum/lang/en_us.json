@@ -924,6 +924,12 @@
   "card.category.collectorsalbum.mobs": "Mobs",
   "card.category.collectorsalbum.nature": "Nature",
   "card.category.collectorsalbum.items": "Items",
+  "card.rarity.common": "Common",
+  "card.rarity.uncommon": "Uncommon",
+  "card.rarity.rare": "Rare",
+  "card.rarity.epic": "Epic",
+  "card.rarity.legendary": "Legendary",
+  "card.rarity.mythical": "Mythical",
 
   "text.collectorsalbum.album.header": "Collector's album",
   "text.collectorsalbum.album.categories": "Categories",

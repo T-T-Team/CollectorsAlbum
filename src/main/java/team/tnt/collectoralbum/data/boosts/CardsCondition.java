@@ -70,9 +70,7 @@ public class CardsCondition implements ICardBoostCondition {
         Component categoryText = category != null ?
                 Component.literal(category.getTranslatedName().getString()).withStyle(category.getTooltipFormat()) :
                 wildcard;
-        Component rarityText = rarity != null ?
-                Component.literal(TextHelper.splitAndCapitalizeFirstWords(rarity.name(), "_+")).withStyle(rarity.getColor()):
-                wildcard;
+        Component rarityText = rarity != null ? rarity.getTranslatedName() : wildcard;
         return Component.translatable("text.collectorsalbum.album.boost.condition.cards", count, rarityText, categoryText).withStyle(ChatFormatting.GRAY);
     }
 
