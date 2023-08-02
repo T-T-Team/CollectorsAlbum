@@ -1,12 +1,14 @@
 package team.tnt.collectoralbum.common.item;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import team.tnt.collectoralbum.common.init.SoundRegistry;
 
 import java.util.function.Supplier;
 
 public enum CardRarity {
+
     COMMON(ChatFormatting.WHITE, SoundRegistry.FLIP_COMMON),
     UNCOMMON(ChatFormatting.GREEN, SoundRegistry.FLIP_UNCOMMON),
     RARE(ChatFormatting.BLUE, SoundRegistry.FLIP_RARE),
@@ -17,11 +19,13 @@ public enum CardRarity {
     final int value;
     final ChatFormatting color;
     final Supplier<SoundEvent> discoverySound;
+    final Component name;
 
     CardRarity(ChatFormatting color, Supplier<SoundEvent> discoverySound) {
         this.value = this.ordinal() + 1;
         this.color = color;
         this.discoverySound = discoverySound;
+        this.name = Component.translatable("card.rarity." + name().toLowerCase()).withStyle(color);
     }
 
     public SoundEvent getDiscoverySound() {
@@ -32,7 +36,7 @@ public enum CardRarity {
         return value;
     }
 
-    public ChatFormatting getColor() {
-        return color;
+    public Component getTranslatedName() {
+        return name;
     }
 }
