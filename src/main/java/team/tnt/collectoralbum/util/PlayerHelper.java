@@ -43,7 +43,7 @@ public final class PlayerHelper {
         CardDefinition definition = card.getCard();
         ICardCategory cardCategory = definition.category();
         SimpleContainer simpleContainer = container.forCategory(cardCategory);
-        int index = definition.cardNumber();
+        int index = definition.cardNumber() - 1;
         ItemStack equippedItemStack = simpleContainer.getItem(index);
         if (equippedItemStack.isEmpty()) {
             ItemStack movedCard = stack.copy();
