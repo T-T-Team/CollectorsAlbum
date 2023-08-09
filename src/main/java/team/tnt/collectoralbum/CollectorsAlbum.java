@@ -51,7 +51,6 @@ public class CollectorsAlbum {
 
         MinecraftForge.EVENT_BUS.addListener(this::registerReloadListener);
 
-
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             CollectorsAlbumClient client = CollectorsAlbumClient.getClient();
             eventBus.addListener(client::synchInit);
