@@ -20,6 +20,7 @@ public class ModConfig {
     public boolean requireTurnAllCards = false;
 
     @Configurable
+    @Configurable.Synchronized
     @Configurable.Comment("When allowed, all unpacked cards will be moved to your album if applicable")
     public boolean autoEquipUnpackedCards = true;
 }
