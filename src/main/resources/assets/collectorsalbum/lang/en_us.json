@@ -945,6 +945,7 @@
 
   "config.screen.collectorsalbum": "Collector's Album Config",
   "config.collectorsalbum.option.persistAlbumThroughDeath": "Persist album through death",
+  "config.collectorsalbum.option.autoEquipUnpackedCards": "Auto equip unpacked cards",
   "config.collectorsalbum.option.mobDrops": "Mob Card Pack Drops",
   "config.collectorsalbum.option.noDropWeight": "No Item Drop Weight",
   "config.collectorsalbum.option.commonDropWeight": "Common Drop Weight",
@@ -955,5 +956,5 @@
   "config.collectorsalbum.option.mythicalDropWeight": "Mythical Drop Weight",
   "config.collectorsalbum.option.requireTurnAllCards": "Require flip of all cards",
 
-  "text.config.collectorsalbum.mob_drops.weight_warning": "Using 0 as value is potentionally dangerous. Make sure atleast one category is set to 1+ value"
+  "text.config.collectorsalbum.mob_drops.weight_warning": "Using 0 as value is potentially dangerous. Make sure at least one category is set to 1+ value"
 }

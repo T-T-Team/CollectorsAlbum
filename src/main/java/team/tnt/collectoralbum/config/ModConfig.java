@@ -18,4 +18,8 @@ public class ModConfig {
     @Configurable
     @Configurable.Comment("When set to true no cards will be received from package unless you flip all cards")
     public boolean requireTurnAllCards = false;
+
+    @Configurable
+    @Configurable.Comment("When allowed, all unpacked cards will be moved to your album if applicable")
+    public boolean autoEquipUnpackedCards = true;
 }
