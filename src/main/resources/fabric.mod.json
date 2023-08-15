@@ -9,6 +9,9 @@
     "Toma",
     "Tomano"
   ],
+  "contributors": [
+    "Reivad"
+  ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/collectors-album",
     "sources": "https://github.com/Toma1O6/CollectorsAlbum"
@@ -33,7 +36,7 @@
     "minecraft": "~1.19",
     "java": ">=17",
 
-    "configuration": "^2.0.0"
+    "configuration": "^2.1.0"
   },
   "suggests": {
   }

@@ -1,7 +1,5 @@
 package team.tnt.collectoralbum.util.datagen;
 
-import ca.weblite.objc.Runtime;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
