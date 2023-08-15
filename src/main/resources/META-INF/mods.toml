@@ -30,6 +30,7 @@ displayName="Collector's Album" #mandatory
 logoFile="logo.png" #optional
 # A text field displayed in the mod UI
 authors="Toma, Tomano" #optional
+credits="Reivad for creating pack and card icons"
 # The description text for the mod (multi line!) (#mandatory)
 description='''
 Collect 150 custom cards to your album and gain extra bonuses
