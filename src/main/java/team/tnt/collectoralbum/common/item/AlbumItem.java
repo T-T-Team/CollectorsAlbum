@@ -21,7 +21,6 @@ import team.tnt.collectoralbum.CollectorsAlbum;
 import team.tnt.collectoralbum.client.CollectorsAlbumClient;
 import team.tnt.collectoralbum.common.container.AlbumContainer;
 import team.tnt.collectoralbum.common.menu.AlbumMenu;
-import team.tnt.collectoralbum.config.ModConfig;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +31,7 @@ public class AlbumItem extends Item implements IDeathPersistableItem {
     private static final String PAGE_INFO_TRANSLATION_KEY = "text.collectorsalbum.album.boost.paging";
 
     public AlbumItem() {
-        super(new Properties().tab(CollectorsAlbum.TAB).stacksTo(1));
+        super(new Properties().stacksTo(1));
     }
 
     @Override

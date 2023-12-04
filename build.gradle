@@ -25,7 +25,7 @@ archivesBaseName = "collectorsalbum-${loader}-${minecraft_version}"
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'official', version: '1.19.2'
+    mappings channel: 'official', version: "${minecraft_version}"
 
     runs {
         client {
@@ -76,13 +76,11 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.34'
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // Integrations
-    implementation fg.deobf("curse.maven:${quark_group}:${quark_file}") // Quark
-    implementation fg.deobf("curse.maven:${autoreg_group}:${autoreg_file}") // Quark dependency - autoreglib
     implementation fg.deobf("curse.maven:${configuration_group}:${configuration_file}") // Configuration API
 }
 

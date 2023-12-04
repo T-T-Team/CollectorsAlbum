@@ -2,7 +2,6 @@ package team.tnt.collectoralbum.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -14,6 +13,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import team.tnt.collectoralbum.CollectorsAlbum;
 import team.tnt.collectoralbum.common.AlbumStats;
@@ -187,7 +187,7 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
         }
 
         @Override
-        public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+        public void renderWidget(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
             RenderSystem.setShaderTexture(0, location);
@@ -195,10 +195,10 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
             Tesselator tesselator = Tesselator.getInstance();
             BufferBuilder bufferBuilder = tesselator.getBuilder();
             bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-            bufferBuilder.vertex(pose, x, y, 0).uv(0.0F, 0.0F).endVertex();
-            bufferBuilder.vertex(pose, x, y + width, 0).uv(0.0F, 1.0F).endVertex();
-            bufferBuilder.vertex(pose, x + height, y + width, 0).uv(1.0F, 1.0F).endVertex();
-            bufferBuilder.vertex(pose, x + height, y, 0).uv(1.0F, 0.0F).endVertex();
+            bufferBuilder.vertex(pose, getX(), getY(), 0).uv(0.0F, 0.0F).endVertex();
+            bufferBuilder.vertex(pose, getX(), getY() + width, 0).uv(0.0F, 1.0F).endVertex();
+            bufferBuilder.vertex(pose, getX() + height, getY() + width, 0).uv(1.0F, 1.0F).endVertex();
+            bufferBuilder.vertex(pose, getX() + height, getY(), 0).uv(1.0F, 0.0F).endVertex();
             tesselator.end();
         }
 
@@ -208,7 +208,7 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
         }
 
         @Override
-        public void updateNarration(NarrationElementOutput narrationElementOutput) {
+        public void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
         }
 
         @FunctionalInterface

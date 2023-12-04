@@ -2,8 +2,6 @@ package team.tnt.collectoralbum;
 
 import dev.toma.configuration.Configuration;
 import dev.toma.configuration.config.format.ConfigFormats;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -28,13 +26,6 @@ public class CollectorsAlbum {
 
     public static final Logger LOGGER = LogManager.getLogger(CollectorsAlbum.class);
     public static final String MODID = "collectorsalbum";
-
-    public static final CreativeModeTab TAB = new CreativeModeTab("collectorsalbum.tab") {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(ItemRegistry.ALBUM.get());
-        }
-    };
 
     public static final CardPackLootManager CARD_PACK_MANAGER = new CardPackLootManager();
     public static final AlbumCardBoostManager ALBUM_CARD_BOOST_MANAGER = new AlbumCardBoostManager();

@@ -3,7 +3,7 @@ package team.tnt.collectoralbum.data.boosts;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
@@ -44,7 +44,7 @@ public class ClearEffectsAction implements IAction {
         @Override
         public ClearEffectsAction fromJson(JsonObject data, OpType opType) throws JsonParseException {
             JsonArray array = GsonHelper.getAsJsonArray(data, "effects");
-            MobEffect[] effects = JsonHelper.resolveRegistryObjectsFromIdArray(array, Registry.MOB_EFFECT, MobEffect[]::new);
+            MobEffect[] effects = JsonHelper.resolveRegistryObjectsFromIdArray(array, BuiltInRegistries.MOB_EFFECT, MobEffect[]::new);
             return new ClearEffectsAction(effects);
         }
 

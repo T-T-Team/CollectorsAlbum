@@ -26,7 +26,7 @@ public class CardPackItem extends Item {
     private final ResourceLocation dropsProviderPath;
 
     public CardPackItem(ResourceLocation dropsProviderPath) {
-        super(new Properties().tab(CollectorsAlbum.TAB));
+        super(new Properties());
         this.dropsProviderPath = dropsProviderPath;
     }
 
