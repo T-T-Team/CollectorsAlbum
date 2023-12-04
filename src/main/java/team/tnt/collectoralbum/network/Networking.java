@@ -2,35 +2,33 @@ package team.tnt.collectoralbum.network;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraftforge.network.*;
 import team.tnt.collectoralbum.CollectorsAlbum;
 import team.tnt.collectoralbum.network.api.IPacket;
 import team.tnt.collectoralbum.network.packet.*;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.function.BiConsumer;
 
 public class Networking {
 
-    private static final String NETWORK_PROTOCOL_VERSION = "collectorsalbum-v1";
-    private static final SimpleChannel NETWORK_CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(CollectorsAlbum.MODID, "network"),
-            () -> NETWORK_PROTOCOL_VERSION,
-            NETWORK_PROTOCOL_VERSION::equals,
-            NETWORK_PROTOCOL_VERSION::equals
-    );
-    private static byte packetId;
+    private static final int VERSION = 1;
+    private static final SimpleChannel NETWORK_CHANNEL = ChannelBuilder.named(new ResourceLocation(CollectorsAlbum.MODID, "network"))
+            .networkProtocolVersion(1)
+            .clientAcceptedVersions((status, version) -> status == Channel.VersionTest.Status.PRESENT && version == VERSION)
+            .serverAcceptedVersions((status, version) -> status == Channel.VersionTest.Status.PRESENT && version == VERSION)
+            .simpleChannel();
 
     // Packet dispatching
     // --------------------------------------------------------------------------
 
     public static void dispatchServerPacket(IPacket<?> packet) {
-        NETWORK_CHANNEL.sendToServer(packet);
+        NETWORK_CHANNEL.send(packet, PacketDistributor.SERVER.noArg());
     }
 
     public static void dispatchClientPacket(ServerPlayer serverPlayerRef, IPacket<?> packet) {
-        NETWORK_CHANNEL.sendTo(packet, serverPlayerRef.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        NETWORK_CHANNEL.send(packet, PacketDistributor.PLAYER.with(serverPlayerRef));
     }
 
     // Packet registration
@@ -53,6 +51,10 @@ public class Networking {
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
-        NETWORK_CHANNEL.registerMessage(packetId++, packetClass, IPacket::encode, instance::decode, IPacket::handle);
+        NETWORK_CHANNEL.messageBuilder(packetClass)
+                .encoder(IPacket::encode)
+                .decoder(instance::decode)
+                .consumerNetworkThread((BiConsumer<T, CustomPayloadEvent.Context>) IPacket::handle)
+                .add();
     }
 }

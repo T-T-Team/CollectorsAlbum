@@ -1,7 +1,7 @@
 package team.tnt.collectoralbum.data.boosts;
 
 import com.google.gson.*;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -56,7 +56,7 @@ public class GiveMissingEffectAction implements IAction {
             for (JsonElement element : array) {
                 JsonObject effectJson = JsonHelper.asObject(element);
                 ResourceLocation effectId = new ResourceLocation(GsonHelper.getAsString(effectJson, "effect"));
-                MobEffect effect = Registry.MOB_EFFECT.get(effectId);
+                MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(effectId);
                 if (effect == null) {
                     throw new JsonSyntaxException("Unknown effect: " + effectId);
                 }

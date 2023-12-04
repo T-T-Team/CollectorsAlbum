@@ -4,7 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
@@ -30,7 +31,7 @@ public class TagCardProvider implements ICardDropProvider {
     public List<ItemStack> provideDrops() {
         Random random = new Random();
         List<Holder<Item>> holders = new ArrayList<>();
-        Registry.ITEM.getTagOrEmpty(tag).forEach(holders::add);
+        BuiltInRegistries.ITEM.getTagOrEmpty(tag).forEach(holders::add);
         if (holders.isEmpty()) {
             CollectorsAlbum.LOGGER.error("Attempted to provide items from empty or undefined tag {}", tag.location());
             return Collections.emptyList();
@@ -46,7 +47,7 @@ public class TagCardProvider implements ICardDropProvider {
         public TagCardProvider fromJson(JsonElement data) throws JsonParseException {
             JsonObject object = JsonHelper.asObject(data);
             ResourceLocation id = new ResourceLocation(GsonHelper.getAsString(object, "tag"));
-            TagKey<Item> tagKey = TagKey.create(Registry.ITEM_REGISTRY, id);
+            TagKey<Item> tagKey = TagKey.create(Registries.ITEM, id);
             return new TagCardProvider(tagKey);
         }
     }

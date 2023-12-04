@@ -4,8 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import team.tnt.collectoralbum.common.ICardCategory;
 import team.tnt.collectoralbum.common.container.AlbumContainer;
 import team.tnt.collectoralbum.common.init.CardCategoryRegistry;
@@ -43,14 +42,14 @@ public class RequestAlbumPagePacket extends AbstractNetworkPacket<RequestAlbumPa
     }
 
     @Override
-    protected void handlePacket(NetworkEvent.Context context) {
+    protected void handlePacket(CustomPayloadEvent.Context context) {
         ItemStack stack = context.getSender().getMainHandItem();
         if (stack.getItem() != ItemRegistry.ALBUM.get()) {
             return;
         }
         AlbumContainer container = new AlbumContainer(stack);
         ICardCategory category = this.category;
-        NetworkHooks.openScreen(context.getSender(), new SimpleMenuProvider((id, inv, player) -> new AlbumMenu(container, inv, id, category), CommonComponents.EMPTY), buffer -> {
+        context.getSender().openMenu(new SimpleMenuProvider((id, inv, player) -> new AlbumMenu(container, inv, id, category), CommonComponents.EMPTY), buffer -> {
             buffer.writeItem(stack);
             buffer.writeBoolean(category != null);
             if (category != null) {

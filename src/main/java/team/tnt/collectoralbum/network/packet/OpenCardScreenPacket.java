@@ -5,7 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import team.tnt.collectoralbum.client.screen.CardOpenScreen;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class OpenCardScreenPacket extends AbstractNetworkPacket<OpenCardScreenPa
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    protected void handlePacket(NetworkEvent.Context context) {
+    protected void handlePacket(CustomPayloadEvent.Context context) {
         CardOpenScreen screen = new CardOpenScreen(drops);
         Minecraft.getInstance().setScreen(screen);
     }

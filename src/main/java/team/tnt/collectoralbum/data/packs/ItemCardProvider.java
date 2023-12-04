@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
@@ -35,7 +35,7 @@ public class ItemCardProvider implements ICardDropProvider {
         public ItemCardProvider fromJson(JsonElement data) throws JsonParseException {
             JsonObject object = JsonHelper.asObject(data);
             ResourceLocation identifier = new ResourceLocation(GsonHelper.getAsString(object, "item"));
-            Item item = Registry.ITEM.get(identifier);
+            Item item = BuiltInRegistries.ITEM.get(identifier);
             if (item == Items.AIR) {
                 throw new JsonSyntaxException("Unknown item: " + identifier);
             }

@@ -16,7 +16,7 @@ public class ServerPlayerMixin {
     @Inject(method = "restoreFrom", at = @At("RETURN"))
     public void collectorsalbum$restoreAlbumItem(ServerPlayer that, boolean keepEverything, CallbackInfo ci) {
         ServerPlayer newPlayer = (ServerPlayer) (Object) this;
-        GameRules rules = newPlayer.level.getGameRules();
+        GameRules rules = newPlayer.level().getGameRules();
         if (rules.getBoolean(GameRules.RULE_KEEPINVENTORY) || keepEverything || that.isSpectator()) {
             return;
         }

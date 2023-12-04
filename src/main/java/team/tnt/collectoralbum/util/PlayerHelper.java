@@ -17,9 +17,9 @@ public final class PlayerHelper {
 
     public static void giveItem(Player player, ItemStack itemStack) {
         if (!player.addItem(itemStack)) {
-            ItemEntity entity = new ItemEntity(player.level, player.getX(), player.getY(), player.getZ(), itemStack.copy());
+            ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY(), player.getZ(), itemStack.copy());
             entity.setNoPickUpDelay();
-            player.level.addFreshEntity(entity);
+            player.level().addFreshEntity(entity);
         }
         if (!CollectorsAlbum.config.autoEquipUnpackedCards)
             return;
@@ -60,10 +60,10 @@ public final class PlayerHelper {
             moved.setCount(1);
             simpleContainer.setItem(index, moved);
             stack.shrink(1);
-            if (!player.level.isClientSide) {
-                ItemEntity entity = new ItemEntity(player.level, player.getX(), player.getY(), player.getZ(), prevItemStack);
+            if (!player.level().isClientSide) {
+                ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY(), player.getZ(), prevItemStack);
                 entity.setNoPickUpDelay();
-                player.level.addFreshEntity(entity);
+                player.level().addFreshEntity(entity);
             }
             return true;
         }

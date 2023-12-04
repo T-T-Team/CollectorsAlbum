@@ -1,9 +1,7 @@
 package team.tnt.collectoralbum.network.api;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public interface IPacket<T> {
 
@@ -11,5 +9,5 @@ public interface IPacket<T> {
 
     T decode(FriendlyByteBuf buffer);
 
-    void handle(Supplier<NetworkEvent.Context> supplier);
+    void handle(CustomPayloadEvent.Context supplier);
 }

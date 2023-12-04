@@ -1,9 +1,12 @@
 package team.tnt.collectoralbum.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -14,6 +17,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import team.tnt.collectoralbum.CollectorsAlbum;
 import team.tnt.collectoralbum.common.AlbumStats;
@@ -83,11 +87,11 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
     }
 
     @Override
-    protected void renderBg(PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, this.menu.isTitle() ? TITLE : BACKGROUND);
-        Matrix4f pose = poseStack.last().pose();
+        Matrix4f pose = graphics.pose().last().pose();
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferBuilder = tesselator.getBuilder();
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
@@ -99,14 +103,14 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
     }
 
     @Override
-    protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         if (this.menu.isTitle()) {
             // left page
             // header
             int headerWidth = font.width(TEXT_HEADER);
-            font.draw(poseStack, TEXT_HEADER, 20 + (130 - headerWidth) / 2.0F, 13, 0x7C5D4D);
+            graphics.drawString(font, TEXT_HEADER.getString(), 20 + (130 - headerWidth) / 2.0F, 13, 0x7C5D4D, false);
             // rarity pcts
-            font.draw(poseStack, TEXT_RARITIES, 27, 55, 0x7C5D4D);
+            graphics.drawString(font, TEXT_RARITIES, 27, 55, 0x7C5D4D, false);
             int i = 0;
             Map<CardRarity, Integer> byRarity = stats.getCardsByRarity();
             for (CardRarity rarity : CardRarity.values()) {
@@ -114,18 +118,18 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
                 String name = rarity.name();
                 String pct = Math.round(value / (float) stats.getCardsCollected() * 100) + "%";
                 String text = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase() + ": " + pct;
-                font.draw(poseStack, text, 30, 67 + i++ * 10, 0x7C5D4D);
+                graphics.drawString(font, text, 30, 67 + i++ * 10, 0x7C5D4D, false);
             }
             // total cards
             int collected = stats.getCardsCollected();
             int total = stats.getTotalCards();
-            font.draw(poseStack, TEXT_TOTAL_CARDS.apply(collected, total), 27, 35, 0x7C5D4D);
+            graphics.drawString(font, TEXT_TOTAL_CARDS.apply(collected, total), 27, 35, 0x7C5D4D, false);
             // points
             int points = stats.getPoints();
-            font.draw(poseStack, TEXT_POINTS.apply(points), 27, 80 + i * 10, 0x7C5D4D);
+            graphics.drawString(font, TEXT_POINTS.apply(points), 27, 80 + i * 10, 0x7C5D4D, false);
 
             // right page
-            font.draw(poseStack, TEXT_CATEGORIES, 164, 35, 0x7C5D4D);
+            graphics.drawString(font, TEXT_CATEGORIES, 164, 35, 0x7C5D4D, false);
             int j = 0;
             Map<ICardCategory, List<ICard>> map = stats.getCardsByCategory();
             for (ICardCategory category : CardCategoryRegistry.getValues().stream().sorted().toArray(ICardCategory[]::new)) {
@@ -133,7 +137,7 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
                 Component displayName = category.getTranslatedName();
                 String count = value + " / " + category.getCapacity();
                 String text = displayName.getString() + " - " + count;
-                font.draw(poseStack, text, 167, 47 + j++ * 10, 0x7C5D4D);
+                graphics.drawString(font, text, 167, 47 + j++ * 10, 0x7C5D4D, false);
             }
             return;
         }
@@ -141,19 +145,19 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
             if (slot instanceof AlbumMenu.CardSlot cardSlot) {
                 int cardNumber = cardSlot.getCardNumber();
                 String text = "#" + cardNumber;
-                font.draw(poseStack, text, slot.x + (18 - font.width(text)) / 2.0F - 1, slot.y + 18, 0x7C5D4D);
+                graphics.drawString(font, text, slot.x + (18 - font.width(text)) / 2.0F - 1, slot.y + 18, 0x7C5D4D, false);
             }
         }
         ICardCategory category = menu.getCategory();
         MutableComponent component = Component.literal(category.getTranslatedName().getString()).withStyle(ChatFormatting.ITALIC);
-        font.draw(poseStack, component, 40, 10, 0x7C5D4D);
+        graphics.drawString(font, component, 40, 10, 0x7C5D4D, false);
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
-        renderBackground(poseStack);
-        super.render(poseStack, mouseX, mouseY, partialTick);
-        renderTooltip(poseStack, mouseX, mouseY);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        renderBackground(graphics, mouseX, mouseY, partialTick);
+        super.render(graphics, mouseX, mouseY, partialTick);
+        renderTooltip(graphics, mouseX, mouseY);
     }
 
     protected void clickPrevPage(ArrowWidget widget) {
@@ -187,28 +191,28 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
         }
 
         @Override
-        public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+        public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
             RenderSystem.setShaderTexture(0, location);
-            Matrix4f pose = poseStack.last().pose();
+            Matrix4f pose = graphics.pose().last().pose();
             Tesselator tesselator = Tesselator.getInstance();
             BufferBuilder bufferBuilder = tesselator.getBuilder();
             bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-            bufferBuilder.vertex(pose, x, y, 0).uv(0.0F, 0.0F).endVertex();
-            bufferBuilder.vertex(pose, x, y + width, 0).uv(0.0F, 1.0F).endVertex();
-            bufferBuilder.vertex(pose, x + height, y + width, 0).uv(1.0F, 1.0F).endVertex();
-            bufferBuilder.vertex(pose, x + height, y, 0).uv(1.0F, 0.0F).endVertex();
+            bufferBuilder.vertex(pose, getX(), getY(), 0).uv(0.0F, 0.0F).endVertex();
+            bufferBuilder.vertex(pose, getX(), getY() + width, 0).uv(0.0F, 1.0F).endVertex();
+            bufferBuilder.vertex(pose, getX() + height, getY() + width, 0).uv(1.0F, 1.0F).endVertex();
+            bufferBuilder.vertex(pose, getX() + height, getY(), 0).uv(1.0F, 0.0F).endVertex();
             tesselator.end();
+        }
+
+        @Override
+        protected void updateWidgetNarration(NarrationElementOutput p_259858_) {
         }
 
         @Override
         public void onClick(double mouseX, double mouseY) {
             clickResponder.onClick(this);
-        }
-
-        @Override
-        public void updateNarration(NarrationElementOutput narrationElementOutput) {
         }
 
         @FunctionalInterface

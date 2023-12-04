@@ -2,6 +2,7 @@ package team.tnt.collectoralbum.mixins;
 
 import net.minecraft.network.Connection;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.players.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,7 +15,7 @@ import team.tnt.collectoralbum.network.packet.SendAlbumBoostsPacket;
 public abstract class PlayerListMixin {
 
     @Inject(method = "placeNewPlayer", at = @At("TAIL"))
-    public void collectorsalbum_onPlayerLogIn(Connection connection, ServerPlayer player, CallbackInfo ci) {
+    public void collectorsalbum_onPlayerLogIn(Connection connection, ServerPlayer player, CommonListenerCookie cookie, CallbackInfo ci) {
         Networking.dispatchClientPacket(player, new SendAlbumBoostsPacket());
     }
 }

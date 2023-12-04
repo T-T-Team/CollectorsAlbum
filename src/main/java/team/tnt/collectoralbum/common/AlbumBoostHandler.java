@@ -19,14 +19,14 @@ public class AlbumBoostHandler {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         Player entity = event.player;
-        if (event.phase == TickEvent.Phase.START || entity.level.isClientSide)
+        if (event.phase == TickEvent.Phase.START || entity.level().isClientSide)
             return;
         ServerPlayer serverPlayer = (ServerPlayer) entity;
         tickPlayer(serverPlayer);
     }
 
     private static void tickPlayer(ServerPlayer player) {
-        if (player.level.getGameTime() % 50L != 0L) return;
+        if (player.level().getGameTime() % 50L != 0L) return;
         AbstractContainerMenu inventory = player.containerMenu;
         Optional<AlbumCardBoostCollection> data = CollectorsAlbum.ALBUM_CARD_BOOST_MANAGER.getBoosts();
         data.ifPresent(ops -> {

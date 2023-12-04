@@ -1,7 +1,7 @@
 package team.tnt.collectoralbum.network.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import team.tnt.collectoralbum.CollectorsAlbum;
 import team.tnt.collectoralbum.network.api.IPacket;
 
@@ -23,6 +23,6 @@ public class SendAlbumBoostsPacket implements IPacket<SendAlbumBoostsPacket> {
     }
 
     @Override
-    public void handle(Supplier<NetworkEvent.Context> supplier) {
+    public void handle(CustomPayloadEvent.Context supplier) {
     }
 }

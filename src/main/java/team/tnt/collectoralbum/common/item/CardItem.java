@@ -1,18 +1,15 @@
 package team.tnt.collectoralbum.common.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import team.tnt.collectoralbum.CollectorsAlbum;
 import team.tnt.collectoralbum.common.CardCategoryIndexPool;
 import team.tnt.collectoralbum.common.CardDefinition;
-import team.tnt.collectoralbum.integration.IntegrationsHelper;
 
 import java.util.List;
 
@@ -28,16 +25,10 @@ public class CardItem extends Item implements ICard {
     private final int cardNumber;
 
     public CardItem(CardRarity rarity, CardDefinition card) {
-        super(new Properties().tab(CollectorsAlbum.TAB));
+        super(new Properties());
         this.card = card;
         this.rarity = rarity;
         this.cardNumber = CardCategoryIndexPool.getIndexOffset(card.category()) + card.cardNumber();
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return IntegrationsHelper.getCardCapabilityProvider(stack, nbt);
     }
 
     @Override

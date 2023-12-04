@@ -4,10 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.ParallelDispatchEvent;
 import team.tnt.collectoralbum.CollectorsAlbum;
 import team.tnt.collectoralbum.api.IAlbumScreenFactory;
 import team.tnt.collectoralbum.client.screen.AlbumScreen;
@@ -27,16 +24,14 @@ public final class CollectorsAlbumClient {
         return INSTANCE;
     }
 
-    public void synchInit(ParallelDispatchEvent event) {
-        event.enqueueWork(() -> {
-            MenuScreens.register(MenuTypes.ALBUM.get(), (AlbumMenu menu, Inventory inventory, Component title) -> {
-                ICardCategory category = menu.getCategory();
-                if (category == null) {
-                    return new AlbumScreen(menu, inventory, title);
-                }
-                IAlbumScreenFactory factory = category.getAlbumScreenFactory();
-                return factory.createAlbumScreen(menu, inventory, title);
-            });
+    public void synchInit() {
+        MenuScreens.register(MenuTypes.ALBUM.get(), (AlbumMenu menu, Inventory inventory, Component title) -> {
+            ICardCategory category = menu.getCategory();
+            if (category == null) {
+                return new AlbumScreen(menu, inventory, title);
+            }
+            IAlbumScreenFactory factory = category.getAlbumScreenFactory();
+            return factory.createAlbumScreen(menu, inventory, title);
         });
     }
 
