@@ -1,0 +1,30 @@
+{
+  "cardNumber": 95,
+  "group": "collectorsalbum:nature",
+  "itemMap": {
+    "collectorsalbum:common_acacia_sapling_card": {
+      "rarity": "COMMON",
+      "extraPoints": 0
+    },
+    "collectorsalbum:uncommon_acacia_sapling_card": {
+      "rarity": "UNCOMMON",
+      "extraPoints": 0
+    },
+    "collectorsalbum:rare_acacia_sapling_card": {
+      "rarity": "RARE",
+      "extraPoints": 0
+    },
+    "collectorsalbum:epic_acacia_sapling_card": {
+      "rarity": "EPIC",
+      "extraPoints": 0
+    },
+    "collectorsalbum:legendary_acacia_sapling_card": {
+      "rarity": "LEGENDARY",
+      "extraPoints": 0
+    },
+    "collectorsalbum:mythical_acacia_sapling_card": {
+      "rarity": "MYTHICAL",
+      "extraPoints": 0
+    }
+  }
+}

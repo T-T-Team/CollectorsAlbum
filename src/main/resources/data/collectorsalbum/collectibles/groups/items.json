@@ -1,0 +1,37 @@
+{
+  "cards": [
+    "collectorsalbum:honeycomb_card",
+    "collectorsalbum:firework_rocket_card",
+    "collectorsalbum:ender_eye_card",
+    "collectorsalbum:emerald_card",
+    "collectorsalbum:bell_card",
+    "collectorsalbum:compass_card",
+    "collectorsalbum:redstone_card",
+    "collectorsalbum:netherite_ingot_card",
+    "collectorsalbum:glowstone_dust_card",
+    "collectorsalbum:nautilus_shell_card",
+    "collectorsalbum:iron_ingot_card",
+    "collectorsalbum:spyglass_card",
+    "collectorsalbum:beacon_card",
+    "collectorsalbum:music_disc_card",
+    "collectorsalbum:amethyst_shard_card",
+    "collectorsalbum:brewing_stand_card",
+    "collectorsalbum:heart_of_the_sea_card",
+    "collectorsalbum:diamond_card",
+    "collectorsalbum:cookie_card",
+    "collectorsalbum:enchantment_table_card",
+    "collectorsalbum:gold_ingot_card",
+    "collectorsalbum:lantern_card",
+    "collectorsalbum:clock_card",
+    "collectorsalbum:lapis_lazuli_card",
+    "collectorsalbum:campfire_card",
+    "collectorsalbum:nether_star_card",
+    "collectorsalbum:feather_card",
+    "collectorsalbum:coal_card",
+    "collectorsalbum:ender_pearl_card",
+    "collectorsalbum:blaze_powder_card"
+  ],
+  "displayStyle": {
+    "color": "white"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "cardNumber": 87,
+  "group": "collectorsalbum:mobs",
+  "itemMap": {
+    "collectorsalbum:common_bat_card": {
+      "rarity": "COMMON",
+      "extraPoints": 0
+    },
+    "collectorsalbum:uncommon_bat_card": {
+      "rarity": "UNCOMMON",
+      "extraPoints": 0
+    },
+    "collectorsalbum:rare_bat_card": {
+      "rarity": "RARE",
+      "extraPoints": 0
+    },
+    "collectorsalbum:epic_bat_card": {
+      "rarity": "EPIC",
+      "extraPoints": 0
+    },
+    "collectorsalbum:legendary_bat_card": {
+      "rarity": "LEGENDARY",
+      "extraPoints": 0
+    },
+    "collectorsalbum:mythical_bat_card": {
+      "rarity": "MYTHICAL",
+      "extraPoints": 0
+    }
+  }
+}

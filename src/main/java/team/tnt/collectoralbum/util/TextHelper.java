@@ -1,6 +1,7 @@
 package team.tnt.collectoralbum.util;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TreeMap;
 
@@ -18,7 +19,7 @@ public final class TextHelper {
 
     public static String splitAndCapitalizeFirstWords(String raw, String regex) {
         return Arrays.stream(raw.split(regex))
-                .map(w -> w.substring(0, 1).toUpperCase() + w.substring(1).toLowerCase())
+                .map(w -> w.substring(0, 1).toUpperCase(Locale.ROOT) + w.substring(1).toLowerCase(Locale.ROOT))
                 .reduce((s1, s2) -> s1 + " " + s2)
                 .orElse("NULL");
     }

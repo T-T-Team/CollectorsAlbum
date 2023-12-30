@@ -1,0 +1,30 @@
+{
+  "cardNumber": 136,
+  "group": "collectorsalbum:items",
+  "itemMap": {
+    "collectorsalbum:common_ender_pearl_card": {
+      "rarity": "COMMON",
+      "extraPoints": 0
+    },
+    "collectorsalbum:uncommon_ender_pearl_card": {
+      "rarity": "UNCOMMON",
+      "extraPoints": 0
+    },
+    "collectorsalbum:rare_ender_pearl_card": {
+      "rarity": "RARE",
+      "extraPoints": 0
+    },
+    "collectorsalbum:epic_ender_pearl_card": {
+      "rarity": "EPIC",
+      "extraPoints": 0
+    },
+    "collectorsalbum:legendary_ender_pearl_card": {
+      "rarity": "LEGENDARY",
+      "extraPoints": 0
+    },
+    "collectorsalbum:mythical_ender_pearl_card": {
+      "rarity": "MYTHICAL",
+      "extraPoints": 0
+    }
+  }
+}

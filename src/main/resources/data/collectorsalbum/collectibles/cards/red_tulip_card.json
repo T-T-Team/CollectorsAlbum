@@ -1,0 +1,30 @@
+{
+  "cardNumber": 103,
+  "group": "collectorsalbum:nature",
+  "itemMap": {
+    "collectorsalbum:common_red_tulip_card": {
+      "rarity": "COMMON",
+      "extraPoints": 0
+    },
+    "collectorsalbum:uncommon_red_tulip_card": {
+      "rarity": "UNCOMMON",
+      "extraPoints": 0
+    },
+    "collectorsalbum:rare_red_tulip_card": {
+      "rarity": "RARE",
+      "extraPoints": 0
+    },
+    "collectorsalbum:epic_red_tulip_card": {
+      "rarity": "EPIC",
+      "extraPoints": 0
+    },
+    "collectorsalbum:legendary_red_tulip_card": {
+      "rarity": "LEGENDARY",
+      "extraPoints": 0
+    },
+    "collectorsalbum:mythical_red_tulip_card": {
+      "rarity": "MYTHICAL",
+      "extraPoints": 0
+    }
+  }
+}

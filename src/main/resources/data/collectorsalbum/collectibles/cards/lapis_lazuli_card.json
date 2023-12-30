@@ -1,0 +1,30 @@
+{
+  "cardNumber": 132,
+  "group": "collectorsalbum:items",
+  "itemMap": {
+    "collectorsalbum:common_lapis_lazuli_card": {
+      "rarity": "COMMON",
+      "extraPoints": 0
+    },
+    "collectorsalbum:uncommon_lapis_lazuli_card": {
+      "rarity": "UNCOMMON",
+      "extraPoints": 0
+    },
+    "collectorsalbum:rare_lapis_lazuli_card": {
+      "rarity": "RARE",
+      "extraPoints": 0
+    },
+    "collectorsalbum:epic_lapis_lazuli_card": {
+      "rarity": "EPIC",
+      "extraPoints": 0
+    },
+    "collectorsalbum:legendary_lapis_lazuli_card": {
+      "rarity": "LEGENDARY",
+      "extraPoints": 0
+    },
+    "collectorsalbum:mythical_lapis_lazuli_card": {
+      "rarity": "MYTHICAL",
+      "extraPoints": 0
+    }
+  }
+}

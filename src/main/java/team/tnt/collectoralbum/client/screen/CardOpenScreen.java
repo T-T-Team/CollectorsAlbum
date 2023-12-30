@@ -1,5 +1,7 @@
 package team.tnt.collectoralbum.client.screen;
 
+import api.tnt.collectoralbum.CollectorsAlbumApi;
+import api.tnt.collectoralbum.cards.CollectibleCard;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -26,13 +28,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Matrix4f;
 import team.tnt.collectoralbum.CollectorsAlbum;
-import team.tnt.collectoralbum.common.item.ICard;
 import team.tnt.collectoralbum.network.Networking;
 import team.tnt.collectoralbum.network.packet.RequestCardPackDropPacket;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class CardOpenScreen extends Screen {
@@ -135,11 +137,9 @@ public class CardOpenScreen extends Screen {
             this.targetY = targetY;
             ResourceLocation itemId = ForgeRegistries.ITEMS.getKey(stack.getItem());
             this.itemTexture = new ResourceLocation(itemId.getNamespace(), "textures/item/" + itemId.getPath() + ".png");
-            if (stack.getItem() instanceof ICard card) {
-                this.discoverySound = card.getCardRarity().getDiscoverySound();
-            } else {
-                this.discoverySound = null;
-            }
+            Optional<CollectibleCard> optional = CollectorsAlbumApi.getCardProperties(stack.getItem());
+            this.discoverySound = optional.map(card -> card.getProperties(stack.getItem()).rarity().getDiscoverySound())
+                    .orElse(null);
         }
 
         public void setAnimTime(int time) {

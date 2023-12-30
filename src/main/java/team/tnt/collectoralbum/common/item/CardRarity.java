@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import team.tnt.collectoralbum.common.init.SoundRegistry;
 
+import java.util.Locale;
 import java.util.function.Supplier;
 
 public enum CardRarity {
@@ -25,7 +26,7 @@ public enum CardRarity {
         this.value = this.ordinal() + 1;
         this.color = color;
         this.discoverySound = discoverySound;
-        this.name = Component.translatable("card.rarity." + name().toLowerCase()).withStyle(color);
+        this.name = Component.translatable("card.rarity." + name().toLowerCase(Locale.ROOT)).withStyle(color);
     }
 
     public SoundEvent getDiscoverySound() {

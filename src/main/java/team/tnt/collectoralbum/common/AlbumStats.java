@@ -1,3 +1,4 @@
+/*
 package team.tnt.collectoralbum.common;
 
 import net.minecraft.nbt.CompoundTag;
@@ -96,3 +97,4 @@ public class AlbumStats {
         map.put(key, value);
     }
 }
+*/

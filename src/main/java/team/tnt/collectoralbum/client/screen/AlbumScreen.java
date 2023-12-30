@@ -9,33 +9,23 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.Slot;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import team.tnt.collectoralbum.CollectorsAlbum;
-import team.tnt.collectoralbum.common.AlbumStats;
-import team.tnt.collectoralbum.common.ICardCategory;
 import team.tnt.collectoralbum.common.init.CardCategoryRegistry;
-import team.tnt.collectoralbum.common.item.CardRarity;
-import team.tnt.collectoralbum.common.item.ICard;
-import team.tnt.collectoralbum.common.menu.AlbumMenu;
 import team.tnt.collectoralbum.network.Networking;
 import team.tnt.collectoralbum.network.packet.RequestAlbumPagePacket;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
+public class AlbumScreen extends Screen {
 
     private static final ResourceLocation TITLE = new ResourceLocation(CollectorsAlbum.MODID, "textures/screen/album_title.png");
     private static final ResourceLocation BACKGROUND = new ResourceLocation(CollectorsAlbum.MODID, "textures/screen/album.png");
@@ -50,19 +40,15 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
     private static final BiFunction<Integer, Integer, MutableComponent> TEXT_TOTAL_CARDS = (cards, total) -> Component.translatable("text.collectorsalbum.album.total_cards", cards, total);
 
     private final int pageIndex;
-    private AlbumStats stats;
 
-    public AlbumScreen(AlbumMenu abstractContainerMenu, Inventory inventory, Component component) {
-        super(abstractContainerMenu, inventory, component);
-        this.imageWidth = 306;
-        this.imageHeight = 257;
-        this.pageIndex = menu.isTitle() ? 0 : menu.getCategoryIndex();
+    public AlbumScreen() {
+        super(Component.translatable("screen.collectorsalbum.album"));
+        this.pageIndex = 0;
     }
 
     @Override
     protected void init() {
-        super.init();
-        if (pageIndex > 0) {
+        /*if (pageIndex > 0) {
             ArrowWidget widget = addRenderableWidget(new ArrowWidget(leftPos + 18, topPos + 5, 16, 16, ARROW_LEFT));
             widget.setOnClickResponder(this::clickPrevPage);
         }
@@ -70,7 +56,7 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
             ArrowWidget widget = addRenderableWidget(new ArrowWidget(leftPos + 265, topPos + 4, 16, 16, ARROW_RIGHT));
             widget.setOnClickResponder(this::clickNextPage);
         }
-        this.stats = menu.getContainer().getStats();
+        this.stats = menu.getContainer().getStats();*/
     }
 
     @Override
@@ -86,9 +72,9 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
-    @Override
+    //@Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        /*RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, this.menu.isTitle() ? TITLE : BACKGROUND);
         Matrix4f pose = graphics.pose().last().pose();
@@ -99,12 +85,12 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
         bufferBuilder.vertex(pose, leftPos, topPos + imageHeight, 0).uv(0.0F, 1.0F).endVertex();
         bufferBuilder.vertex(pose, leftPos + imageWidth, topPos + imageHeight, 0).uv(1.0F, 1.0F).endVertex();
         bufferBuilder.vertex(pose, leftPos + imageWidth, topPos, 0).uv(1.0F, 0.0F).endVertex();
-        tesselator.end();
+        tesselator.end()*/
     }
 
-    @Override
+    //@Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        if (this.menu.isTitle()) {
+        /*if (this.menu.isTitle()) {
             // left page
             // header
             int headerWidth = font.width(TEXT_HEADER);
@@ -117,7 +103,7 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
                 int value = byRarity.getOrDefault(rarity, 0);
                 String name = rarity.name();
                 String pct = Math.round(value / (float) stats.getCardsCollected() * 100) + "%";
-                String text = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase() + ": " + pct;
+                String text = name.substring(0, 1).toUpperCase(Locale.ROOT) + name.substring(1).toLowerCase() + ": " + pct;
                 graphics.drawString(font, text, 30, 67 + i++ * 10, 0x7C5D4D, false);
             }
             // total cards
@@ -150,14 +136,13 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
         }
         ICardCategory category = menu.getCategory();
         MutableComponent component = Component.literal(category.getTranslatedName().getString()).withStyle(ChatFormatting.ITALIC);
-        graphics.drawString(font, component, 40, 10, 0x7C5D4D, false);
+        graphics.drawString(font, component, 40, 10, 0x7C5D4D, false);*/
     }
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         renderBackground(graphics, mouseX, mouseY, partialTick);
         super.render(graphics, mouseX, mouseY, partialTick);
-        renderTooltip(graphics, mouseX, mouseY);
     }
 
     protected void clickPrevPage(ArrowWidget widget) {
@@ -171,8 +156,9 @@ public class AlbumScreen extends AbstractContainerScreen<AlbumMenu> {
     protected void changePage(int indexOffset) {
         int nextIndex = this.pageIndex + indexOffset;
         if (nextIndex < 0 || nextIndex > CardCategoryRegistry.getCount()) return;
-        ICardCategory category = nextIndex == 0 ? null : CardCategoryRegistry.byIndex(nextIndex - 1);
-        Networking.dispatchServerPacket(new RequestAlbumPagePacket(category));
+        // TODO
+        //ICardCategory category = nextIndex == 0 ? null : CardCategoryRegistry.byIndex(nextIndex - 1);
+        //Networking.dispatchServerPacket(new RequestAlbumPagePacket(category));
     }
 
     protected static final class ArrowWidget extends AbstractWidget {

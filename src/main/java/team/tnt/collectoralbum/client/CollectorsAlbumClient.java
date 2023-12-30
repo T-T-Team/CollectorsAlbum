@@ -1,16 +1,8 @@
 package team.tnt.collectoralbum.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.event.TickEvent;
 import team.tnt.collectoralbum.CollectorsAlbum;
-import team.tnt.collectoralbum.api.IAlbumScreenFactory;
-import team.tnt.collectoralbum.client.screen.AlbumScreen;
-import team.tnt.collectoralbum.common.ICardCategory;
-import team.tnt.collectoralbum.common.init.MenuTypes;
-import team.tnt.collectoralbum.common.menu.AlbumMenu;
 import team.tnt.collectoralbum.data.boosts.OpType;
 
 public final class CollectorsAlbumClient {
@@ -22,17 +14,6 @@ public final class CollectorsAlbumClient {
 
     public static CollectorsAlbumClient getClient() {
         return INSTANCE;
-    }
-
-    public void synchInit() {
-        MenuScreens.register(MenuTypes.ALBUM.get(), (AlbumMenu menu, Inventory inventory, Component title) -> {
-            ICardCategory category = menu.getCategory();
-            if (category == null) {
-                return new AlbumScreen(menu, inventory, title);
-            }
-            IAlbumScreenFactory factory = category.getAlbumScreenFactory();
-            return factory.createAlbumScreen(menu, inventory, title);
-        });
     }
 
     public void handleClientTick(TickEvent.ClientTickEvent event) {

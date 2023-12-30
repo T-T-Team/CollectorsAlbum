@@ -1,0 +1,37 @@
+{
+  "cards": [
+    "collectorsalbum:stone_sword_card",
+    "collectorsalbum:golden_sword_card",
+    "collectorsalbum:stone_pickaxe_card",
+    "collectorsalbum:diamond_shovel_card",
+    "collectorsalbum:iron_sword_card",
+    "collectorsalbum:stone_shovel_card",
+    "collectorsalbum:wooden_axe_card",
+    "collectorsalbum:wooden_hoe_card",
+    "collectorsalbum:stone_hoe_card",
+    "collectorsalbum:golden_axe_card",
+    "collectorsalbum:golden_pickaxe_card",
+    "collectorsalbum:diamond_hoe_card",
+    "collectorsalbum:diamond_pickaxe_card",
+    "collectorsalbum:iron_shovel_card",
+    "collectorsalbum:iron_axe_card",
+    "collectorsalbum:iron_hoe_card",
+    "collectorsalbum:golden_shovel_card",
+    "collectorsalbum:wooden_pickaxe_card",
+    "collectorsalbum:wooden_shovel_card",
+    "collectorsalbum:netherite_shovel_card",
+    "collectorsalbum:netherite_hoe_card",
+    "collectorsalbum:netherite_axe_card",
+    "collectorsalbum:netherite_sword_card",
+    "collectorsalbum:wooden_sword_card",
+    "collectorsalbum:iron_pickaxe_card",
+    "collectorsalbum:stone_axe_card",
+    "collectorsalbum:golden_hoe_card",
+    "collectorsalbum:netherite_pickaxe_card",
+    "collectorsalbum:diamond_sword_card",
+    "collectorsalbum:diamond_axe_card"
+  ],
+  "displayStyle": {
+    "color": "yellow"
+  }
+}

@@ -9,8 +9,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import team.tnt.collectoralbum.CollectorsAlbum;
 import team.tnt.collectoralbum.common.init.ItemRegistry;
-import team.tnt.collectoralbum.common.item.CardItem;
-import team.tnt.collectoralbum.common.item.CardPackItem;
 
 public final class CreativeTabs {
 
@@ -22,7 +20,7 @@ public final class CreativeTabs {
             .displayItems((parameters, output) -> {
                 output.accept(ItemRegistry.ALBUM.get());
                 ForgeRegistries.ITEMS.getValues().stream()
-                        .filter(item -> item instanceof CardPackItem || item instanceof CardItem)
+                        .filter(item -> ForgeRegistries.ITEMS.getKey(item).getNamespace().equals(CollectorsAlbum.MODID))
                         .forEach(output::accept);
             })
             .build()

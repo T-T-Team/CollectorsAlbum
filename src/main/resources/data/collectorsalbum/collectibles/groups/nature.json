@@ -1,0 +1,37 @@
+{
+  "cards": [
+    "collectorsalbum:sweet_berries_card",
+    "collectorsalbum:red_mushroom_card",
+    "collectorsalbum:jungle_sapling_card",
+    "collectorsalbum:nether_wart_card",
+    "collectorsalbum:allium_card",
+    "collectorsalbum:dead_bush_card",
+    "collectorsalbum:dark_oak_sapling_card",
+    "collectorsalbum:beetroot_card",
+    "collectorsalbum:bamboo_card",
+    "collectorsalbum:acacia_sapling_card",
+    "collectorsalbum:oxeye_daisy_card",
+    "collectorsalbum:blue_orchid_card",
+    "collectorsalbum:birch_sapling_card",
+    "collectorsalbum:brown_mushroom_card",
+    "collectorsalbum:potato_card",
+    "collectorsalbum:glow_berries_card",
+    "collectorsalbum:golden_carrot_card",
+    "collectorsalbum:melon_slice_card",
+    "collectorsalbum:azure_bluet_card",
+    "collectorsalbum:golden_apple_card",
+    "collectorsalbum:kelp_card",
+    "collectorsalbum:spruce_sapling_card",
+    "collectorsalbum:sugar_cane_card",
+    "collectorsalbum:poppy_card",
+    "collectorsalbum:red_tulip_card",
+    "collectorsalbum:wheat_card",
+    "collectorsalbum:apple_card",
+    "collectorsalbum:carrot_card",
+    "collectorsalbum:oak_sapling_card",
+    "collectorsalbum:dandelion_card"
+  ],
+  "displayStyle": {
+    "color": "green"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "cards": [
+    "collectorsalbum:piglin_brute_card",
+    "collectorsalbum:ghast_card",
+    "collectorsalbum:chicken_card",
+    "collectorsalbum:ender_dragon_card",
+    "collectorsalbum:witch_card",
+    "collectorsalbum:zombie_card",
+    "collectorsalbum:wither_card",
+    "collectorsalbum:blaze_card",
+    "collectorsalbum:squid_card",
+    "collectorsalbum:villager_card",
+    "collectorsalbum:bat_card",
+    "collectorsalbum:wolf_card",
+    "collectorsalbum:slime_card",
+    "collectorsalbum:wither_skeleton_card",
+    "collectorsalbum:cat_card",
+    "collectorsalbum:enderman_card",
+    "collectorsalbum:pillager_card",
+    "collectorsalbum:spider_card",
+    "collectorsalbum:fox_card",
+    "collectorsalbum:pig_card",
+    "collectorsalbum:sheep_card",
+    "collectorsalbum:horse_card",
+    "collectorsalbum:bee_card",
+    "collectorsalbum:cow_card",
+    "collectorsalbum:creeper_card",
+    "collectorsalbum:parrot_card",
+    "collectorsalbum:skeleton_card",
+    "collectorsalbum:magma_cube_card",
+    "collectorsalbum:panda_card",
+    "collectorsalbum:polar_bear_card"
+  ],
+  "displayStyle": {
+    "color": "red"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "cards": [
+    "collectorsalbum:chainmail_helmet_card",
+    "collectorsalbum:diamond_horse_armor_card",
+    "collectorsalbum:iron_leggings_card",
+    "collectorsalbum:netherite_helmte_card",
+    "collectorsalbum:diamond_helmet_card",
+    "collectorsalbum:diamond_boots_card",
+    "collectorsalbum:leather_horse_armor_card",
+    "collectorsalbum:chainmail_boots_card",
+    "collectorsalbum:golden_chestplate_card",
+    "collectorsalbum:golden_helmet_card",
+    "collectorsalbum:leather_boots_card",
+    "collectorsalbum:iron_horse_armor_card",
+    "collectorsalbum:netherite_leggings_card",
+    "collectorsalbum:iron_helmet_card",
+    "collectorsalbum:golden_boots_card",
+    "collectorsalbum:leather_helmet_card",
+    "collectorsalbum:iron_boots_card",
+    "collectorsalbum:diamond_chestplate_card",
+    "collectorsalbum:leather_chestplate_card",
+    "collectorsalbum:golden_leggings_card",
+    "collectorsalbum:shield_card",
+    "collectorsalbum:iron_chestplate_card",
+    "collectorsalbum:turtle_helmet_card",
+    "collectorsalbum:chainmail_leggings_card",
+    "collectorsalbum:golden_horse_armor_card",
+    "collectorsalbum:netherite_boots_card",
+    "collectorsalbum:leather_leggings_card",
+    "collectorsalbum:diamond_leggings_card",
+    "collectorsalbum:chainmail_chestplate_card",
+    "collectorsalbum:netherite_chestplate_card"
+  ],
+  "displayStyle": {
+    "color": "blue"
+  }
+}
