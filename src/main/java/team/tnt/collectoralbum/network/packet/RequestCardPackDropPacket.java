@@ -1,7 +1,7 @@
 package team.tnt.collectoralbum.network.packet;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraftforge.network.NetworkEvent;
 import team.tnt.collectoralbum.server.OpenCardPackContextHolder;
 import team.tnt.collectoralbum.util.PlayerHelper;
 
@@ -16,7 +16,7 @@ public class RequestCardPackDropPacket extends AbstractNetworkHandlePacket<Reque
     }
 
     @Override
-    protected void handlePacket(CustomPayloadEvent.Context context) {
+    protected void handlePacket(NetworkEvent.Context context) {
         Optional<List<ItemStack>> optional = OpenCardPackContextHolder.getContextAndClear(context.getSender());
         optional.ifPresent(list -> {
             for (ItemStack stack : list) {

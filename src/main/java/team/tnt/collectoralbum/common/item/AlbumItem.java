@@ -15,6 +15,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 import team.tnt.collectoralbum.CollectorsAlbum;
 import team.tnt.collectoralbum.client.CollectorsAlbumClient;
@@ -43,10 +44,14 @@ public class AlbumItem extends Item implements IDeathPersistableItem {
         ItemStack itemStack = player.getItemInHand(usedHand);
         if (!level.isClientSide) {
             ServerPlayer serverPlayer = (ServerPlayer) player;
-            serverPlayer.openMenu(new SimpleMenuProvider((id, inv, owner) -> new AlbumMenu(new AlbumContainer(itemStack), inv, id), CommonComponents.EMPTY), buffer -> {
-                buffer.writeItem(itemStack);
-                buffer.writeInt(0);
-            });
+            NetworkHooks.openScreen(
+                    serverPlayer,
+                    new SimpleMenuProvider((id, inv, owner) -> new AlbumMenu(new AlbumContainer(itemStack), inv, id), CommonComponents.EMPTY),
+                    buffer -> {
+                        buffer.writeItem(itemStack);
+                        buffer.writeInt(0);
+                    }
+            );
         }
         return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
     }
@@ -61,7 +66,7 @@ public class AlbumItem extends Item implements IDeathPersistableItem {
             Component[] pagedText = CollectorsAlbum.ALBUM_CARD_BOOST_MANAGER.getBoosts()
                     .map(coll -> coll.getPagedDescription(pageIndex))
                     .orElse(new Component[0]);
-            if (pagedText == null) return;
+            if (pagedText.length == 0) return;
             tooltipComponents.addAll(Arrays.asList(pagedText));
             tooltipComponents.add(Component.translatable(PAGE_INFO_TRANSLATION_KEY, pageIndex + 1, pageSize).withStyle(ChatFormatting.DARK_GRAY));
         } else {

@@ -90,7 +90,7 @@ public class CardOpenScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(graphics, mouseX, mouseY, partialTick);
+        renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
     }
 
@@ -213,8 +213,7 @@ public class CardOpenScreen extends Screen {
                 x1 = centerX - halfX * progress;
                 x2 = centerX + halfX * progress;
             }
-            Matrix4f pose = graphics.pose().last().pose();
-            renderTexture(pose, x1, y1, x2, y2);
+            renderTexture(graphics, flipped ? itemTexture : CARD_BACK, (int) x1, (int) y1, 0, 0, 0, (int) (x2 - x1), (int) (y2 - y1), (int) (x2 - x1), (int) (y2 - y1));
         }
 
         @Override
