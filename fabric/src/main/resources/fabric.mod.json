@@ -8,9 +8,9 @@
     "${mod_authors}"
   ],
   "contact": {
-    "homepage": "",
-    "sources": "",
-    "issues": ""
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/collectors-album",
+    "sources": "https://github.com/T-T-Team/CollectorsAlbum",
+    "issues": "https://github.com/T-T-Team/CollectorsAlbum/issues"
   },
   "license": "${mod_licence}",
   "icon": "assets/icon.png",
@@ -29,5 +29,10 @@
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
     "java": ">=${java_version}"
+  },
+  "custom": {
+    "modmenu": {
+      "modmenu.discord": "https://discord.gg/WEFYxwS8E3"
+    }
   }
 }
