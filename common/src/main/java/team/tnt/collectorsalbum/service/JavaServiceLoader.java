@@ -1,4 +1,4 @@
-package example.mod.service;
+package team.tnt.collectorsalbum.service;
 
 import java.util.ServiceLoader;
 

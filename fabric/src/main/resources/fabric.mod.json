@@ -13,18 +13,17 @@
     "issues": ""
   },
   "license": "${mod_licence}",
-  "icon": "assets/logo.png",
+  "icon": "assets/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "example.mod.FabricExampleMod"
+      "team.tnt.collectorsalbum.CollectorsAlbumFabric"
     ]
   },
   "mixins": [
     "${mod_id}.mixins.json",
     "${mod_id}.fabric.mixins.json"
   ],
-  "accessWidener": "${mod_id}.accesswidener",
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": "*",
