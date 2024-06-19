@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+    id 'org.spongepowered.gradle.vanilla' version "${vanilla_gradle_version}"
+}
+
+version = "${project.minecraft_version}-${project.version}"
+group = project.mod_group
+archivesBaseName = "${project.mod_id}" + "-common"
+
+minecraft {
+    version("${minecraft_version}")
+
+    def accessWidenerFile = file("src/main/resources/${mod_id}.accesswidener")
+    if (accessWidenerFile.exists()) {
+        accessWideners(accessWidenerFile)
+    }
+
+    runs {
+    }
+}
+
+dependencies {
+    compileOnly group: 'org.spongepowered', name: 'mixin', version: "${mixin_version}"
+}

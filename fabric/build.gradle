@@ -1,0 +1,76 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+}
+
+plugins {
+    id 'fabric-loom' version "${fabric_loom}"
+    id 'idea'
+}
+
+version = "${project.minecraft_version}-${project.version}"
+group = project.mod_group
+archivesBaseName = "${project.mod_id}" + "-fabric"
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.officialMojangMappings() // TODO parchment support smh?
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+    compileOnly project(":common")
+}
+
+loom {
+    def accessWidenerFile = project(":common").file("src/main/resources/${mod_id}.accesswidener")
+    if (accessWidenerFile.exists()) {
+        accessWidenerPath.set(accessWidenerFile)
+    }
+
+    mixin {
+        defaultRefmapName.set("${mod_id}.refmap.json")
+    }
+
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run/client")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run/server")
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : "${mod_name}",
+                "Specification-Vendor"    : "${mod_authors}",
+                "Specification-Version"   : project.jar.archiveVersion,
+                "Implementation-Title"    : "${mod_name}",
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : "${mod_authors}",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+
+    exclude("META-INF/accesstransformer.cfg")
+}
+
+processResources {
+    from project(":common").sourceSets.main.resources
+}
+
+tasks.withType(JavaCompile) {
+    source(project(":common").sourceSets.main.allSource)
+}

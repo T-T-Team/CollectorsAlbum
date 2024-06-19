@@ -1,79 +1,87 @@
 plugins {
-	id 'fabric-loom' version '1.0-SNAPSHOT'
-	id 'maven-publish'
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+subprojects {
+    apply plugin: 'java'
 
-archivesBaseName = project.archives_base_name + "-${project.minecraft_version}"
-version = project.mod_version
-group = project.maven_group
+    java.toolchain.languageVersion = JavaLanguageVersion.of("${java_version}")
+    // Uncomment to generate sources jar file
+    //java.withSourcesJar()
+    // Uncomment to generate javadoc file
+    //java.withJavadocJar()
 
-repositories {
-	maven { url "https://maven.parchmentmc.org" }
-	maven { url "https://maven.terraformersmc.com/releases" }
-	maven { url "https://www.cursemaven.com" }
+    jar {
+        manifest {
+            attributes([
+                    'Specification-Title'       : "${mod_name}",
+                    'Specification-Vendor'      : "${mod_authors}",
+                    'Specification-Version'     : "${project.jar.archiveVersion}",
+                    'Implementation-Title'      : "${project.name}",
+                    'Implementation-Version'    : "${project.jar.archiveVersion}",
+                    'Implementation-Vendor'     : "${mod_authors}",
+                    'Implementation-Timestamp'  : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    'Timestamp'                 : System.currentTimeMillis()
+            ])
+        }
+    }
 
-	flatDir {
-		dir 'libs'
-	}
-}
+    repositories {
+        mavenCentral()
 
-dependencies {
-	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	// Mappings
-	mappings loom.layered() {
-		officialMojangMappings() // we want mojang mappins
-		parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_version}@zip") // and layered with community variable names
-	}
-	// Fabric loader
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	// Modmenu
-	modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
-	// Configuration
-	modImplementation "curse.maven:configuration-${project.configuration_project_id}:${project.configuration_file_id}"
+        maven {
+            name = "Sponge / Mixin"
+            url  = "https://repo.spongepowered.org/repository/maven-public/"
+        }
+    }
 
-	// JUnit
-	testImplementation("org.junit.jupiter:junit-jupiter:${project.junit_version}")
-}
+    processResources {
+        def props = [
+                // Mod
+                "version": project.version,
+                "mod_id": "${mod_id}",
+                "mod_name": "${mod_name}",
+                "mod_authors": "${mod_authors}",
+                "mod_licence": "${mod_licence}",
+                "mod_description": "${mod_description}",
+                "mod_group": "${mod_group}",
 
-processResources {
-	inputs.property "version", project.version
+                // Minecraft env
+                "java_version": "${java_version}",
+                "minecraft_version": "${minecraft_version}",
+                "minecraft_version_range": "${minecraft_version_range}",
+                "vanilla_gradle_version": "${vanilla_gradle_version}",
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
-}
+                // Mixin env
+                "mixin_loader": "${mixin_loader}",
+                "mixin_version": "${mixin_version}",
+                "mixin_min_version": "${mixin_min_version}",
 
-tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
-}
+                // Neoforge
+                "neoforge_version": "${neoforge_version}",
+                "neoforge_loader_range": "${neoforge_loader_range}",
+                "neoforge_version_range": "${neoforge_version_range}",
+                "neogradle_userdev": "${neogradle_userdev}",
 
-java {
-	withSourcesJar()
-}
+                // Forge
+                "forge_version": "${forge_version}",
+                "forge_version_range": "${forge_version_range}",
+                "forge_gradle_version": "${forge_gradle_version}",
 
-jar {
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
-	}
-}
+                // Fabric
+                "fabric_version": "${fabric_version}",
+                "fabric_loader_version": "${fabric_loader_version}",
+                "fabric_loom": "${fabric_loom}"
+        ]
 
-test {
-	useJUnitPlatform()
-}
+        filesMatching(["pack.mcmeta", "fabric.mod.json", "META-INF/*.toml", "*.mixins.json"]) {
+            expand(props)
+        }
+        inputs.properties(props)
+    }
 
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
-
-	repositories {
-	}
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = "UTF-8"
+        it.options.getRelease().set(project.java_version.toInteger())
+    }
 }
