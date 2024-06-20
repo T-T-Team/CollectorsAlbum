@@ -1,15 +1,27 @@
 package team.tnt.collectorsalbum;
 
+import dev.toma.configuration.Configuration;
+import dev.toma.configuration.config.format.ConfigFormats;
 import net.minecraft.world.entity.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.PlayerAlbumTracker;
+import team.tnt.collectorsalbum.config.CollectorsAlbumConfig;
 
 public class CollectorsAlbum {
 
     public static final String MOD_ID = "collectorsalbum";
     public static final Logger LOGGER = LogManager.getLogger("CollectorsAlbum");
+    private static CollectorsAlbumConfig config;
+
+    public static void init() {
+        config = Configuration.registerConfig(CollectorsAlbumConfig.class, ConfigFormats.yaml()).getConfigInstance();
+    }
+
+    public static CollectorsAlbumConfig getConfig() {
+        return config;
+    }
 
     public static void tickPlayer(Player player) {
         PlayerAlbumTracker tracker = PlayerAlbumTracker.get();

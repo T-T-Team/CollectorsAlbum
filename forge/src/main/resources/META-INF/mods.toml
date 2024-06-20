@@ -23,3 +23,10 @@ description='''${mod_description}'''
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="configuration"
+    mandatory=true
+    versionRange="${configuration_version_range}"
+    ordering="NONE"
+    side="BOTH"

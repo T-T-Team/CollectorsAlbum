@@ -71,7 +71,10 @@ subprojects {
                 // Fabric
                 "fabric_version": "${fabric_version}",
                 "fabric_loader_version": "${fabric_loader_version}",
-                "fabric_loom": "${fabric_loom}"
+                "fabric_loom": "${fabric_loom}",
+
+                // Dependencies
+                "configuration_version_range": "${configuration_version_range}"
         ]
 
         filesMatching(["pack.mcmeta", "fabric.mod.json", "META-INF/*.toml", "*.mixins.json"]) {

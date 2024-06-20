@@ -67,14 +67,21 @@ minecraft {
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
+repositories {
+    maven { url "https://www.cursemaven.com" }
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${forge_version}"
 
+    // Configuration
+    implementation("curse.maven:configuration-444699:${configuration_version}")
+
     // Note: Hack fix for now, force jopt-simple to be exactly 5.0.4 because Mojang ships that version, but some transitive dependencies request 6.0+
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
-    compileOnly project(":common")
-
     annotationProcessor("org.spongepowered:mixin:${mixin_version}:processor")
+
+    compileOnly project(":common")
 }
 
 tasks.withType(JavaCompile) {

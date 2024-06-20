@@ -45,8 +45,16 @@ runs {
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
+repositories {
+    maven { url "https://www.cursemaven.com" }
+}
+
 dependencies {
     implementation "net.neoforged:neoforge:${project.neoforge_version}"
+
+    // Configuration
+    implementation "curse.maven:configuration-444699:${configuration_version}"
+
     compileOnly project(":common")
 }
 

@@ -11,5 +11,7 @@ public interface AlbumCard {
 
     ItemStack asItem();
 
-    int getCardNumber();
+    int cardNumber();
+
+    AlbumCardType<?> getType();
 }

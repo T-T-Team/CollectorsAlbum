@@ -19,6 +19,13 @@ minecraft {
     }
 }
 
+repositories {
+    flatDir {
+        dir "../libs"
+    }
+}
+
 dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: "${mixin_version}"
+    compileOnly "dev.toma.configuration:configuration-common-1.21:${configuration_version}"
 }
