@@ -7,7 +7,7 @@ public class RegistryValue<A, T extends A> implements Supplier<T> {
     private final Supplier<T> supplier;
     private T value;
 
-    public RegistryValue(Supplier<T> supplier) {
+    RegistryValue(Supplier<T> supplier) {
         this.supplier = supplier;
     }
 

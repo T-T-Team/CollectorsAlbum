@@ -25,7 +25,7 @@ public final class MultiLoaderRegistry<T> {
         return new MultiLoaderRegistry<>(registry, namespace);
     }
 
-    public <A extends T> RegistryValue<T, A> register(String name, Function<ResourceLocation, A> provider) {
+    public <A extends T> Supplier<A> register(String name, Function<ResourceLocation, A> provider) {
         assert this.registryObjects != null;
         ResourceLocation key = ResourceLocation.fromNamespaceAndPath(this.namespace, name);
         Supplier<A> supplier = () -> provider.apply(key);
@@ -36,7 +36,7 @@ public final class MultiLoaderRegistry<T> {
         return value;
     }
 
-    public <A extends T> RegistryValue<T, A> register(String name, Supplier<A> provider) {
+    public <A extends T> Supplier<A> register(String name, Supplier<A> provider) {
         assert this.registryObjects != null;
         ResourceLocation key = ResourceLocation.fromNamespaceAndPath(this.namespace, name);
         RegistryValue<T, A> value = new RegistryValue<>(provider);
