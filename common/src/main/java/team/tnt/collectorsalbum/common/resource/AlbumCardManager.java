@@ -7,13 +7,15 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.AlbumCard;
+import team.tnt.collectorsalbum.platform.resource.PlatformGsonReloadListenerPlatform;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class AlbumCardManager extends MultiloaderJsonReloadListener {
+public class AlbumCardManager extends PlatformGsonReloadListenerPlatform {
 
     private static final AlbumCardManager INSTANCE = new AlbumCardManager();
+    private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_card_manager");
     private final Map<ResourceLocation, AlbumCard> registeredCards = new HashMap<>();
 
     private AlbumCardManager() {
@@ -25,7 +27,12 @@ public class AlbumCardManager extends MultiloaderJsonReloadListener {
     }
 
     @Override
-    public void loadData(Map<ResourceLocation, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler) {
+    public ResourceLocation identifier() {
+        return IDENTIFIER;
+    }
+
+    @Override
+    public void apply(Map<ResourceLocation, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler) {
         this.registeredCards.clear();
         for (Map.Entry<ResourceLocation, JsonElement> entry : resources.entrySet()) {
             ResourceLocation identifier = entry.getKey();

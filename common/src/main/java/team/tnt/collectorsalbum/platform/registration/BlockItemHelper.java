@@ -1,4 +1,4 @@
-package team.tnt.collectorsalbum.common.registry;
+package team.tnt.collectorsalbum.platform.registration;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -9,11 +9,11 @@ import net.minecraft.world.level.block.Block;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public final class ItemBlockHelper {
+public final class BlockItemHelper {
 
-    private final MultiLoaderRegistry<Item> itemRegistry;
+    private final PlatformRegistry<Item> itemRegistry;
 
-    public ItemBlockHelper(MultiLoaderRegistry<Item> itemRegistry) {
+    public BlockItemHelper(PlatformRegistry<Item> itemRegistry) {
         this.itemRegistry = itemRegistry;
     }
 

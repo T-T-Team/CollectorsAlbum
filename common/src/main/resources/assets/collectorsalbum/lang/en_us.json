@@ -1,5 +1,7 @@
 {
   "item.collectorsalbum.album": "Album",
 
+  "itemGroup.collectorsalbum.album": "Collector's Album",
+
   "config.screen.collectorsalbum": "Collector's Album Config"
 }
