@@ -12,10 +12,13 @@ import team.tnt.collectorsalbum.platform.resource.FabricReloadListenerWrapper;
 
 public class CollectorsAlbumFabric implements ModInitializer {
 
+    public CollectorsAlbumFabric() {
+        CollectorsAlbum.init();
+    }
+
     @Override
     public void onInitialize() {
-        CollectorsAlbum.init();
-
+        CollectorsAlbum.NETWORK_MANAGER.bind();
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> CollectorsAlbum.serverStopped());
 
         ResourceManagerHelper resourceManagerHelper = ResourceManagerHelper.get(PackType.SERVER_DATA);

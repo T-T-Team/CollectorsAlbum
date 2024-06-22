@@ -11,7 +11,8 @@ import team.tnt.collectorsalbum.common.init.ItemGroupRegistry;
 import team.tnt.collectorsalbum.common.init.ItemRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
-import team.tnt.collectorsalbum.platform.NeoforgeRegistration;
+import team.tnt.collectorsalbum.platform.network.NeoforgeNetwork;
+import team.tnt.collectorsalbum.platform.registration.NeoforgeRegistration;
 
 @Mod(CollectorsAlbum.MOD_ID)
 public class CollectorsAlbumNeoforge {
@@ -21,6 +22,7 @@ public class CollectorsAlbumNeoforge {
 
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, ItemRegistry.REGISTRY);
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, ItemGroupRegistry.REGISTRY);
+        NeoforgeNetwork.subscribeRegistryEvent(eventBus, CollectorsAlbum.NETWORK_MANAGER);
 
         IEventBus neoBus = NeoForge.EVENT_BUS;
         neoBus.addListener(this::addReloadListeners);

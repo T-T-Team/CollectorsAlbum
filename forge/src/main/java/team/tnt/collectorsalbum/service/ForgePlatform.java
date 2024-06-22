@@ -2,7 +2,8 @@ package team.tnt.collectorsalbum.service;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import team.tnt.collectorsalbum.util.Side;
+import team.tnt.collectorsalbum.platform.Side;
+import team.tnt.collectorsalbum.platform.Platform;
 
 public class ForgePlatform implements Platform {
 

@@ -1,10 +1,9 @@
-package team.tnt.collectorsalbum.platform;
+package team.tnt.collectorsalbum.platform.registration;
 
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.RegisterEvent;
-import team.tnt.collectorsalbum.platform.registration.PlatformRegistry;
 
 public final class NeoforgeRegistration {
 

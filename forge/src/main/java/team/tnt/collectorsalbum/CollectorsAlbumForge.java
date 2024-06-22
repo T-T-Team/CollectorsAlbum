@@ -7,6 +7,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import team.tnt.collectorsalbum.common.init.ItemGroupRegistry;
 import team.tnt.collectorsalbum.common.init.ItemRegistry;
@@ -24,11 +25,17 @@ public class CollectorsAlbumForge {
         ForgeRegistration.subscribeRegistryEvent(eventBus, ItemRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, ItemGroupRegistry.REGISTRY);
 
+        eventBus.addListener(this::setup);
+
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(this::addReloadListeners);
         forgeBus.addListener(this::playerTick);
         forgeBus.addListener(this::playerLoggedOut);
         forgeBus.addListener(this::serverStopping);
+    }
+
+    private void setup(FMLCommonSetupEvent event) {
+        CollectorsAlbum.NETWORK_MANAGER.bind();
     }
 
     private void playerTick(TickEvent.PlayerTickEvent event) {
