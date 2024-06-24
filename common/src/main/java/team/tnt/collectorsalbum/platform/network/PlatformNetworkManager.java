@@ -10,6 +10,7 @@ import team.tnt.collectorsalbum.platform.JavaServiceLoader;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 public final class PlatformNetworkManager implements Identifiable {
@@ -25,6 +26,18 @@ public final class PlatformNetworkManager implements Identifiable {
     @Override
     public ResourceLocation identifier() {
         return this.identifier;
+    }
+
+    public static ResourceLocation generatePacketIdentifier(Identifiable identifiable, Class<? extends CustomPacketPayload> type) {
+        return generatePacketIdentifier(identifiable.identifier().getNamespace(), type);
+    }
+
+    public static ResourceLocation generatePacketIdentifier(ResourceLocation identifier, Class<? extends CustomPacketPayload> type) {
+        return generatePacketIdentifier(identifier.getNamespace(), type);
+    }
+
+    public static ResourceLocation generatePacketIdentifier(String namespace, Class<? extends CustomPacketPayload> type) {
+        return ResourceLocation.fromNamespaceAndPath(namespace, type.getSimpleName().replaceAll("([A-Z])", "_$1").toLowerCase(Locale.ROOT));
     }
 
     public static PlatformNetworkManager create(ResourceLocation identifier) {

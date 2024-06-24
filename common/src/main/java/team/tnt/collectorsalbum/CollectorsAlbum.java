@@ -2,7 +2,6 @@ package team.tnt.collectorsalbum;
 
 import dev.toma.configuration.Configuration;
 import dev.toma.configuration.config.format.ConfigFormats;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
