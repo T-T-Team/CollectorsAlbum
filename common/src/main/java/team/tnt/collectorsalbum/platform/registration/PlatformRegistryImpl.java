@@ -12,18 +12,17 @@ import java.util.function.Supplier;
 
 final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
 
-    private final Registry<T> registry;
+    private final Supplier<Registry<T>> registryRef;
     private final String namespace;
     private Map<ResourceLocation, RegistryElement<T, ?>> registeredRefs = new HashMap<>();
 
-    PlatformRegistryImpl(Registry<T> registry, String namespace) {
-        this.registry = registry;
+    PlatformRegistryImpl(Supplier<Registry<T>> registryRef, String namespace) {
+        this.registryRef = registryRef;
         this.namespace = namespace;
     }
 
     @Override
     public <R extends T> Supplier<R> register(String elementId, Supplier<R> ref) {
-        assert this.registeredRefs != null;
         ResourceLocation key = ResourceLocation.fromNamespaceAndPath(this.namespace, elementId);
         RegistryElement<T, R> value = new RegistryElement<>(ref);
         if (this.registeredRefs.put(key, value) != null) {
@@ -34,7 +33,6 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
 
     @Override
     public <R extends T> Supplier<R> register(String elementId, Function<ResourceLocation, R> ref) {
-        assert this.registeredRefs != null;
         ResourceLocation key = ResourceLocation.fromNamespaceAndPath(this.namespace, elementId);
         Supplier<R> supplier = () -> ref.apply(key);
         RegistryElement<T, R> value = new RegistryElement<>(supplier);
@@ -47,7 +45,6 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
     @SuppressWarnings("unchecked")
     @Override
     public <R extends T> void bindRef(BiConsumer<ResourceLocation, Supplier<R>> refConsumer) {
-        assert this.registeredRefs != null;
         for (Map.Entry<ResourceLocation, RegistryElement<T, ?>> entry : this.registeredRefs.entrySet()) {
             refConsumer.accept(entry.getKey(), (Supplier<R>) entry.getValue());
         }
@@ -56,7 +53,6 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
 
     @Override
     public void bind() {
-        assert this.registeredRefs != null;
         for (Map.Entry<ResourceLocation, RegistryElement<T, ?>> entry : this.registeredRefs.entrySet()) {
             this.bindInternal(entry.getKey(), entry.getValue());
         }
@@ -70,10 +66,10 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
 
     @Override
     public ResourceKey<? extends Registry<T>> registryKey() {
-        return this.registry.key();
+        return this.registryRef.get().key();
     }
 
     private <R extends T> void bindInternal(ResourceLocation identifier, RegistryElement<T, R> element) {
-        Registry.register(this.registry, identifier, element.get());
+        Registry.register(this.registryRef.get(), identifier, element.get());
     }
 }

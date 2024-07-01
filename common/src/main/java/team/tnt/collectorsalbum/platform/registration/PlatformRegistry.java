@@ -1,5 +1,6 @@
 package team.tnt.collectorsalbum.platform.registration;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -11,7 +12,11 @@ import java.util.function.Supplier;
 public interface PlatformRegistry<T> {
 
     static <T> PlatformRegistry<T> create(Registry<T> registry, String namespace) {
-        return new PlatformRegistryImpl<>(registry, namespace);
+        return new PlatformRegistryImpl<>(() -> registry, namespace);
+    }
+
+    static <T> PlatformRegistry<T> create(Reference<T> reference, String namespace) {
+        return new PlatformRegistryImpl<>(reference, namespace);
     }
 
     <R extends T> Supplier<R> register(String elementId, Supplier<R> ref);
@@ -25,4 +30,12 @@ public interface PlatformRegistry<T> {
     boolean is(ResourceKey<?> resourceKey);
 
     ResourceKey<? extends Registry<T>> registryKey();
+
+    @FunctionalInterface
+    interface Reference<T> extends Supplier<Registry<T>> {
+
+        default Codec<T> codec() {
+            return this.get().byNameCodec();
+        }
+    }
 }

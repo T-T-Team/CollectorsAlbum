@@ -9,6 +9,9 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.NewRegistryEvent;
+import team.tnt.collectorsalbum.common.init.CardTypeRegistry;
+import team.tnt.collectorsalbum.common.init.CategoryRegistry;
 import team.tnt.collectorsalbum.common.init.ItemGroupRegistry;
 import team.tnt.collectorsalbum.common.init.ItemRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
@@ -24,7 +27,9 @@ public class CollectorsAlbumForge {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ForgeRegistration.subscribeRegistryEvent(eventBus, ItemRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, ItemGroupRegistry.REGISTRY);
-
+        ForgeRegistration.subscribeRegistryEvent(eventBus, CardTypeRegistry.REGISTRY);
+        ForgeRegistration.subscribeRegistryEvent(eventBus, CategoryRegistry.REGISTRY);
+        eventBus.addListener(this::createNewRegistries);
         eventBus.addListener(this::setup);
 
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
@@ -55,5 +60,9 @@ public class CollectorsAlbumForge {
     private void addReloadListeners(AddReloadListenerEvent event) {
         event.addListener(AlbumCardManager.getInstance());
         event.addListener(AlbumCategoryManager.getInstance());
+    }
+
+    private void createNewRegistries(NewRegistryEvent event) {
+        ForgeRegistration.bindCustomRegistries(event);
     }
 }

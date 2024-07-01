@@ -53,7 +53,6 @@ public final class PlatformNetworkManager implements Identifiable {
     }
 
     public <P extends CustomPacketPayload> void registerPacket(PacketDirection direction, Class<P> payloadType, CustomPacketPayload.Type<P> type, StreamCodec<FriendlyByteBuf, P> codec, PacketHandler<P> handler) {
-        assert registry != null;
         registry.register(direction, new PacketHolder<>(payloadType, type, codec, handler));
     }
 
@@ -65,7 +64,6 @@ public final class PlatformNetworkManager implements Identifiable {
     }
 
     public void bindRef(Consumer<List<PacketHolder<?>>> c2sPackets, Consumer<List<PacketHolder<?>>> s2cPackets) {
-        assert registry != null;
         List<PacketHolder<?>> c2s = registry.sidePackets.get(PacketDirection.CLIENT_TO_SERVER);
         List<PacketHolder<?>> s2c = registry.sidePackets.get(PacketDirection.SERVER_TO_CLIENT);
         if (!c2s.isEmpty())

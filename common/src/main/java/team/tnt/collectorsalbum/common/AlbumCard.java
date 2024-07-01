@@ -7,7 +7,7 @@ public interface AlbumCard {
 
     ResourceLocation identifier();
 
-    AlbumCategory category();
+    AlbumCategoryType<?> category();
 
     ItemStack asItem();
 

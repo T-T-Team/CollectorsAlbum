@@ -1,9 +1,16 @@
 package team.tnt.collectorsalbum.platform.registration;
 
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.ForgeRegistry;
+import net.minecraftforge.registries.NewRegistryEvent;
 import net.minecraftforge.registries.RegisterEvent;
+import net.minecraftforge.registries.RegistryBuilder;
+import team.tnt.collectorsalbum.mixin.RegistryManagerInvoker;
 
 public final class ForgeRegistration {
 
@@ -13,6 +20,24 @@ public final class ForgeRegistration {
             if (registry.is(eventKey)) {
                 registry.bindRef((identifier, ref) -> event.register(registry.registryKey(), helper -> helper.register(identifier, ref.get())));
             }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> void bindCustomRegistries(NewRegistryEvent event) {
+        PlatformRegistryFactory.<T>bindRefs((attributes, binder) -> {
+            ResourceKey<Registry<T>> resourceKey = attributes.key();
+            ResourceLocation key = resourceKey.location();
+            RegistryBuilder<T> builder = RegistryBuilder.of(key);
+            if (!attributes.sync()) {
+                builder.disableSync();
+            }
+            builder.hasTags();
+            event.create(builder, ifr -> {
+                RegistryManagerInvoker.tarkovCraft$invokeInjectForgeRegistry((ForgeRegistry<T>) ifr, BuiltInRegistries.REGISTRY);
+                Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.get(key);
+                binder.bind(registry);
+            });
         });
     }
 

@@ -14,4 +14,6 @@ public interface AlbumCategory {
     boolean accepts(AlbumCard card);
 
     Optional<AlbumCard> getCardAt(int index);
+
+    AlbumCategoryType<?> getType();
 }

@@ -32,7 +32,10 @@ minecraft.reobf = false
 minecraft {
     mappings channel: 'official', version: minecraft_version
 
-    accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
+    def accessTransformerFile = project(":forge").file("src/main/resources/META-INF/accesstransformer.cfg")
+    if (accessTransformerFile.exists()) {
+        accessTransformer = accessTransformerFile
+    }
 
     runs {
         client {
