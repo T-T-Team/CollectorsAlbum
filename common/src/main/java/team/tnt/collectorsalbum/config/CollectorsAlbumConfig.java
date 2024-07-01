@@ -5,6 +5,4 @@ import team.tnt.collectorsalbum.CollectorsAlbum;
 
 @Config(id = CollectorsAlbum.MOD_ID)
 public final class CollectorsAlbumConfig {
-
-
 }

@@ -1,9 +1,12 @@
 package team.tnt.collectorsalbum.common;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 
 public final class AlbumCardType<C extends AlbumCard> {
+
+    public static final Codec<AlbumCard> INSTANCE_CODEC = CollectorsAlbumRegistries.CARD_TYPE.codec().dispatch("type", AlbumCard::getType, AlbumCardType::codec);
 
     private final ResourceLocation identifier;
     private final MapCodec<C> codec;
@@ -11,5 +14,13 @@ public final class AlbumCardType<C extends AlbumCard> {
     public AlbumCardType(ResourceLocation identifier, MapCodec<C> codec) {
         this.identifier = identifier;
         this.codec = codec;
+    }
+
+    public ResourceLocation identifier() {
+        return this.identifier;
+    }
+
+    public MapCodec<C> codec() {
+        return this.codec;
     }
 }

@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:test",
+  "rarity": "mythical",
+  "item": "minecraft:diamond",
+  "category": "collectorsalbum:tools",
+  "number": 1
+}

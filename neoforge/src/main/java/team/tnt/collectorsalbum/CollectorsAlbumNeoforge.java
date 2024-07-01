@@ -8,10 +8,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
-import team.tnt.collectorsalbum.common.init.CardTypeRegistry;
-import team.tnt.collectorsalbum.common.init.CategoryRegistry;
-import team.tnt.collectorsalbum.common.init.ItemGroupRegistry;
-import team.tnt.collectorsalbum.common.init.ItemRegistry;
+import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.platform.network.NeoforgeNetwork;
@@ -28,6 +25,7 @@ public class CollectorsAlbumNeoforge {
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, ItemGroupRegistry.REGISTRY);
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, CardTypeRegistry.REGISTRY);
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, CategoryRegistry.REGISTRY);
+        NeoforgeRegistration.subscribeRegistryEvent(eventBus, SoundRegistry.REGISTRY);
         NeoforgeNetwork.subscribeRegistryEvent(eventBus, CollectorsAlbum.NETWORK_MANAGER);
 
         IEventBus neoBus = NeoForge.EVENT_BUS;

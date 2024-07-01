@@ -5,10 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.server.packs.PackType;
 import team.tnt.collectorsalbum.common.CollectorsAlbumRegistries;
-import team.tnt.collectorsalbum.common.init.CardTypeRegistry;
-import team.tnt.collectorsalbum.common.init.CategoryRegistry;
-import team.tnt.collectorsalbum.common.init.ItemGroupRegistry;
-import team.tnt.collectorsalbum.common.init.ItemRegistry;
+import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.platform.registration.CustomPlatformRegistryBindCallback;
@@ -45,5 +42,6 @@ public class CollectorsAlbumFabric implements ModInitializer {
         FabricRegistration.registerCustomRegistry(CollectorsAlbumRegistries.CATEGORY);
         ItemRegistry.REGISTRY.bind();
         ItemGroupRegistry.REGISTRY.bind();
+        SoundRegistry.REGISTRY.bind();
     }
 }

@@ -10,10 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.NewRegistryEvent;
-import team.tnt.collectorsalbum.common.init.CardTypeRegistry;
-import team.tnt.collectorsalbum.common.init.CategoryRegistry;
-import team.tnt.collectorsalbum.common.init.ItemGroupRegistry;
-import team.tnt.collectorsalbum.common.init.ItemRegistry;
+import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.platform.registration.ForgeRegistration;
@@ -29,6 +26,7 @@ public class CollectorsAlbumForge {
         ForgeRegistration.subscribeRegistryEvent(eventBus, ItemGroupRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, CardTypeRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, CategoryRegistry.REGISTRY);
+        ForgeRegistration.subscribeRegistryEvent(eventBus, SoundRegistry.REGISTRY);
         eventBus.addListener(this::createNewRegistries);
         eventBus.addListener(this::setup);
 

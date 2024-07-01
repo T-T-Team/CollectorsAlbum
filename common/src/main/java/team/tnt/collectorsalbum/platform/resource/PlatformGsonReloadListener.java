@@ -16,12 +16,12 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class PlatformGsonReloadListenerPlatform extends PlatformBaseReloadListener<Map<ResourceLocation, JsonElement>> {
+public abstract class PlatformGsonReloadListener extends PlatformBaseReloadListener<Map<ResourceLocation, JsonElement>> {
 
     protected final Gson gson;
     protected final String directory;
 
-    public PlatformGsonReloadListenerPlatform(Gson gson, String directory) {
+    public PlatformGsonReloadListener(Gson gson, String directory) {
         this.gson = gson;
         this.directory = directory;
     }
