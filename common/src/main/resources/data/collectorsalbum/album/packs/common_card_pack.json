@@ -1,7 +1,7 @@
 {
   "type": "collectorsalbum:repeated",
   "times": {
-    "type": "collectorsalbum:config",
+    "type": "collectorsalbum:config_int",
     "config": "collectorsalbum",
     "path": "packDrops.packDropsCount"
   },
@@ -11,7 +11,7 @@
       "items": [
         {
           "weight": {
-            "type": "collectorsalbum:config",
+            "type": "collectorsalbum:config_int",
             "config": "collectorsalbum",
             "path": "packDrops.commonDrops.commonCardDropChance"
           },
@@ -22,7 +22,7 @@
         },
         {
           "weight": {
-            "type": "collectorsalbum:config",
+            "type": "collectorsalbum:config_int",
             "config": "collectorsalbum",
             "path": "packDrops.commonDrops.uncommonCardDropChance"
           },
@@ -33,7 +33,7 @@
         },
         {
           "weight": {
-            "type": "collectorsalbum:config",
+            "type": "collectorsalbum:config_int",
             "config": "collectorsalbum",
             "path": "packDrops.commonDrops.rareCardDropChance"
           },
@@ -44,7 +44,7 @@
         },
         {
           "weight": {
-            "type": "collectorsalbum:config",
+            "type": "collectorsalbum:config_int",
             "config": "collectorsalbum",
             "path": "packDrops.commonDrops.epicCardDropChance"
           },
@@ -55,7 +55,7 @@
         },
         {
           "weight": {
-            "type": "collectorsalbum:config",
+            "type": "collectorsalbum:config_int",
             "config": "collectorsalbum",
             "path": "packDrops.commonDrops.legendaryCardDropChance"
           },
@@ -66,7 +66,7 @@
         },
         {
           "weight": {
-            "type": "collectorsalbum:config",
+            "type": "collectorsalbum:config_int",
             "config": "collectorsalbum",
             "path": "packDrops.commonDrops.mythicalCardDropChance"
           },

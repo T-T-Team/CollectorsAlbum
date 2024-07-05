@@ -19,6 +19,7 @@ import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
 import team.tnt.collectorsalbum.common.resource.drops.DropContext;
 import team.tnt.collectorsalbum.common.resource.drops.DropOutputBuilder;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProvider;
+import team.tnt.collectorsalbum.common.resource.drops.ListBasedDropOutputBuilder;
 import team.tnt.collectorsalbum.network.S2C_OpenCardPackScreen;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 
@@ -58,12 +59,12 @@ public class CardPackItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity entity) {
         if (entity instanceof ServerPlayer player && !level.isClientSide()) {
-            DropOutputBuilder.DropOutputBuilderImpl<ItemStack> outputs = new DropOutputBuilder.DropOutputBuilderImpl<>();
+            ListBasedDropOutputBuilder<ItemStack> outputs = ListBasedDropOutputBuilder.createArrayListBased();
             ItemDropProvider provider = CardPackDropManager.getInstance().getProvider(this.lootDataSourcePath);
             DropContext context = DropContext.of(DropContext.PLAYER, player, DropContext.ITEMSTACK, itemStack, DropContext.RANDOM, player.getRandom());
             provider.generateDrops(context, outputs);
             AlbumCardManager cardManager = AlbumCardManager.getInstance();
-            List<ItemStack> validDrops = outputs.getDrops().stream()
+            List<ItemStack> validDrops = outputs.getItems().stream()
                     .filter(stack -> cardManager.isCard(stack.getItem()))
                     .collect(Collectors.toList());
             Collections.shuffle(validDrops);

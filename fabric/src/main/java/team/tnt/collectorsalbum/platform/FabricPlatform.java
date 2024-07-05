@@ -9,4 +9,9 @@ public class FabricPlatform implements Platform {
     public Side getSide() {
         return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT ? Side.CLIENT : Side.SERVER;
     }
+
+    @Override
+    public boolean isModLoaded(String namespace) {
+        return FabricLoader.getInstance().isModLoaded(namespace);
+    }
 }

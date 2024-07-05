@@ -947,6 +947,14 @@
   "config.collectorsalbum.option.epicCardDropChance": "Card drop weight: Epic",
   "config.collectorsalbum.option.legendaryCardDropChance": "Card drop weight: Legendary",
   "config.collectorsalbum.option.mythicalCardDropChance": "Card drop weight: Mythical",
+  "config.collectorsalbum.option.mobDrops": "Mob drops configuration",
+  "config.collectorsalbum.option.mobPackDropChance": "Pack drop chance",
+  "config.collectorsalbum.option.commonPackDrop": "Pack drop weight: Common",
+  "config.collectorsalbum.option.uncommonPackDrop": "Pack drop weight: Uncommon",
+  "config.collectorsalbum.option.rarePackDrop": "Pack drop weight: Rare",
+  "config.collectorsalbum.option.epicPackDrop": "Pack drop weight: Epic",
+  "config.collectorsalbum.option.legendaryPackDrop": "Pack drop weight: Legendary",
+  "config.collectorsalbum.option.mythicalPackDrop": "Pack drop weight: Mythical",
 
   "config.screen.collectorsalbum-client": "Collector's Album Client Config",
   "config.collectorsalbum-client.option.packOpenAnimation": "Card pack open animation"

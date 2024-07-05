@@ -18,6 +18,7 @@ import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
+import team.tnt.collectorsalbum.common.resource.MobAdditionalDropManager;
 import team.tnt.collectorsalbum.platform.registration.ForgeRegistration;
 
 @Mod(CollectorsAlbum.MOD_ID)
@@ -73,6 +74,7 @@ public class CollectorsAlbumForge {
         event.addListener(AlbumCardManager.getInstance());
         event.addListener(AlbumCategoryManager.getInstance());
         event.addListener(CardPackDropManager.getInstance());
+        event.addListener(MobAdditionalDropManager.getInstance());
     }
 
     private void createNewRegistries(NewRegistryEvent event) {

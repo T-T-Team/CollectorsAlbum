@@ -9,19 +9,19 @@ import team.tnt.collectorsalbum.common.init.NumberProviderRegistry;
 
 import java.util.Optional;
 
-public class ConfigValueNumberProvider implements NumberProvider {
+public class ConfigValueIntProvider implements NumberProvider {
 
-    public static final MapCodec<ConfigValueNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    public static final MapCodec<ConfigValueIntProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.STRING.fieldOf("config").forGetter(t -> t.config),
             Codec.STRING.fieldOf("path").forGetter(t -> t.path),
             Codec.INT.optionalFieldOf("defaultValue", 0).forGetter(t -> t.defaultValue)
-    ).apply(instance, ConfigValueNumberProvider::new));
+    ).apply(instance, ConfigValueIntProvider::new));
 
     private final String config;
     private final String path;
     private final int defaultValue;
 
-    public ConfigValueNumberProvider(String configId, String path, int defaultValue) {
+    public ConfigValueIntProvider(String configId, String path, int defaultValue) {
         this.config = configId;
         this.path = path;
         this.defaultValue = defaultValue;
@@ -35,6 +35,6 @@ public class ConfigValueNumberProvider implements NumberProvider {
 
     @Override
     public NumberProviderType<?> getType() {
-        return NumberProviderRegistry.CONFIG.get();
+        return NumberProviderRegistry.CONFIG_INT.get();
     }
 }

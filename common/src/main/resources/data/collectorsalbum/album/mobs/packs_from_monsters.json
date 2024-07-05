@@ -1,0 +1,99 @@
+{
+  "type": "collectorsalbum:entity_filter",
+  "filter": "collectorsalbum:monster",
+  "pass": {
+    "type": "collectorsalbum:random_chance",
+    "precision": 5,
+    "chance": {
+      "type": "collectorsalbum:config_percent",
+      "config": "collectorsalbum",
+      "path": "mobDrops.mobPackDropChance",
+      "precision": 5
+    },
+    "item": {
+      "type": "collectorsalbum:weighted_select",
+      "value": {
+        "items": [
+          {
+            "weight": {
+              "type": "collectorsalbum:config_int",
+              "config": "collectorsalbum",
+              "path": "mobDrops.commonPackDrop"
+            },
+            "item": {
+              "type": "collectorsalbum:item",
+              "itemStack": {
+                "id": "collectorsalbum:common_card_pack"
+              }
+            }
+          },
+          {
+            "weight": {
+              "type": "collectorsalbum:config_int",
+              "config": "collectorsalbum",
+              "path": "mobDrops.uncommonPackDrop"
+            },
+            "item": {
+              "type": "collectorsalbum:item",
+              "itemStack": {
+                "id": "collectorsalbum:uncommon_card_pack"
+              }
+            }
+          },
+          {
+            "weight": {
+              "type": "collectorsalbum:config_int",
+              "config": "collectorsalbum",
+              "path": "mobDrops.rarePackDrop"
+            },
+            "item": {
+              "type": "collectorsalbum:item",
+              "itemStack": {
+                "id": "collectorsalbum:rare_card_pack"
+              }
+            }
+          },
+          {
+            "weight": {
+              "type": "collectorsalbum:config_int",
+              "config": "collectorsalbum",
+              "path": "mobDrops.epicPackDrop"
+            },
+            "item": {
+              "type": "collectorsalbum:item",
+              "itemStack": {
+                "id": "collectorsalbum:epic_card_pack"
+              }
+            }
+          },
+          {
+            "weight": {
+              "type": "collectorsalbum:config_int",
+              "config": "collectorsalbum",
+              "path": "mobDrops.legendaryPackDrop"
+            },
+            "item": {
+              "type": "collectorsalbum:item",
+              "itemStack": {
+                "id": "collectorsalbum:legendary_card_pack"
+              }
+            }
+          },
+          {
+            "weight": {
+              "type": "collectorsalbum:config_int",
+              "config": "collectorsalbum",
+              "path": "mobDrops.mythicalPackDrop"
+            },
+            "item": {
+              "type": "collectorsalbum:item",
+              "itemStack": {
+                "id": "collectorsalbum:mythical_card_pack"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

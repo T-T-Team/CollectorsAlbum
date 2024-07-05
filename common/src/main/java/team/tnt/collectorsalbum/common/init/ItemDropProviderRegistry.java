@@ -17,4 +17,6 @@ public final class ItemDropProviderRegistry {
     public static final Supplier<ItemDropProviderType<RepeatedItemDropProvider>> REPEATED_DROP_PROVIDER = REGISTRY.register("repeated", () -> new ItemDropProviderType<>(RepeatedItemDropProvider.CODEC));
     public static final Supplier<ItemDropProviderType<WeightedItemDropProvider>> WEIGHTED_DROP_PROVIDER = REGISTRY.register("weighted_select", () -> new ItemDropProviderType<>(WeightedItemDropProvider.CODEC));
     public static final Supplier<ItemDropProviderType<ListItemDropProvider>> LIST_DROP_PROVIDER = REGISTRY.register("list", () -> new ItemDropProviderType<>(ListItemDropProvider.CODEC));
+    public static final Supplier<ItemDropProviderType<EntityFilterItemDropProvider>> ENTITY_FILTER = REGISTRY.register("entity_filter", () -> new ItemDropProviderType<>(EntityFilterItemDropProvider.CODEC));
+    public static final Supplier<ItemDropProviderType<RandomChanceFilterItemDropProvider>> RANDOM_CHANCE = REGISTRY.register("random_chance", () -> new ItemDropProviderType<>(RandomChanceFilterItemDropProvider.CODEC));
 }

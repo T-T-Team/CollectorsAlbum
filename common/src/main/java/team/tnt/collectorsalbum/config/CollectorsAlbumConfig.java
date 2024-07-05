@@ -12,4 +12,11 @@ public final class CollectorsAlbumConfig {
             "Keep in mind to actually change contents of the pack you need to make custom datapack",
             "See wiki for that"})
     public DefaultPackDropsConfig packDrops = new DefaultPackDropsConfig();
+
+    @Configurable
+    @Configurable.Comment({"Configuration related to mob drops",
+            "Keep in mind to actually change contents of the pack you need to make custom datapack",
+            "See wiki for that"
+    })
+    public MobDropConfig mobDrops = new MobDropConfig();
 }
