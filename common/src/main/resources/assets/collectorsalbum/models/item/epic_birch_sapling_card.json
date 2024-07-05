@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "collectorsalbum:item/epic_birch_sapling_card"
+  }
+}

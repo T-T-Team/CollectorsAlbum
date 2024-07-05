@@ -1,0 +1,94 @@
+{
+  "type": "collectorsalbum:list",
+  "items": [
+    {
+      "type": "collectorsalbum:tag",
+      "tag": "collectorsalbum:cards/mythical"
+    },
+    {
+      "type": "collectorsalbum:repeated",
+      "times": {
+        "type": "collectorsalbum:sum",
+        "left": {
+          "type": "collectorsalbum:config",
+          "config": "collectorsalbum",
+          "path": "packDrops.packDropsCount"
+        },
+        "right": -1
+      },
+      "item": {
+        "type": "collectorsalbum:weighted_select",
+        "value": {
+          "items": [
+            {
+              "weight": {
+                "type": "collectorsalbum:config",
+                "config": "collectorsalbum",
+                "path": "packDrops.mythicalDrops.commonCardDropChance"
+              },
+              "item": {
+                "type": "collectorsalbum:tag",
+                "tag": "collectorsalbum:cards/common"
+              }
+            },
+            {
+              "weight": {
+                "type": "collectorsalbum:config",
+                "config": "collectorsalbum",
+                "path": "packDrops.mythicalDrops.uncommonCardDropChance"
+              },
+              "item": {
+                "type": "collectorsalbum:tag",
+                "tag": "collectorsalbum:cards/uncommon"
+              }
+            },
+            {
+              "weight": {
+                "type": "collectorsalbum:config",
+                "config": "collectorsalbum",
+                "path": "packDrops.mythicalDrops.rareCardDropChance"
+              },
+              "item": {
+                "type": "collectorsalbum:tag",
+                "tag": "collectorsalbum:cards/rare"
+              }
+            },
+            {
+              "weight": {
+                "type": "collectorsalbum:config",
+                "config": "collectorsalbum",
+                "path": "packDrops.mythicalDrops.epicCardDropChance"
+              },
+              "item": {
+                "type": "collectorsalbum:tag",
+                "tag": "collectorsalbum:cards/epic"
+              }
+            },
+            {
+              "weight": {
+                "type": "collectorsalbum:config",
+                "config": "collectorsalbum",
+                "path": "packDrops.mythicalDrops.legendaryCardDropChance"
+              },
+              "item": {
+                "type": "collectorsalbum:tag",
+                "tag": "collectorsalbum:cards/legendary"
+              }
+            },
+            {
+              "weight": {
+                "type": "collectorsalbum:config",
+                "config": "collectorsalbum",
+                "path": "packDrops.mythicalDrops.mythicalCardDropChance"
+              },
+              "item": {
+                "type": "collectorsalbum:tag",
+                "tag": "collectorsalbum:cards/mythical"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

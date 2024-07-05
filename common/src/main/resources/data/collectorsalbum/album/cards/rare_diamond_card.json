@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:rare_diamond_card",
+  "rarity": "RARE",
+  "item": "collectorsalbum:rare_diamond_card",
+  "category": "collectorsalbum:items",
+  "number": 7
+}

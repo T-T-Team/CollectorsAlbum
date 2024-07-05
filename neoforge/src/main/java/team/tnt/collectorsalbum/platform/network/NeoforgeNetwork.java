@@ -1,5 +1,7 @@
 package team.tnt.collectorsalbum.platform.network;
 
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,7 +27,7 @@ public class NeoforgeNetwork implements Network {
     }
 
     @Override
-    public void initialize(ResourceLocation identifier, List<PacketHolder<?>> c2s, List<PacketHolder<?>> s2c) {
+    public void initialize(ResourceLocation identifier, List<PacketHolder<?, ?>> c2s, List<PacketHolder<?, ?>> s2c) {
         throw new UnsupportedOperationException("Cannot automatically bind network packets on NeoForge platform. Use specific events to register your packets instead!");
     }
 
@@ -39,16 +41,18 @@ public class NeoforgeNetwork implements Network {
         PacketDistributor.sendToServer(payload);
     }
 
-    private static  <P extends CustomPacketPayload> void registerInternalC2S(PayloadRegistrar registrar, PacketHolder<P> holder) {
-        registrar.playToServer(holder.type(), holder.codec(), (payload, ctx) -> {
+    @SuppressWarnings("unchecked")
+    private static  <P extends CustomPacketPayload> void registerInternalC2S(PayloadRegistrar registrar, PacketHolder<P, ?> holder) {
+        registrar.playToServer(holder.type(), (StreamCodec<? super RegistryFriendlyByteBuf, P>) holder.codec(), (payload, ctx) -> {
             if (holder.handler() != null) {
                 ctx.enqueueWork(() -> holder.handler().handle(payload, ctx.player()));
             }
         });
     }
 
-    private static  <P extends CustomPacketPayload> void registerInternalS2C(PayloadRegistrar registrar, PacketHolder<P> holder) {
-        registrar.playToClient(holder.type(), holder.codec(), (payload, ctx) -> {
+    @SuppressWarnings("unchecked")
+    private static <P extends CustomPacketPayload> void registerInternalS2C(PayloadRegistrar registrar, PacketHolder<P, ?> holder) {
+        registrar.playToClient(holder.type(), (StreamCodec<? super RegistryFriendlyByteBuf, P>) holder.codec(), (payload, ctx) -> {
             if (holder.handler() != null) {
                 ctx.enqueueWork(() -> holder.handler().handle(payload, ctx.player()));
             }

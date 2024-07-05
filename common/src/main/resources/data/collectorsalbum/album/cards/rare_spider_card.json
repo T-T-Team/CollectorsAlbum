@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:rare_spider_card",
+  "rarity": "RARE",
+  "item": "collectorsalbum:rare_spider_card",
+  "category": "collectorsalbum:mobs",
+  "number": 5
+}

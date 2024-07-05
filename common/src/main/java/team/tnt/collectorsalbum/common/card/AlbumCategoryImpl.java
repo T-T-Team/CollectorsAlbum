@@ -30,7 +30,7 @@ public class AlbumCategoryImpl implements AlbumCategory {
     public AlbumCategoryImpl(int maxSize, ResourceLocation identifier) {
         this.maxSize = maxSize;
         this.identifier = identifier;
-        this.displayText = Component.translatable(null);
+        this.displayText = Component.translatable("unknown");
         this.cards = new AlbumCard[maxSize];
     }
 

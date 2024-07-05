@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:rare_pig_card",
+  "rarity": "RARE",
+  "item": "collectorsalbum:rare_pig_card",
+  "category": "collectorsalbum:mobs",
+  "number": 20
+}

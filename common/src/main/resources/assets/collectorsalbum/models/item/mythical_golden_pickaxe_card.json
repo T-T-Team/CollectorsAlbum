@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "collectorsalbum:item/mythical_golden_pickaxe_card"
+  }
+}

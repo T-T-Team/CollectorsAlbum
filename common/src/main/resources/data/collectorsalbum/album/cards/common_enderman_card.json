@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:common_enderman_card",
+  "rarity": "COMMON",
+  "item": "collectorsalbum:common_enderman_card",
+  "category": "collectorsalbum:mobs",
+  "number": 15
+}

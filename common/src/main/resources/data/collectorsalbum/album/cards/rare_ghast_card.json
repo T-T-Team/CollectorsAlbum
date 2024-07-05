@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:rare_ghast_card",
+  "rarity": "RARE",
+  "item": "collectorsalbum:rare_ghast_card",
+  "category": "collectorsalbum:mobs",
+  "number": 12
+}

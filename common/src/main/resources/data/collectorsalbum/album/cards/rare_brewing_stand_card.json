@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:rare_brewing_stand_card",
+  "rarity": "RARE",
+  "item": "collectorsalbum:rare_brewing_stand_card",
+  "category": "collectorsalbum:items",
+  "number": 3
+}

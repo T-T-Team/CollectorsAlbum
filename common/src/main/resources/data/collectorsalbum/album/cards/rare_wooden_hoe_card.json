@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:rare_wooden_hoe_card",
+  "rarity": "RARE",
+  "item": "collectorsalbum:rare_wooden_hoe_card",
+  "category": "collectorsalbum:tools",
+  "number": 5
+}

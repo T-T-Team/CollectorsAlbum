@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "collectorsalbum:item/uncommon_wooden_shovel_card"
+  }
+}

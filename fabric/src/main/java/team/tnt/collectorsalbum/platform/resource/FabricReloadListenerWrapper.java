@@ -19,7 +19,7 @@ public final class FabricReloadListenerWrapper<T extends PreparableReloadListene
         this.reloadListener = reloadListener;
     }
 
-    public static <T extends PreparableReloadListener & Identifiable> FabricReloadListenerWrapper<T> wrap(final T reloadListener) {
+    public static <T extends PreparableReloadListener & Identifiable> FabricReloadListenerWrapper<T> of(final T reloadListener) {
         Objects.requireNonNull(reloadListener);
         return new FabricReloadListenerWrapper<>(reloadListener);
     }

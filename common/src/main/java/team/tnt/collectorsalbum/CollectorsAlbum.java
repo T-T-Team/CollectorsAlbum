@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.PlayerAlbumTracker;
 import team.tnt.collectorsalbum.config.CollectorsAlbumConfig;
+import team.tnt.collectorsalbum.network.NetworkManager;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 
 public class CollectorsAlbum {
@@ -50,5 +51,6 @@ public class CollectorsAlbum {
     }
 
     private static void registerPackets() {
+        NetworkManager.init();
     }
 }

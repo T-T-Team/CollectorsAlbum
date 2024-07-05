@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:rare_creeper_card",
+  "rarity": "RARE",
+  "item": "collectorsalbum:rare_creeper_card",
+  "category": "collectorsalbum:mobs",
+  "number": 4
+}

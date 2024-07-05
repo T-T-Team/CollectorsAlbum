@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:rare_cookie_card",
+  "rarity": "RARE",
+  "item": "collectorsalbum:rare_cookie_card",
+  "category": "collectorsalbum:items",
+  "number": 15
+}

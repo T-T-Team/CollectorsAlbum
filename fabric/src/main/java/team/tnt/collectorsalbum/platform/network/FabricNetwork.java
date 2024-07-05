@@ -5,7 +5,9 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,7 +17,7 @@ import java.util.List;
 public class FabricNetwork implements Network {
 
     @Override
-    public void initialize(ResourceLocation identifier, List<PacketHolder<?>> c2s, List<PacketHolder<?>> s2c) {
+    public void initialize(ResourceLocation identifier, List<PacketHolder<?, ?>> c2s, List<PacketHolder<?, ?>> s2c) {
         PayloadTypeRegistry<RegistryFriendlyByteBuf> c2sRegistrar = PayloadTypeRegistry.playC2S();
         PayloadTypeRegistry<RegistryFriendlyByteBuf> s2cRegistrar = PayloadTypeRegistry.playS2C();
 
@@ -33,8 +35,9 @@ public class FabricNetwork implements Network {
         ClientPlayNetworking.send(payload);
     }
 
-    private <P extends CustomPacketPayload> void registerInternal(PayloadTypeRegistry<?> registrar, PacketHolder<P> holder, PacketDirection direction) {
-        registrar.register(holder.type(), holder.codec());
+    @SuppressWarnings("unchecked")
+    private <P extends CustomPacketPayload> void registerInternal(PayloadTypeRegistry<?> registrar, PacketHolder<P, ?> holder, PacketDirection direction) {
+        registrar.register(holder.type(), (StreamCodec<? super FriendlyByteBuf, P>) holder.codec());
 
         PacketHandler<P> handler = holder.handler();
         if (handler != null) {

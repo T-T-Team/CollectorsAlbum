@@ -48,24 +48,24 @@ public final class PlatformNetworkManager implements Identifiable {
         return create(ResourceLocation.fromNamespaceAndPath(namespace, "network"));
     }
 
-    public <P extends CustomPacketPayload> void registerPacket(PacketDirection direction, Class<P> payloadType, CustomPacketPayload.Type<P> type, StreamCodec<FriendlyByteBuf, P> codec) {
+    public <P extends CustomPacketPayload, BUF extends FriendlyByteBuf> void registerPacket(PacketDirection direction, Class<P> payloadType, CustomPacketPayload.Type<P> type, StreamCodec<BUF, P> codec) {
         registerPacket(direction, payloadType, type, codec, null);
     }
 
-    public <P extends CustomPacketPayload> void registerPacket(PacketDirection direction, Class<P> payloadType, CustomPacketPayload.Type<P> type, StreamCodec<FriendlyByteBuf, P> codec, PacketHandler<P> handler) {
+    public <P extends CustomPacketPayload, BUF extends FriendlyByteBuf> void registerPacket(PacketDirection direction, Class<P> payloadType, CustomPacketPayload.Type<P> type, StreamCodec<BUF, P> codec, PacketHandler<P> handler) {
         registry.register(direction, new PacketHolder<>(payloadType, type, codec, handler));
     }
 
     public void bind() {
-        List<PacketHolder<?>> c2s = new ArrayList<>();
-        List<PacketHolder<?>> s2c = new ArrayList<>();
+        List<PacketHolder<?, ?>> c2s = new ArrayList<>();
+        List<PacketHolder<?, ?>> s2c = new ArrayList<>();
         this.bindRef(c2s::addAll, s2c::addAll);
         NETWORK.initialize(this.identifier, c2s, s2c);
     }
 
-    public void bindRef(Consumer<List<PacketHolder<?>>> c2sPackets, Consumer<List<PacketHolder<?>>> s2cPackets) {
-        List<PacketHolder<?>> c2s = registry.sidePackets.get(PacketDirection.CLIENT_TO_SERVER);
-        List<PacketHolder<?>> s2c = registry.sidePackets.get(PacketDirection.SERVER_TO_CLIENT);
+    public void bindRef(Consumer<List<PacketHolder<?, ?>>> c2sPackets, Consumer<List<PacketHolder<?, ?>>> s2cPackets) {
+        List<PacketHolder<?, ?>> c2s = registry.sidePackets.get(PacketDirection.CLIENT_TO_SERVER);
+        List<PacketHolder<?, ?>> s2c = registry.sidePackets.get(PacketDirection.SERVER_TO_CLIENT);
         if (!c2s.isEmpty())
             c2sPackets.accept(c2s);
         if (!s2c.isEmpty())
@@ -75,7 +75,7 @@ public final class PlatformNetworkManager implements Identifiable {
 
     private static final class Registry {
 
-        private final EnumMap<PacketDirection, List<PacketHolder<?>>> sidePackets;
+        private final EnumMap<PacketDirection, List<PacketHolder<?, ?>>> sidePackets;
 
         private Registry() {
             this.sidePackets = new EnumMap<>(PacketDirection.class);
@@ -83,7 +83,7 @@ public final class PlatformNetworkManager implements Identifiable {
             this.sidePackets.put(PacketDirection.SERVER_TO_CLIENT, new ArrayList<>());
         }
 
-        void register(PacketDirection direction, PacketHolder<?> packet) {
+        void register(PacketDirection direction, PacketHolder<?, ?> packet) {
             this.sidePackets.get(direction).add(packet);
         }
     }

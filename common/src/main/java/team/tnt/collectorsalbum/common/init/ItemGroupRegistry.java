@@ -2,6 +2,7 @@ package team.tnt.collectorsalbum.common.init;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.platform.registration.PlatformRegistry;
@@ -16,7 +17,12 @@ public final class ItemGroupRegistry {
             .icon(() -> ItemRegistry.ALBUM.get().getDefaultInstance())
             .title(Component.translatable(key.toLanguageKey("itemGroup")))
             .displayItems((params, builder) -> {
-                builder.accept(ItemRegistry.ALBUM.get());
+                BuiltInRegistries.ITEM.stream()
+                        .filter(item -> {
+                            ResourceLocation identifier = BuiltInRegistries.ITEM.getKey(item);
+                            return identifier.getNamespace().equals(CollectorsAlbum.MOD_ID);
+                        })
+                        .forEach(builder::accept);
             })
             .build()
     );

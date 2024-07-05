@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:rare_poppy_card",
+  "rarity": "RARE",
+  "item": "collectorsalbum:rare_poppy_card",
+  "category": "collectorsalbum:nature",
+  "number": 9
+}

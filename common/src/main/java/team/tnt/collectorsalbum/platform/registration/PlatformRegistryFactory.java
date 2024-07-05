@@ -23,6 +23,17 @@ public final class PlatformRegistryFactory {
         return createSimple(key, true);
     }
 
+    public static <T> PlatformRegistry.Reference<T> createDefaulted(ResourceKey<Registry<T>> key, boolean sync, ResourceLocation defaultKey) {
+        RegistryAttributes<T> attributes = new RegistryAttributes<>(key, defaultKey, sync);
+        BindableRegistryReference<T> reference = new BindableRegistryReference<>(attributes);
+        PREPARED_REGISTRIES.add(reference);
+        return reference;
+    }
+
+    public static <T> PlatformRegistry.Reference<T> createDefaulted(ResourceKey<Registry<T>> key, ResourceLocation defaultKey) {
+        return createDefaulted(key, true, defaultKey);
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> void bindRefs(BiConsumer<RegistryAttributes<T>, RegistryBinder<T>> builder) {
         for (BindableRegistryReference<?> reference : PREPARED_REGISTRIES) {

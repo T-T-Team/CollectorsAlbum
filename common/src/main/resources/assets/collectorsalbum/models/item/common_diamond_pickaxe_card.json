@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "collectorsalbum:item/common_diamond_pickaxe_card"
+  }
+}

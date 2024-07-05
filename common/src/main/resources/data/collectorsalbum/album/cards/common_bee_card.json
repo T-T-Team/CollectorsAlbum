@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:common_bee_card",
+  "rarity": "COMMON",
+  "item": "collectorsalbum:common_bee_card",
+  "category": "collectorsalbum:mobs",
+  "number": 16
+}

@@ -1,6 +1,8 @@
 package team.tnt.collectorsalbum.platform.network;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,15 +21,15 @@ public final class ForgeNetwork implements Network {
     private SimpleChannel channel;
 
     @Override
-    public void initialize(ResourceLocation identifier, List<PacketHolder<?>> c2s, List<PacketHolder<?>> s2c) {
+    public void initialize(ResourceLocation identifier, List<PacketHolder<?, ?>> c2s, List<PacketHolder<?, ?>> s2c) {
         this.channel = ChannelBuilder.named(identifier)
                 .networkProtocolVersion(1)
                 .simpleChannel();
 
-        for (PacketHolder<?> holder : c2s) {
+        for (PacketHolder<?, ?> holder : c2s) {
             this.registerInternal(holder);
         }
-        for (PacketHolder<?> holder : s2c) {
+        for (PacketHolder<?, ?> holder : s2c) {
             this.registerInternal(holder);
         }
     }
@@ -42,9 +44,10 @@ public final class ForgeNetwork implements Network {
         channel.send(payload, PacketDistributor.PLAYER.with(player));
     }
 
-    private <T extends CustomPacketPayload> void registerInternal(PacketHolder<T> holder) {
+    @SuppressWarnings("unchecked")
+    private <T extends CustomPacketPayload> void registerInternal(PacketHolder<T, ?> holder) {
         this.channel.messageBuilder(holder.payloadType())
-                .codec(holder.codec())
+                .codec((StreamCodec<FriendlyByteBuf, T>) holder.codec())
                 .consumerMainThread((payload, ctx) -> {
                     if (holder.handler() != null) {
                         holder.handler().handle(payload, this.getPlayer(ctx));

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface Network {
 
-    void initialize(ResourceLocation identifier, List<PacketHolder<?>> c2s, List<PacketHolder<?>> s2c);
+    void initialize(ResourceLocation identifier, List<PacketHolder<?, ?>> c2s, List<PacketHolder<?, ?>> s2c);
 
     void sendClientMessage(ServerPlayer player, CustomPacketPayload payload);
 

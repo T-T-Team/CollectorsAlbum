@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:rare_lantern_card",
+  "rarity": "RARE",
+  "item": "collectorsalbum:rare_lantern_card",
+  "category": "collectorsalbum:items",
+  "number": 25
+}

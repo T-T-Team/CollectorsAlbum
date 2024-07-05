@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:rare_horse_card",
+  "rarity": "RARE",
+  "item": "collectorsalbum:rare_horse_card",
+  "category": "collectorsalbum:mobs",
+  "number": 22
+}

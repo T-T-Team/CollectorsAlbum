@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:rare_bat_card",
+  "rarity": "RARE",
+  "item": "collectorsalbum:rare_bat_card",
+  "category": "collectorsalbum:mobs",
+  "number": 27
+}

@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:common_iron_ingot_card",
+  "rarity": "COMMON",
+  "item": "collectorsalbum:common_iron_ingot_card",
+  "category": "collectorsalbum:items",
+  "number": 5
+}

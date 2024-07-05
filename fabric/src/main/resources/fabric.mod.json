@@ -18,6 +18,9 @@
   "entrypoints": {
     "main": [
       "team.tnt.collectorsalbum.CollectorsAlbumFabric"
+    ],
+    "client": [
+      "team.tnt.collectorsalbum.CollectorsAlbumClientFabric"
     ]
   },
   "mixins": [
@@ -29,7 +32,7 @@
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
     "java": ">=${java_version}",
-    "configuration": "^2.2.0"
+    "configuration": "^2.3.0"
   },
   "custom": {
     "modmenu": {

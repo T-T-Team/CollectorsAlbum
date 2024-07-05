@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:rare_parrot_card",
+  "rarity": "RARE",
+  "item": "collectorsalbum:rare_parrot_card",
+  "category": "collectorsalbum:mobs",
+  "number": 23
+}

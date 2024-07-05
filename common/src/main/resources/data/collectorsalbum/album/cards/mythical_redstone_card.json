@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "collectorsalbum:mythical_redstone_card",
+  "rarity": "MYTHICAL",
+  "item": "collectorsalbum:mythical_redstone_card",
+  "category": "collectorsalbum:items",
+  "number": 10
+}
