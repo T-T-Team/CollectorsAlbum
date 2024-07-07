@@ -3,6 +3,8 @@ package team.tnt.collectorsalbum.common.resource.drops;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
+import team.tnt.collectorsalbum.common.resource.util.ActionContext;
+import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
 public final class NoItemDropProvider implements ItemDropProvider {
 
@@ -12,7 +14,7 @@ public final class NoItemDropProvider implements ItemDropProvider {
     private NoItemDropProvider() {}
 
     @Override
-    public void generateDrops(DropContext context, DropOutputBuilder<ItemStack> output) {
+    public void generateDrops(ActionContext context, OutputBuilder<ItemStack> output) {
     }
 
     @Override

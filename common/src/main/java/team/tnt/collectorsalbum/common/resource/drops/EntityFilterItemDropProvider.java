@@ -9,6 +9,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
+import team.tnt.collectorsalbum.common.resource.util.ActionContext;
+import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
 public class EntityFilterItemDropProvider implements ItemDropProvider {
 
@@ -29,8 +31,8 @@ public class EntityFilterItemDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public void generateDrops(DropContext context, DropOutputBuilder<ItemStack> output) {
-        Entity entity = context.getNullable(DropContext.ENTITY, Entity.class);
+    public void generateDrops(ActionContext context, OutputBuilder<ItemStack> output) {
+        Entity entity = context.getNullable(ActionContext.ENTITY, Entity.class);
         if (entity == null) {
             CollectorsAlbum.LOGGER.warn("Failed to generate item drop, 'entity' key is not found in drop context!");
             return;

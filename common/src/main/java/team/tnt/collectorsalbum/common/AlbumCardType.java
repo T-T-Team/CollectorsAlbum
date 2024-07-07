@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public final class AlbumCardType<C extends AlbumCard> {
 
-    public static final Codec<AlbumCard> INSTANCE_CODEC = CollectorsAlbumRegistries.CARD_TYPE.codec().dispatch("type", AlbumCard::getType, AlbumCardType::codec);
+    public static final Codec<AlbumCard> INSTANCE_CODEC = CollectorsAlbumRegistries.CARD_TYPE.byNameCodec().dispatch("type", AlbumCard::getType, AlbumCardType::codec);
 
     private final ResourceLocation identifier;
     private final MapCodec<C> codec;

@@ -1,5 +1,6 @@
 package team.tnt.collectorsalbum;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -36,11 +37,13 @@ public class CollectorsAlbumNeoforge {
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, NumberProviderRegistry.REGISTRY);
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, ItemDropProviderRegistry.REGISTRY);
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, ItemDataComponentRegistry.REGISTRY);
+        NeoforgeRegistration.subscribeRegistryEvent(eventBus, AlbumBonusRegistry.REGISTRY);
         NeoforgeNetwork.subscribeRegistryEvent(eventBus, CollectorsAlbum.NETWORK_MANAGER);
 
         IEventBus neoBus = NeoForge.EVENT_BUS;
         neoBus.addListener(this::addReloadListeners);
         neoBus.addListener(this::playerTick);
+        neoBus.addListener(this::playerLoggedIn);
         neoBus.addListener(this::playerLoggedOut);
         neoBus.addListener(this::serverStopping);
 
@@ -54,6 +57,10 @@ public class CollectorsAlbumNeoforge {
 
     private void playerTick(PlayerTickEvent.Post event) {
         CollectorsAlbum.tickPlayer(event.getEntity());
+    }
+
+    private void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        CollectorsAlbum.sendPlayerDatapacks((ServerPlayer) event.getEntity());
     }
 
     private void playerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {

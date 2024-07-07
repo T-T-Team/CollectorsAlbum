@@ -23,6 +23,8 @@ public interface AlbumCard {
 
     ItemStack asItem();
 
+    int getPoints();
+
     int cardNumber();
 
     AlbumCardType<?> getType();

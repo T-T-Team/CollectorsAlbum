@@ -4,6 +4,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import team.tnt.collectorsalbum.CollectorsAlbum;
+import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.item.AlbumItem;
 import team.tnt.collectorsalbum.common.item.CardPackItem;
 import team.tnt.collectorsalbum.platform.registration.PlatformRegistry;
@@ -14,7 +15,7 @@ public final class ItemRegistry {
 
     public static final PlatformRegistry<Item> REGISTRY = PlatformRegistry.create(BuiltInRegistries.ITEM, CollectorsAlbum.MOD_ID);
 
-    public static final Supplier<AlbumItem> ALBUM = REGISTRY.register("album", () -> new AlbumItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+    public static final Supplier<AlbumItem> ALBUM = REGISTRY.register("album", () -> new AlbumItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).component(ItemDataComponentRegistry.ALBUM.get(), Album.emptyAlbum())));
     public static final Supplier<CardPackItem> COMMON_CARD_PACK = REGISTRY.register("common_card_pack", key -> new CardPackItem(new Item.Properties().stacksTo(1), key));
     public static final Supplier<CardPackItem> UNCOMMON_CARD_PACK = REGISTRY.register("uncommon_card_pack", key -> new CardPackItem(new Item.Properties().stacksTo(1), key));
     public static final Supplier<CardPackItem> RARE_CARD_PACK = REGISTRY.register("rare_card_pack", key -> new CardPackItem(new Item.Properties().stacksTo(1), key));

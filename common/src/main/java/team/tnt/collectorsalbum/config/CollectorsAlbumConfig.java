@@ -8,7 +8,7 @@ import team.tnt.collectorsalbum.CollectorsAlbum;
 public final class CollectorsAlbumConfig {
 
     @Configurable
-    @Configurable.Comment({"Configurations related to card package drop distributions",
+    @Configurable.Comment({"Configuration related to card package drop distributions",
             "Keep in mind to actually change contents of the pack you need to make custom datapack",
             "See wiki for that"})
     public DefaultPackDropsConfig packDrops = new DefaultPackDropsConfig();
@@ -19,4 +19,11 @@ public final class CollectorsAlbumConfig {
             "See wiki for that"
     })
     public MobDropConfig mobDrops = new MobDropConfig();
+
+    @Configurable
+    @Configurable.Comment({"Configuration related to album bonuses",
+            "Keep in mind to actually change the bonuses to something you need to make custom datapack",
+            "See wiki for that"
+    })
+    public AlbumBonusConfig bonusConfig = new AlbumBonusConfig();
 }

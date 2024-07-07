@@ -6,7 +6,7 @@ import team.tnt.collectorsalbum.common.CollectorsAlbumRegistries;
 
 public final class NumberProviderType<P extends NumberProvider> {
 
-    public static final Codec<NumberProvider> INSTANCE_CODEC = CollectorsAlbumRegistries.NUMBER_PROVIDER.codec().dispatch(NumberProvider::getType, t -> t.codec);
+    public static final Codec<NumberProvider> INSTANCE_CODEC = CollectorsAlbumRegistries.NUMBER_PROVIDER.byNameCodec().dispatch(NumberProvider::getType, t -> t.codec);
 
     private final MapCodec<P> codec;
 

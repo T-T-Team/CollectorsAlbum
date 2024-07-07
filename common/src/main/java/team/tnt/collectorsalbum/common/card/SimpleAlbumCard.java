@@ -13,6 +13,7 @@ import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.platform.Codecs;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class SimpleAlbumCard implements AlbumCard {
 
@@ -61,6 +62,11 @@ public class SimpleAlbumCard implements AlbumCard {
     }
 
     @Override
+    public int getPoints() {
+        return this.rarity.getValue();
+    }
+
+    @Override
     public int cardNumber() {
         return this.cardNumber;
     }
@@ -76,5 +82,18 @@ public class SimpleAlbumCard implements AlbumCard {
             this.cachedCategory = AlbumCategoryManager.getInstance().findById(this.categoryIdentifier).orElseThrow();
         }
         return this.cachedCategory;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleAlbumCard that = (SimpleAlbumCard) o;
+        return Objects.equals(cardIdentifier, that.cardIdentifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(cardIdentifier);
     }
 }

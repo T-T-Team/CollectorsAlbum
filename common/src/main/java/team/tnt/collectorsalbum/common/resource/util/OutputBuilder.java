@@ -1,19 +1,19 @@
-package team.tnt.collectorsalbum.common.resource.drops;
+package team.tnt.collectorsalbum.common.resource.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public interface DropOutputBuilder<T> {
+public interface OutputBuilder<T> {
 
     void accept(T item);
 
     void acceptAll(List<T> items);
 
-    class DropOutputBuilderImpl<T> implements DropOutputBuilder<T> {
+    class OutputBuilderImpl<T> implements OutputBuilder<T> {
 
         private final List<T> drops;
 
-        public DropOutputBuilderImpl() {
+        public OutputBuilderImpl() {
             this.drops = new ArrayList<>();
         }
 

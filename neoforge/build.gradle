@@ -47,10 +47,17 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 
 repositories {
     maven { url "https://www.cursemaven.com" }
+    maven {
+        name = "Curios Continuation" // TODO replace with official curios once released on 1.21
+        url = uri("https://maven.octo-studios.com/releases")
+    }
 }
 
 dependencies {
     implementation "net.neoforged:neoforge:${project.neoforge_version}"
+
+    // Curios
+    implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     // Configuration
     implementation "curse.maven:configuration-444699:${configuration_version}"

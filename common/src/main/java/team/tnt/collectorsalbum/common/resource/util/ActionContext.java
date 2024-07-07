@@ -1,4 +1,4 @@
-package team.tnt.collectorsalbum.common.resource.drops;
+package team.tnt.collectorsalbum.common.resource.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,13 +6,15 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public interface DropContext {
+public interface ActionContext {
 
     String PLAYER = "player";
     String ITEMSTACK = "itemstack";
     String ENTITY = "entity";
     String DAMAGE_SOURCE = "damageSource";
     String RANDOM = "random";
+    String ALBUM = "album";
+    String CATEGORY = "category";
 
     <T> Optional<T> get(String key, Class<T> clazz);
 
@@ -36,33 +38,33 @@ public interface DropContext {
         return getOrThrow(key, clazz, () -> new NoSuchElementException("No such key exists in context for value: " + key));
     }
 
-    static DropContext empty() {
-        return new DropContextImpl();
+    static ActionContext empty() {
+        return new ActionContextImpl();
     }
 
-    static DropContext of(String k1, Object v1) {
-        DropContextImpl context = new DropContextImpl();
+    static ActionContext of(String k1, Object v1) {
+        ActionContextImpl context = new ActionContextImpl();
         context.values.put(k1, v1);
         return context;
     }
 
-    static DropContext of(String k1, Object v1, String k2, Object v2) {
-        DropContextImpl context = new DropContextImpl();
+    static ActionContext of(String k1, Object v1, String k2, Object v2) {
+        ActionContextImpl context = new ActionContextImpl();
         context.values.put(k1, v1);
         context.values.put(k2, v2);
         return context;
     }
 
-    static DropContext of(String k1, Object v1, String k2, Object v2, String k3, Object v3) {
-        DropContextImpl context = new DropContextImpl();
+    static ActionContext of(String k1, Object v1, String k2, Object v2, String k3, Object v3) {
+        ActionContextImpl context = new ActionContextImpl();
         context.values.put(k1, v1);
         context.values.put(k2, v2);
         context.values.put(k3, v3);
         return context;
     }
 
-    static DropContext of(String k1, Object v1, String k2, Object v2, String k3, Object v3, String k4, Object v4) {
-        DropContextImpl context = new DropContextImpl();
+    static ActionContext of(String k1, Object v1, String k2, Object v2, String k3, Object v3, String k4, Object v4) {
+        ActionContextImpl context = new ActionContextImpl();
         context.values.put(k1, v1);
         context.values.put(k2, v2);
         context.values.put(k3, v3);
@@ -70,8 +72,8 @@ public interface DropContext {
         return context;
     }
 
-    static DropContext of(String k1, Object v1, String k2, Object v2, String k3, Object v3, String k4, Object v4, String k5, Object v5) {
-        DropContextImpl context = new DropContextImpl();
+    static ActionContext of(String k1, Object v1, String k2, Object v2, String k3, Object v3, String k4, Object v4, String k5, Object v5) {
+        ActionContextImpl context = new ActionContextImpl();
         context.values.put(k1, v1);
         context.values.put(k2, v2);
         context.values.put(k3, v3);
@@ -80,7 +82,7 @@ public interface DropContext {
         return context;
     }
 
-    class DropContextImpl implements DropContext {
+    class ActionContextImpl implements ActionContext {
 
         private final Map<String, Object> values = new HashMap<>();
 

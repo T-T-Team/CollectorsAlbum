@@ -1,6 +1,8 @@
 package team.tnt.collectorsalbum.mixin;
 
+import net.minecraft.network.Connection;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.players.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,6 +12,14 @@ import team.tnt.collectorsalbum.CollectorsAlbum;
 
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
+
+    @Inject(
+            method = "placeNewPlayer",
+            at = @At("TAIL")
+    )
+    private void collectorsAlbum$playerLoggingIn(Connection connection, ServerPlayer player, CommonListenerCookie cookie, CallbackInfo ci) {
+        CollectorsAlbum.sendPlayerDatapacks(player);
+    }
 
     @Inject(
             method = "remove",

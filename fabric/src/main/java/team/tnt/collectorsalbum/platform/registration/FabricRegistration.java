@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceKey;
 
 public final class FabricRegistration {
 
-    public static <T> void registerCustomRegistry(PlatformRegistry.Reference<T> reference) {
+    public static <T> void registerCustomRegistry(PlatformRegistry.RegistryReference<T> reference) {
         PlatformRegistryFactory.bindRef(reference, (attributes, binder) -> {
             ResourceKey<Registry<T>> key = attributes.key();
             FabricRegistryBuilder<T, ?> builder = attributes.defaultKey() != null

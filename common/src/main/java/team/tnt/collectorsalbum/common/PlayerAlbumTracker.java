@@ -1,7 +1,11 @@
 package team.tnt.collectorsalbum.common;
 
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
+import team.tnt.collectorsalbum.common.init.RegistryTags;
+import team.tnt.collectorsalbum.integrations.PlatformIntegrations;
 
 import java.util.*;
 
@@ -16,8 +20,23 @@ public final class PlayerAlbumTracker {
         return INSTANCE;
     }
 
-    public Optional<AlbumLocateResult> findAlbum(Player player) {
-        return Optional.empty(); // TODO implement
+    public AlbumLocatorResult findAlbum(Player player, Album previousAlbum) {
+        AlbumLocatorResult integrationResult = PlatformIntegrations.getAlbumLocatorResult(player, previousAlbum);
+        if (integrationResult.exists()) {
+            return integrationResult;
+        }
+        Inventory inventory = player.getInventory();
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack itemStack = inventory.getItem(i);
+            if (!itemStack.isEmpty() && itemStack.is(RegistryTags.Items.ALBUM)) {
+                Album album = itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+                if (previousAlbum != null && previousAlbum.test(album)) {
+                    return AlbumLocatorResult.found(itemStack, album, i);
+                }
+                return AlbumLocatorResult.found(itemStack, Album.basedOn(album), i);
+            }
+        }
+        return AlbumLocatorResult.notFound();
     }
 
     public Optional<Album> getAlbum(Player player) {
@@ -42,8 +61,5 @@ public final class PlayerAlbumTracker {
 
     public void clearCache() {
         this.playerAlbums.clear();
-    }
-
-    public record AlbumLocateResult(ItemStack itemStack, Album album) {
     }
 }

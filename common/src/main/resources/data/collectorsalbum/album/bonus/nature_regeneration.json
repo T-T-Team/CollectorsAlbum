@@ -1,0 +1,43 @@
+{
+  "type": "collectorsalbum:config_toggle",
+  "config": "collectorsalbum",
+  "path": "bonusConfig.regenerationBonusEnabled",
+  "enabled": {
+    "type": "collectorsalbum:first_applicable",
+    "items": [
+      {
+        "type": "collectorsalbum:category_cards",
+        "category": "collectorsalbum:nature",
+        "rarityFilter": ["mythical"],
+        "cardCount": {
+          "min": 30
+        },
+        "item": {
+          "type": "collectorsalbum:effect",
+          "effect": "minecraft:regeneration",
+          "amplifier": {
+            "type": "collectorsalbum:config_int",
+            "config": "collectorsalbum",
+            "path": "bonusConfig.fullMobEffectAmplifier"
+          }
+        }
+      },
+      {
+        "type": "collectorsalbum:category_cards",
+        "category": "collectorsalbum:nature",
+        "cardCount": {
+          "min": 30
+        },
+        "item": {
+          "type": "collectorsalbum:effect",
+          "effect": "minecraft:regeneration",
+          "amplifier": {
+            "type": "collectorsalbum:config_int",
+            "config": "collectorsalbum",
+            "path": "bonusConfig.baseMobEffectAmplifier"
+          }
+        }
+      }
+    ]
+  }
+}

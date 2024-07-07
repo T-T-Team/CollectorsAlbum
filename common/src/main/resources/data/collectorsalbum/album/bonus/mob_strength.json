@@ -1,0 +1,43 @@
+{
+  "type": "collectorsalbum:config_toggle",
+  "config": "collectorsalbum",
+  "path": "bonusConfig.strengthBonusEnabled",
+  "enabled": {
+    "type": "collectorsalbum:first_applicable",
+    "items": [
+      {
+        "type": "collectorsalbum:category_cards",
+        "category": "collectorsalbum:mobs",
+        "rarityFilter": ["mythical"],
+        "cardCount": {
+          "min": 30
+        },
+        "item": {
+          "type": "collectorsalbum:effect",
+          "effect": "minecraft:strength",
+          "amplifier": {
+            "type": "collectorsalbum:config_int",
+            "config": "collectorsalbum",
+            "path": "bonusConfig.fullMobEffectAmplifier"
+          }
+        }
+      },
+      {
+        "type": "collectorsalbum:category_cards",
+        "category": "collectorsalbum:mobs",
+        "cardCount": {
+          "min": 30
+        },
+        "item": {
+          "type": "collectorsalbum:effect",
+          "effect": "minecraft:strength",
+          "amplifier": {
+            "type": "collectorsalbum:config_int",
+            "config": "collectorsalbum",
+            "path": "bonusConfig.baseMobEffectAmplifier"
+          }
+        }
+      }
+    ]
+  }
+}

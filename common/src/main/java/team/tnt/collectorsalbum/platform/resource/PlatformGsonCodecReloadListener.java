@@ -9,12 +9,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.apache.logging.log4j.message.FormattedMessage;
+import team.tnt.collectorsalbum.network.S2C_SendDatapackResources;
+import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public abstract class PlatformGsonCodecReloadListener<T> extends PlatformGsonReloadListener {
 
-    private static final Gson GSON = new Gson();
+    public static final Gson GSON = new Gson();
 
     private final Codec<T> codec;
 
@@ -23,15 +27,32 @@ public abstract class PlatformGsonCodecReloadListener<T> extends PlatformGsonRel
         this.codec = codec;
     }
 
+    public Codec<T> codec() {
+        return codec;
+    }
+
+    public List<T> getNetworkData() {
+        return null;
+    }
+
+    public void onNetworkDataReceived(List<T> collection) {
+    }
+
     protected abstract void preApply(Map<ResourceLocation, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler);
 
     protected abstract void resolve(ResourceLocation path, T element);
+
+    protected boolean filterEntry(ResourceLocation identifier) {
+        return true;
+    }
 
     @Override
     public final void apply(Map<ResourceLocation, JsonElement> resource, ResourceManager manager, ProfilerFiller profiler) {
         this.preApply(resource, manager, profiler);
         for (Map.Entry<ResourceLocation, JsonElement> entry : resource.entrySet()) {
             ResourceLocation identifier = entry.getKey();
+            if (!this.filterEntry(identifier))
+                continue;
             JsonElement element = entry.getValue();
             try {
                 DataResult<T> dataResult = this.codec.parse(JsonOps.INSTANCE, element);
@@ -45,6 +66,10 @@ public abstract class PlatformGsonCodecReloadListener<T> extends PlatformGsonRel
     }
 
     protected void onReloadComplete(ResourceManager manager, ProfilerFiller profiler) {
+        List<T> data = this.getNetworkData();
+        if (data != null) {
+            PlatformNetworkManager.NETWORK.sendAllClientMessage(new S2C_SendDatapackResources<>(this));
+        }
     }
 
     protected void handleParsingError(Exception e, ResourceLocation currentPath) {

@@ -36,7 +36,7 @@ public abstract class ItemStackMixin implements DataComponentHolder {
         manager.getCardInfo(item).ifPresent(info -> {
             components.add(AlbumCard.ITEM_TOOLTIP_HEADER);
             components.add(Component.translatable(AlbumCard.ITEM_TOOLTIP_NUMBER_KEY, Component.literal("#" + info.cardNumber()).withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.GRAY));
-            //components.add(Component.translatable(AlbumCard.ITEM_TOOLTIP_CATEGORY_KEY, info.getLinkedCategory().getDisplayText()));
+            components.add(Component.translatable(AlbumCard.ITEM_TOOLTIP_CATEGORY_KEY, info.getLinkedCategory().getDisplayText()).withStyle(ChatFormatting.GRAY));
             components.add(Component.translatable(AlbumCard.ITEM_TOOLTIP_RARITY_KEY, info.rarity().getDisplayText()).withStyle(ChatFormatting.GRAY));
             components.add(Component.translatable(AlbumCard.ITEM_TOOLTIP_VALUE_KEY, Component.translatable("collectorsalbum.text.points.value", info.rarity().getValue()).withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.GRAY));
         });

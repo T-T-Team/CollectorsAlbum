@@ -15,15 +15,15 @@ public interface PlatformRegistry<T> {
         return new PlatformRegistryImpl<>(() -> registry, namespace);
     }
 
-    static <T> PlatformRegistry<T> create(Reference<T> reference, String namespace) {
+    static <T> PlatformRegistry<T> create(RegistryReference<T> reference, String namespace) {
         return new PlatformRegistryImpl<>(reference, namespace);
     }
 
-    <R extends T> Supplier<R> register(String elementId, Supplier<R> ref);
+    <R extends T> Reference<R> register(String elementId, Supplier<R> ref);
 
-    <R extends T> Supplier<R> register(String elementId, Function<ResourceLocation, R> ref);
+    <R extends T> Reference<R> register(String elementId, Function<ResourceLocation, R> ref);
 
-    <R extends T> void bindRef(BiConsumer<ResourceLocation, Supplier<R>> refConsumer);
+    <R extends T> void bindRef(BiConsumer<ResourceLocation, Reference<R>> refConsumer);
 
     void bind();
 
@@ -32,9 +32,13 @@ public interface PlatformRegistry<T> {
     ResourceKey<? extends Registry<T>> registryKey();
 
     @FunctionalInterface
-    interface Reference<T> extends Supplier<Registry<T>> {
+    interface Reference<T> extends Supplier<T> {
+    }
 
-        default Codec<T> codec() {
+    @FunctionalInterface
+    interface RegistryReference<T> extends PlatformRegistry.Reference<Registry<T>> {
+
+        default Codec<T> byNameCodec() {
             return this.get().byNameCodec();
         }
     }

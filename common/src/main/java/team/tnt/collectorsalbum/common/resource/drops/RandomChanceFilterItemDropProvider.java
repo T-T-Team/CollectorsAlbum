@@ -12,6 +12,8 @@ import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.function.ConstantNumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProviderType;
+import team.tnt.collectorsalbum.common.resource.util.ActionContext;
+import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 import team.tnt.collectorsalbum.platform.Codecs;
 
 import java.util.function.Function;
@@ -36,8 +38,8 @@ public class RandomChanceFilterItemDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public void generateDrops(DropContext context, DropOutputBuilder<ItemStack> output) {
-        RandomSource source = context.getOrThrow(DropContext.RANDOM, RandomSource.class);
+    public void generateDrops(ActionContext context, OutputBuilder<ItemStack> output) {
+        RandomSource source = context.getOrThrow(ActionContext.RANDOM, RandomSource.class);
         int unit = (int) Math.pow(10, this.precision);
         int chance = Mth.clamp(this.chance.getAsInt(), 0, unit);
         float percent = chance / (float) unit;

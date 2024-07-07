@@ -1,22 +1,22 @@
-package team.tnt.collectorsalbum.common.resource.drops;
+package team.tnt.collectorsalbum.common.resource.util;
 
 import java.util.List;
 
-public class SingleItemDropOutputBuilder<T> implements DropOutputBuilder<T> {
+public class SingleItemOutputBuilder<T> implements OutputBuilder<T> {
 
     private T item;
     private boolean allowsOverwrite;
 
-    private SingleItemDropOutputBuilder(boolean allowsOverwrite) {
+    private SingleItemOutputBuilder(boolean allowsOverwrite) {
         this.allowsOverwrite = allowsOverwrite;
     }
 
-    public static <T> SingleItemDropOutputBuilder<T> acceptsFirst() {
-        return new SingleItemDropOutputBuilder<>(false);
+    public static <T> SingleItemOutputBuilder<T> acceptsFirst() {
+        return new SingleItemOutputBuilder<>(false);
     }
 
-    public static <T> SingleItemDropOutputBuilder<T> acceptsLast() {
-        return new SingleItemDropOutputBuilder<>(true);
+    public static <T> SingleItemOutputBuilder<T> acceptsLast() {
+        return new SingleItemOutputBuilder<>(true);
     }
 
     @Override

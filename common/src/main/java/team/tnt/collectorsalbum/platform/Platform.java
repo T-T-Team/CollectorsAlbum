@@ -1,5 +1,7 @@
 package team.tnt.collectorsalbum.platform;
 
+import net.minecraft.server.MinecraftServer;
+
 public interface Platform {
 
     Platform INSTANCE = JavaServiceLoader.loadService(Platform.class);
@@ -7,4 +9,6 @@ public interface Platform {
     Side getSide();
 
     boolean isModLoaded(String namespace);
+
+    MinecraftServer getServerInstance();
 }

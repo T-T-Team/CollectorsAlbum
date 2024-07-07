@@ -12,37 +12,37 @@ public final class PlatformRegistryFactory {
 
     private static List<BindableRegistryReference<?>> PREPARED_REGISTRIES = new ArrayList<>();
 
-    public static <T> PlatformRegistry.Reference<T> createSimple(ResourceKey<Registry<T>> key, boolean sync) {
+    public static <T> PlatformRegistry.RegistryReference<T> createSimple(ResourceKey<Registry<T>> key, boolean sync) {
         RegistryAttributes<T> attributes = new RegistryAttributes<>(key, null, sync);
         BindableRegistryReference<T> reference = new BindableRegistryReference<>(attributes);
         PREPARED_REGISTRIES.add(reference);
         return reference;
     }
 
-    public static <T> PlatformRegistry.Reference<T> createSimple(ResourceKey<Registry<T>> key) {
+    public static <T> PlatformRegistry.RegistryReference<T> createSimple(ResourceKey<Registry<T>> key) {
         return createSimple(key, true);
     }
 
-    public static <T> PlatformRegistry.Reference<T> createDefaulted(ResourceKey<Registry<T>> key, boolean sync, ResourceLocation defaultKey) {
+    public static <T> PlatformRegistry.RegistryReference<T> createDefaulted(ResourceKey<Registry<T>> key, boolean sync, ResourceLocation defaultKey) {
         RegistryAttributes<T> attributes = new RegistryAttributes<>(key, defaultKey, sync);
         BindableRegistryReference<T> reference = new BindableRegistryReference<>(attributes);
         PREPARED_REGISTRIES.add(reference);
         return reference;
     }
 
-    public static <T> PlatformRegistry.Reference<T> createDefaulted(ResourceKey<Registry<T>> key, ResourceLocation defaultKey) {
+    public static <T> PlatformRegistry.RegistryReference<T> createDefaulted(ResourceKey<Registry<T>> key, ResourceLocation defaultKey) {
         return createDefaulted(key, true, defaultKey);
     }
 
     @SuppressWarnings("unchecked")
     public static <T> void bindRefs(BiConsumer<RegistryAttributes<T>, RegistryBinder<T>> builder) {
         for (BindableRegistryReference<?> reference : PREPARED_REGISTRIES) {
-            bindRef((BindableRegistryReference<T>) reference, builder);
+            bindRef((PlatformRegistry.RegistryReference<T>) reference, builder);
         }
         PREPARED_REGISTRIES = null;
     }
 
-    public static <T> void bindRef(PlatformRegistry.Reference<T> reference, BiConsumer<RegistryAttributes<T>, RegistryBinder<T>> builder) {
+    public static <T> void bindRef(PlatformRegistry.RegistryReference<T> reference, BiConsumer<RegistryAttributes<T>, RegistryBinder<T>> builder) {
         BindableRegistryReference<T> bindable = (BindableRegistryReference<T>) reference;
         RegistryAttributes<T> attributes = bindable.attributes;
         builder.accept(attributes, bindable::bind);
@@ -55,7 +55,7 @@ public final class PlatformRegistryFactory {
 
     public record RegistryAttributes<T>(ResourceKey<Registry<T>> key, ResourceLocation defaultKey, boolean sync) { }
 
-    private static final class BindableRegistryReference<T> implements PlatformRegistry.Reference<T> {
+    private static final class BindableRegistryReference<T> implements PlatformRegistry.RegistryReference<T> {
 
         private final RegistryAttributes<T> attributes;
         private Registry<T> instance;

@@ -1,0 +1,43 @@
+{
+  "type": "collectorsalbum:config_toggle",
+  "config": "collectorsalbum",
+  "path": "bonusConfig.hasteBonusEnabled",
+  "enabled": {
+    "type": "collectorsalbum:first_applicable",
+    "items": [
+      {
+        "type": "collectorsalbum:category_cards",
+        "category": "collectorsalbum:tools",
+        "rarityFilter": ["mythical"],
+        "cardCount": {
+          "min": 30
+        },
+        "item": {
+          "type": "collectorsalbum:effect",
+          "effect": "minecraft:haste",
+          "amplifier": {
+            "type": "collectorsalbum:config_int",
+            "config": "collectorsalbum",
+            "path": "bonusConfig.fullMobEffectAmplifier"
+          }
+        }
+      },
+      {
+        "type": "collectorsalbum:category_cards",
+        "category": "collectorsalbum:tools",
+        "cardCount": {
+          "min": 30
+        },
+        "item": {
+          "type": "collectorsalbum:effect",
+          "effect": "minecraft:haste",
+          "amplifier": {
+            "type": "collectorsalbum:config_int",
+            "config": "collectorsalbum",
+            "path": "bonusConfig.baseMobEffectAmplifier"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -914,6 +914,12 @@
   "item.collectorsalbum.uncommon_wooden_sword_card": "Wooden Sword Card",
   "item.collectorsalbum.uncommon_zombie_card": "Zombie Card",
 
+  "album.category.collectorsalbum.tools": "Tools",
+  "album.category.collectorsalbum.armor": "Armor",
+  "album.category.collectorsalbum.mobs": "Mobs",
+  "album.category.collectorsalbum.nature": "Nature",
+  "album.category.collectorsalbum.items": "Items",
+
   "collectorsalbum.label.press_open": "Press Right mouse button to open",
   "collectorsalbum.label.use_open": "Hold Right mouse button to open",
   "card.rarity.common": "Common",
@@ -957,5 +963,7 @@
   "config.collectorsalbum.option.mythicalPackDrop": "Pack drop weight: Mythical",
 
   "config.screen.collectorsalbum-client": "Collector's Album Client Config",
-  "config.collectorsalbum-client.option.packOpenAnimation": "Card pack open animation"
+  "config.collectorsalbum-client.option.packOpenAnimation": "Card pack open animation",
+
+  "curios.collectorsalbum.album": "Album"
 }

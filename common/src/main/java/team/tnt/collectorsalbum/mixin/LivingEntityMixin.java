@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import team.tnt.collectorsalbum.common.resource.MobAdditionalDropManager;
-import team.tnt.collectorsalbum.common.resource.drops.DropContext;
+import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProvider;
-import team.tnt.collectorsalbum.common.resource.drops.SingleItemDropOutputBuilder;
+import team.tnt.collectorsalbum.common.resource.util.SingleItemOutputBuilder;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements Attackable {
@@ -34,14 +34,14 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         if (!gameRules.getBoolean(GameRules.RULE_DOMOBLOOT))
             return;
         if (!livingEntity.level().isClientSide() && killer instanceof Player player) {
-            DropContext context = DropContext.of(
-                    DropContext.ENTITY, livingEntity,
-                    DropContext.PLAYER, player,
-                    DropContext.ITEMSTACK, player.getMainHandItem(),
-                    DropContext.DAMAGE_SOURCE, source,
-                    DropContext.RANDOM, livingEntity.getRandom()
+            ActionContext context = ActionContext.of(
+                    ActionContext.ENTITY, livingEntity,
+                    ActionContext.PLAYER, player,
+                    ActionContext.ITEMSTACK, player.getMainHandItem(),
+                    ActionContext.DAMAGE_SOURCE, source,
+                    ActionContext.RANDOM, livingEntity.getRandom()
             );
-            SingleItemDropOutputBuilder<ItemStack> builder = SingleItemDropOutputBuilder.acceptsFirst();
+            SingleItemOutputBuilder<ItemStack> builder = SingleItemOutputBuilder.acceptsFirst();
             MobAdditionalDropManager dropManager = MobAdditionalDropManager.getInstance();
             for (ItemDropProvider provider : dropManager) {
                 provider.generateDrops(context, builder);

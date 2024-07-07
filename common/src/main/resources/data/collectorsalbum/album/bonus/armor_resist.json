@@ -1,0 +1,43 @@
+{
+  "type": "collectorsalbum:config_toggle",
+  "config": "collectorsalbum",
+  "path": "bonusConfig.resistanceBonusEnabled",
+  "enabled": {
+    "type": "collectorsalbum:first_applicable",
+    "items": [
+      {
+        "type": "collectorsalbum:category_cards",
+        "category": "collectorsalbum:armor",
+        "rarityFilter": ["mythical"],
+        "cardCount": {
+          "min": 30
+        },
+        "item": {
+          "type": "collectorsalbum:effect",
+          "effect": "minecraft:resistance",
+          "amplifier": {
+            "type": "collectorsalbum:config_int",
+            "config": "collectorsalbum",
+            "path": "bonusConfig.fullMobEffectAmplifier"
+          }
+        }
+      },
+      {
+        "type": "collectorsalbum:category_cards",
+        "category": "collectorsalbum:armor",
+        "cardCount": {
+          "min": 30
+        },
+        "item": {
+          "type": "collectorsalbum:effect",
+          "effect": "minecraft:resistance",
+          "amplifier": {
+            "type": "collectorsalbum:config_int",
+            "config": "collectorsalbum",
+            "path": "bonusConfig.baseMobEffectAmplifier"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -3,7 +3,7 @@ package team.tnt.collectorsalbum.platform.registration;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public final class RegistryElement<B, R extends B> implements Supplier<R> {
+public final class RegistryElement<B, R extends B> implements PlatformRegistry.Reference<R> {
 
     private final Supplier<R> provider;
     private R cachedValue;

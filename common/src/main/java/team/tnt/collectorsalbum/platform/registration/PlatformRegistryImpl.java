@@ -22,7 +22,7 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
     }
 
     @Override
-    public <R extends T> Supplier<R> register(String elementId, Supplier<R> ref) {
+    public <R extends T> Reference<R> register(String elementId, Supplier<R> ref) {
         ResourceLocation key = ResourceLocation.fromNamespaceAndPath(this.namespace, elementId);
         RegistryElement<T, R> value = new RegistryElement<>(ref);
         if (this.registeredRefs.put(key, value) != null) {
@@ -32,7 +32,7 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
     }
 
     @Override
-    public <R extends T> Supplier<R> register(String elementId, Function<ResourceLocation, R> ref) {
+    public <R extends T> Reference<R> register(String elementId, Function<ResourceLocation, R> ref) {
         ResourceLocation key = ResourceLocation.fromNamespaceAndPath(this.namespace, elementId);
         Supplier<R> supplier = () -> ref.apply(key);
         RegistryElement<T, R> value = new RegistryElement<>(supplier);
@@ -44,9 +44,9 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <R extends T> void bindRef(BiConsumer<ResourceLocation, Supplier<R>> refConsumer) {
+    public <R extends T> void bindRef(BiConsumer<ResourceLocation, Reference<R>> refConsumer) {
         for (Map.Entry<ResourceLocation, RegistryElement<T, ?>> entry : this.registeredRefs.entrySet()) {
-            refConsumer.accept(entry.getKey(), (Supplier<R>) entry.getValue());
+            refConsumer.accept(entry.getKey(), (Reference<R>) entry.getValue());
         }
         this.registeredRefs = null;
     }

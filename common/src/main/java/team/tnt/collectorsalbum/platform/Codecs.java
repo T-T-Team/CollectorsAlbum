@@ -1,9 +1,23 @@
 package team.tnt.collectorsalbum.platform;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.StreamDecoder;
+import net.minecraft.network.codec.StreamEncoder;
+import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
+import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 public final class Codecs {
@@ -14,6 +28,50 @@ public final class Codecs {
         return Codec.FLOAT.validate(f -> f >= min && f <= max
                 ? DataResult.success(f)
                 : DataResult.error(() -> String.format("Value [%f] is not within required range [%f;%f]", f, min, max))
+        );
+    }
+
+    public static <T, C extends Collection<T>> DataResult<C> requireSize(C collection, int size) {
+        return collection.size() != size ? DataResult.error(() -> String.format("Collection must contain exactly %d elements, found %d!", size, collection.size())) : DataResult.success(collection);
+    }
+
+    public static <T> Codec<Set<T>> setCodec(Codec<T> codec) {
+        return setCodec(codec, HashSet::new);
+    }
+
+    public static <T> Codec<Set<T>> setCodec(Codec<T> codec, Function<List<T>, Set<T>> codecFactory) {
+        return codec.listOf().xmap(codecFactory, ArrayList::new);
+    }
+
+    public static <T> Codec<NonNullList<T>> nonNullListCodec(Codec<T> codec, T empty) {
+        return codec.listOf().xmap(
+                list -> NonNullList.withSize(list.size(), empty),
+                Function.identity()
+        );
+    }
+
+    public static <BUF extends FriendlyByteBuf, T> StreamCodec<BUF, NonNullList<T>> nonNullListStreamCodec(StreamCodec<BUF, T> codec, Predicate<T> skip, T empty) {
+        return StreamCodec.of(
+                (buf, list) -> {
+                    for (T t : list) {
+                        boolean saved = !skip.test(t);
+                        buf.writeBoolean(saved);
+                        if (saved) {
+                            codec.encode(buf, t);
+                        }
+                    }
+                }, (buf) -> {
+                    int size = buf.readInt();
+                    NonNullList<T> list = NonNullList.withSize(size, empty);
+                    for (int i = 0; i < size; i++) {
+                        boolean saved = buf.readBoolean();
+                        if (saved) {
+                            T t = codec.decode(buf);
+                            list.set(i, t);
+                        }
+                    }
+                    return list;
+                }
         );
     }
 

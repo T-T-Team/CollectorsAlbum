@@ -4,6 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
+import team.tnt.collectorsalbum.common.resource.util.ActionContext;
+import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
 public class ItemStackDropProvider implements ItemDropProvider {
 
@@ -18,7 +20,7 @@ public class ItemStackDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public void generateDrops(DropContext context, DropOutputBuilder<ItemStack> output) {
+    public void generateDrops(ActionContext context, OutputBuilder<ItemStack> output) {
         output.accept(this.itemStack.copy());
     }
 

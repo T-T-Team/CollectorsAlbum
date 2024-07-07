@@ -16,10 +16,9 @@ import net.minecraft.world.level.Level;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
-import team.tnt.collectorsalbum.common.resource.drops.DropContext;
-import team.tnt.collectorsalbum.common.resource.drops.DropOutputBuilder;
+import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProvider;
-import team.tnt.collectorsalbum.common.resource.drops.ListBasedDropOutputBuilder;
+import team.tnt.collectorsalbum.common.resource.util.ListBasedOutputBuilder;
 import team.tnt.collectorsalbum.network.S2C_OpenCardPackScreen;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 
@@ -59,9 +58,9 @@ public class CardPackItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity entity) {
         if (entity instanceof ServerPlayer player && !level.isClientSide()) {
-            ListBasedDropOutputBuilder<ItemStack> outputs = ListBasedDropOutputBuilder.createArrayListBased();
+            ListBasedOutputBuilder<ItemStack> outputs = ListBasedOutputBuilder.createArrayListBased();
             ItemDropProvider provider = CardPackDropManager.getInstance().getProvider(this.lootDataSourcePath);
-            DropContext context = DropContext.of(DropContext.PLAYER, player, DropContext.ITEMSTACK, itemStack, DropContext.RANDOM, player.getRandom());
+            ActionContext context = ActionContext.of(ActionContext.PLAYER, player, ActionContext.ITEMSTACK, itemStack, ActionContext.RANDOM, player.getRandom());
             provider.generateDrops(context, outputs);
             AlbumCardManager cardManager = AlbumCardManager.getInstance();
             List<ItemStack> validDrops = outputs.getItems().stream()

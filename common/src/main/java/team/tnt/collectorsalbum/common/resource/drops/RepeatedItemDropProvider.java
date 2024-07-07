@@ -10,6 +10,8 @@ import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.function.ConstantNumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProviderType;
+import team.tnt.collectorsalbum.common.resource.util.ActionContext;
+import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
 import java.util.function.Function;
 
@@ -29,7 +31,7 @@ public class RepeatedItemDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public void generateDrops(DropContext context, DropOutputBuilder<ItemStack> output) {
+    public void generateDrops(ActionContext context, OutputBuilder<ItemStack> output) {
         int count = this.times.getAsInt();
         for (int i = 0; i < count; i++) {
             this.item.generateDrops(context, output);

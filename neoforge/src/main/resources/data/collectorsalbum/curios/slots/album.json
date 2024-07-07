@@ -1,0 +1,6 @@
+{
+  "replace": true,
+  "drop_rule": "ALWAYS_KEEP",
+  "render_toggle": false,
+  "validators": ["curios:tag"]
+}
