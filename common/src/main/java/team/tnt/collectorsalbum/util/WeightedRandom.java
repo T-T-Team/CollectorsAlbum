@@ -68,7 +68,7 @@ public class WeightedRandom<T> implements Supplier<T> {
         }
 
         public int getWeight() {
-            return this.weight.getAsInt();
+            return this.weight.intValue();
         }
 
         public static <T> Codec<WeightedItem<T>> codec(Codec<T> elementCodec) {

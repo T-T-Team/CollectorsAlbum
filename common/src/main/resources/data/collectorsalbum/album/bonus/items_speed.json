@@ -16,7 +16,7 @@
           "type": "collectorsalbum:effect",
           "effect": "minecraft:speed",
           "amplifier": {
-            "type": "collectorsalbum:config_int",
+            "type": "collectorsalbum:config",
             "config": "collectorsalbum",
             "path": "bonusConfig.fullMobEffectAmplifier"
           }
@@ -32,7 +32,7 @@
           "type": "collectorsalbum:effect",
           "effect": "minecraft:speed",
           "amplifier": {
-            "type": "collectorsalbum:config_int",
+            "type": "collectorsalbum:config",
             "config": "collectorsalbum",
             "path": "bonusConfig.baseMobEffectAmplifier"
           }

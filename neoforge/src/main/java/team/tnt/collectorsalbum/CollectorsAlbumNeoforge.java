@@ -14,10 +14,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import team.tnt.collectorsalbum.client.CollectorsAlbumClient;
 import team.tnt.collectorsalbum.common.init.*;
-import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
-import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
-import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
-import team.tnt.collectorsalbum.common.resource.MobAdditionalDropManager;
+import team.tnt.collectorsalbum.common.resource.*;
 import team.tnt.collectorsalbum.platform.network.NeoforgeNetwork;
 import team.tnt.collectorsalbum.platform.registration.NeoforgeRegistration;
 
@@ -74,6 +71,7 @@ public class CollectorsAlbumNeoforge {
     private void addReloadListeners(AddReloadListenerEvent event) {
         event.addListener(AlbumCardManager.getInstance());
         event.addListener(AlbumCategoryManager.getInstance());
+        event.addListener(AlbumBonusManager.getInstance());
         event.addListener(CardPackDropManager.getInstance());
         event.addListener(MobAdditionalDropManager.getInstance());
     }

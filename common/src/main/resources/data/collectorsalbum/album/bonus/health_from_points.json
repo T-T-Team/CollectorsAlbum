@@ -6,11 +6,11 @@
       "min": 900,
       "item": {
         "type": "collectorsalbum:attribute",
-        "attribute": "minecraft:max_health",
+        "attribute": "minecraft:generic.max_health",
         "modifier": {
           "id": "collectorsalbum:health_from_points",
           "amount": {
-            "type": "collectorsalbum:config_int",
+            "type": "collectorsalbum:config",
             "config": "collectorsalbum",
             "path": "bonusConfig.healthBonusLevelSteps.5"
           },
@@ -23,11 +23,11 @@
       "min": 700,
       "item": {
         "type": "collectorsalbum:attribute",
-        "attribute": "minecraft:max_health",
+        "attribute": "minecraft:generic.max_health",
         "modifier": {
           "id": "collectorsalbum:health_from_points",
           "amount": {
-            "type": "collectorsalbum:config_int",
+            "type": "collectorsalbum:config",
             "config": "collectorsalbum",
             "path": "bonusConfig.healthBonusLevelSteps.4"
           },
@@ -40,11 +40,11 @@
       "min": 600,
       "item": {
         "type": "collectorsalbum:attribute",
-        "attribute": "minecraft:max_health",
+        "attribute": "minecraft:generic.max_health",
         "modifier": {
           "id": "collectorsalbum:health_from_points",
           "amount": {
-            "type": "collectorsalbum:config_int",
+            "type": "collectorsalbum:config",
             "config": "collectorsalbum",
             "path": "bonusConfig.healthBonusLevelSteps.3"
           },
@@ -57,11 +57,11 @@
       "min": 500,
       "item": {
         "type": "collectorsalbum:attribute",
-        "attribute": "minecraft:max_health",
+        "attribute": "minecraft:generic.max_health",
         "modifier": {
           "id": "collectorsalbum:health_from_points",
           "amount": {
-            "type": "collectorsalbum:config_int",
+            "type": "collectorsalbum:config",
             "config": "collectorsalbum",
             "path": "bonusConfig.healthBonusLevelSteps.2"
           },
@@ -74,11 +74,11 @@
       "min": 400,
       "item": {
         "type": "collectorsalbum:attribute",
-        "attribute": "minecraft:max_health",
+        "attribute": "minecraft:generic.max_health",
         "modifier": {
           "id": "collectorsalbum:health_from_points",
           "amount": {
-            "type": "collectorsalbum:config_int",
+            "type": "collectorsalbum:config",
             "config": "collectorsalbum",
             "path": "bonusConfig.healthBonusLevelSteps.1"
           },
@@ -91,11 +91,11 @@
       "min": 300,
       "item": {
         "type": "collectorsalbum:attribute",
-        "attribute": "minecraft:max_health",
+        "attribute": "minecraft:generic.max_health",
         "modifier": {
           "id": "collectorsalbum:health_from_points",
           "amount": {
-            "type": "collectorsalbum:config_int",
+            "type": "collectorsalbum:config",
             "config": "collectorsalbum",
             "path": "bonusConfig.healthBonusLevelSteps.0"
           },

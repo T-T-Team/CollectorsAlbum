@@ -105,7 +105,7 @@ public class AlbumCategoryCardBonusFilter implements IntermediateAlbumBonus {
         }
 
         public boolean test(int value) {
-            return value >= min.getAsInt() && value <= max.getAsInt();
+            return value >= min.intValue() && value <= max.intValue();
         }
     }
 }

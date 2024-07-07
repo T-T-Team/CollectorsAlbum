@@ -12,6 +12,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
+import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProviderType;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 
@@ -23,7 +24,7 @@ public class AttributeAlbumBonus implements AlbumBonus {
             ResourceLocation.CODEC.fieldOf("id").forGetter(AttributeModifier::id),
             Codec.either(Codec.DOUBLE, NumberProviderType.INSTANCE_CODEC).fieldOf("amount").forGetter(t -> Either.left(t.amount())),
             AttributeModifier.Operation.CODEC.fieldOf("operation").forGetter(AttributeModifier::operation)
-    ).apply(instance, (id, either, op) -> new AttributeModifier(id, either.map(Function.identity(), prov -> (double) prov.getAsInt()), op)));
+    ).apply(instance, (id, either, op) -> new AttributeModifier(id, either.map(Function.identity(), NumberProvider::doubleValue), op)));
     public static final MapCodec<AttributeAlbumBonus> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BuiltInRegistries.ATTRIBUTE.holderByNameCodec().fieldOf("attribute").forGetter(t -> t.attribute),
                 CONFIGURABLE_MODIFIER_CODEC.fieldOf("modifier").forGetter(t -> t.attributeModifier)

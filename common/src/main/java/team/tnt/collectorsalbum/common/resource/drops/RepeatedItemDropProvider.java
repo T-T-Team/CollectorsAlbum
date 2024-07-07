@@ -32,7 +32,7 @@ public class RepeatedItemDropProvider implements ItemDropProvider {
 
     @Override
     public void generateDrops(ActionContext context, OutputBuilder<ItemStack> output) {
-        int count = this.times.getAsInt();
+        int count = this.times.intValue();
         for (int i = 0; i < count; i++) {
             this.item.generateDrops(context, output);
         }

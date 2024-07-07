@@ -77,6 +77,6 @@ public class AlbumMobEffectBonus implements AlbumBonus {
     }
 
     private MobEffectInstance createEffectInstance() {
-        return new MobEffectInstance(effect, duration.getAsInt(), amplifier.getAsInt(), ambient, visible, showIcon);
+        return new MobEffectInstance(effect, duration.intValue(), amplifier.intValue(), ambient, visible, showIcon);
     }
 }

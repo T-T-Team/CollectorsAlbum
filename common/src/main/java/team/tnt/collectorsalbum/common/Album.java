@@ -10,7 +10,10 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import team.tnt.collectorsalbum.CollectorsAlbum;
+import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
+import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.platform.Codecs;
 
 import java.util.*;
@@ -124,7 +127,17 @@ public final class Album implements Predicate<Album> {
     }
 
     public void tick(Player player) {
-        long timer = player.level().getGameTime();
+        ActionContext context = ActionContext.of(ActionContext.PLAYER, player, ActionContext.ALBUM, this);
+        AlbumBonusManager manager = AlbumBonusManager.getInstance();
+        manager.applyBonuses(context);
+        CollectorsAlbum.LOGGER.info("Album bonuses applied");
+    }
+
+    public void removed(Player player) {
+        ActionContext context = ActionContext.of(ActionContext.PLAYER, player, ActionContext.ALBUM, this);
+        AlbumBonusManager manager = AlbumBonusManager.getInstance();
+        manager.removeBonuses(context);
+        CollectorsAlbum.LOGGER.info("Album bonuses removed");
     }
 
     @Override

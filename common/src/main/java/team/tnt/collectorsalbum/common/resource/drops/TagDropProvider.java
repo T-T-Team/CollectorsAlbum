@@ -44,7 +44,7 @@ public class TagDropProvider implements ItemDropProvider {
         Item item = TagHelper.getRandomTagValue(this.tagKey, BuiltInRegistries.ITEM, random);
         if (item != null) {
             int sizeUpperBound = item.getDefaultMaxStackSize();
-            int itemSize = Mth.clamp(this.size.getAsInt(), 1, sizeUpperBound);
+            int itemSize = Mth.clamp(this.size.intValue(), 1, sizeUpperBound);
             output.accept(new ItemStack(item, itemSize));
         } else {
             CollectorsAlbum.LOGGER.warn("Failed to obtain items for tag {} for drop generation", this.tagKey);

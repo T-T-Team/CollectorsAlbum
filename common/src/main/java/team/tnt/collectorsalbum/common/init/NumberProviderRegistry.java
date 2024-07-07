@@ -13,7 +13,6 @@ public final class NumberProviderRegistry {
 
     public static final Supplier<NumberProviderType<ConstantNumberProvider>> CONSTANT = REGISTRY.register("constant", () -> new NumberProviderType<>(ConstantNumberProvider.CODEC));
     public static final Supplier<NumberProviderType<RandomNumberProvider>> RANDOM = REGISTRY.register("random", () -> new NumberProviderType<>(RandomNumberProvider.CODEC));
-    public static final Supplier<NumberProviderType<ConfigValueIntProvider>> CONFIG_INT = REGISTRY.register("config_int", () -> new NumberProviderType<>(ConfigValueIntProvider.CODEC));
-    public static final Supplier<NumberProviderType<ConfigValueFloatProvider>> CONFIG_PERCENT = REGISTRY.register("config_percent", () -> new NumberProviderType<>(ConfigValueFloatProvider.CODEC));
+    public static final Supplier<NumberProviderType<ConfigValueIntProvider>> CONFIG_INT = REGISTRY.register("config", () -> new NumberProviderType<>(ConfigValueIntProvider.CODEC));
     public static final Supplier<NumberProviderType<SumNumberProvider>> SUM = REGISTRY.register("sum", () -> new NumberProviderType<>(SumNumberProvider.CODEC));
 }

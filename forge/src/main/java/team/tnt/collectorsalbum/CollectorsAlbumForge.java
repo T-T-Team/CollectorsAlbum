@@ -16,10 +16,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.NewRegistryEvent;
 import team.tnt.collectorsalbum.client.CollectorsAlbumClient;
 import team.tnt.collectorsalbum.common.init.*;
-import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
-import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
-import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
-import team.tnt.collectorsalbum.common.resource.MobAdditionalDropManager;
+import team.tnt.collectorsalbum.common.resource.*;
 import team.tnt.collectorsalbum.platform.registration.ForgeRegistration;
 
 @Mod(CollectorsAlbum.MOD_ID)
@@ -80,6 +77,7 @@ public class CollectorsAlbumForge {
     private void addReloadListeners(AddReloadListenerEvent event) {
         event.addListener(AlbumCardManager.getInstance());
         event.addListener(AlbumCategoryManager.getInstance());
+        event.addListener(AlbumBonusManager.getInstance());
         event.addListener(CardPackDropManager.getInstance());
         event.addListener(MobAdditionalDropManager.getInstance());
     }

@@ -63,8 +63,8 @@ public class AlbumPointBonusFilter implements IntermediateAlbumBonus {
         if (album == null) {
             return false;
         }
-        int from = min.getAsInt();
-        int to = max.getAsInt();
+        int from = min.intValue();
+        int to = max.intValue();
         int points = album.getPoints();
         return points >= from && points <= to;
     }

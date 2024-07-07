@@ -11,21 +11,23 @@ import java.util.function.Function;
 public class SumNumberProvider implements NumberProvider {
 
     public static final MapCodec<SumNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.either(Codec.INT, NumberProviderType.INSTANCE_CODEC).fieldOf("left").forGetter(t -> Either.right(t.left)),
-            Codec.either(Codec.INT, NumberProviderType.INSTANCE_CODEC).fieldOf("right").forGetter(t -> Either.right(t.right))
+            Codec.either(Codec.DOUBLE, NumberProviderType.INSTANCE_CODEC).fieldOf("left").forGetter(t -> Either.right(t.left)),
+            Codec.either(Codec.DOUBLE, NumberProviderType.INSTANCE_CODEC).fieldOf("right").forGetter(t -> Either.right(t.right))
     ).apply(instance, SumNumberProvider::new));
 
     private final NumberProvider left;
     private final NumberProvider right;
 
-    public SumNumberProvider(Either<Integer, NumberProvider> left, Either<Integer, NumberProvider> right) {
+    public SumNumberProvider(Either<Double, NumberProvider> left, Either<Double, NumberProvider> right) {
         this.left = left.map(ConstantNumberProvider::new, Function.identity());
         this.right = right.map(ConstantNumberProvider::new, Function.identity());
     }
 
     @Override
-    public int getAsInt() {
-        return left.getAsInt() + right.getAsInt();
+    public <N extends Number> N getNumber(Function<Number, N> mapper) {
+        double left = this.left.doubleValue();
+        double right = this.right.doubleValue();
+        return mapper.apply(left + right);
     }
 
     @Override

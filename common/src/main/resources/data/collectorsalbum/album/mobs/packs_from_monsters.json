@@ -3,12 +3,10 @@
   "filter": "collectorsalbum:monster",
   "pass": {
     "type": "collectorsalbum:random_chance",
-    "precision": 5,
     "chance": {
-      "type": "collectorsalbum:config_percent",
+      "type": "collectorsalbum:config",
       "config": "collectorsalbum",
-      "path": "mobDrops.mobPackDropChance",
-      "precision": 5
+      "path": "mobDrops.mobPackDropChance"
     },
     "item": {
       "type": "collectorsalbum:weighted_select",
@@ -16,7 +14,7 @@
         "items": [
           {
             "weight": {
-              "type": "collectorsalbum:config_int",
+              "type": "collectorsalbum:config",
               "config": "collectorsalbum",
               "path": "mobDrops.commonPackDrop"
             },
@@ -29,7 +27,7 @@
           },
           {
             "weight": {
-              "type": "collectorsalbum:config_int",
+              "type": "collectorsalbum:config",
               "config": "collectorsalbum",
               "path": "mobDrops.uncommonPackDrop"
             },
@@ -42,7 +40,7 @@
           },
           {
             "weight": {
-              "type": "collectorsalbum:config_int",
+              "type": "collectorsalbum:config",
               "config": "collectorsalbum",
               "path": "mobDrops.rarePackDrop"
             },
@@ -55,7 +53,7 @@
           },
           {
             "weight": {
-              "type": "collectorsalbum:config_int",
+              "type": "collectorsalbum:config",
               "config": "collectorsalbum",
               "path": "mobDrops.epicPackDrop"
             },
@@ -68,7 +66,7 @@
           },
           {
             "weight": {
-              "type": "collectorsalbum:config_int",
+              "type": "collectorsalbum:config",
               "config": "collectorsalbum",
               "path": "mobDrops.legendaryPackDrop"
             },
@@ -81,7 +79,7 @@
           },
           {
             "weight": {
-              "type": "collectorsalbum:config_int",
+              "type": "collectorsalbum:config",
               "config": "collectorsalbum",
               "path": "mobDrops.mythicalPackDrop"
             },

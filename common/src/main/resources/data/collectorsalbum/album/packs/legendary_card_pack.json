@@ -10,7 +10,7 @@
       "times": {
         "type": "collectorsalbum:sum",
         "left": {
-          "type": "collectorsalbum:config_int",
+          "type": "collectorsalbum:config",
           "config": "collectorsalbum",
           "path": "packDrops.packDropsCount"
         },
@@ -22,7 +22,7 @@
           "items": [
             {
               "weight": {
-                "type": "collectorsalbum:config_int",
+                "type": "collectorsalbum:config",
                 "config": "collectorsalbum",
                 "path": "packDrops.legendaryDrops.commonCardDropChance"
               },
@@ -33,7 +33,7 @@
             },
             {
               "weight": {
-                "type": "collectorsalbum:config_int",
+                "type": "collectorsalbum:config",
                 "config": "collectorsalbum",
                 "path": "packDrops.legendaryDrops.uncommonCardDropChance"
               },
@@ -44,7 +44,7 @@
             },
             {
               "weight": {
-                "type": "collectorsalbum:config_int",
+                "type": "collectorsalbum:config",
                 "config": "collectorsalbum",
                 "path": "packDrops.legendaryDrops.rareCardDropChance"
               },
@@ -55,7 +55,7 @@
             },
             {
               "weight": {
-                "type": "collectorsalbum:config_int",
+                "type": "collectorsalbum:config",
                 "config": "collectorsalbum",
                 "path": "packDrops.legendaryDrops.epicCardDropChance"
               },
@@ -66,7 +66,7 @@
             },
             {
               "weight": {
-                "type": "collectorsalbum:config_int",
+                "type": "collectorsalbum:config",
                 "config": "collectorsalbum",
                 "path": "packDrops.legendaryDrops.legendaryCardDropChance"
               },
@@ -77,7 +77,7 @@
             },
             {
               "weight": {
-                "type": "collectorsalbum:config_int",
+                "type": "collectorsalbum:config",
                 "config": "collectorsalbum",
                 "path": "packDrops.legendaryDrops.mythicalCardDropChance"
               },

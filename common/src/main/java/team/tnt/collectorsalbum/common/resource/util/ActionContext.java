@@ -14,7 +14,6 @@ public interface ActionContext {
     String DAMAGE_SOURCE = "damageSource";
     String RANDOM = "random";
     String ALBUM = "album";
-    String CATEGORY = "category";
 
     <T> Optional<T> get(String key, Class<T> clazz);
 

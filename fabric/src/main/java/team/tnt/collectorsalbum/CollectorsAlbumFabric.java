@@ -6,10 +6,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.server.packs.PackType;
 import team.tnt.collectorsalbum.common.CollectorsAlbumRegistries;
 import team.tnt.collectorsalbum.common.init.*;
-import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
-import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
-import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
-import team.tnt.collectorsalbum.common.resource.MobAdditionalDropManager;
+import team.tnt.collectorsalbum.common.resource.*;
 import team.tnt.collectorsalbum.platform.FabricPlatform;
 import team.tnt.collectorsalbum.platform.registration.CustomPlatformRegistryBindCallback;
 import team.tnt.collectorsalbum.platform.registration.FabricRegistration;
@@ -45,6 +42,7 @@ public class CollectorsAlbumFabric implements ModInitializer {
         ResourceManagerHelper resourceManagerHelper = ResourceManagerHelper.get(PackType.SERVER_DATA);
         resourceManagerHelper.registerReloadListener(FabricReloadListenerWrapper.of(AlbumCardManager.getInstance()));
         resourceManagerHelper.registerReloadListener(FabricReloadListenerWrapper.of(AlbumCategoryManager.getInstance()));
+        resourceManagerHelper.registerReloadListener(FabricReloadListenerWrapper.of(AlbumBonusManager.getInstance()));
         resourceManagerHelper.registerReloadListener(FabricReloadListenerWrapper.of(CardPackDropManager.getInstance()));
         resourceManagerHelper.registerReloadListener(FabricReloadListenerWrapper.of(MobAdditionalDropManager.getInstance()));
 

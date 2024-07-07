@@ -8,15 +8,9 @@ public final class AlbumBonusType<B extends AlbumBonus> {
 
     public static final Codec<AlbumBonus> INSTANCE_CODEC = CollectorsAlbumRegistries.ALBUM_BONUS.byNameCodec().dispatch(AlbumBonus::getType, t -> t.codec);
 
-    private final AlbumBonusTarget target;
     private final MapCodec<B> codec;
 
-    public AlbumBonusType(AlbumBonusTarget target, MapCodec<B> codec) {
-        this.target = target;
+    public AlbumBonusType(MapCodec<B> codec) {
         this.codec = codec;
-    }
-
-    public AlbumBonusTarget getTarget() {
-        return target;
     }
 }

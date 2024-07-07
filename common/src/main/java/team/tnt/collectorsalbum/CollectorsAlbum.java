@@ -5,13 +5,16 @@ import dev.toma.configuration.config.format.ConfigFormats;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumLocatorResult;
 import team.tnt.collectorsalbum.common.PlayerAlbumTracker;
+import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
+import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.config.CollectorsAlbumConfig;
 import team.tnt.collectorsalbum.integrations.PlatformIntegrations;
 import team.tnt.collectorsalbum.network.NetworkManager;
@@ -41,17 +44,27 @@ public class CollectorsAlbum {
     public static void tickPlayer(Player player) {
         PlayerAlbumTracker tracker = PlayerAlbumTracker.get();
         Album album = tracker.getAlbum(player).orElse(null);
+        Level level = player.level();
+        long time = level.getGameTime();
+        if (level.isClientSide() || time % 100L != 0L) {
+            return;
+        }
+        AlbumLocatorResult result;
         if (album == null) {
-            AlbumLocatorResult result = tracker.findAlbum(player, null);
+            result = tracker.findAlbum(player, null);
             if (!result.exists())
                 return;
             album = result.getAlbum();
             tracker.cacheAlbum(player, album);
-        } else if (player.level().getGameTime() % 50L == 0L) {
-            AlbumLocatorResult result = tracker.findAlbum(player, album);
-            if (!result.exists() || result.getAlbum().test(album)) {
-                // TODO album removed
-                // FIXME NPE when result does not exist and ticking continues
+        } else {
+            result = tracker.findAlbum(player, album);
+            if (!result.exists() || !result.getAlbum().test(album)) {
+                tracker.deleteCachedAlbum(player.getUUID());
+                album.removed(player);
+                if (result.getAlbum() != null) {
+                    tracker.cacheAlbum(player, result.getAlbum());
+                }
+                return;
             }
         }
         album.tick(player);
@@ -65,7 +78,7 @@ public class CollectorsAlbum {
         List<CustomPacketPayload> payloads = new ArrayList<>();
         payloads.add(new S2C_SendDatapackResources<>(AlbumCardManager.getInstance()));
         payloads.add(new S2C_SendDatapackResources<>(AlbumCategoryManager.getInstance()));
-        // TODO bonuses
+        payloads.add(new S2C_SendDatapackResources<>(AlbumBonusManager.getInstance()));
         return payloads;
     }
 

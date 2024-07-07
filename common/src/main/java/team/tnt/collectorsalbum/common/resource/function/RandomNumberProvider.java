@@ -7,27 +7,29 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import team.tnt.collectorsalbum.common.init.NumberProviderRegistry;
 
 import java.util.Random;
+import java.util.function.Function;
 
 public class RandomNumberProvider implements NumberProvider {
 
     public static final MapCodec<RandomNumberProvider> CODEC = RecordCodecBuilder.<RandomNumberProvider>mapCodec(instance -> instance.group(
-            Codec.INT.fieldOf("min").forGetter(t -> t.min),
-            Codec.INT.fieldOf("max").forGetter(t -> t.max)
+            Codec.DOUBLE.fieldOf("min").forGetter(t -> t.min),
+            Codec.DOUBLE.fieldOf("max").forGetter(t -> t.max)
     ).apply(instance, RandomNumberProvider::new))
             .validate(o -> o.min > o.max ? DataResult.error(() -> "Min value cannot be larger than max value!") : DataResult.success(o));
     private static final Random RANDOM = new Random();
-    private final int min;
-    private final int max;
+    private final double min;
+    private final double max;
 
-    public RandomNumberProvider(int min, int max) {
+    public RandomNumberProvider(double min, double max) {
         this.min = min;
         this.max = max;
     }
 
     @Override
-    public int getAsInt() {
-        int diff = max - min + 1;
-        return RANDOM.nextInt(diff) + min;
+    public <N extends Number> N getNumber(Function<Number, N> mapper) {
+        double delta = max - min;
+        double randomBetween = min + delta * RANDOM.nextDouble();
+        return mapper.apply(randomBetween);
     }
 
     @Override
