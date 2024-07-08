@@ -52,8 +52,9 @@ public class CollectorsAlbum {
         AlbumLocatorResult result;
         if (album == null) {
             result = tracker.findAlbum(player, null);
-            if (!result.exists())
+            if (!result.exists()) {
                 return;
+            }
             album = result.getAlbum();
             tracker.cacheAlbum(player, album);
         } else {

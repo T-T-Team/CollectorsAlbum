@@ -53,9 +53,6 @@ public class AlbumMobEffectBonus implements AlbumBonus {
     @Override
     public void apply(ActionContext context) {
         Player player = context.getOrThrow(ActionContext.PLAYER, Player.class);
-        if (!rewriteExisting && player.hasEffect(effect)) {
-            return;
-        }
         MobEffectInstance instance = this.createEffectInstance();
         if (!player.addEffect(instance) && rewriteExisting) {
             player.removeEffect(effect);

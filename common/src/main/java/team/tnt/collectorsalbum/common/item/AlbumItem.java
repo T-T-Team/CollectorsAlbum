@@ -9,6 +9,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import team.tnt.collectorsalbum.common.Album;
+import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 
 import java.util.List;
 

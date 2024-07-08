@@ -3,6 +3,7 @@ package team.tnt.collectorsalbum.common;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.init.RegistryTags;
 import team.tnt.collectorsalbum.integrations.PlatformIntegrations;
@@ -31,9 +32,9 @@ public final class PlayerAlbumTracker {
             if (!itemStack.isEmpty() && itemStack.is(RegistryTags.Items.ALBUM)) {
                 Album album = itemStack.get(ItemDataComponentRegistry.ALBUM.get());
                 if (previousAlbum != null && previousAlbum.test(album)) {
-                    return AlbumLocatorResult.found(itemStack, album, i);
+                    return AlbumLocatorResult.found(itemStack, previousAlbum, i);
                 }
-                return AlbumLocatorResult.found(itemStack, Album.basedOn(album), i);
+                return AlbumLocatorResult.found(itemStack, album, i);
             }
         }
         return AlbumLocatorResult.notFound();

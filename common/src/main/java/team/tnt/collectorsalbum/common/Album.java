@@ -130,14 +130,16 @@ public final class Album implements Predicate<Album> {
         ActionContext context = ActionContext.of(ActionContext.PLAYER, player, ActionContext.ALBUM, this);
         AlbumBonusManager manager = AlbumBonusManager.getInstance();
         manager.applyBonuses(context);
-        CollectorsAlbum.LOGGER.info("Album bonuses applied");
     }
 
     public void removed(Player player) {
         ActionContext context = ActionContext.of(ActionContext.PLAYER, player, ActionContext.ALBUM, this);
         AlbumBonusManager manager = AlbumBonusManager.getInstance();
         manager.removeBonuses(context);
-        CollectorsAlbum.LOGGER.info("Album bonuses removed");
+    }
+
+    public UUID getUUID() {
+        return this.albumId;
     }
 
     @Override
