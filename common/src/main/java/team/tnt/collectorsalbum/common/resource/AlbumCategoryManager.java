@@ -17,6 +17,7 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
     private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_category_manager");
     private static final AlbumCategoryManager INSTANCE = new AlbumCategoryManager();
     private final Map<ResourceLocation, AlbumCategory> registeredCategories = new HashMap<>();
+    private final List<AlbumCategory> pagedCategories = new ArrayList<>();
 
     private AlbumCategoryManager() {
         super("album/categories", AlbumCategoryType.INSTANCE_CODEC);
@@ -25,6 +26,18 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
 
     public static AlbumCategoryManager getInstance() {
         return INSTANCE;
+    }
+
+    public AlbumCategory getCategoryForPage(int page) {
+        return page >= 0 && page < pagedCategories.size() ? pagedCategories.get(page) : null;
+    }
+
+    public int getPageForCategory(AlbumCategory category) {
+        return pagedCategories.indexOf(category);
+    }
+
+    public List<AlbumCategory> listBookmarkableCategories() {
+        return pagedCategories.stream().filter(cat -> !cat.visualTemplate().bookmarkIcon.isEmpty()).toList();
     }
 
     @Override
@@ -39,6 +52,7 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
     @Override
     protected void preApply(Map<ResourceLocation, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler) {
         this.registeredCategories.clear();
+        this.pagedCategories.clear();
     }
 
     @Override
@@ -51,6 +65,8 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
     @Override
     protected void onReloadComplete(ResourceManager manager, ProfilerFiller profiler) {
         super.onReloadComplete(manager, profiler);
+        this.registeredCategories.values().stream().sorted(Comparator.comparingInt(AlbumCategory::getPageOrder))
+                .forEach(pagedCategories::add);
     }
 
     @Override
@@ -61,6 +77,8 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
     @Override
     public void onNetworkDataReceived(List<AlbumCategory> collection) {
         registeredCategories.clear();
+        pagedCategories.clear();
         collection.forEach(category -> registeredCategories.put(category.identifier(), category));
+        pagedCategories.addAll(collection.stream().sorted(Comparator.comparingInt(AlbumCategory::getPageOrder)).toList());
     }
 }

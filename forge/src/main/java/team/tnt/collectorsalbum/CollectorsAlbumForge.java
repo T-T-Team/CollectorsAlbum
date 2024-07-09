@@ -18,6 +18,7 @@ import team.tnt.collectorsalbum.client.CollectorsAlbumClient;
 import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.*;
 import team.tnt.collectorsalbum.platform.registration.ForgeRegistration;
+import team.tnt.collectorsalbum.platform.resource.MenuScreenRegistration;
 
 @Mod(CollectorsAlbum.MOD_ID)
 public class CollectorsAlbumForge {
@@ -35,6 +36,7 @@ public class CollectorsAlbumForge {
         ForgeRegistration.subscribeRegistryEvent(eventBus, ItemDropProviderRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, ItemDataComponentRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, AlbumBonusRegistry.REGISTRY);
+        ForgeRegistration.subscribeRegistryEvent(eventBus, MenuRegistry.REGISTRY);
         eventBus.addListener(this::createNewRegistries);
         eventBus.addListener(this::setup);
         eventBus.addListener(this::clientSetup);
@@ -54,6 +56,8 @@ public class CollectorsAlbumForge {
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
+        CollectorsAlbumClient.init();
+        event.enqueueWork(() -> MenuScreenRegistration.bind());
     }
 
     private void playerTick(TickEvent.PlayerTickEvent event) {

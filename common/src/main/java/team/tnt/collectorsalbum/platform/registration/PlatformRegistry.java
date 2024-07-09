@@ -2,8 +2,13 @@ package team.tnt.collectorsalbum.platform.registration;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import team.tnt.collectorsalbum.platform.Platform;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -17,6 +22,15 @@ public interface PlatformRegistry<T> {
 
     static <T> PlatformRegistry<T> create(RegistryReference<T> reference, String namespace) {
         return new PlatformRegistryImpl<>(reference, namespace);
+    }
+
+    static MenuHelper createMenuHelper(PlatformRegistry<MenuType<?>> menuTypeRegistry) {
+        return new MenuHelper() {
+            @Override
+            public <M extends AbstractContainerMenu, D> Reference<MenuType<M>> register(String name, Platform.MenuFactory<M, D> factory, StreamCodec<? super FriendlyByteBuf, D> codec) {
+                return menuTypeRegistry.register(name, () -> Platform.INSTANCE.createMenu(factory, codec));
+            }
+        };
     }
 
     <R extends T> Reference<R> register(String elementId, Supplier<R> ref);
@@ -41,5 +55,10 @@ public interface PlatformRegistry<T> {
         default Codec<T> byNameCodec() {
             return this.get().byNameCodec();
         }
+    }
+
+    @FunctionalInterface
+    interface MenuHelper {
+        <M extends AbstractContainerMenu, D> Reference<MenuType<M>> register(String name, Platform.MenuFactory<M, D> factory, StreamCodec<? super FriendlyByteBuf, D> codec);
     }
 }

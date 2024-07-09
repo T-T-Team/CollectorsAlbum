@@ -9,8 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import team.tnt.collectorsalbum.common.Album;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
+import team.tnt.collectorsalbum.platform.Platform;
 
 import java.util.List;
 
@@ -25,7 +24,9 @@ public class AlbumItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-        // TODO open GUI
+        if (level.isClientSide()) {
+            Platform.INSTANCE.openAlbumUi(itemStack);
+        }
         return InteractionResultHolder.consume(itemStack);
     }
 

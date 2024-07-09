@@ -24,7 +24,6 @@ public final class ItemDataComponentRegistry {
     public static final Supplier<DataComponentType<Album>> ALBUM = REGISTRY.register("album",
             () -> DataComponentType.<Album>builder()
                     .persistent(Album.CODEC)
-                    .networkSynchronized(Album.STREAM_CODEC)
                     .build()
     );
 }

@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import team.tnt.collectorsalbum.common.AlbumCard;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.AlbumCategoryType;
+import team.tnt.collectorsalbum.common.AlbumCategoryUiTemplate;
 import team.tnt.collectorsalbum.common.init.CategoryRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.platform.Codecs;
@@ -30,15 +31,17 @@ public class DefaultAlbumCategory implements AlbumCategory {
                 int sum = set.stream().mapToInt(AlbumCard::cardNumber).sum();
                 return expectedSum == sum ? DataResult.success(set) : DataResult.error(() -> "Category must contain exactly 30 cards for each rarity!");
             }).fieldOf("cards").forGetter(t -> t.cards),
-            DisplayAttributes.CODEC.fieldOf("display").forGetter(t -> t.attributes)
+            DisplayAttributes.CODEC.fieldOf("display").forGetter(t -> t.attributes),
+            AlbumCategoryUiTemplate.CODEC.optionalFieldOf("template", AlbumCategoryUiTemplate.DEFAULT_TEMPLATE).forGetter(t -> t.template)
     ).apply(instance, DefaultAlbumCategory::new));
 
     private final ResourceLocation identifier;
     private final Set<AlbumCard> cards;
     private final DisplayAttributes attributes;
     private final Component displayText;
+    private final AlbumCategoryUiTemplate template;
 
-    private DefaultAlbumCategory(ResourceLocation identifier, Set<AlbumCard> cards, DisplayAttributes attributes) {
+    private DefaultAlbumCategory(ResourceLocation identifier, Set<AlbumCard> cards, DisplayAttributes attributes, AlbumCategoryUiTemplate template) {
         this.identifier = identifier;
         this.cards = cards;
         this.attributes = attributes;
@@ -46,6 +49,7 @@ public class DefaultAlbumCategory implements AlbumCategory {
         this.displayText = attributes.translated()
                 ? Component.translatable(attributes.displayString()).withStyle(styles)
                 : Component.literal(attributes.displayString()).withStyle(styles);
+        this.template = template;
     }
 
     @Override
@@ -56,6 +60,11 @@ public class DefaultAlbumCategory implements AlbumCategory {
     @Override
     public Component getDisplayText() {
         return this.displayText;
+    }
+
+    @Override
+    public AlbumCategoryUiTemplate visualTemplate() {
+        return template;
     }
 
     @Override

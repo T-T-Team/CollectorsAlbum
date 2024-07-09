@@ -29,7 +29,7 @@ public class AlbumPointBonusFilter implements IntermediateAlbumBonus {
 
     public AlbumPointBonusFilter(Either<Integer, NumberProvider> min, Either<Integer, NumberProvider> max, AlbumBonus item) {
         this.min = min.map(ConstantNumberProvider::new, Function.identity());
-        this.max = min.map(ConstantNumberProvider::new, Function.identity());
+        this.max = max.map(ConstantNumberProvider::new, Function.identity());
         this.item = item;
     }
 

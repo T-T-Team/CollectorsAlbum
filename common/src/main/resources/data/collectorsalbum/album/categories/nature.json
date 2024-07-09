@@ -7,6 +7,9 @@
     "styles": ["green"],
     "pageOrder": 400
   },
+  "template": {
+    "bookmarkItem": "minecraft:oxeye_daisy"
+  },
   "cards": [
     "collectorsalbum:common_oak_sapling_card",
     "collectorsalbum:epic_oak_sapling_card",

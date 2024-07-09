@@ -1,19 +1,11 @@
 package team.tnt.collectorsalbum.platform;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.mojang.serialization.JsonOps;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.codec.StreamDecoder;
-import net.minecraft.network.codec.StreamEncoder;
-import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
 import java.util.*;
 import java.util.function.Function;
@@ -23,6 +15,20 @@ import java.util.function.UnaryOperator;
 public final class Codecs {
 
     public static final Codec<Float> PERCENT_FLOAT = rangeInclusiveFloat(0.0F, 1.0F);
+    public static final Codec<Integer> COLOR_CODEC = Codec.either(Codec.INT, Codec.STRING.comapFlatMap(
+            text -> {
+                try {
+                    int color = Integer.decode(text);
+                    return DataResult.success(color);
+                } catch (NumberFormatException e) {
+                    return DataResult.error(e::getMessage);
+                }
+            },
+            Integer::toHexString
+    )).xmap(
+            either -> either.map(Function.identity(), Function.identity()),
+            Either::left
+    );
 
     public static Codec<Float> rangeInclusiveFloat(float min, float max) {
         return Codec.FLOAT.validate(f -> f >= min && f <= max
@@ -45,7 +51,13 @@ public final class Codecs {
 
     public static <T> Codec<NonNullList<T>> nonNullListCodec(Codec<T> codec, T empty) {
         return codec.listOf().xmap(
-                list -> NonNullList.withSize(list.size(), empty),
+                list -> {
+                    NonNullList<T> nonNullList = NonNullList.<T>withSize(list.size(), empty);
+                    for (int i = 0; i < list.size(); ++i) {
+                        nonNullList.set(i, list.get(i));
+                    }
+                    return nonNullList;
+                },
                 Function.identity()
         );
     }

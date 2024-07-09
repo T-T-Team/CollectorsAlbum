@@ -7,6 +7,9 @@
     "styles": ["yellow"],
     "pageOrder": 100
   },
+  "template": {
+    "bookmarkItem": "minecraft:diamond_pickaxe"
+  },
   "cards": [
     "collectorsalbum:common_wooden_sword_card",
     "collectorsalbum:epic_wooden_sword_card",

@@ -7,6 +7,9 @@
     "styles": ["red"],
     "pageOrder": 300
   },
+  "template": {
+    "bookmarkItem": "minecraft:zombie_head"
+  },
   "cards": [
     "collectorsalbum:common_blaze_card",
     "collectorsalbum:epic_blaze_card",

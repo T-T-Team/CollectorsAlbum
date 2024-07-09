@@ -42,13 +42,22 @@ public class CollectorsAlbum {
     }
 
     public static void tickPlayer(Player player) {
-        PlayerAlbumTracker tracker = PlayerAlbumTracker.get();
-        Album album = tracker.getAlbum(player).orElse(null);
         Level level = player.level();
         long time = level.getGameTime();
         if (level.isClientSide() || time % 100L != 0L) {
             return;
         }
+        actuallyTickPlayer(player);
+    }
+
+    public static void forceAlbumReload(Player player) {
+        if (!player.level().isClientSide())
+            actuallyTickPlayer(player);
+    }
+
+    private static void actuallyTickPlayer(Player player) {
+        PlayerAlbumTracker tracker = PlayerAlbumTracker.get();
+        Album album = tracker.getAlbum(player).orElse(null);
         AlbumLocatorResult result;
         if (album == null) {
             result = tracker.findAlbum(player, null);
@@ -64,6 +73,7 @@ public class CollectorsAlbum {
                 album.removed(player);
                 if (result.getAlbum() != null) {
                     tracker.cacheAlbum(player, result.getAlbum());
+                    result.getAlbum().tick(player);
                 }
                 return;
             }

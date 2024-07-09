@@ -7,6 +7,9 @@
     "styles": ["blue"],
     "pageOrder": 200
   },
+  "template": {
+    "bookmarkItem": "minecraft:iron_chestplate"
+  },
   "cards": [
     "collectorsalbum:common_leather_helmet_card",
     "collectorsalbum:epic_leather_helmet_card",

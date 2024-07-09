@@ -9,6 +9,8 @@ public interface AlbumCategory {
 
     Component getDisplayText();
 
+    AlbumCategoryUiTemplate visualTemplate();
+
     boolean accepts(AlbumCard card);
 
     int getSlots();

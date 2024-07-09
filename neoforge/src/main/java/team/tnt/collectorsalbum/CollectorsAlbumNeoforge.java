@@ -2,10 +2,12 @@ package team.tnt.collectorsalbum;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -17,6 +19,7 @@ import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.*;
 import team.tnt.collectorsalbum.platform.network.NeoforgeNetwork;
 import team.tnt.collectorsalbum.platform.registration.NeoforgeRegistration;
+import team.tnt.collectorsalbum.platform.resource.MenuScreenRegistration;
 
 @Mod(CollectorsAlbum.MOD_ID)
 public class CollectorsAlbumNeoforge {
@@ -35,6 +38,7 @@ public class CollectorsAlbumNeoforge {
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, ItemDropProviderRegistry.REGISTRY);
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, ItemDataComponentRegistry.REGISTRY);
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, AlbumBonusRegistry.REGISTRY);
+        NeoforgeRegistration.subscribeRegistryEvent(eventBus, MenuRegistry.REGISTRY);
         NeoforgeNetwork.subscribeRegistryEvent(eventBus, CollectorsAlbum.NETWORK_MANAGER);
 
         IEventBus neoBus = NeoForge.EVENT_BUS;
@@ -46,10 +50,12 @@ public class CollectorsAlbumNeoforge {
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             CollectorsAlbumClient.construct();
+            eventBus.addListener(this::registerScreens);
         }
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
+        CollectorsAlbumClient.init();
     }
 
     private void playerTick(PlayerTickEvent.Post event) {
@@ -78,5 +84,10 @@ public class CollectorsAlbumNeoforge {
 
     private void addRegistries(NewRegistryEvent event) {
         NeoforgeRegistration.bindNewRegistries(event);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void registerScreens(RegisterMenuScreensEvent event) {
+        MenuScreenRegistration.bindRefs(event::register);
     }
 }

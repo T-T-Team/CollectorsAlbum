@@ -73,7 +73,7 @@ public class AlbumCategoryCardBonusFilter implements IntermediateAlbumBonus {
     @Override
     public boolean canApply(ActionContext context) {
         return context.get(ActionContext.ALBUM, Album.class).map(album -> {
-            List<AlbumCard> cards = album.getCardsForCategory(this.category);
+            Collection<AlbumCard> cards = album.getCardsForCategory(this.category);
             List<AlbumCard> validCards = cards.stream().filter(card -> {
                 CardRarity rarity = card.rarity();
                 Set<CardRarity> rarityFilter = this.rarityFilter.orElse(Collections.emptySet());

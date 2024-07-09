@@ -59,5 +59,6 @@ public class CollectorsAlbumFabric implements ModInitializer {
         ItemRegistry.REGISTRY.bind();
         ItemGroupRegistry.REGISTRY.bind();
         SoundRegistry.REGISTRY.bind();
+        MenuRegistry.REGISTRY.bind();
     }
 }

@@ -7,6 +7,9 @@
     "styles": ["white"],
     "pageOrder": 500
   },
+  "template": {
+    "bookmarkItem": "minecraft:feather"
+  },
   "cards": [
     "collectorsalbum:common_enchantment_table_card",
     "collectorsalbum:epic_enchantment_table_card",

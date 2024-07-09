@@ -10,5 +10,6 @@ public final class NetworkManager {
         CollectorsAlbum.NETWORK_MANAGER.registerPacket(PacketDirection.SERVER_TO_CLIENT, S2C_SendDatapackResources.class, S2C_SendDatapackResources.TYPE, S2C_SendDatapackResources.CODEC, S2C_SendDatapackResources::onDataReceived);
 
         CollectorsAlbum.NETWORK_MANAGER.registerPacket(PacketDirection.CLIENT_TO_SERVER, C2S_CompleteOpeningCardPack.class, C2S_CompleteOpeningCardPack.TYPE, C2S_CompleteOpeningCardPack.CODEC, C2S_CompleteOpeningCardPack::onPacketReceived);
+        CollectorsAlbum.NETWORK_MANAGER.registerPacket(PacketDirection.CLIENT_TO_SERVER, C2S_RequestAlbumCategoryInventory.class, C2S_RequestAlbumCategoryInventory.TYPE, C2S_RequestAlbumCategoryInventory.CODEC, C2S_RequestAlbumCategoryInventory::onPacket);
     }
 }

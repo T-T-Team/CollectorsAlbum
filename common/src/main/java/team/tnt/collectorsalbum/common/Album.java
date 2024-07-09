@@ -10,7 +10,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
@@ -25,46 +24,16 @@ public final class Album implements Predicate<Album> {
             UUIDUtil.CODEC.fieldOf("albumId").forGetter(t -> t.albumId),
             Codec.unboundedMap(
                     ResourceLocation.CODEC,
-                    AlbumCardManager.BY_NAME_CODEC.listOf()
-            ).xmap(HashMap::new, map -> map).fieldOf("cardsByCategory").forGetter(t -> (HashMap<ResourceLocation, List<AlbumCard>>) t.cardsByCategory),
+                    Codecs.setCodec(AlbumCardManager.BY_NAME_CODEC)
+            ).xmap(HashMap::new, map -> map).fieldOf("cardsByCategory").forGetter(t -> (HashMap<ResourceLocation, Set<AlbumCard>>) t.cardsByCategory),
             Codec.unboundedMap(
                     ResourceLocation.CODEC,
                     Codecs.nonNullListCodec(ItemStack.OPTIONAL_CODEC, ItemStack.EMPTY)
             ).fieldOf("categoryInventories").forGetter(t -> t.categoryInventories)
     ).apply(instance, Album::new));
-    public static final StreamCodec<RegistryFriendlyByteBuf, Album> STREAM_CODEC = StreamCodec.composite(
-            UUIDUtil.STREAM_CODEC, card -> card.albumId,
-            ByteBufCodecs.map(HashMap::new, ResourceLocation.STREAM_CODEC, ResourceLocation.STREAM_CODEC.apply(ByteBufCodecs.list())).map(map -> {
-                Map<ResourceLocation, List<AlbumCard>> remapped = new HashMap<>();
-                AlbumCardManager cardManager = AlbumCardManager.getInstance();
-                for (Map.Entry<ResourceLocation, List<ResourceLocation>> entry : map.entrySet()) {
-                    List<AlbumCard> cards = new ArrayList<>();
-                    for (ResourceLocation key : entry.getValue()) {
-                        AlbumCard card = cardManager.getCardById(key);
-                        if (card != null) {
-                            cards.add(card);
-                        }
-                    }
-                    remapped.put(entry.getKey(), cards);
-                }
-                return remapped;
-            }, map -> {
-                HashMap<ResourceLocation, List<ResourceLocation>> remapped = new HashMap<>();
-                for (Map.Entry<ResourceLocation, List<AlbumCard>> entry : map.entrySet()) {
-                    List<ResourceLocation> identifiers = new ArrayList<>();
-                    for (AlbumCard card : entry.getValue()) {
-                        identifiers.add(card.identifier());
-                    }
-                    remapped.put(entry.getKey(), identifiers);
-                }
-                return remapped;
-            }), album -> album.cardsByCategory,
-            ByteBufCodecs.map(HashMap::new, ResourceLocation.STREAM_CODEC, Codecs.nonNullListStreamCodec(ItemStack.OPTIONAL_STREAM_CODEC, ItemStack::isEmpty, ItemStack.EMPTY)), t -> t.categoryInventories,
-            Album::new
-    );
 
     private final UUID albumId;
-    private final Map<ResourceLocation, List<AlbumCard>> cardsByCategory;
+    private final Map<ResourceLocation, Set<AlbumCard>> cardsByCategory;
     private final Map<ResourceLocation, NonNullList<ItemStack>> categoryInventories;
     private final int points;
 
@@ -72,7 +41,7 @@ public final class Album implements Predicate<Album> {
         this(albumId, new HashMap<>(), new HashMap<>());
     }
 
-    private Album(UUID albumId, Map<ResourceLocation, List<AlbumCard>> cardsByCategory, Map<ResourceLocation, NonNullList<ItemStack>> categoryInventories) {
+    private Album(UUID albumId, Map<ResourceLocation, Set<AlbumCard>> cardsByCategory, Map<ResourceLocation, NonNullList<ItemStack>> categoryInventories) {
         this.albumId = albumId;
         this.cardsByCategory = cardsByCategory;
         this.categoryInventories = categoryInventories;
@@ -84,11 +53,18 @@ public final class Album implements Predicate<Album> {
         return new Album(UUID.randomUUID());
     }
 
-    public static Album basedOn(Album other) {
-        if (other == null) {
-            return emptyAlbum();
-        }
-        return new Album(UUID.randomUUID(), new HashMap<>(other.cardsByCategory), new HashMap<>(other.categoryInventories));
+    public Album update(ResourceLocation category, NonNullList<ItemStack> items) {
+        Map<ResourceLocation, Set<AlbumCard>> categoryMap = new HashMap<>(this.cardsByCategory);
+        Set<AlbumCard> modified = categoryMap.computeIfAbsent(category, k -> new HashSet<>());
+        AlbumCardManager manager = AlbumCardManager.getInstance();
+        modified.addAll(items.stream().map(itemStack -> {
+            if (itemStack.isEmpty())
+                return null;
+            return manager.getCardInfo(itemStack.getItem()).orElse(null);
+        }).filter(Objects::nonNull).toList());
+        Map<ResourceLocation, NonNullList<ItemStack>> newCategoryMap = new HashMap<>(this.categoryInventories);
+        newCategoryMap.put(category, items);
+        return new Album(UUID.randomUUID(), categoryMap, newCategoryMap);
     }
 
     @Override
@@ -100,29 +76,12 @@ public final class Album implements Predicate<Album> {
         return points;
     }
 
-    public ItemStack getItem(ResourceLocation categoryId, int index) {
-        List<ItemStack> list = categoryInventories.get(categoryId);
-        if (list == null) {
-            return ItemStack.EMPTY;
-        }
-        return list.get(index);
+    public NonNullList<ItemStack> getInventory(ResourceLocation category) {
+        return categoryInventories.getOrDefault(category, NonNullList.withSize(1, ItemStack.EMPTY));
     }
 
-    public ItemStack getItem(AlbumCategory category, int index) {
-        return getItem(category.identifier(), index);
-    }
-
-    public ItemStack setItem(AlbumCategory category, int index, ItemStack itemStack) {
-        ItemStack prevItemStack = this.getItem(category, index);
-        if (prevItemStack.isEmpty() && itemStack.isEmpty())
-            return ItemStack.EMPTY;
-        List<ItemStack> list = categoryInventories.computeIfAbsent(category.identifier(), key -> NonNullList.withSize(category.getSlots(), ItemStack.EMPTY));
-        list.set(index, itemStack);
-        return prevItemStack;
-    }
-
-    public List<AlbumCard> getCardsForCategory(ResourceLocation category) {
-        List<AlbumCard> cards = cardsByCategory.get(category);
+    public Collection<AlbumCard> getCardsForCategory(ResourceLocation category) {
+        Set<AlbumCard> cards = cardsByCategory.get(category);
         return cards == null ? Collections.emptyList() : cards;
     }
 
@@ -136,10 +95,6 @@ public final class Album implements Predicate<Album> {
         ActionContext context = ActionContext.of(ActionContext.PLAYER, player, ActionContext.ALBUM, this);
         AlbumBonusManager manager = AlbumBonusManager.getInstance();
         manager.removeBonuses(context);
-    }
-
-    public UUID getUUID() {
-        return this.albumId;
     }
 
     @Override
