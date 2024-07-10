@@ -1,12 +1,14 @@
 package team.tnt.collectorsalbum.common.resource;
 
 import com.google.gson.JsonElement;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonus;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonusType;
+import team.tnt.collectorsalbum.common.resource.bonus.NoBonus;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.network.S2C_SendDatapackResources;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
@@ -41,6 +43,19 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Alb
         this.bonusList.forEach(bonus -> bonus.removed(context));
     }
 
+    public Pair<AlbumBonus, AlbumBonus> getBonusesForPage(int page) {
+        int leftIdx = page * 2;
+        int rightIdx = leftIdx + 1;
+        AlbumBonus left = this.getBonusAtIndex(leftIdx);
+        AlbumBonus right = this.getBonusAtIndex(rightIdx);
+        return Pair.of(left, right);
+    }
+
+    public boolean hasNextPage(int currentPage) {
+        int lastDisplayed = currentPage * 2 + 1;
+        return lastDisplayed >= 0 && lastDisplayed < this.bonusList.size();
+    }
+
     @Override
     public ResourceLocation identifier() {
         return IDENTIFIER;
@@ -73,5 +88,12 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Alb
     protected void onReloadComplete(ResourceManager manager, ProfilerFiller profiler) {
         super.onReloadComplete(manager, profiler);
         PlatformNetworkManager.NETWORK.sendAllClientMessage(new S2C_SendDatapackResources<>(this));
+    }
+
+    private AlbumBonus getBonusAtIndex(int index) {
+        if (index < 0 || index >= this.bonusList.size()) {
+            return NoBonus.INSTANCE;
+        }
+        return this.bonusList.get(index);
     }
 }

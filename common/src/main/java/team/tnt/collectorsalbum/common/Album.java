@@ -4,19 +4,19 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.UUIDUtil;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import team.tnt.collectorsalbum.common.card.CardRarity;
 import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
+import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.platform.Codecs;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public final class Album implements Predicate<Album> {
 
@@ -55,14 +55,14 @@ public final class Album implements Predicate<Album> {
 
     public Album update(ResourceLocation category, NonNullList<ItemStack> items) {
         Map<ResourceLocation, Set<AlbumCard>> categoryMap = new HashMap<>(this.cardsByCategory);
-        Set<AlbumCard> modified = categoryMap.computeIfAbsent(category, k -> new HashSet<>());
         AlbumCardManager manager = AlbumCardManager.getInstance();
-        modified.addAll(items.stream().map(itemStack -> {
+        Set<AlbumCard> modified = new HashSet<>(items.stream().map(itemStack -> {
             if (itemStack.isEmpty())
                 return null;
             return manager.getCardInfo(itemStack.getItem()).orElse(null);
         }).filter(Objects::nonNull).toList());
         Map<ResourceLocation, NonNullList<ItemStack>> newCategoryMap = new HashMap<>(this.categoryInventories);
+        categoryMap.put(category, modified);
         newCategoryMap.put(category, items);
         return new Album(UUID.randomUUID(), categoryMap, newCategoryMap);
     }
@@ -83,6 +83,35 @@ public final class Album implements Predicate<Album> {
     public Collection<AlbumCard> getCardsForCategory(ResourceLocation category) {
         Set<AlbumCard> cards = cardsByCategory.get(category);
         return cards == null ? Collections.emptyList() : cards;
+    }
+
+    public int countCards() {
+        return this.cardsByCategory.values().stream().mapToInt(Set::size).sum();
+    }
+
+    public Map<CardRarity, Float> calculateRarityRatios() {
+        Map<CardRarity, List<AlbumCard>> byRarity = this.cardsByCategory.values().stream()
+                .flatMap(Collection::stream).collect(Collectors.groupingBy(AlbumCard::rarity));
+        Map<CardRarity, Float> map = new EnumMap<>(CardRarity.class);
+        int totalCards = Math.max(this.countCards(), 1);
+        for (CardRarity rarity : CardRarity.values()) {
+            List<AlbumCard> list = byRarity.getOrDefault(rarity, Collections.emptyList());
+            float ratio = list.size() / (float) totalCards;
+            map.put(rarity, ratio);
+        }
+        return map;
+    }
+
+    public List<AlbumCategoryStatistics> calculateStatistics() {
+        AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
+        Collection<AlbumCategory> categories = manager.listCategories();
+        return categories.stream().map(cat -> {
+            Set<AlbumCard> cardsInCategory = this.cardsByCategory.getOrDefault(cat.identifier(), Collections.emptySet());
+            int categoryTotal = cat.getSlots();
+            int categoryCollected = cardsInCategory.size();
+            return new AlbumCategoryStatistics(cat, categoryCollected, categoryTotal);
+        }).sorted(Comparator.comparingDouble(AlbumCategoryStatistics::getCollectedProgress).reversed())
+                .toList();
     }
 
     public void tick(Player player) {
@@ -108,5 +137,12 @@ public final class Album implements Predicate<Album> {
     @Override
     public int hashCode() {
         return Objects.hashCode(albumId);
+    }
+
+    public record AlbumCategoryStatistics(AlbumCategory category, int collectedCards, int allCards) {
+
+        public float getCollectedProgress() {
+            return collectedCards / (float) allCards;
+        }
     }
 }

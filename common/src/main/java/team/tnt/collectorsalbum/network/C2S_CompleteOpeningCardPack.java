@@ -36,9 +36,6 @@ public record C2S_CompleteOpeningCardPack() implements CustomPacketPayload {
                 PlatformPlayerHelper.giveItemStackOrDrop(player, item.copy());
             }
             itemStack.remove(ItemDataComponentRegistry.PACK_DROPS.get());
-            if (!player.isCreative()) {
-                itemStack.shrink(1);
-            }
         }
     }
 }

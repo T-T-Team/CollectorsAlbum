@@ -32,7 +32,7 @@ public class AlbumBonusConfig {
     @Configurable.FixedSize
     @Configurable.Range(min = 0, max = 1024)
     @Configurable.Comment({"Allows you to configure health boost steps given from album points", "1 = 0.5 heart"})
-    public int[] healthBonusLevelSteps = { 2, 4, 6, 8, 10, 20 };
+    public int[] healthBonusLevelSteps = { 4, 8, 12, 16, 20, 40 };
 
     @Configurable
     @Configurable.Range(min = 0, max = 255)

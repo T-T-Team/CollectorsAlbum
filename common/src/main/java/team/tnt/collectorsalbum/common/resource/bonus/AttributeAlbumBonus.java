@@ -45,7 +45,8 @@ public class AttributeAlbumBonus implements AlbumBonus {
         if (instance != null) {
             AttributeModifier activeModifier = instance.getModifier(this.attributeModifier.id());
             if (activeModifier == null || !activeModifier.equals(this.attributeModifier)) {
-                instance.addTransientModifier(this.attributeModifier);
+                instance.removeModifier(this.attributeModifier); // Needs to be deleted as vanilla does not check for equality when replacing
+                instance.addPermanentModifier(this.attributeModifier);
             }
         }
     }
@@ -55,7 +56,10 @@ public class AttributeAlbumBonus implements AlbumBonus {
         Player player = context.getOrThrow(ActionContext.PLAYER, Player.class);
         AttributeInstance instance = player.getAttribute(this.attribute);
         if (instance != null) {
-            instance.removeModifier(this.attributeModifier);
+            AttributeModifier modifier = instance.getModifier(this.attributeModifier.id());
+            if (this.attributeModifier.equals(modifier)) {
+                instance.removeModifier(this.attributeModifier);
+            }
         }
     }
 

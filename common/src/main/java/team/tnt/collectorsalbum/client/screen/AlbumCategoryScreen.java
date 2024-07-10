@@ -51,7 +51,7 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
 
     @Override
     public void removed() {
-        AlbumNavigationHelper.saveMousePositionSnapshot();
+        AlbumNavigationHelper.captureCurrentMousePositionSnapshot();
         super.removed();
     }
 

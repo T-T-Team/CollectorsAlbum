@@ -934,10 +934,15 @@
   "collectorsalbum.tooltip.card.rarity": "Rarity: %s",
   "collectorsalbum.tooltip.card.value": "Value: %s",
   "collectorsalbum.text.points.value": "%s pts",
+  "collectorsalbum.text.statistics.collected": "Cards: %s / %s",
+  "collectorsalbum.text.statistics.points": "%s points",
+  "collectorsalbum.text.statistics.rarities_label": "Card rarities",
+  "collectorsalbum.text.statistics.categories_label": "Categories",
 
   "itemGroup.collectorsalbum.album": "Collector's Album",
 
   "screen.collectorsalbum.album.main": "Album",
+  "screen.collectorsalbum.album.bonuses": "Bonuses",
 
   "config.screen.collectorsalbum": "Collector's Album Config",
   "config.collectorsalbum.option.packDrops": "Card pack drops",

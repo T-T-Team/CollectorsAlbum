@@ -77,7 +77,7 @@ public class AlbumCategoryCardBonusFilter implements IntermediateAlbumBonus {
             List<AlbumCard> validCards = cards.stream().filter(card -> {
                 CardRarity rarity = card.rarity();
                 Set<CardRarity> rarityFilter = this.rarityFilter.orElse(Collections.emptySet());
-                if (!rarityFilter.contains(rarity)) {
+                if (!rarityFilter.isEmpty() && !rarityFilter.contains(rarity)) {
                     return false;
                 }
                 int value = card.getPoints();

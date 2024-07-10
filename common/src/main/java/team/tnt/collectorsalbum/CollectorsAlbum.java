@@ -83,6 +83,7 @@ public class CollectorsAlbum {
 
     public static void sendPlayerDatapacks(ServerPlayer player) {
         getDatapackSyncPayloads().forEach(payload -> PlatformNetworkManager.NETWORK.sendClientMessage(player, payload));
+        forceAlbumReload(player);
     }
 
     public static List<CustomPacketPayload> getDatapackSyncPayloads() {

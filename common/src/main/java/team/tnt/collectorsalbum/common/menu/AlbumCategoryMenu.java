@@ -132,6 +132,16 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
                 return cardNumber == (this.index + 1) && cardCategory.equals(category);
             }).orElse(false);
         }
+
+        @Override
+        public int getMaxStackSize() {
+            return 1;
+        }
+
+        @Override
+        public int getMaxStackSize(ItemStack $$0) {
+            return getMaxStackSize();
+        }
     }
 
     private static final class AlbumInventoryWrapper extends SimpleContainer {

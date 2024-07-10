@@ -14,6 +14,7 @@ public final class ItemDataComponentRegistry {
 
     public static final PlatformRegistry<DataComponentType<?>> REGISTRY = PlatformRegistry.create(BuiltInRegistries.DATA_COMPONENT_TYPE, CollectorsAlbum.MOD_ID);
 
+    @Deprecated
     public static final Supplier<DataComponentType<List<ItemStack>>> PACK_DROPS = REGISTRY.register("pack_drops",
             () -> DataComponentType.<List<ItemStack>>builder()
                     .persistent(ItemStack.CODEC.listOf())

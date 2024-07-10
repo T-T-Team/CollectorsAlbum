@@ -1,9 +1,7 @@
 package team.tnt.collectorsalbum.client.screen;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
 import team.tnt.collectorsalbum.common.AlbumCategory;
@@ -22,7 +20,7 @@ public final class AlbumNavigationHelper {
     private static Double savedMouseX;
     private static Double savedMouseY;
 
-    public static void saveMousePositionSnapshot() {
+    public static void captureCurrentMousePositionSnapshot() {
         MouseHandlerAccessor accessor = (MouseHandlerAccessor) Minecraft.getInstance().mouseHandler;
         savedMouseX = accessor.getXpos();
         savedMouseY = accessor.getYpos();
@@ -52,10 +50,7 @@ public final class AlbumNavigationHelper {
     }
 
     public static void navigateBonusesPage() {
-        resetCategoryPage();
-    }
-
-    public static void navigateHelp(ItemStack itemStack) {
+        Minecraft.getInstance().setScreen(new AlbumBonusesScreen());
         resetCategoryPage();
     }
 

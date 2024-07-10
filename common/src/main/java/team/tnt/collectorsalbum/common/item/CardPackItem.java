@@ -67,7 +67,10 @@ public class CardPackItem extends Item {
                     .filter(stack -> cardManager.isCard(stack.getItem()))
                     .collect(Collectors.toList());
             Collections.shuffle(validDrops);
-            itemStack.set(ItemDataComponentRegistry.PACK_DROPS.get(), validDrops);
+            itemStack.set(ItemDataComponentRegistry.PACK_DROPS.get(), validDrops); // TODO remove
+            if (!player.isCreative())
+                itemStack.shrink(1);
+            // TODO save serverside data only and then award items from that
             PlatformNetworkManager.NETWORK.sendClientMessage(player, new S2C_OpenCardPackScreen(validDrops));
         }
         return itemStack;

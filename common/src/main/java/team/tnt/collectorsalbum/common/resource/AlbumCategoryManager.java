@@ -40,6 +40,17 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
         return pagedCategories.stream().filter(cat -> !cat.visualTemplate().bookmarkIcon.isEmpty()).toList();
     }
 
+    /**
+     * @return Count of cards which can be collected - used in Album statistics. Counts only unique card numbers per category (but this depends on implementation).
+     */
+    public int getCollectibleCardCount() {
+        return this.pagedCategories.stream().mapToInt(AlbumCategory::getSlots).sum();
+    }
+
+    public Collection<AlbumCategory> listCategories() {
+        return this.registeredCategories.values();
+    }
+
     @Override
     public ResourceLocation identifier() {
         return IDENTIFIER;
