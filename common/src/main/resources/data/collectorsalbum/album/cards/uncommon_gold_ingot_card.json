@@ -1,5 +1,5 @@
 {
-  "type": "collectorsalbum:card",
+  "type": "collectorsalbum:rarity_card",
   "id": "collectorsalbum:uncommon_gold_ingot_card",
   "rarity": "UNCOMMON",
   "item": "collectorsalbum:uncommon_gold_ingot_card",

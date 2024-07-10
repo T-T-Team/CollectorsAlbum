@@ -1,5 +1,5 @@
 {
-  "type": "collectorsalbum:card",
+  "type": "collectorsalbum:rarity_card",
   "id": "collectorsalbum:common_carrot_card",
   "rarity": "COMMON",
   "item": "collectorsalbum:common_carrot_card",

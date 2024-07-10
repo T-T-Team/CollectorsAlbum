@@ -1,5 +1,5 @@
 {
-  "type": "collectorsalbum:card",
+  "type": "collectorsalbum:rarity_card",
   "id": "collectorsalbum:rare_bamboo_card",
   "rarity": "RARE",
   "item": "collectorsalbum:rare_bamboo_card",

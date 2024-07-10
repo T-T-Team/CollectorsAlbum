@@ -1,5 +1,5 @@
 {
-  "type": "collectorsalbum:card",
+  "type": "collectorsalbum:rarity_card",
   "id": "collectorsalbum:common_zombie_card",
   "rarity": "COMMON",
   "item": "collectorsalbum:common_zombie_card",

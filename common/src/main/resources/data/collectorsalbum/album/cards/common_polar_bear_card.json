@@ -1,5 +1,5 @@
 {
-  "type": "collectorsalbum:card",
+  "type": "collectorsalbum:rarity_card",
   "id": "collectorsalbum:common_polar_bear_card",
   "rarity": "COMMON",
   "item": "collectorsalbum:common_polar_bear_card",

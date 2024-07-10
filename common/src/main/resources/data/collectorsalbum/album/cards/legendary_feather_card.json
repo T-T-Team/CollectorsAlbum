@@ -1,5 +1,5 @@
 {
-  "type": "collectorsalbum:card",
+  "type": "collectorsalbum:rarity_card",
   "id": "collectorsalbum:legendary_feather_card",
   "rarity": "LEGENDARY",
   "item": "collectorsalbum:legendary_feather_card",
