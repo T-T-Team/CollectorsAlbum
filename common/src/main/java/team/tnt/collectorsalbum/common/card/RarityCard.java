@@ -15,15 +15,15 @@ import team.tnt.collectorsalbum.platform.Codecs;
 import java.util.Locale;
 import java.util.Objects;
 
-public class SimpleAlbumCard implements AlbumCard {
+public class RarityCard implements AlbumCard {
 
-    public static final MapCodec<SimpleAlbumCard> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("id").forGetter(SimpleAlbumCard::identifier),
-            Codecs.simpleEnumCodec(CardRarity.class, text -> text.toUpperCase(Locale.ROOT)).fieldOf("rarity").forGetter(SimpleAlbumCard::rarity),
-            ItemStack.SIMPLE_ITEM_CODEC.fieldOf("item").forGetter(SimpleAlbumCard::asItem),
-            ResourceLocation.CODEC.fieldOf("category").forGetter(SimpleAlbumCard::category),
-            ExtraCodecs.POSITIVE_INT.fieldOf("number").forGetter(SimpleAlbumCard::cardNumber)
-    ).apply(instance, SimpleAlbumCard::new));
+    public static final MapCodec<RarityCard> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ResourceLocation.CODEC.fieldOf("id").forGetter(RarityCard::identifier),
+            Codecs.simpleEnumCodec(CardRarity.class, text -> text.toUpperCase(Locale.ROOT)).fieldOf("rarity").forGetter(RarityCard::rarity),
+            ItemStack.SIMPLE_ITEM_CODEC.fieldOf("item").forGetter(RarityCard::asItem),
+            ResourceLocation.CODEC.fieldOf("category").forGetter(RarityCard::category),
+            ExtraCodecs.POSITIVE_INT.fieldOf("number").forGetter(RarityCard::cardNumber)
+    ).apply(instance, RarityCard::new));
 
     private final ResourceLocation cardIdentifier;
     private final CardRarity rarity;
@@ -33,7 +33,7 @@ public class SimpleAlbumCard implements AlbumCard {
 
     private AlbumCategory cachedCategory;
 
-    public SimpleAlbumCard(ResourceLocation cardIdentifier, CardRarity rarity, ItemStack itemStack, ResourceLocation categoryIdentifier, int cardNumber) {
+    public RarityCard(ResourceLocation cardIdentifier, CardRarity rarity, ItemStack itemStack, ResourceLocation categoryIdentifier, int cardNumber) {
         this.cardIdentifier = cardIdentifier;
         this.rarity = rarity;
         this.itemStack = itemStack;
@@ -73,7 +73,7 @@ public class SimpleAlbumCard implements AlbumCard {
 
     @Override
     public AlbumCardType<?> getType() {
-        return CardTypeRegistry.CARD.get();
+        return CardTypeRegistry.RARITY_CARD.get();
     }
 
     @Override
@@ -88,7 +88,7 @@ public class SimpleAlbumCard implements AlbumCard {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SimpleAlbumCard that = (SimpleAlbumCard) o;
+        RarityCard that = (RarityCard) o;
         return Objects.equals(cardIdentifier, that.cardIdentifier);
     }
 

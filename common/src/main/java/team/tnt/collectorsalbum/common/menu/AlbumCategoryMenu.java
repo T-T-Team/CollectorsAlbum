@@ -1,5 +1,7 @@
 package team.tnt.collectorsalbum.common.menu;
 
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -11,6 +13,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.Album;
+import team.tnt.collectorsalbum.common.AlbumCard;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.AlbumCategoryUiTemplate;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
@@ -23,6 +26,7 @@ import java.util.List;
 public class AlbumCategoryMenu extends AbstractContainerMenu {
 
     private ResourceLocation category;
+    private final Int2IntMap cardNumberToSlotCache = new Int2IntOpenHashMap();
 
     public AlbumCategoryMenu(int menuId, Inventory inventory) {
         super(MenuRegistry.ALBUM_CATEGORY.get(), menuId);
@@ -60,6 +64,7 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
                     if (cardIndex >= cardNumbers.length)
                         break;
                     addSlot(new CardSlot(wrapper, cardIndex, cardX, cardY, category, cardNumbers[cardIndex]));
+                    this.cardNumberToSlotCache.put(cardNumbers[cardIndex], cardIndex);
                 }
             }
             // right page cards
@@ -74,6 +79,7 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
                         if (cardIndex >= cardNumbers.length)
                             break;
                         addSlot(new CardSlot(wrapper, cardIndex, cardX, cardY, category, cardNumbers[cardIndex]));
+                        this.cardNumberToSlotCache.put(cardNumbers[cardIndex], cardIndex);
                     }
                 }
             }
@@ -103,7 +109,51 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        return ItemStack.EMPTY; // TODO implement
+        ItemStack itemStack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+
+        if (slot.hasItem()) {
+            ItemStack slotItem = slot.getItem();
+            itemStack = slotItem.copy();
+
+            AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
+            int slotsCount = manager.findById(category).map(cat -> cat.getCardNumbers().length).orElse(0);
+            if (slotsCount == 0) {
+                return this.transferInInventory(slotItem, index, 0);
+            }
+
+            if (index >= 0 && index < slotsCount) {
+                // Extraction
+                if (!moveItemStackTo(slotItem, slotsCount, slotsCount + 36, true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (index >= slotsCount && index < slotsCount + 36) {
+                // Insert to album
+                AlbumCard albumCard = this.getCardInfo(slotItem);
+                if (albumCard == null || !albumCard.category().equals(this.category)) {
+                    return this.transferInInventory(slotItem, index, slotsCount);
+                }
+
+                int cardNumber = albumCard.cardNumber();
+                if (!this.cardNumberToSlotCache.containsKey(cardNumber)) {
+                    return this.transferInInventory(slotItem, index, slotsCount);
+                }
+                int cardSlot = this.cardNumberToSlotCache.get(cardNumber);
+                Slot targetSlot = this.slots.get(cardSlot);
+                AlbumCard replacement = null;
+                if (targetSlot.hasItem()) {
+                    ItemStack inSlot = targetSlot.getItem();
+                    replacement = this.getCardInfo(inSlot);
+                }
+
+                if (replacement == null || albumCard.compareTo(replacement) > 0) {
+                    itemStack = targetSlot.getItem().copy();
+                    targetSlot.set(slotItem);
+                    slot.set(itemStack.copy());
+                }
+            }
+        }
+        return ItemStack.EMPTY;
     }
 
     public AlbumCategory getCategory() {
@@ -112,6 +162,23 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
         }
         AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
         return manager.findById(category).orElseThrow();
+    }
+
+    private ItemStack transferInInventory(ItemStack itemStack, int index, int cards) {
+        if (index >= cards && index < cards + 27) {
+            if (!moveItemStackTo(itemStack, cards + 27, cards + 36, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (index >= cards + 27 && index < cards + 36) {
+            if (!moveItemStackTo(itemStack, cards, cards + 9, false)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        return itemStack;
+    }
+
+    private AlbumCard getCardInfo(ItemStack itemStack) {
+        return AlbumCardManager.getInstance().getCardInfo(itemStack.getItem()).orElse(null);
     }
 
     private static final class CardSlot extends Slot {
