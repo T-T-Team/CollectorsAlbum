@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "mypack:emerald",
+  "rarity": "epic",
+  "item": "minecraft:emerald",
+  "category": "mypack:rare_minerals",
+  "number": 4
+}

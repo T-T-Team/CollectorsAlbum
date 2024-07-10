@@ -1,0 +1,10 @@
+{
+  "type": "collectorsalbum:repeated",
+  "times": 9,
+  "item": {
+    "type": "collectorsalbum:item",
+    "itemStack": {
+      "id": "minecraft:diamond"
+    }
+  }
+}

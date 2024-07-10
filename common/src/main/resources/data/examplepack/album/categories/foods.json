@@ -1,0 +1,14 @@
+{
+  "type": "collectorsalbum:category",
+  "id": "mypack:foods",
+  "display": {
+    "name": "Food",
+    "styles": ["dark_red"],
+    "pageOrder": 210
+  },
+  "template": {
+    "bookmarkItem": "minecraft:cooked_beef"
+  },
+  "cards": [
+  ]
+}

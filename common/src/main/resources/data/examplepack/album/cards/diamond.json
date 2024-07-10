@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "mypack:diamond",
+  "rarity": "legendary",
+  "item": "minecraft:diamond",
+  "category": "mypack:rare_minerals",
+  "number": 5
+}

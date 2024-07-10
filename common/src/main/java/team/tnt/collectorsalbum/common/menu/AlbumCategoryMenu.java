@@ -48,22 +48,22 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
             int xSpacing = slotTemplate.xSlotSpacing();
             int ySpacing = slotTemplate.ySlotSpacing();
             int pageWidth = slotTemplate.pageWidth();
-            int categoryCards = albumCategory.getSlots();
+            int[] cardNumbers = albumCategory.getCardNumbers();
             int slotsPerPage = slotTemplate.colums() * slotTemplate.rows();
-            Container wrapper = new AlbumInventoryWrapper(categoryCards, itemStack, category, album);
+            Container wrapper = new AlbumInventoryWrapper(cardNumbers.length, itemStack, category, album);
             // left page cards
             for (int y = 0; y < slotTemplate.rows(); y++) {
                 for (int x = 0; x < slotTemplate.colums(); x++) {
                     int cardX = xStart + x * xSpacing;
                     int cardY = yStart + y * ySpacing;
                     int cardIndex = x + (y * slotTemplate.colums());
-                    if (cardIndex >= categoryCards)
+                    if (cardIndex >= cardNumbers.length)
                         break;
-                    addSlot(new CardSlot(wrapper, cardIndex, cardX, cardY, category));
+                    addSlot(new CardSlot(wrapper, cardIndex, cardX, cardY, category, cardNumbers[cardIndex]));
                 }
             }
             // right page cards
-            if (categoryCards >= slotsPerPage) {
+            if (cardNumbers.length >= slotsPerPage) {
                 int cardsLength = slotTemplate.colums() * xSpacing - xSpacing;
                 int rightStartX = pageWidth * 2 - 18 - cardsLength - xStart + 2;
                 for (int y = 0; y < slotTemplate.rows(); y++) {
@@ -71,9 +71,9 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
                         int cardX = rightStartX + x * xSpacing;
                         int cardY = yStart + y * ySpacing;
                         int cardIndex = slotsPerPage + x + (y * slotTemplate.colums());
-                        if (cardIndex >= categoryCards)
+                        if (cardIndex >= cardNumbers.length)
                             break;
-                        addSlot(new CardSlot(wrapper, cardIndex, cardX, cardY, category));
+                        addSlot(new CardSlot(wrapper, cardIndex, cardX, cardY, category, cardNumbers[cardIndex]));
                     }
                 }
             }
@@ -117,10 +117,12 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
     private static final class CardSlot extends Slot {
 
         private final ResourceLocation category;
+        private final int cardNumber;
 
-        public CardSlot(Container container, int index, int slotX, int slotY, ResourceLocation category) {
+        public CardSlot(Container container, int index, int slotX, int slotY, ResourceLocation category, int number) {
             super(container, index, slotX, slotY);
             this.category = category;
+            this.cardNumber = number;
         }
 
         @Override
@@ -129,7 +131,7 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
             return manager.getCardInfo(itemStack.getItem()).map(info -> {
                 ResourceLocation cardCategory = info.category();
                 int cardNumber = info.cardNumber();
-                return cardNumber == (this.index + 1) && cardCategory.equals(category);
+                return cardNumber == this.cardNumber && cardCategory.equals(category);
             }).orElse(false);
         }
 

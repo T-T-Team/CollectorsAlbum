@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "mypack:netherite",
+  "rarity": "mythical",
+  "item": "minecraft:netherite_ingot",
+  "category": "mypack:rare_minerals",
+  "number": 99
+}

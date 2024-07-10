@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
+import team.tnt.collectorsalbum.common.resource.drops.NoItemDropProvider;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProvider;
 import team.tnt.collectorsalbum.common.resource.util.ListBasedOutputBuilder;
@@ -30,8 +31,13 @@ public class CardPackItem extends Item {
 
     public static final int MAX_PACK_CARDS = 18;
     public static final Component USAGE = Component.translatable("collectorsalbum.label.use_open").withStyle(ChatFormatting.GRAY);
+    public static final Component LABEL_UNSET = Component.translatable("collectorsalbum.label.not_set").withStyle(ChatFormatting.RED);
 
     private final ResourceLocation lootDataSourcePath;
+
+    public CardPackItem(Properties properties) {
+        this(properties, null);
+    }
 
     public CardPackItem(Properties properties, ResourceLocation lootDataSourcePath) {
         super(properties);
@@ -59,7 +65,7 @@ public class CardPackItem extends Item {
     public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity entity) {
         if (entity instanceof ServerPlayer player && !level.isClientSide()) {
             ListBasedOutputBuilder<ItemStack> outputs = ListBasedOutputBuilder.createArrayListBased();
-            ItemDropProvider provider = CardPackDropManager.getInstance().getProvider(this.lootDataSourcePath);
+            ItemDropProvider provider = this.getDropTable(itemStack);
             ActionContext context = ActionContext.of(ActionContext.PLAYER, player, ActionContext.ITEMSTACK, itemStack, ActionContext.RANDOM, player.getRandom());
             provider.generateDrops(context, outputs);
             AlbumCardManager cardManager = AlbumCardManager.getInstance();
@@ -67,17 +73,32 @@ public class CardPackItem extends Item {
                     .filter(stack -> cardManager.isCard(stack.getItem()))
                     .collect(Collectors.toList());
             Collections.shuffle(validDrops);
-            itemStack.set(ItemDataComponentRegistry.PACK_DROPS.get(), validDrops); // TODO remove
-            if (!player.isCreative())
-                itemStack.shrink(1);
-            // TODO save serverside data only and then award items from that
+            itemStack.set(ItemDataComponentRegistry.PACK_DROPS.get(), validDrops);
             PlatformNetworkManager.NETWORK.sendClientMessage(player, new S2C_OpenCardPackScreen(validDrops));
         }
         return itemStack;
     }
 
+    protected ItemDropProvider getDropTable(ItemStack itemStack) {
+        CardPackDropManager manager = CardPackDropManager.getInstance();
+        ResourceLocation customPath = itemStack.get(ItemDataComponentRegistry.PACK_DROPS_TABLE.get());
+        if (customPath != null) {
+            return manager.getEitherProvider(customPath, this.lootDataSourcePath);
+        } else if (this.lootDataSourcePath != null) {
+            return manager.getProvider(this.lootDataSourcePath);
+        }
+        return NoItemDropProvider.INSTANCE;
+    }
+
     @Override
     public void appendHoverText(ItemStack itemStack, TooltipContext context, List<Component> components, TooltipFlag flag) {
         components.add(USAGE);
+        ResourceLocation customTable = itemStack.get(ItemDataComponentRegistry.PACK_DROPS_TABLE.get());
+        if (customTable != null) {
+            Component customTableLabel = Component.literal(customTable.toString()).withStyle(ChatFormatting.GREEN);
+            components.add(Component.translatable("collectorsalbum.label.custom_drop_table", customTableLabel).withStyle(ChatFormatting.GRAY));
+        } else if (this.lootDataSourcePath == null) {
+            components.add(Component.translatable("collectorsalbum.label.custom_drop_table", LABEL_UNSET).withStyle(ChatFormatting.GRAY));
+        }
     }
 }

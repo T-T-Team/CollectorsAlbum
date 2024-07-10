@@ -17,6 +17,7 @@ public final class AlbumCategoryUiTemplate {
     public static final Codec<AlbumCategoryUiTemplate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             TextureTemplate.CODEC.optionalFieldOf("backgroundTexture", TextureTemplate.ALBUM_BG).forGetter(t -> t.backgroundTexture),
             TextureTemplate.CODEC.optionalFieldOf("slotTexture", TextureTemplate.SLOT_BG).forGetter(t -> t.slotTexture),
+            Codec.INT.optionalFieldOf("bookImageHeight", 180).forGetter(t -> t.bookImageHeight),
             Codec.BOOL.optionalFieldOf("renderSlots", true).forGetter(t -> t.renderSlots),
             Codec.BOOL.optionalFieldOf("renderSlotCardNumbers", true).forGetter(t -> t.renderSlotCardNumbers),
             Codecs.COLOR_CODEC.optionalFieldOf("slotCardNumberTextColor", 0x7B5C4C).forGetter(t -> t.slotCardNumberTextColor),
@@ -24,21 +25,23 @@ public final class AlbumCategoryUiTemplate {
             BuiltInRegistries.ITEM.byNameCodec().optionalFieldOf("bookmarkItem", Items.AIR).xmap(Item::getDefaultInstance, ItemStack::getItem).forGetter(t -> t.bookmarkIcon)
     ).apply(instance, AlbumCategoryUiTemplate::new));
     public static final AlbumCategoryUiTemplate DEFAULT_TEMPLATE = new AlbumCategoryUiTemplate(
-            TextureTemplate.ALBUM_BG, TextureTemplate.SLOT_BG, true, true, 0x7A3499,
+            TextureTemplate.ALBUM_BG, TextureTemplate.SLOT_BG, 180, true, true, 0x7A3499,
             SlotPositionTemplate.TEMPLATE, ItemStack.EMPTY
     );
 
     public final TextureTemplate backgroundTexture;
     public final TextureTemplate slotTexture;
+    public final int bookImageHeight;
     public final boolean renderSlots;
     public final boolean renderSlotCardNumbers;
     public final int slotCardNumberTextColor;
     public final SlotPositionTemplate slotTemplate;
     public final ItemStack bookmarkIcon;
 
-    public AlbumCategoryUiTemplate(TextureTemplate backgroundTexture, TextureTemplate slotTexture, boolean renderSlots, boolean renderSlotCardNumbers, int slotCardNumbersTextColor, SlotPositionTemplate template, ItemStack bookmarkIcon) {
+    public AlbumCategoryUiTemplate(TextureTemplate backgroundTexture, TextureTemplate slotTexture, int bookImageHeight, boolean renderSlots, boolean renderSlotCardNumbers, int slotCardNumbersTextColor, SlotPositionTemplate template, ItemStack bookmarkIcon) {
         this.backgroundTexture = backgroundTexture;
         this.slotTexture = slotTexture;
+        this.bookImageHeight = bookImageHeight;
         this.renderSlots = renderSlots;
         this.renderSlotCardNumbers = renderSlotCardNumbers;
         this.slotCardNumberTextColor = slotCardNumbersTextColor;

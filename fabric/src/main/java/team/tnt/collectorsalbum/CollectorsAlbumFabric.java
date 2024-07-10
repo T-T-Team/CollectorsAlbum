@@ -55,6 +55,7 @@ public class CollectorsAlbumFabric implements ModInitializer {
         FabricRegistration.registerCustomRegistry(CollectorsAlbumRegistries.NUMBER_PROVIDER);
         FabricRegistration.registerCustomRegistry(CollectorsAlbumRegistries.ITEM_DROP_PROVIDER);
         FabricRegistration.registerCustomRegistry(CollectorsAlbumRegistries.ALBUM_BONUS);
+        BlockRegistry.REGISTRY.bind();
         ItemDataComponentRegistry.REGISTRY.bind();
         ItemRegistry.REGISTRY.bind();
         ItemGroupRegistry.REGISTRY.bind();

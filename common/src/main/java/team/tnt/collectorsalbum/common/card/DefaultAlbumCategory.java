@@ -1,7 +1,6 @@
 package team.tnt.collectorsalbum.common.card;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
@@ -14,7 +13,6 @@ import team.tnt.collectorsalbum.common.AlbumCategoryUiTemplate;
 import team.tnt.collectorsalbum.common.init.CategoryRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.platform.Codecs;
-import team.tnt.collectorsalbum.util.MathUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,14 +21,9 @@ import java.util.Set;
 
 public class DefaultAlbumCategory implements AlbumCategory {
 
-    public static final int MAX_SLOTS = 30;
     public static final MapCodec<DefaultAlbumCategory> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("id").forGetter(DefaultAlbumCategory::identifier),
-            Codecs.setCodec(AlbumCardManager.BY_NAME_CODEC).validate(set -> {
-                int expectedSum = MathUtil.seqSum(1, MAX_SLOTS) * CardRarity.values().length;
-                int sum = set.stream().mapToInt(AlbumCard::cardNumber).sum();
-                return expectedSum == sum ? DataResult.success(set) : DataResult.error(() -> "Category must contain exactly 30 cards for each rarity!");
-            }).fieldOf("cards").forGetter(t -> t.cards),
+            Codecs.setCodec(AlbumCardManager.BY_NAME_CODEC).fieldOf("cards").forGetter(t -> t.cards),
             DisplayAttributes.CODEC.fieldOf("display").forGetter(t -> t.attributes),
             AlbumCategoryUiTemplate.CODEC.optionalFieldOf("template", AlbumCategoryUiTemplate.DEFAULT_TEMPLATE).forGetter(t -> t.template)
     ).apply(instance, DefaultAlbumCategory::new));
@@ -40,6 +33,7 @@ public class DefaultAlbumCategory implements AlbumCategory {
     private final DisplayAttributes attributes;
     private final Component displayText;
     private final AlbumCategoryUiTemplate template;
+    private final int[] uniqueCardNumbers;
 
     private DefaultAlbumCategory(ResourceLocation identifier, Set<AlbumCard> cards, DisplayAttributes attributes, AlbumCategoryUiTemplate template) {
         this.identifier = identifier;
@@ -50,6 +44,7 @@ public class DefaultAlbumCategory implements AlbumCategory {
                 ? Component.translatable(attributes.displayString()).withStyle(styles)
                 : Component.literal(attributes.displayString()).withStyle(styles);
         this.template = template;
+        this.uniqueCardNumbers = this.cards.stream().mapToInt(AlbumCard::cardNumber).distinct().sorted().toArray();
     }
 
     @Override
@@ -73,8 +68,8 @@ public class DefaultAlbumCategory implements AlbumCategory {
     }
 
     @Override
-    public int getSlots() {
-        return MAX_SLOTS;
+    public int[] getCardNumbers() {
+        return uniqueCardNumbers;
     }
 
     @Override

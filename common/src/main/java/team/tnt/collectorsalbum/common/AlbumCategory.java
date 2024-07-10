@@ -13,7 +13,7 @@ public interface AlbumCategory {
 
     boolean accepts(AlbumCard card);
 
-    int getSlots();
+    int[] getCardNumbers();
 
     int getPageOrder();
 

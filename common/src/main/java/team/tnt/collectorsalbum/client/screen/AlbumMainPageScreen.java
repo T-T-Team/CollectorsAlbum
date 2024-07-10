@@ -43,7 +43,7 @@ public class AlbumMainPageScreen extends Screen {
         this.itemStack = itemStack;
     }
 
-    public static List<BookmarkWidget> getBookmarks(int guiWidth, int guiHeight, int albumWidth, int albumHeight) {
+    public static List<BookmarkWidget> getBookmarks(int guiWidth, int guiHeight, int albumWidth, int albumHeight, int bookImageHeight) {
         int left = (guiWidth - albumWidth) / 2;
         int top = (guiHeight - albumHeight) / 2 + 10;
         int right = left + albumWidth;
@@ -62,7 +62,7 @@ public class AlbumMainPageScreen extends Screen {
         bookmarks.add(home);
         bookmarks.add(bonuses);
 
-        List<AlbumCategory> categories = AlbumNavigationHelper.listCategoriesForBookmarks(albumHeight - 20);
+        List<AlbumCategory> categories = AlbumNavigationHelper.listCategoriesForBookmarks(bookImageHeight - 20);
         int index = 0;
         for (AlbumCategory category : categories) {
             BookmarkWidget categoryBookmark = new BookmarkWidget(right, top + (index++) * 20, 32, 18, false, category.visualTemplate().bookmarkIcon, () -> Minecraft.getInstance().screen instanceof AlbumCategoryScreen catScreen && catScreen.getCategory().identifier().equals(category.identifier()));
@@ -94,7 +94,7 @@ public class AlbumMainPageScreen extends Screen {
     }
 
     protected void addDefaultWidgets() {
-        List<BookmarkWidget> bookmarks = getBookmarks(width, height, textureWidth, textureHeight);
+        List<BookmarkWidget> bookmarks = getBookmarks(width, height, textureWidth, textureHeight, 180);
         for (BookmarkWidget bookmark : bookmarks) {
             this.addRenderableWidget(bookmark);
         }

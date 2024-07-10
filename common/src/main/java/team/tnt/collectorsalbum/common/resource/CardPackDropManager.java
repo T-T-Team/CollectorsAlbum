@@ -31,6 +31,10 @@ public class CardPackDropManager extends PlatformGsonCodecReloadListener<ItemDro
         return this.providerMap.getOrDefault(id, NoItemDropProvider.INSTANCE);
     }
 
+    public ItemDropProvider getEitherProvider(ResourceLocation main, ResourceLocation secondary) {
+        return this.providerMap.getOrDefault(main, this.getProvider(secondary));
+    }
+
     @Override
     public ResourceLocation identifier() {
         return IDENTIFIER;

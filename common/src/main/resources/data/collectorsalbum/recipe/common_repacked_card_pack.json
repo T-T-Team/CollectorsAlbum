@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CCC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "tag": "collectorsalbum:cards/common"
+    }
+  },
+  "result": {
+    "id": "collectorsalbum:common_repacked_card_pack"
+  }
+}

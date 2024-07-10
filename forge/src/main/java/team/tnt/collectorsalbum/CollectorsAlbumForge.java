@@ -27,6 +27,7 @@ public class CollectorsAlbumForge {
         CollectorsAlbum.init();
 
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        ForgeRegistration.subscribeRegistryEvent(eventBus, BlockRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, ItemRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, ItemGroupRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, CardTypeRegistry.REGISTRY);

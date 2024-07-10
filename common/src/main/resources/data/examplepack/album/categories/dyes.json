@@ -1,0 +1,14 @@
+{
+  "type": "collectorsalbum:category",
+  "id": "mypack:dyes",
+  "display": {
+    "name": "Dyes",
+    "styles": ["yellow"],
+    "pageOrder": 210
+  },
+  "template": {
+    "bookmarkItem": "minecraft:lime_dye"
+  },
+  "cards": [
+  ]
+}

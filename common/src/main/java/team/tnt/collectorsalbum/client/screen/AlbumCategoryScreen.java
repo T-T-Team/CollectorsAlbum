@@ -46,7 +46,8 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
             nextPage.setTooltip(Tooltip.create(AlbumNavigationHelper.getNextCategoryTitle()));
             nextPage.setTooltipDelay(Duration.ofSeconds(1));
         }
-        AlbumMainPageScreen.getBookmarks(width, height, imageWidth, imageHeight).forEach(this::addRenderableWidget);
+        AlbumCategoryUiTemplate template = category.visualTemplate();
+        AlbumMainPageScreen.getBookmarks(width, height, imageWidth, imageHeight, template.bookImageHeight).forEach(this::addRenderableWidget);
     }
 
     @Override
@@ -65,12 +66,13 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
     protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
         AlbumCategoryUiTemplate template = category.visualTemplate();
         blitTextureTemplate(guiGraphics, leftPos, topPos, template.backgroundTexture);
+        int[] cardNumbers = category.getCardNumbers();
         if (template.renderSlots) {
             for (int slot = 0; slot < cardSlots.size(); slot++) {
                 Slot cardSlot = cardSlots.get(slot);
                 blitTextureTemplate(guiGraphics, leftPos + cardSlot.x - 1, topPos + cardSlot.y - 1, template.slotTexture);
                 if (template.renderSlotCardNumbers && !cardSlot.hasItem()) {
-                    Component num = Component.literal("#" + (slot + 1));
+                    Component num = Component.literal("#" + cardNumbers[slot]);
                     PoseStack pose = guiGraphics.pose();
                     pose.pushPose();
                     pose.translate(leftPos + cardSlot.x + 1, topPos + cardSlot.y + 1, 0);

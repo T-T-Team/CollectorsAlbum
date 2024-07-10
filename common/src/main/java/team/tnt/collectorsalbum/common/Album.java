@@ -105,12 +105,15 @@ public final class Album implements Predicate<Album> {
     public List<AlbumCategoryStatistics> calculateStatistics() {
         AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
         Collection<AlbumCategory> categories = manager.listCategories();
-        return categories.stream().map(cat -> {
-            Set<AlbumCard> cardsInCategory = this.cardsByCategory.getOrDefault(cat.identifier(), Collections.emptySet());
-            int categoryTotal = cat.getSlots();
-            int categoryCollected = cardsInCategory.size();
-            return new AlbumCategoryStatistics(cat, categoryCollected, categoryTotal);
-        }).sorted(Comparator.comparingDouble(AlbumCategoryStatistics::getCollectedProgress).reversed())
+        return categories.stream()
+                .map(cat -> {
+                    Set<AlbumCard> cardsInCategory = this.cardsByCategory.getOrDefault(cat.identifier(), Collections.emptySet());
+                    int categoryTotal = cat.getCardNumbers().length;
+                    int categoryCollected = cardsInCategory.size();
+                    return new AlbumCategoryStatistics(cat, categoryCollected, categoryTotal);
+                })
+                .filter(stat -> stat.allCards() > 0)
+                .sorted(Comparator.comparingDouble(AlbumCategoryStatistics::getCollectedProgress).reversed())
                 .toList();
     }
 
@@ -142,7 +145,7 @@ public final class Album implements Predicate<Album> {
     public record AlbumCategoryStatistics(AlbumCategory category, int collectedCards, int allCards) {
 
         public float getCollectedProgress() {
-            return collectedCards / (float) allCards;
+            return allCards > 0 ? collectedCards / (float) allCards : 0.0F;
         }
     }
 }

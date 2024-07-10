@@ -1,0 +1,14 @@
+{
+  "type": "collectorsalbum:category",
+  "id": "mypack:logs",
+  "display": {
+    "name": "Logs",
+    "styles": ["gold"],
+    "pageOrder": 510
+  },
+  "template": {
+    "bookmarkItem": "minecraft:oak_log"
+  },
+  "cards": [
+  ]
+}

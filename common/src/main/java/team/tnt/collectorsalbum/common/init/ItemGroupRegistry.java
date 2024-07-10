@@ -18,6 +18,7 @@ public final class ItemGroupRegistry {
             .icon(() -> ItemRegistry.ALBUM.get().getDefaultInstance())
             .title(Component.translatable(key.toLanguageKey("itemGroup")))
             .displayItems((params, builder) -> {
+                builder.accept(ItemRegistry.TRADING_STATION.get());
                 builder.accept(ItemRegistry.ALBUM.get());
                 builder.accept(ItemRegistry.COMMON_CARD_PACK.get());
                 builder.accept(ItemRegistry.UNCOMMON_CARD_PACK.get());
@@ -37,6 +38,12 @@ public final class ItemGroupRegistry {
                             return identifier.getNamespace().equals(CollectorsAlbum.MOD_ID) && item.getClass().equals(Item.class);
                         })
                         .forEach(builder::accept);
+                builder.accept(ItemRegistry.COMMON_CUSTOM_CARD_PACK.get());
+                builder.accept(ItemRegistry.UNCOMMON_CUSTOM_CARD_PACK.get());
+                builder.accept(ItemRegistry.RARE_CUSTOM_CARD_PACK.get());
+                builder.accept(ItemRegistry.EPIC_CUSTOM_CARD_PACK.get());
+                builder.accept(ItemRegistry.LEGENDARY_CUSTOM_CARD_PACK.get());
+                builder.accept(ItemRegistry.MYTHICAL_CUSTOM_CARD_PACK.get());
             })
             .build()
     );

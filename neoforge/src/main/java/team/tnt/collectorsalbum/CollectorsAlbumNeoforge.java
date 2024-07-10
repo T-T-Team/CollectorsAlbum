@@ -29,6 +29,7 @@ public class CollectorsAlbumNeoforge {
 
         eventBus.addListener(this::addRegistries);
         eventBus.addListener(this::clientSetup);
+        NeoforgeRegistration.subscribeRegistryEvent(eventBus, BlockRegistry.REGISTRY);
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, ItemRegistry.REGISTRY);
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, ItemGroupRegistry.REGISTRY);
         NeoforgeRegistration.subscribeRegistryEvent(eventBus, CardTypeRegistry.REGISTRY);

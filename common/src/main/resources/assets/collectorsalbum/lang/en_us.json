@@ -12,6 +12,12 @@
   "item.collectorsalbum.epic_repacked_card_pack": "Repacked Card Pack (§5Epic§r)",
   "item.collectorsalbum.legendary_repacked_card_pack": "Repacked Card Pack (§6Legendary§r)",
   "item.collectorsalbum.mythical_repacked_card_pack": "Repacked Card Pack (§c§lMythical§r)",
+  "item.collectorsalbum.common_custom_card_pack": "Custom Pack (§7Common§r)",
+  "item.collectorsalbum.uncommon_custom_card_pack": "Custom Pack (§aUncommon§r)",
+  "item.collectorsalbum.rare_custom_card_pack": "Custom Pack (§9Rare§r)",
+  "item.collectorsalbum.epic_custom_card_pack": "Custom Pack (§5Epic§r)",
+  "item.collectorsalbum.legendary_custom_card_pack": "Custom Pack (§6Legendary§r)",
+  "item.collectorsalbum.mythical_custom_card_pack": "Custom Pack (§c§lMythical§r)",
 
   "item.collectorsalbum.common_acacia_sapling_card": "Acacia Sapling Card",
   "item.collectorsalbum.common_allium_card": "Allium Card",
@@ -922,6 +928,8 @@
 
   "collectorsalbum.label.press_open": "Press Right mouse button to open",
   "collectorsalbum.label.use_open": "Hold Right mouse button to open",
+  "collectorsalbum.label.custom_drop_table": "Drop table: %s",
+  "collectorsalbum.label.not_set": "Not set",
   "card.rarity.common": "Common",
   "card.rarity.uncommon": "Uncommon",
   "card.rarity.rare": "Rare",

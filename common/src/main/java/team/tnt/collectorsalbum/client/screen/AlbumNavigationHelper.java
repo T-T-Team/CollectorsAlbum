@@ -45,13 +45,13 @@ public final class AlbumNavigationHelper {
     }
 
     public static void navigateHomepage() {
-        Minecraft.getInstance().setScreen(new AlbumMainPageScreen(lastItemStack));
         resetCategoryPage();
+        Minecraft.getInstance().setScreen(new AlbumMainPageScreen(lastItemStack));
     }
 
     public static void navigateBonusesPage() {
-        Minecraft.getInstance().setScreen(new AlbumBonusesScreen());
         resetCategoryPage();
+        Minecraft.getInstance().setScreen(new AlbumBonusesScreen());
     }
 
     public static void navigateNextCategory() {
@@ -105,14 +105,24 @@ public final class AlbumNavigationHelper {
         if (list.isEmpty()) {
             return Collections.emptyList();
         }
-        int possibleBookmarks = height / 20;
-        int mod = possibleBookmarks % 2;
-        int previous = possibleBookmarks / 2 + mod;
-        int fromIndex = currentCategoryPage - previous;
-        int fromIndexAllowed = Math.max(0, fromIndex);
-        int delta = fromIndexAllowed - fromIndex;
-        int toIndex = Math.min(list.size(), fromIndexAllowed + delta + possibleBookmarks);
-        return list.subList(fromIndexAllowed, toIndex);
+        int bookmarkCount = height / 20;
+        int halfCount = bookmarkCount / 2;
+        int from = Math.max(0, currentCategoryPage - halfCount);
+        int to = Math.min(list.size(), currentCategoryPage + halfCount + 1);
+
+        if (to - from > bookmarkCount) {
+            to = from + bookmarkCount;
+        }
+        if (to - from < bookmarkCount && to == list.size()) {
+            from = Math.max(0, to - bookmarkCount);
+        }
+
+        int size = to - from;
+        if (size < Math.min(bookmarkCount, list.size())) {
+            to = Math.min(list.size(), from + bookmarkCount);
+        }
+
+        return list.subList(from, to);
     }
 
     public static void resetCategoryPage() {

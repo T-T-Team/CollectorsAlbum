@@ -29,11 +29,16 @@ public class AlbumBonusesScreen extends Screen {
     }
 
     @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+
+    @Override
     protected void init() {
         left = (this.width - 256) / 2;
         top = (this.height - 256) / 2;
 
-        AlbumMainPageScreen.getBookmarks(width, height, 256, 256).forEach(this::addRenderableWidget);
+        AlbumMainPageScreen.getBookmarks(width, height, 256, 256, 180).forEach(this::addRenderableWidget);
         this.addRenderableOnly(new TextureRenderable(AlbumMainPageScreen.BACKGROUND, left, top, 256, 256));
 
         AlbumBonusManager manager = AlbumBonusManager.getInstance();

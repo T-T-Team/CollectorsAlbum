@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "mypack:iron",
+  "rarity": "uncommon",
+  "item": "minecraft:iron_ingot",
+  "category": "mypack:rare_minerals",
+  "number": 2
+}

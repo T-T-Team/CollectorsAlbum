@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CCC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "tag": "collectorsalbum:cards/epic"
+    }
+  },
+  "result": {
+    "id": "collectorsalbum:epic_repacked_card_pack"
+  }
+}

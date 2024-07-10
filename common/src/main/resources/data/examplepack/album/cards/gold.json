@@ -1,0 +1,8 @@
+{
+  "type": "collectorsalbum:card",
+  "id": "mypack:gold",
+  "rarity": "rare",
+  "item": "minecraft:gold_ingot",
+  "category": "mypack:rare_minerals",
+  "number": 3
+}

@@ -4,8 +4,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
 import org.joml.Vector2d;
 import team.tnt.collectorsalbum.common.AlbumCard;
 import team.tnt.collectorsalbum.common.card.CardRarity;
@@ -13,6 +11,7 @@ import team.tnt.collectorsalbum.common.card.CardRarity;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO implement
 public class CardPackOpeningScreen extends Screen {
 
     private static final Component TITLE = Component.translatable("screen.collectorsalbum.card_pack_opening_screen");
