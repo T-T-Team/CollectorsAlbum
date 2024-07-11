@@ -11,7 +11,7 @@ import java.util.Set;
 public record CardCategoryFilter(Set<CardRarity> rarities, IntFilter numberFilter, IntFilter pointFilter, IntFilter cardCountFilter) implements CardFilter {
 
     public static final Codec<CardCategoryFilter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codecs.setCodec(Codecs.simpleEnumCodec(CardRarity.class, s -> s.toUpperCase(Locale.ROOT))).optionalFieldOf("rarity", Collections.emptySet()).forGetter(CardCategoryFilter::rarities),
+            Codecs.setCodec(Codecs.simpleEnumCodec(CardRarity.class, s -> s.toUpperCase(Locale.ROOT))).optionalFieldOf("rarities", Collections.emptySet()).forGetter(CardCategoryFilter::rarities),
             IntFilter.CODEC.optionalFieldOf("numbers", IntFilter.NO_FILTER).forGetter(CardCategoryFilter::numberFilter),
             IntFilter.CODEC.optionalFieldOf("points", IntFilter.NO_FILTER).forGetter(CardCategoryFilter::pointFilter),
             IntFilter.CODEC.optionalFieldOf("cards", IntFilter.NO_FILTER).forGetter(CardCategoryFilter::cardCountFilter)

@@ -1,5 +1,5 @@
 {
   "type": "collectorsalbum:effect",
   "effect": "minecraft:speed",
-  "amplifier": 15
+  "amplifier": 5
 }

@@ -91,17 +91,17 @@ public final class Album implements Predicate<Album> {
         return this.cardsByCategory.values().stream().mapToInt(Set::size).sum();
     }
 
-    public Map<CardRarity, Float> calculateRarityRatios() {
+    public Map<CardRarity, CardRarityStatistics> calculateRarityRatios() {
         List<RarityHolder> rarityCards = this.cardsByCategory.values().stream()
                 .flatMap(Collection::stream).filter(card -> card instanceof RarityHolder).map(card -> (RarityHolder) card)
                 .toList();
-        Map<CardRarity, Float> map = new EnumMap<>(CardRarity.class);
+        Map<CardRarity, CardRarityStatistics> map = new EnumMap<>(CardRarity.class);
         Map<CardRarity, List<RarityHolder>> byRarity = rarityCards.stream().collect(Collectors.groupingBy(RarityHolder::rarity));
         int totalCards = Math.max(rarityCards.size(), 1);
         for (CardRarity rarity : CardRarity.values()) {
             List<RarityHolder> list = byRarity.getOrDefault(rarity, Collections.emptyList());
-            float ratio = list.size() / (float) totalCards;
-            map.put(rarity, ratio);
+            CardRarityStatistics statistics = new CardRarityStatistics(list.size(), totalCards);
+            map.put(rarity, statistics);
         }
         return map;
     }
@@ -144,6 +144,13 @@ public final class Album implements Predicate<Album> {
     @Override
     public int hashCode() {
         return Objects.hashCode(albumId);
+    }
+
+    public record CardRarityStatistics(int collected, int total) {
+
+        public float getRatio() {
+            return total > 0 ? collected / (float) total : 0.0F;
+        }
     }
 
     public record AlbumCategoryStatistics(AlbumCategory category, int collectedCards, int allCards) {

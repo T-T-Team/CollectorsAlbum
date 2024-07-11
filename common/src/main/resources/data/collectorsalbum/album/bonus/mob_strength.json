@@ -8,9 +8,11 @@
       {
         "type": "collectorsalbum:category_cards",
         "category": "collectorsalbum:mobs",
-        "rarityFilter": ["mythical"],
-        "cardCount": {
-          "min": 30
+        "filter": {
+          "rarities": ["mythical"],
+          "cards": {
+            "min": 30
+          }
         },
         "item": {
           "type": "collectorsalbum:effect",
@@ -25,8 +27,10 @@
       {
         "type": "collectorsalbum:category_cards",
         "category": "collectorsalbum:mobs",
-        "cardCount": {
-          "min": 30
+        "filter": {
+          "cards": {
+            "min": 30
+          }
         },
         "item": {
           "type": "collectorsalbum:effect",

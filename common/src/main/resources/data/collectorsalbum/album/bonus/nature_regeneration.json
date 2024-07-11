@@ -8,9 +8,11 @@
       {
         "type": "collectorsalbum:category_cards",
         "category": "collectorsalbum:nature",
-        "rarityFilter": ["mythical"],
-        "cardCount": {
-          "min": 30
+        "filter": {
+          "rarities": ["mythical"],
+          "cards": {
+            "min": 30
+          }
         },
         "item": {
           "type": "collectorsalbum:effect",
@@ -25,8 +27,10 @@
       {
         "type": "collectorsalbum:category_cards",
         "category": "collectorsalbum:nature",
-        "cardCount": {
-          "min": 30
+        "filter": {
+          "cards": {
+            "min": 30
+          }
         },
         "item": {
           "type": "collectorsalbum:effect",

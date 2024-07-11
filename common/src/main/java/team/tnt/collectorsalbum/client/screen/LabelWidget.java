@@ -20,6 +20,11 @@ public class LabelWidget extends AbstractWidget {
     }
 
     @Override
+    protected boolean clicked(double mouseX, double mouseY) {
+        return false;
+    }
+
+    @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         guiGraphics.drawString(font, this.getMessage(), getX(), getY(), textColor, shadow);
     }

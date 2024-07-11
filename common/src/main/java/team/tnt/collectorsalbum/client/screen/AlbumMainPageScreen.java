@@ -119,15 +119,17 @@ public class AlbumMainPageScreen extends Screen {
         this.addRenderableOnly(new LabelRenderable(percent, left + 17 + font.width(collectedCards) - font.width(percent), top + 40, TEXT_COLOR));
 
         // Rarity ratios
-        Map<CardRarity, Float> ratios = album.calculateRarityRatios();
+        Map<CardRarity, Album.CardRarityStatistics> ratios = album.calculateRarityRatios();
         this.addRenderableOnly(new LabelRenderable(LABEL_RARITIES, left + 17, top + 55, TEXT_COLOR));
         int rarityIndex = 0;
         for (CardRarity rarity : CardRarity.values()) {
+            Album.CardRarityStatistics statistics = ratios.get(rarity);
             MutableComponent rarityText = Component.literal(rarity.getDisplayText().getString());
             rarityText.getStyle().applyFormats(ChatFormatting.RESET);
-            String ratio = String.format(Locale.ROOT, "%.1f%%", ratios.getOrDefault(rarity, 0F) * 100.0F);
+            String ratio = String.format(Locale.ROOT, "%.1f%%", statistics.getRatio() * 100.0F);
             Component label = Component.literal(rarityText.getString() + ": " + ratio);
-            this.addRenderableOnly(new LabelRenderable(label, left + 20, top + 65 + (rarityIndex++) * 10, TEXT_COLOR));
+            LabelWidget labelWidget = this.addRenderableWidget(new LabelWidget(left + 20, top + 65 + (rarityIndex++) * 10, font.width(label), 10, label, font, TEXT_COLOR, false));
+            labelWidget.setTooltip(Tooltip.create(Component.literal(statistics.collected() + "/" + statistics.total()).withStyle(ChatFormatting.GREEN)));
         }
 
         // --- Right page
