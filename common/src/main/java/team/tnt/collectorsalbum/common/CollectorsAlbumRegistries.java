@@ -4,6 +4,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import team.tnt.collectorsalbum.CollectorsAlbum;
+import team.tnt.collectorsalbum.common.card.AlbumCardType;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonusType;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProviderType;
 import team.tnt.collectorsalbum.common.resource.function.NumberProviderType;

@@ -1,8 +1,9 @@
-package team.tnt.collectorsalbum.common;
+package team.tnt.collectorsalbum.common.card;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
+import team.tnt.collectorsalbum.common.CollectorsAlbumRegistries;
 
 public final class AlbumCardType<C extends AlbumCard> {
 

@@ -8,9 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
+import java.util.function.*;
 
 public final class Codecs {
 
@@ -34,6 +32,29 @@ public final class Codecs {
         return Codec.FLOAT.validate(f -> f >= min && f <= max
                 ? DataResult.success(f)
                 : DataResult.error(() -> String.format("Value [%f] is not within required range [%f;%f]", f, min, max))
+        );
+    }
+
+    public static <T> Codec<T[]> array(Codec<T> codec, IntFunction<T[]> toArray) {
+        return array(codec, toArray, Arrays::asList);
+    }
+
+    public static <T> Codec<T[]> array(Codec<T> codec, IntFunction<T[]> toArray, Function<T[], List<T>> toList) {
+        return codec.listOf().xmap(
+                list -> {
+                    T[] values = toArray.apply(list.size());
+                    for (int i = 0; i < list.size(); i++) {
+                        values[i] = list.get(i);
+                    }
+                    return values;
+                }, toList
+        );
+    }
+
+    public static <T> Codec<Supplier<T>> supplier(Codec<T> codec) {
+        return codec.xmap(
+                t -> () -> t,
+                Supplier::get
         );
     }
 

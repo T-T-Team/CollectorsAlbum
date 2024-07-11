@@ -1,32 +1,32 @@
-package team.tnt.collectorsalbum.common;
+package team.tnt.collectorsalbum.common.card;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
-import team.tnt.collectorsalbum.common.card.CardRarity;
+import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 
-public interface AlbumCard extends Comparable<AlbumCard> {
+import java.util.List;
+import java.util.function.Predicate;
 
-    Component ITEM_TOOLTIP_HEADER = Component.translatable("collectorsalbum.tooltip.card.header").withStyle(ChatFormatting.GRAY);
-    String ITEM_TOOLTIP_NUMBER_KEY = "collectorsalbum.tooltip.card.number";
-    String ITEM_TOOLTIP_CATEGORY_KEY = "collectorsalbum.tooltip.card.category";
-    String ITEM_TOOLTIP_RARITY_KEY = "collectorsalbum.tooltip.card.rarity";
-    String ITEM_TOOLTIP_VALUE_KEY = "collectorsalbum.tooltip.card.value";
+public interface AlbumCard extends Comparable<AlbumCard>, Predicate<CardFilter> {
 
     ResourceLocation identifier();
 
     ResourceLocation category();
 
-    CardRarity rarity();
+    CardUiTemplate template();
 
     ItemStack asItem();
 
     int getPoints();
 
     int cardNumber();
+
+    void appendItemStackHoverTooltip(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltips, TooltipFlag flag);
 
     @Override
     default int compareTo(@NotNull AlbumCard o) {

@@ -8,13 +8,11 @@ import net.minecraft.world.item.Item;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.platform.registration.PlatformRegistry;
 
-import java.util.function.Supplier;
-
 public final class ItemGroupRegistry {
 
     public static final PlatformRegistry<CreativeModeTab> REGISTRY = PlatformRegistry.create(BuiltInRegistries.CREATIVE_MODE_TAB, CollectorsAlbum.MOD_ID);
 
-    public static final Supplier<CreativeModeTab> ALBUM = REGISTRY.register("album", key -> CreativeModeTab.builder(CreativeModeTab.Row.TOP, -1)
+    public static final PlatformRegistry.Reference<CreativeModeTab> ALBUM = REGISTRY.register("album", key -> CreativeModeTab.builder(CreativeModeTab.Row.TOP, -1)
             .icon(() -> ItemRegistry.ALBUM.get().getDefaultInstance())
             .title(Component.translatable(key.toLanguageKey("itemGroup")))
             .displayItems((params, builder) -> {

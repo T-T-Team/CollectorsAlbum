@@ -7,7 +7,9 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import team.tnt.collectorsalbum.common.card.AlbumCard;
 import team.tnt.collectorsalbum.common.card.CardRarity;
+import team.tnt.collectorsalbum.common.card.RarityHolder;
 import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
@@ -90,12 +92,14 @@ public final class Album implements Predicate<Album> {
     }
 
     public Map<CardRarity, Float> calculateRarityRatios() {
-        Map<CardRarity, List<AlbumCard>> byRarity = this.cardsByCategory.values().stream()
-                .flatMap(Collection::stream).collect(Collectors.groupingBy(AlbumCard::rarity));
+        List<RarityHolder> rarityCards = this.cardsByCategory.values().stream()
+                .flatMap(Collection::stream).filter(card -> card instanceof RarityHolder).map(card -> (RarityHolder) card)
+                .toList();
         Map<CardRarity, Float> map = new EnumMap<>(CardRarity.class);
-        int totalCards = Math.max(this.countCards(), 1);
+        Map<CardRarity, List<RarityHolder>> byRarity = rarityCards.stream().collect(Collectors.groupingBy(RarityHolder::rarity));
+        int totalCards = Math.max(rarityCards.size(), 1);
         for (CardRarity rarity : CardRarity.values()) {
-            List<AlbumCard> list = byRarity.getOrDefault(rarity, Collections.emptyList());
+            List<RarityHolder> list = byRarity.getOrDefault(rarity, Collections.emptyList());
             float ratio = list.size() / (float) totalCards;
             map.put(rarity, ratio);
         }

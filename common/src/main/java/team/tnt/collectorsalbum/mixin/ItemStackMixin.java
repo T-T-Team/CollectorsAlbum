@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import team.tnt.collectorsalbum.common.AlbumCard;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 
 import java.util.List;
@@ -33,12 +32,6 @@ public abstract class ItemStackMixin implements DataComponentHolder {
         ItemStack itemStack = (ItemStack) (Object) this;
         Item item = itemStack.getItem();
         AlbumCardManager manager = AlbumCardManager.getInstance();
-        manager.getCardInfo(item).ifPresent(info -> {
-            components.add(AlbumCard.ITEM_TOOLTIP_HEADER);
-            components.add(Component.translatable(AlbumCard.ITEM_TOOLTIP_NUMBER_KEY, Component.literal("#" + info.cardNumber()).withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.GRAY));
-            components.add(Component.translatable(AlbumCard.ITEM_TOOLTIP_CATEGORY_KEY, info.getLinkedCategory().getDisplayText()).withStyle(ChatFormatting.GRAY));
-            components.add(Component.translatable(AlbumCard.ITEM_TOOLTIP_RARITY_KEY, info.rarity().getDisplayText()).withStyle(ChatFormatting.GRAY));
-            components.add(Component.translatable(AlbumCard.ITEM_TOOLTIP_VALUE_KEY, Component.translatable("collectorsalbum.text.points.value", info.rarity().getValue()).withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.GRAY));
-        });
+        manager.getCardInfo(item).ifPresent(info -> info.appendItemStackHoverTooltip(itemStack, ctx, components, flag));
     }
 }

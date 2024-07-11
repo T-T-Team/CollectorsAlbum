@@ -12,25 +12,37 @@ import java.util.function.UnaryOperator;
 
 public enum CardRarity {
 
-    COMMON(SoundRegistry.FLIP_COMMON, text -> text.withStyle(ChatFormatting.WHITE)),
-    UNCOMMON(SoundRegistry.FLIP_UNCOMMON, text -> text.withStyle(ChatFormatting.GREEN)),
-    RARE(SoundRegistry.FLIP_RARE, text -> text.withStyle(ChatFormatting.BLUE)),
-    EPIC(SoundRegistry.FLIP_EPIC, text -> text.withStyle(ChatFormatting.DARK_PURPLE)),
-    LEGENDARY(SoundRegistry.FLIP_LEGENDARY, text -> text.withStyle(ChatFormatting.GOLD)),
-    MYTHICAL(SoundRegistry.FLIP_MYTHICAL, text -> text.withStyle(ChatFormatting.RED)),;
+    COMMON(new Integer[] {0xAAAAAA}, new Integer[] {80}, SoundRegistry.FLIP_COMMON, text -> text.withStyle(ChatFormatting.WHITE)),
+    UNCOMMON(new Integer[] {0x55ff55}, new Integer[] {80}, SoundRegistry.FLIP_UNCOMMON, text -> text.withStyle(ChatFormatting.GREEN)),
+    RARE(new Integer[] {0x5555ff}, new Integer[] {80}, SoundRegistry.FLIP_RARE, text -> text.withStyle(ChatFormatting.BLUE)),
+    EPIC(new Integer[] {0xaa00aa}, new Integer[] {80}, SoundRegistry.FLIP_EPIC, text -> text.withStyle(ChatFormatting.DARK_PURPLE)),
+    LEGENDARY(new Integer[] {0xffaa00}, new Integer[] {80}, SoundRegistry.FLIP_LEGENDARY, text -> text.withStyle(ChatFormatting.GOLD)),
+    MYTHICAL(new Integer[] {0xff5555, 0xffffff}, new Integer[] {80, 100}, SoundRegistry.FLIP_MYTHICAL, text -> text.withStyle(ChatFormatting.RED)),;
 
+    private final Integer[] colors;
+    private final Integer[] durations;
     private final Supplier<SoundEvent> flipSound;
     private final Component text;
     private final int value;
 
-    CardRarity(Supplier<SoundEvent> flipSound, UnaryOperator<MutableComponent> displayTextFormatter) {
+    CardRarity(Integer[] colors, Integer[] durations, Supplier<SoundEvent> flipSound, UnaryOperator<MutableComponent> displayTextFormatter) {
+        this.colors = colors;
+        this.durations = durations;
         this.flipSound = flipSound;
         this.text = displayTextFormatter.apply(Component.translatable("card.rarity." + name().toLowerCase(Locale.ROOT)));
         this.value = ordinal() + 1;
     }
 
-    public SoundEvent getFlipSound() {
-        return this.flipSound.get();
+    public Integer[] getColors() {
+        return colors;
+    }
+
+    public Integer[] getDurations() {
+        return durations;
+    }
+
+    public Supplier<SoundEvent> getFlipSoundRef() {
+        return this.flipSound;
     }
 
     public Component getDisplayText() {

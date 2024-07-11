@@ -5,8 +5,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector2d;
-import team.tnt.collectorsalbum.common.AlbumCard;
-import team.tnt.collectorsalbum.common.card.CardRarity;
+import team.tnt.collectorsalbum.common.card.AlbumCard;
+import team.tnt.collectorsalbum.common.card.CardUiTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,20 +39,13 @@ public class CardPackOpeningScreen extends Screen {
     }
 
     private void onCardFlipped(AlbumCard card) {
-        CardRarity rarity = card.rarity();
+        CardUiTemplate template = card.template();
+        Integer[] effects = template.effectColors();
+        Integer[] durations = template.effectDurations();
         double speed = 0.3;
-        switch (rarity) {
-            case COMMON -> emitter.emit(0xFFFFFF, 50, 15, speed);
-            case UNCOMMON -> emitter.emit(0xFFFFFF, 50, 25, speed);
-            case RARE -> emitter.emit(0xFFFFFF, 50, 30, speed);
-            case EPIC -> emitter.emit(0xFFFFFF, 50, 40, speed);
-            case LEGENDARY -> emitter.emit(0xFFFFFF, 50, 50, speed);
-            case MYTHICAL -> {
-                emitter.emit(0xFFFFFF, 50, 30, speed);
-                emitter.emit(0xFF0000, 50, 30, speed);
-            }
+        for (int i = 0; i < effects.length; i++) {
+            this.emitter.emit(effects[i], durations[i], 15, speed);
         }
-        this.emitter.emit(0xFFFFFFF, 50, 15, 0.5);
     }
 
     private static class FxEmitter {

@@ -9,8 +9,8 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
-import team.tnt.collectorsalbum.common.AlbumCard;
-import team.tnt.collectorsalbum.common.AlbumCardType;
+import team.tnt.collectorsalbum.common.card.AlbumCard;
+import team.tnt.collectorsalbum.common.card.AlbumCardType;
 import team.tnt.collectorsalbum.network.S2C_SendDatapackResources;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
