@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.chat.Component;
 import team.tnt.collectorsalbum.common.resource.function.ConstantNumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProviderType;
@@ -25,5 +26,20 @@ public record IntFilter(NumberProvider min, NumberProvider max) {
 
     public boolean test(int value) {
         return value >= min.intValue() && value <= max.intValue();
+    }
+
+    public Component getDisplayComponent() {
+        int from = min.intValue();
+        int to = max.intValue();
+        if (from > Integer.MIN_VALUE && to < Integer.MAX_VALUE) {
+            return Component.literal("[" + from + "," + to + "]");
+        } else if (from == to) {
+            return Component.literal("{" + from + "}");
+        } else if (from > Integer.MIN_VALUE) {
+            return Component.literal("[" + from + ",...)");
+        } else if (to < Integer.MAX_VALUE) {
+            return Component.literal("(...," + to + "]");
+        }
+        return null;
     }
 }

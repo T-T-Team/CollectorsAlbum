@@ -1,36 +1,41 @@
 package team.tnt.collectorsalbum.common.resource.bonus;
 
-import com.mojang.datafixers.util.Either;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.chat.Component;
 import team.tnt.collectorsalbum.common.Album;
+import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
+import team.tnt.collectorsalbum.common.CommonLabels;
+import team.tnt.collectorsalbum.common.card.CardCategoryFilter;
+import team.tnt.collectorsalbum.common.card.IntFilter;
 import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
-import team.tnt.collectorsalbum.common.resource.function.ConstantNumberProvider;
-import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
-import team.tnt.collectorsalbum.common.resource.function.NumberProviderType;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
 
 public class AlbumPointBonusFilter implements IntermediateAlbumBonus {
 
     public static final MapCodec<AlbumPointBonusFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.either(Codec.INT, NumberProviderType.INSTANCE_CODEC).optionalFieldOf("min", Either.left(Integer.MIN_VALUE)).forGetter(t -> Either.right(t.min)),
-            Codec.either(Codec.INT, NumberProviderType.INSTANCE_CODEC).optionalFieldOf("max", Either.left(Integer.MAX_VALUE)).forGetter(t -> Either.right(t.max)),
+            IntFilter.CODEC.fieldOf("filter").forGetter(t -> t.range),
             AlbumBonusType.INSTANCE_CODEC.fieldOf("item").forGetter(t -> t.item)
     ).apply(instance, AlbumPointBonusFilter::new));
+    public static final Component POINT_FILTER = Component.translatable("collectorsalbum.label.bonus.point_filter");
 
-    private final NumberProvider min;
-    private final NumberProvider max;
+    private final IntFilter range;
     private final AlbumBonus item;
 
-    public AlbumPointBonusFilter(Either<Integer, NumberProvider> min, Either<Integer, NumberProvider> max, AlbumBonus item) {
-        this.min = min.map(ConstantNumberProvider::new, Function.identity());
-        this.max = max.map(ConstantNumberProvider::new, Function.identity());
+    public AlbumPointBonusFilter(IntFilter range, AlbumBonus item) {
+        this.range = range;
         this.item = item;
+    }
+
+    @Override
+    public void addDescription(AlbumBonusDescriptionOutput description) {
+        boolean applicable = this.canApply(description.getContext());
+        Component base = this.range.getDisplayComponent();
+        Component value = base != null ? Component.literal(base.getString() + " - " + CommonLabels.getBoolState(applicable).getString()).withStyle(AlbumBonusDescriptionOutput.getBooleanColor(applicable)) : null;
+        description.condition(POINT_FILTER, value, applicable, this);
     }
 
     @Override
@@ -63,9 +68,6 @@ public class AlbumPointBonusFilter implements IntermediateAlbumBonus {
         if (album == null) {
             return false;
         }
-        int from = min.intValue();
-        int to = max.intValue();
-        int points = album.getPoints();
-        return points >= from && points <= to;
+        return this.range.test(album.getPoints());
     }
 }

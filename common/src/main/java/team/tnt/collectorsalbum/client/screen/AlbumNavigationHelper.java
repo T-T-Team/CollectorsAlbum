@@ -51,7 +51,7 @@ public final class AlbumNavigationHelper {
 
     public static void navigateBonusesPage() {
         resetCategoryPage();
-        Minecraft.getInstance().setScreen(new AlbumBonusesScreen());
+        Minecraft.getInstance().setScreen(new AlbumBonusesScreen(lastItemStack));
     }
 
     public static void navigateNextCategory() {

@@ -926,10 +926,31 @@
   "album.category.collectorsalbum.nature": "Nature",
   "album.category.collectorsalbum.items": "Items",
 
+  "collectorsalbum.label.bonus.list": "Bonus List:",
+  "collectorsalbum.tooltip.bonus.list": "All of following elements are applied",
+  "collectorsalbum.label.bonus.first_applicable": "First applicable:",
+  "collectorsalbum.tooltip.bonus.first_applicable": "Only first applicable bonus will be used",
+  "collectorsalbum.label.bonus.config_toggle": "Option: %s",
+  "collectorsalbum.label.bonus.config_toggle.enabled": "If enabled",
+  "collectorsalbum.label.bonus.config_toggle.disabled": "If disabled",
+  "collectorsalbum.label.bonus.matched_cards": "Matched: %s",
+  "collectorsalbum.label.bonus.attribute": "Property: %s",
+  "collectorsalbum.label.bonus.attribute_modifier": "Value: %s",
+  "collectorsalbum.tooltip.bonus.attribute_operation": "Operation: %s",
+  "collectorsalbum.label.bonus.point_filter": "Point filter",
+
   "collectorsalbum.label.press_open": "Press Right mouse button to open",
   "collectorsalbum.label.use_open": "Hold Right mouse button to open",
   "collectorsalbum.label.custom_drop_table": "Drop table: %s",
   "collectorsalbum.label.not_set": "Not set",
+  "collectorsalbum.label.unknown": "Unknown",
+  "collectorsalbum.label.filter": "Filter",
+  "collectorsalbum.label.filter.rarities": "Rarities",
+  "collectorsalbum.label.filter.points": "Points",
+  "collectorsalbum.label.filter.numbers": "Numbers",
+  "collectorsalbum.label.applies": "Applies",
+  "collectorsalbum.label.passed": "Passed",
+  "collectorsalbum.label.failed": "Failed",
   "card.rarity.common": "Common",
   "card.rarity.uncommon": "Uncommon",
   "card.rarity.rare": "Rare",
@@ -990,5 +1011,6 @@
   "config.screen.collectorsalbum-client": "Collector's Album Client Config",
   "config.collectorsalbum-client.option.packOpenAnimation": "Card pack open animation",
 
-  "curios.identifier.album": "Album"
+  "curios.identifier.album": "Album",
+  "trinkets.slot.hand.album": "Album"
 }

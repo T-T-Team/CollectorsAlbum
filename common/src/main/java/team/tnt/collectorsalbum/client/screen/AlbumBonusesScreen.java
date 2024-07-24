@@ -6,21 +6,31 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import team.tnt.collectorsalbum.common.Album;
+import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
+import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonus;
+import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 
 import java.time.Duration;
+import java.util.List;
 
 public class AlbumBonusesScreen extends Screen {
 
     public static final Component TITLE = Component.translatable("screen.collectorsalbum.album.bonuses").withStyle(ChatFormatting.BOLD);
 
+    private final ItemStack itemStack;
     private int left, top;
+    private int scrollLeft, scrollRight;
+    private boolean leftScrollActive, rightScrollActive;
 
     private int currentBonusIndex;
 
-    public AlbumBonusesScreen() {
+    public AlbumBonusesScreen(ItemStack itemStack) {
         super(TITLE);
+        this.itemStack = itemStack;
     }
 
     @Override
@@ -41,11 +51,20 @@ public class AlbumBonusesScreen extends Screen {
         AlbumMainPageScreen.getBookmarks(width, height, 256, 256, 180).forEach(this::addRenderableWidget);
         this.addRenderableOnly(new TextureRenderable(AlbumMainPageScreen.BACKGROUND, left, top, 256, 256));
 
+        Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+        if (album == null) {
+            Component error = Component.literal("Failed to load album!").withStyle(ChatFormatting.RED);
+            this.addRenderableOnly(new LabelRenderable(error, left + (256 - font.width(error)) / 2, top + (180 - font.lineHeight) / 2));
+            return;
+        }
+
         AlbumBonusManager manager = AlbumBonusManager.getInstance();
         Pair<AlbumBonus, AlbumBonus> bonusPair = manager.getBonusesForPage(currentBonusIndex);
-        AlbumBonus first = bonusPair.getFirst();
-        AlbumBonus second = bonusPair.getSecond();
-        // TODO for each bonus compile description and add as a widget
+        ActionContext context = ActionContext.of(ActionContext.PLAYER, minecraft.player, ActionContext.ALBUM, album);
+        List<AlbumBonusDescriptionOutput.ComponentWithTooltip> first = this.getBonusDescription(bonusPair.getFirst(), context);
+        List<AlbumBonusDescriptionOutput.ComponentWithTooltip> second = this.getBonusDescription(bonusPair.getSecond(), context);
+        this.createWidgets(first, left + 14, top + 14, scrollLeft);
+        this.createWidgets(second, left + 142, top + 14, scrollRight);
 
         if (currentBonusIndex > 0) {
             // previous page btn
@@ -59,6 +78,28 @@ public class AlbumBonusesScreen extends Screen {
             nextPage.setTooltip(Tooltip.create(AlbumNavigationHelper.getNextCategoryTitle()));
             nextPage.setTooltipDelay(Duration.ofSeconds(1));
         }
+    }
+
+    private void createWidgets(List<AlbumBonusDescriptionOutput.ComponentWithTooltip> components, int x, int y, int scroll) {
+        int maxDisplay = 15;
+        int offsetStep = 2;
+        for (int i = scroll; i < Math.min(scroll + maxDisplay, components.size()); i++) {
+            AlbumBonusDescriptionOutput.ComponentWithTooltip component = components.get(i);
+            int offset = offsetStep * component.level();
+            Component label = component.label();
+            LabelWidget widget = this.addRenderableWidget(new LabelWidget(x + offset, y + i * 10, 100 - offset, 10, label, font, AlbumMainPageScreen.TEXT_COLOR, false));
+            widget.setOverflowRendering(0xFFDBC7A4, 0xFFB5A589, 0xFFCCB998);
+            if (component.hasTooltip()) {
+                widget.setTooltip(Tooltip.create(component.tooltip()));
+                widget.setTooltipDelay(Duration.ofMillis(400));
+            }
+        }
+    }
+
+    private List<AlbumBonusDescriptionOutput.ComponentWithTooltip> getBonusDescription(AlbumBonus bonus, ActionContext context) {
+        AlbumBonusDescriptionOutput description = AlbumBonusDescriptionOutput.createEmpty(context);
+        bonus.addDescription(description);
+        return description.toComponentList();
     }
 
     private void addPage(int direction) {

@@ -146,7 +146,7 @@ public class AlbumMainPageScreen extends Screen {
             MutableComponent categoryLabelNoStyle = Component.literal(stat.category().getDisplayText().getString());
             categoryLabelNoStyle.getStyle().applyFormats(ChatFormatting.RESET);
             Component displayLabel = Component.literal(categoryLabelNoStyle.getString() + ": " + stat.collectedCards() + "/" + stat.allCards());
-            LabelWidget labelWidget = addRenderableWidget(new LabelWidget(left + 148, top + 40 + i * 10, 90, 10, displayLabel, font, TEXT_COLOR, false));
+            LabelWidget labelWidget = addRenderableWidget(new LabelWidget(left + 148, top + 40 + i * 10, 95, 10, displayLabel, font, TEXT_COLOR, false));
             labelWidget.setTooltip(Tooltip.create(Component.literal(String.format(Locale.ROOT, "%.1f%%", stat.getCollectedProgress() * 100F)).withStyle(ChatFormatting.GREEN)));
         }
 

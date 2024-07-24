@@ -17,4 +17,5 @@ public final class ItemDropProviderRegistry {
     public static final PlatformRegistry.Reference<ItemDropProviderType<ListItemDropProvider>> LIST_DROP_PROVIDER = REGISTRY.register("list", () -> new ItemDropProviderType<>(ListItemDropProvider.CODEC));
     public static final PlatformRegistry.Reference<ItemDropProviderType<EntityFilterItemDropProvider>> ENTITY_FILTER = REGISTRY.register("entity_filter", () -> new ItemDropProviderType<>(EntityFilterItemDropProvider.CODEC));
     public static final PlatformRegistry.Reference<ItemDropProviderType<RandomChanceFilterItemDropProvider>> RANDOM_CHANCE = REGISTRY.register("random_chance", () -> new ItemDropProviderType<>(RandomChanceFilterItemDropProvider.CODEC));
+    public static final PlatformRegistry.Reference<ItemDropProviderType<DropReferenceProvider>> REFERENCE = REGISTRY.register("reference", () -> new ItemDropProviderType<>(DropReferenceProvider.CODEC));
 }

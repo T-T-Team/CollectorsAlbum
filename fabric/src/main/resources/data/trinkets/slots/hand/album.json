@@ -1,0 +1,4 @@
+{
+  "icon": "collectorsalbum:ui/album_inventory_slot",
+  "drop_rule": "keep"
+}

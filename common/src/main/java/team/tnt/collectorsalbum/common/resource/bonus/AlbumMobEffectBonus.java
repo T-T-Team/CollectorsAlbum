@@ -9,6 +9,8 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
+import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
+import team.tnt.collectorsalbum.common.card.CardCategoryFilter;
 import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.function.ConstantNumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
@@ -48,6 +50,11 @@ public class AlbumMobEffectBonus implements AlbumBonus {
         this.ambient = ambient;
         this.visible = visible;
         this.showIcon = showIcon;
+    }
+
+    @Override
+    public void addDescription(AlbumBonusDescriptionOutput description) {
+
     }
 
     @Override

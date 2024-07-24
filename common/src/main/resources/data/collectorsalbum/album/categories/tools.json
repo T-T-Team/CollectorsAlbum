@@ -4,7 +4,7 @@
   "display": {
     "name": "album.category.collectorsalbum.tools",
     "translate": true,
-    "styles": ["yellow"],
+    "styles": ["gold"],
     "pageOrder": 100
   },
   "template": {

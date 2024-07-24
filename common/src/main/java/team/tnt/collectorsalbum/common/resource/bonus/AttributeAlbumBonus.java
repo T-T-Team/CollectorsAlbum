@@ -4,13 +4,16 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
+import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
 import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProviderType;
@@ -29,6 +32,9 @@ public class AttributeAlbumBonus implements AlbumBonus {
             BuiltInRegistries.ATTRIBUTE.holderByNameCodec().fieldOf("attribute").forGetter(t -> t.attribute),
                 CONFIGURABLE_MODIFIER_CODEC.fieldOf("modifier").forGetter(t -> t.attributeModifier)
     ).apply(instance, AttributeAlbumBonus::new));
+    private static final String LABEL_ATTRIBUTE = "collectorsalbum.label.bonus.attribute";
+    private static final String LABEL_ATTRIBUTE_MODIFIER = "collectorsalbum.label.bonus.attribute_modifier";
+    private static final String TOOL_ATTRIBUTE_OPERATION = "collectorsalbum.tooltip.bonus.attribute_operation";
 
     private final Holder<Attribute> attribute;
     private final AttributeModifier attributeModifier;
@@ -36,6 +42,17 @@ public class AttributeAlbumBonus implements AlbumBonus {
     public AttributeAlbumBonus(Holder<Attribute> attribute, AttributeModifier attributeModifier) {
         this.attribute = attribute;
         this.attributeModifier = attributeModifier;
+    }
+
+    @Override
+    public void addDescription(AlbumBonusDescriptionOutput description) {
+        Attribute unwrappedAttribute = this.attribute.value();
+        Component attributeName = Component.translatable(unwrappedAttribute.getDescriptionId()).withStyle(unwrappedAttribute.getStyle(true));
+        description.text(Component.translatable(LABEL_ATTRIBUTE, attributeName));
+        description.text(
+                Component.translatable(LABEL_ATTRIBUTE_MODIFIER, Component.literal(String.valueOf(this.attributeModifier.amount())).withStyle(ChatFormatting.GREEN)),
+                Component.translatable(TOOL_ATTRIBUTE_OPERATION, Component.literal(this.attributeModifier.operation().name()))
+        );
     }
 
     @Override

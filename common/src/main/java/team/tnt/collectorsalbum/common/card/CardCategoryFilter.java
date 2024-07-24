@@ -2,6 +2,8 @@ package team.tnt.collectorsalbum.common.card;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.chat.Component;
+import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
 import team.tnt.collectorsalbum.platform.Codecs;
 
 import java.util.Collections;
@@ -17,4 +19,21 @@ public record CardCategoryFilter(Set<CardRarity> rarities, IntFilter numberFilte
             IntFilter.CODEC.optionalFieldOf("cards", IntFilter.NO_FILTER).forGetter(CardCategoryFilter::cardCountFilter)
     ).apply(instance, CardCategoryFilter::new));
     public static final CardCategoryFilter NO_FILTER = new CardCategoryFilter(Collections.emptySet(), IntFilter.NO_FILTER, IntFilter.NO_FILTER, IntFilter.NO_FILTER);
+    public static final Component LABEL_FILTER = Component.translatable("collectorsalbum.label.filter");
+    public static final Component LABEL_FILTER_RARITY = Component.translatable("collectorsalbum.label.filter.rarities");
+    public static final Component LABEL_FILTER_NUMBER = Component.translatable("collectorsalbum.label.filter.numbers");
+    public static final Component LABEL_FILTER_POINT = Component.translatable("collectorsalbum.label.filter.points");
+
+    public void generateDescriptionLabels(AlbumBonusDescriptionOutput descriptionOutput) {
+        if (!rarities.isEmpty()) {
+            Component raritiesTooltip = Component.literal("[" + String.join(",", this.rarities().stream().map(rarity -> rarity.getDisplayText().getString()).toList()) + "]");
+            descriptionOutput.text(LABEL_FILTER_RARITY, raritiesTooltip);
+        }
+        if (numberFilter != IntFilter.NO_FILTER) {
+            descriptionOutput.text(LABEL_FILTER_NUMBER, this.numberFilter.getDisplayComponent());
+        }
+        if (pointFilter != IntFilter.NO_FILTER) {
+            descriptionOutput.text(LABEL_FILTER_POINT, this.pointFilter.getDisplayComponent());
+        }
+    }
 }
