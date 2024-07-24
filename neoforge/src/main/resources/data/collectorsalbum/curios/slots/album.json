@@ -2,5 +2,6 @@
   "replace": true,
   "drop_rule": "ALWAYS_KEEP",
   "render_toggle": false,
-  "validators": ["curios:tag"]
+  "validators": ["curios:tag"],
+  "icon": "collectorsalbum:slot/album_inventory_slot"
 }
