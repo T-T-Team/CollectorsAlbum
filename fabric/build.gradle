@@ -25,7 +25,6 @@ repositories {
         name = "Ladysnake Libs" // Trinkets
         url = 'https://maven.ladysnake.org/releases'
     }
-    maven { url "https://www.cursemaven.com" }
 }
 
 dependencies {
@@ -38,7 +37,7 @@ dependencies {
     // Trinkets
     modImplementation("dev.emi:trinkets:${trinkets_version}")
     // Configuration
-    modImplementation("curse.maven:configuration-444699:${configuration_version}")
+    modImplementation("dev.toma.configuration:configuration-${minecraft_version}:${configuration_version}-fabric")
 
     compileOnly project(":common")
 }

@@ -3,15 +3,14 @@ package team.tnt.collectorsalbum.common.resource.bonus;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.toma.configuration.Configuration;
 import dev.toma.configuration.config.ConfigHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
 import team.tnt.collectorsalbum.common.CommonLabels;
 import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
-import team.tnt.collectorsalbum.config.CollectorsAlbumConfig;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,18 +20,18 @@ public class ConfigToggleBonusFilter implements IntermediateAlbumBonus {
     private static final String IS_ENABLED = "collectorsalbum.label.bonus.config_toggle.enabled";
     private static final String IS_DISABLED = "collectorsalbum.label.bonus.config_toggle.disabled";
     public static final MapCodec<ConfigToggleBonusFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            CollectorsAlbumConfig.CONFIG_CODEC.fieldOf("config").forGetter(t -> t.config),
+            Configuration.BY_ID_CODEC.fieldOf("config").forGetter(t -> t.config),
             Codec.STRING.fieldOf("path").forGetter(t -> t.path),
             AlbumBonusType.INSTANCE_CODEC.fieldOf("enabled").forGetter(t -> t.enabled),
             AlbumBonusType.INSTANCE_CODEC.optionalFieldOf("disabled", NoBonus.INSTANCE).forGetter(t -> t.disabled)
     ).apply(instance, ConfigToggleBonusFilter::new));
 
-    private final ConfigHolder<Object> config;
+    private final ConfigHolder<?> config;
     private final String path;
     private final AlbumBonus enabled;
     private final AlbumBonus disabled;
 
-    public ConfigToggleBonusFilter(ConfigHolder<Object> config, String path, AlbumBonus enabled, AlbumBonus disabled) {
+    public ConfigToggleBonusFilter(ConfigHolder<?> config, String path, AlbumBonus enabled, AlbumBonus disabled) {
         this.config = config;
         this.path = path;
         this.enabled = enabled;
@@ -43,6 +42,7 @@ public class ConfigToggleBonusFilter implements IntermediateAlbumBonus {
     public void addDescription(AlbumBonusDescriptionOutput description) {
         String[] paths = this.path.split("\\.");
         String field = paths.length > 0 ? paths[paths.length - 1] : "???";
+        // TODO obtain actual component from config
         Component configFieldName = Component.translatable("config." + config.getConfigId() + ".option." + field).withStyle(ChatFormatting.AQUA);
         Component label = Component.translatable("collectorsalbum.label.bonus.config_toggle", configFieldName);
         Component configName = Component.translatable("config.screen." + config.getConfigId());

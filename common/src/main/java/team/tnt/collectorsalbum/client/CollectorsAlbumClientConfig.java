@@ -8,6 +8,6 @@ import team.tnt.collectorsalbum.CollectorsAlbum;
 public class CollectorsAlbumClientConfig {
 
     @Configurable
-    @Configurable.Comment("Allows you to skip animation of card pack opening")
+    @Configurable.Comment(value = "Allows you to skip animation of card pack opening", localize = true)
     public boolean packOpenAnimation = true;
 }
