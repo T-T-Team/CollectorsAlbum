@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.toma.configuration.Configuration;
 import dev.toma.configuration.config.ConfigHolder;
+import dev.toma.configuration.config.value.IConfigValue;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
@@ -14,11 +15,13 @@ import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class ConfigToggleBonusFilter implements IntermediateAlbumBonus {
 
     private static final String IS_ENABLED = "collectorsalbum.label.bonus.config_toggle.enabled";
     private static final String IS_DISABLED = "collectorsalbum.label.bonus.config_toggle.disabled";
+    private static final Component UNKNOWN_CONFIG_OPTION = Component.translatable("collectorsalbum.label.bonus.config_toggle.unknown").withStyle(ChatFormatting.RED);
     public static final MapCodec<ConfigToggleBonusFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Configuration.BY_ID_CODEC.fieldOf("config").forGetter(t -> t.config),
             Codec.STRING.fieldOf("path").forGetter(t -> t.path),
@@ -40,13 +43,11 @@ public class ConfigToggleBonusFilter implements IntermediateAlbumBonus {
 
     @Override
     public void addDescription(AlbumBonusDescriptionOutput description) {
-        String[] paths = this.path.split("\\.");
-        String field = paths.length > 0 ? paths[paths.length - 1] : "???";
-        // TODO obtain actual component from config
-        Component configFieldName = Component.translatable("config." + config.getConfigId() + ".option." + field).withStyle(ChatFormatting.AQUA);
-        Component label = Component.translatable("collectorsalbum.label.bonus.config_toggle", configFieldName);
+        Optional<IConfigValue<Boolean>> configValue = this.config.getConfigValue(this.path, Boolean.class);
+        Component configLabel = configValue.map(val -> (Component) val.getTitle().copy().withStyle(ChatFormatting.BLUE))
+                .orElse(UNKNOWN_CONFIG_OPTION);
         Component configName = Component.translatable("config.screen." + config.getConfigId());
-        description.text(label, configName);
+        description.text(configLabel, configName);
         boolean enabled = this.canApply(description.getContext());
         if (this.enabled != NoBonus.INSTANCE) {
             description.nested(() -> {

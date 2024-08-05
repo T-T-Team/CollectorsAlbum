@@ -1,25 +1,30 @@
 package team.tnt.collectorsalbum.client.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+
+import java.util.Objects;
 
 public class LabelWidget extends AbstractWidget {
 
     private final Font font;
     private final int textColor;
-    private final boolean shadow;
+    private final boolean scrolling;
 
-    private OverflowRender overflowRender;
-
-    public LabelWidget(int x, int y, int width, int height, Component label, Font font, int textColor, boolean shadow) {
+    public LabelWidget(int x, int y, int width, int height, Component label, Font font, int textColor, boolean scrolling) {
         super(x, y, width, height, label);
         this.font = font;
         this.textColor = textColor;
-        this.shadow = shadow;
+        this.scrolling = scrolling;
+    }
+
+    public LabelWidget(int x, int y, int width, int height, Component label, Font font, int textColor) {
+        this(x, y, width, height, label, font, textColor, false);
     }
 
     @Override
@@ -27,37 +32,40 @@ public class LabelWidget extends AbstractWidget {
         return false;
     }
 
-    public void setOverflowRendering(int background, int foreground, int textBackground) {
-        this.overflowRender = new OverflowRender(background, textBackground, foreground);
-    }
-
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        int textWidth = font.width(this.getMessage());
-        if (overflowRender != null && isHovered && textWidth > this.width) {
-            PoseStack poseStack = guiGraphics.pose();
-            poseStack.pushPose();
-            poseStack.translate(0, 0, 400);
-            this.overflowRender.render(guiGraphics, this.getX() - 2, this.getY() - 2, textWidth + 2, 11);
-            guiGraphics.drawString(font, this.getMessage(), getX(), getY(), textColor, shadow);
-            poseStack.popPose();
+        guiGraphics.enableScissor(this.getX(), this.getY(), this.getRight(), this.getBottom());
+        if (scrolling) {
+            renderScrollingStringInternal(guiGraphics, font, this.getMessage(), this.getX(), this.getX(), this.getY(), this.getRight(), this.getBottom(), textColor);
         } else {
-            guiGraphics.enableScissor(this.getX(), this.getY(), this.getRight(), this.getBottom());
-            guiGraphics.drawString(font, this.getMessage(), getX(), getY(), textColor, shadow);
-            guiGraphics.disableScissor();
+            guiGraphics.drawString(font, this.getMessage(), this.getX(), this.getY(), textColor, false);
         }
+        guiGraphics.disableScissor();
     }
 
     @Override
     protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
     }
 
-    private record OverflowRender(int backgroundDark, int background, int backgroundLight) {
-
-        public void render(GuiGraphics guiGraphics, int x, int y, int width, int height) {
-            guiGraphics.fill(x, y, x + width + 1, y + height + 1, backgroundDark);
-            guiGraphics.fill(x + 1, y + 1, x + width + 1, y + height + 1, backgroundLight);
-            guiGraphics.fill(x + 1, y + 1, x + width, y + height, background);
+    private static void renderScrollingStringInternal(GuiGraphics graphics, Font font, Component label, int textX, int x, int y, int width, int height, int color) {
+        int textWidth = font.width(label);
+        int containerHeight = y + height;
+        Objects.requireNonNull(font);
+        int posY = (containerHeight - 9) / 2 + 1;
+        int containerWidth = width - x;
+        int $$12;
+        if (textWidth > containerWidth) {
+            $$12 = textWidth - containerWidth;
+            double $$13 = (double) Util.getMillis() / 1000.0;
+            double $$14 = Math.max((double)$$12 * 0.5, 3.0);
+            double $$15 = Math.sin(1.5707963267948966 * Math.cos(6.283185307179586 * $$13 / $$14)) / 2.0 + 0.5;
+            double $$16 = Mth.lerp($$15, 0.0, $$12);
+            graphics.enableScissor(x, y, width, height);
+            graphics.drawString(font, label, x - (int)$$16, posY, color, false);
+            graphics.disableScissor();
+        } else {
+            graphics.drawString(font, label, textX, posY, color, false);
         }
+
     }
 }

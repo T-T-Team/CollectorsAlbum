@@ -4,13 +4,16 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.entity.player.Player;
 import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
-import team.tnt.collectorsalbum.common.card.CardCategoryFilter;
 import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.function.ConstantNumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
@@ -54,7 +57,14 @@ public class AlbumMobEffectBonus implements AlbumBonus {
 
     @Override
     public void addDescription(AlbumBonusDescriptionOutput description) {
-
+        MobEffect mobEffect = this.effect.value();
+        int amplifierValue = this.amplifier.intValue();
+        ActionContext context = description.getContext();
+        Player player = context.getOrThrow(ActionContext.PLAYER, Player.class);
+        Component amplifier = amplifierValue >= 1 && amplifierValue <= 9 ? Component.literal(" ").append(Component.translatable("enchantment.level." + (amplifierValue + 1))) : CommonComponents.EMPTY;
+        Component title = Component.translatable("collectorsalbum.label.bonus.mob_effect.effect", mobEffect.getDisplayName(), amplifier).withStyle(ChatFormatting.BLUE);
+        Component tooltip = Component.translatable("collectorsalbum.label.bonus.mob_effect.duration", MobEffectUtil.formatDuration(this.createEffectInstance(), 1.0F, player.level().tickRateManager().tickrate()));
+        description.text(title, tooltip);
     }
 
     @Override

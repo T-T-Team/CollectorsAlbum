@@ -14,7 +14,6 @@ import team.tnt.collectorsalbum.common.PlayerAlbumTracker;
 import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
-import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.config.CollectorsAlbumConfig;
 import team.tnt.collectorsalbum.integrations.PlatformIntegrations;
 import team.tnt.collectorsalbum.network.NetworkManager;
@@ -32,7 +31,7 @@ public class CollectorsAlbum {
     private static CollectorsAlbumConfig config;
 
     public static void init() {
-        config = Configuration.registerConfig(CollectorsAlbumConfig.class, ConfigFormats.yaml()).getConfigInstance();
+        config = Configuration.registerConfig(CollectorsAlbumConfig.class, ConfigFormats.YAML).getConfigInstance();
         registerPackets();
         PlatformIntegrations.registerAlbumFinders();
     }

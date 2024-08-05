@@ -128,7 +128,7 @@ public class AlbumMainPageScreen extends Screen {
             rarityText.getStyle().applyFormats(ChatFormatting.RESET);
             String ratio = String.format(Locale.ROOT, "%.1f%%", statistics.getRatio() * 100.0F);
             Component label = Component.literal(rarityText.getString() + ": " + ratio);
-            LabelWidget labelWidget = this.addRenderableWidget(new LabelWidget(left + 20, top + 65 + (rarityIndex++) * 10, font.width(label), 10, label, font, TEXT_COLOR, false));
+            LabelWidget labelWidget = this.addRenderableWidget(new LabelWidget(left + 20, top + 65 + (rarityIndex++) * 10, font.width(label), 10, label, font, TEXT_COLOR));
             labelWidget.setTooltip(Tooltip.create(Component.literal(statistics.collected() + "/" + statistics.total()).withStyle(ChatFormatting.GREEN)));
         }
 
@@ -146,7 +146,7 @@ public class AlbumMainPageScreen extends Screen {
             MutableComponent categoryLabelNoStyle = Component.literal(stat.category().getDisplayText().getString());
             categoryLabelNoStyle.getStyle().applyFormats(ChatFormatting.RESET);
             Component displayLabel = Component.literal(categoryLabelNoStyle.getString() + ": " + stat.collectedCards() + "/" + stat.allCards());
-            LabelWidget labelWidget = addRenderableWidget(new LabelWidget(left + 148, top + 40 + i * 10, 95, 10, displayLabel, font, TEXT_COLOR, false));
+            LabelWidget labelWidget = addRenderableWidget(new LabelWidget(left + 148, top + 40 + i * 10, 95, 10, displayLabel, font, TEXT_COLOR));
             labelWidget.setTooltip(Tooltip.create(Component.literal(String.format(Locale.ROOT, "%.1f%%", stat.getCollectedProgress() * 100F)).withStyle(ChatFormatting.GREEN)));
         }
 

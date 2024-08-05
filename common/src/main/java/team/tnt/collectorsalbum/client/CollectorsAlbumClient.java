@@ -21,7 +21,7 @@ public final class CollectorsAlbumClient {
     public static CollectorsAlbumClientConfig config;
 
     public static void construct() {
-        config = Configuration.registerConfig(CollectorsAlbumClientConfig.class, ConfigFormats.yaml()).getConfigInstance();
+        config = Configuration.registerConfig(CollectorsAlbumClientConfig.class, ConfigFormats.YAML).getConfigInstance();
         MenuScreenRegistration.registerScreenFactory(MenuRegistry.ALBUM_CATEGORY, (AlbumCategoryMenu menu, Inventory inv, Component title) -> new AlbumCategoryScreen(menu, inv, title, menu.getCategory()));
     }
 

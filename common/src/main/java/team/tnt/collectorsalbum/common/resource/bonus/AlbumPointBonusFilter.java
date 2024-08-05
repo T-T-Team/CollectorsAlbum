@@ -6,7 +6,6 @@ import net.minecraft.network.chat.Component;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
 import team.tnt.collectorsalbum.common.CommonLabels;
-import team.tnt.collectorsalbum.common.card.CardCategoryFilter;
 import team.tnt.collectorsalbum.common.card.IntFilter;
 import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;

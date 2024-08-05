@@ -20,11 +20,11 @@ import java.util.List;
 public class AlbumBonusesScreen extends Screen {
 
     public static final Component TITLE = Component.translatable("screen.collectorsalbum.album.bonuses").withStyle(ChatFormatting.BOLD);
+    private static final int LINE_COUNT = 14;
 
     private final ItemStack itemStack;
     private int left, top;
-    private int scrollLeft, scrollRight;
-    private boolean leftScrollActive, rightScrollActive;
+    private int scrollingOffset, pageSize;
 
     private int currentBonusIndex;
 
@@ -63,8 +63,9 @@ public class AlbumBonusesScreen extends Screen {
         ActionContext context = ActionContext.of(ActionContext.PLAYER, minecraft.player, ActionContext.ALBUM, album);
         List<AlbumBonusDescriptionOutput.ComponentWithTooltip> first = this.getBonusDescription(bonusPair.getFirst(), context);
         List<AlbumBonusDescriptionOutput.ComponentWithTooltip> second = this.getBonusDescription(bonusPair.getSecond(), context);
-        this.createWidgets(first, left + 14, top + 14, scrollLeft);
-        this.createWidgets(second, left + 142, top + 14, scrollRight);
+        this.pageSize = Math.max(first.size(), second.size());
+        this.createWidgets(first, left + 14, top + 14, this.scrollingOffset);
+        this.createWidgets(second, left + 142, top + 14, this.scrollingOffset);
 
         if (currentBonusIndex > 0) {
             // previous page btn
@@ -80,15 +81,27 @@ public class AlbumBonusesScreen extends Screen {
         }
     }
 
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        int scale = (int)(-scrollY);
+        int next = this.scrollingOffset + scale;
+        if (next >= 0 && next + LINE_COUNT <= this.pageSize) {
+            this.scrollingOffset = next;
+            this.init(this.minecraft, this.width, this.height);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void createWidgets(List<AlbumBonusDescriptionOutput.ComponentWithTooltip> components, int x, int y, int scroll) {
-        int maxDisplay = 15;
         int offsetStep = 2;
-        for (int i = scroll; i < Math.min(scroll + maxDisplay, components.size()); i++) {
+        for (int i = scroll; i < Math.min(scroll + LINE_COUNT, components.size()); i++) {
+            int index = i - scroll;
             AlbumBonusDescriptionOutput.ComponentWithTooltip component = components.get(i);
             int offset = offsetStep * component.level();
             Component label = component.label();
-            LabelWidget widget = this.addRenderableWidget(new LabelWidget(x + offset, y + i * 10, 100 - offset, 10, label, font, AlbumMainPageScreen.TEXT_COLOR, false));
-            widget.setOverflowRendering(0xFFDBC7A4, 0xFFB5A589, 0xFFCCB998);
+            LabelWidget widget = this.addRenderableWidget(new LabelWidget(x + offset, y + index * 10, 100 - offset, 10, label, font, AlbumMainPageScreen.TEXT_COLOR, true));
             if (component.hasTooltip()) {
                 widget.setTooltip(Tooltip.create(component.tooltip()));
                 widget.setTooltipDelay(Duration.ofMillis(400));
@@ -108,6 +121,7 @@ public class AlbumBonusesScreen extends Screen {
 
     private void setPage(int page) {
         this.currentBonusIndex = page;
+        this.scrollingOffset = 0;
         init(minecraft, width, height);
     }
 }
