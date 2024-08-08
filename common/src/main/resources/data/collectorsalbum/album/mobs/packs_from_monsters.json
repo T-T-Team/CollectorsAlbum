@@ -1,6 +1,5 @@
 {
-  "type": "collectorsalbum:entity_filter",
-  "filter": "collectorsalbum:monster",
+  "type": "collectorsalbum:monster_filter",
   "pass": {
     "type": "collectorsalbum:random_chance",
     "chance": {
