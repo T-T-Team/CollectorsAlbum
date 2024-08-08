@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 public record CardUiTemplate(Integer[] effectColors, Integer[] effectDurations, Supplier<SoundEvent> flipSoundRef) {
 
-    public static final CardUiTemplate TEMPLATE = new CardUiTemplate(new Integer[] { 0x00FF00 }, new Integer[] { 80 }, SoundRegistry.FLIP_COMMON);
+    public static final CardUiTemplate TEMPLATE = new CardUiTemplate(new Integer[] { 0x00FF00 }, new Integer[] { 5 }, SoundRegistry.FLIP_COMMON);
     public static final Codec<CardUiTemplate> CODEC = RecordCodecBuilder.<CardUiTemplate>create(instance -> instance.group(
             Codecs.array(Codec.INT, Integer[]::new).optionalFieldOf("effectColors", TEMPLATE.effectColors()).forGetter(t -> t.effectColors),
             Codecs.array(Codec.INT, Integer[]::new).optionalFieldOf("effectDurations", TEMPLATE.effectDurations()).forGetter(t -> t.effectDurations),

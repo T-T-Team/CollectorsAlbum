@@ -30,6 +30,7 @@ import team.tnt.collectorsalbum.network.C2S_CompleteOpeningCardPack;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -67,7 +68,7 @@ public class CardPackOpeningScreen extends Screen {
                 int index = x + y * 6;
                 ItemStack drop = this.drops.get(index);
                 CardWidget widget = this.addCardWidget(rowLeft + x * (CARD_SIZE + CARD_MARGIN), rowTop, drop);
-                widget.setOnFlipFinish(this::onCardFlipped);
+                widget.setOnIconFlipped(this::onCardFlipped);
                 widget.setPositionAnimationDelay(index * 3);
             }
         }
@@ -76,6 +77,7 @@ public class CardPackOpeningScreen extends Screen {
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
         this.renderTransparentBackground(graphics);
+        this.emitter.draw(graphics, delta);
     }
 
     @Override
@@ -90,17 +92,21 @@ public class CardPackOpeningScreen extends Screen {
 
     @Override
     public void tick() {
-        super.tick();
+        this.emitter.update();
         this.cardWidgets.forEach(CardWidget::tick);
     }
 
-    private void onCardFlipped(AlbumCard card) {
+    private void onCardFlipped(CardWidget widget) {
+        AlbumCard card = widget.card;
         CardUiTemplate template = card.template();
         Integer[] effects = template.effectColors();
         Integer[] durations = template.effectDurations();
-        double speed = 0.3;
+        double speed = 4.0;
+        int count = Math.min(20 + card.getPoints() * 5, 100) / Math.max(effects.length, 1);
         for (int i = 0; i < effects.length; i++) {
-            this.emitter.emit(effects[i], durations[i], 15, speed);
+            float centerX = widget.getX() + widget.getWidth() / 2.0F;
+            float centerY = widget.getY() + widget.getHeight() / 2.0F;
+            this.emitter.emit(centerX, centerY, effects[i], durations[i], count, speed);
         }
     }
 
@@ -112,6 +118,28 @@ public class CardPackOpeningScreen extends Screen {
         return this.addRenderableWidget(widget);
     }
 
+    static void renderFullTexture(ResourceLocation path, Matrix4f pose, float x, float y, float z, float width, float height) {
+        RenderSystem.setShaderTexture(0, path);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        BufferBuilder builder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        builder.addVertex(pose, x, y, z).setUv(0.0F, 0.0F);
+        builder.addVertex(pose, x, y + height, z).setUv(0.0F, 1.0F);
+        builder.addVertex(pose, x + width, y + height, z).setUv(1.0F, 1.0F);
+        builder.addVertex(pose, x + width, y, z).setUv(1.0F, 0.0F);
+        BufferUploader.drawWithShader(builder.buildOrThrow());
+    }
+
+    static void renderFullColoredTexture(ResourceLocation path, Matrix4f pose, float x, float y, float z, float width, float height, int color) {
+        RenderSystem.setShaderTexture(0, path);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+        BufferBuilder builder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        builder.addVertex(pose, x, y, z).setUv(0.0F, 0.0F).setColor(color);
+        builder.addVertex(pose, x, y + height, z).setUv(0.0F, 1.0F).setColor(color);
+        builder.addVertex(pose, x + width, y + height, z).setUv(1.0F, 1.0F).setColor(color);
+        builder.addVertex(pose, x + width, y, z).setUv(1.0F, 0.0F).setColor(color);
+        BufferUploader.drawWithShader(builder.buildOrThrow());
+    }
+
     private static final class CardWidget extends AbstractWidget {
 
         private static final int TOTAL_MOVE_TIME = 10;
@@ -119,10 +147,10 @@ public class CardPackOpeningScreen extends Screen {
 
         private final int originalX, originalY;
         private final int targetX, targetY;
-        private final ItemStack itemStack;
         private final AlbumCard card;
         private final ResourceLocation itemTexture;
-        private Consumer<AlbumCard> onFlipFinish;
+        private Consumer<CardWidget> onIconFlipped;
+        private Consumer<CardWidget> onFlipFinish;
 
         private boolean flipped;
         private boolean flipping;
@@ -136,14 +164,17 @@ public class CardPackOpeningScreen extends Screen {
             this.originalY = y;
             this.targetX = targetX;
             this.targetY = targetY;
-            this.itemStack = itemStack;
-            this.card = AlbumCardManager.getInstance().getCardInfo(this.itemStack.getItem())
+            this.card = AlbumCardManager.getInstance().getCardInfo(itemStack.getItem())
                     .orElse(null);
-            ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(this.itemStack.getItem());
+            ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
             this.itemTexture = ResourceLocation.fromNamespaceAndPath(itemId.getNamespace(), "textures/item/" + itemId.getPath() + ".png"); // not the best way to do it, but should work in most cases
         }
 
-        public void setOnFlipFinish(Consumer<AlbumCard> onFlipFinish) {
+        public void setOnIconFlipped(Consumer<CardWidget> onIconFlipped) {
+            this.onIconFlipped = onIconFlipped;
+        }
+
+        public void setOnFlipFinish(Consumer<CardWidget> onFlipFinish) {
             this.onFlipFinish = onFlipFinish;
         }
 
@@ -170,6 +201,8 @@ public class CardPackOpeningScreen extends Screen {
 
         @Override
         public void onClick(double $$0, double $$1) {
+            if (this.flipping || this.flipped)
+                return;
             this.flipping = true;
         }
 
@@ -200,6 +233,7 @@ public class CardPackOpeningScreen extends Screen {
             int pHeight = this.getHeight();
 
             if (this.flipping) {
+                boolean wasFlipped = this.flipped;
                 float flipActual = this.flipCurrent / (float) TOTAL_FLIP_TIME;
                 float flipOld = this.flipOld / (float) TOTAL_FLIP_TIME;
                 float flipProgressRaw = Mth.lerp(delta, flipOld, flipActual);
@@ -211,11 +245,14 @@ public class CardPackOpeningScreen extends Screen {
                 float halfWidth = this.getWidth() / 2.0F;
                 px = this.getX() + halfWidth * (1.0F - amount);
                 pWidth = this.getWidth() * amount;
+                if (this.flipped && !wasFlipped && this.onIconFlipped != null && this.card != null) {
+                    this.onIconFlipped.accept(this);
+                }
             }
 
             ResourceLocation texture = this.flipped ? itemTexture : CARD_BG;
             Matrix4f poseMat = graphics.pose().last().pose();
-            this.renderTexture(texture, poseMat, (int) px, py, (int) pWidth, pHeight);
+            renderFullTexture(texture, poseMat, px, py, 400, pWidth, pHeight);
         }
 
         @Override
@@ -225,18 +262,6 @@ public class CardPackOpeningScreen extends Screen {
         @Override
         protected boolean clicked(double mouseX, double mouseY) {
             return !this.flipped && !this.flipping && super.clicked(mouseX, mouseY);
-        }
-
-        private void renderTexture(ResourceLocation path, Matrix4f pose, int x, int y, int width, int height) {
-            int z = 400;
-            RenderSystem.setShaderTexture(0, path);
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            BufferBuilder builder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-            builder.addVertex(pose, x, y, z).setUv(0.0F, 0.0F);
-            builder.addVertex(pose, x, y + height, z).setUv(0.0F, 1.0F);
-            builder.addVertex(pose, x + width, y + height, z).setUv(1.0F, 1.0F);
-            builder.addVertex(pose, x + width, y, z).setUv(1.0F, 0.0F);
-            BufferUploader.drawWithShader(builder.buildOrThrow());
         }
 
         private void tickPosition() {
@@ -260,7 +285,7 @@ public class CardPackOpeningScreen extends Screen {
             if (this.flipCurrent >= TOTAL_FLIP_TIME) {
                 this.flipping = false;
                 if (this.onFlipFinish != null && this.card != null) {
-                    this.onFlipFinish.accept(this.card);
+                    this.onFlipFinish.accept(this);
                 }
                 return;
             }
@@ -270,39 +295,93 @@ public class CardPackOpeningScreen extends Screen {
 
     private static class FxEmitter {
 
-        private List<FxElement> liveElements = new ArrayList<>();
+        private final List<FxElement> liveElements = new ArrayList<>();
 
-        void emit(int color, int lifetime, int count, double dirMul) {
+        void emit(float x, float y, int color, int lifetime, int count, double dirMul) {
             for (int i = 0; i < count; i++) {
-                FxElement element = new FxElement(color, lifetime);
+                FxElement element = new FxElement(x, y, color, lifetime);
                 double xRand = Math.random() - Math.random();
                 double yRand = Math.random() - Math.random();
-                element.setDir(new Vector2d(xRand, yRand), dirMul);
+                element.setDir(new Vector2d(xRand * dirMul, yRand * dirMul));
                 liveElements.add(element);
             }
+        }
+
+        void update() {
+            Iterator<FxElement> it = liveElements.iterator();
+            while (it.hasNext()) {
+                FxElement element = it.next();
+                element.update();
+                if (element.shouldRemove()) {
+                    it.remove();
+                }
+            }
+        }
+
+        void draw(GuiGraphics graphics, float delta) {
+            this.liveElements.forEach(fx -> fx.draw(graphics, delta));
         }
     }
 
     private static class FxElement {
 
-        private final int color;
-        private int lifetime;
+        private static final ResourceLocation[] PATHS = {
+                spark(0), spark(1), spark(2), spark(3),
+                spark(4), spark(5), spark(6), spark(7)
+        };
 
-        public FxElement(int color, int lifetime) {
+        private float x, y, xOld, yOld;
+        private final int color;
+        private final int stageLife;
+        private int stage;
+        private int stageLifeLeft;
+        private Vector2d direction;
+
+        public FxElement(float x, float y, int color, int stageLife) {
+            this.x = x;
+            this.y = y;
+            this.xOld = x;
+            this.yOld = y;
             this.color = color;
-            this.lifetime = lifetime;
+            this.stageLife = stageLife;
+            this.stageLifeLeft = stageLife;
+            this.stage = PATHS.length - 1;
         }
 
-        void draw(GuiGraphics graphics) {
-
+        void draw(GuiGraphics graphics, float delta) {
+            ResourceLocation path = PATHS[this.stage];
+            Matrix4f pose = graphics.pose().last().pose();
+            float scale = 8.0F;
+            float halfScale = scale / 2.0F;
+            float xPos = Mth.lerp(delta, xOld, x);
+            float yPos = Mth.lerp(delta, yOld, y);
+            renderFullColoredTexture(path, pose, xPos - halfScale, yPos - halfScale, 0, scale, scale, 0xFF << 24 | this.color);
         }
 
         void update() {
-
+            this.xOld = this.x;
+            this.yOld = this.y;
+            if (--this.stageLifeLeft < 0) {
+                --this.stage;
+                this.stageLifeLeft = this.stageLife;
+            }
+            if (this.direction != null) {
+                this.x += (float) this.direction.x;
+                this.y += (float) this.direction.y;
+                this.direction.mul(0.95F);
+            }
         }
 
-        void setDir(Vector2d dir, double speed) {
+        void setDir(Vector2d dir) {
+            this.direction = dir;
+        }
 
+        boolean shouldRemove() {
+            return this.stage == 0 && this.stageLifeLeft <= 0;
+        }
+
+        private static ResourceLocation spark(int index) {
+            return ResourceLocation.withDefaultNamespace(String.format("textures/particle/spark_%d.png", index));
         }
     }
 }

@@ -12,12 +12,12 @@ import java.util.function.UnaryOperator;
 
 public enum CardRarity {
 
-    COMMON(new Integer[] {0xAAAAAA}, new Integer[] {80}, SoundRegistry.FLIP_COMMON, text -> text.withStyle(ChatFormatting.WHITE)),
-    UNCOMMON(new Integer[] {0x55ff55}, new Integer[] {80}, SoundRegistry.FLIP_UNCOMMON, text -> text.withStyle(ChatFormatting.GREEN)),
-    RARE(new Integer[] {0x5555ff}, new Integer[] {80}, SoundRegistry.FLIP_RARE, text -> text.withStyle(ChatFormatting.BLUE)),
-    EPIC(new Integer[] {0xaa00aa}, new Integer[] {80}, SoundRegistry.FLIP_EPIC, text -> text.withStyle(ChatFormatting.DARK_PURPLE)),
-    LEGENDARY(new Integer[] {0xffaa00}, new Integer[] {80}, SoundRegistry.FLIP_LEGENDARY, text -> text.withStyle(ChatFormatting.GOLD)),
-    MYTHICAL(new Integer[] {0xff5555, 0xffffff}, new Integer[] {80, 100}, SoundRegistry.FLIP_MYTHICAL, text -> text.withStyle(ChatFormatting.RED)),;
+    COMMON(new Integer[] {0xAAAAAA}, new Integer[] {5}, SoundRegistry.FLIP_COMMON, text -> text.withStyle(ChatFormatting.WHITE)),
+    UNCOMMON(new Integer[] {0x55ff55}, new Integer[] {5}, SoundRegistry.FLIP_UNCOMMON, text -> text.withStyle(ChatFormatting.GREEN)),
+    RARE(new Integer[] {0x5555ff}, new Integer[] {5}, SoundRegistry.FLIP_RARE, text -> text.withStyle(ChatFormatting.BLUE)),
+    EPIC(new Integer[] {0xaa00aa}, new Integer[] {5}, SoundRegistry.FLIP_EPIC, text -> text.withStyle(ChatFormatting.DARK_PURPLE)),
+    LEGENDARY(new Integer[] {0xffaa00}, new Integer[] {5}, SoundRegistry.FLIP_LEGENDARY, text -> text.withStyle(ChatFormatting.GOLD)),
+    MYTHICAL(new Integer[] {0xff5555, 0xffffff}, new Integer[] {5, 10}, SoundRegistry.FLIP_MYTHICAL, text -> text.withStyle(ChatFormatting.RED)),;
 
     private final Integer[] colors;
     private final Integer[] durations;
