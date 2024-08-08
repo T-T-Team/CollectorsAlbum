@@ -9,8 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.apache.logging.log4j.message.FormattedMessage;
-import team.tnt.collectorsalbum.network.S2C_SendDatapackResources;
-import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 
 import java.util.List;
 import java.util.Map;
@@ -65,10 +63,6 @@ public abstract class PlatformGsonCodecReloadListener<T> extends PlatformGsonRel
     }
 
     protected void onReloadComplete(ResourceManager manager, ProfilerFiller profiler) {
-        List<T> data = this.getNetworkData();
-        if (data != null) {
-            PlatformNetworkManager.NETWORK.sendAllClientMessage(new S2C_SendDatapackResources<>(this));
-        }
     }
 
     protected void handleParsingError(Exception e, ResourceLocation currentPath) {

@@ -7,7 +7,6 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.AlbumCategoryType;
-import team.tnt.collectorsalbum.network.S2C_SendDatapackResources;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
 import java.util.*;
@@ -21,7 +20,6 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
 
     private AlbumCategoryManager() {
         super("album/categories", AlbumCategoryType.INSTANCE_CODEC);
-        S2C_SendDatapackResources.registerType(this);
     }
 
     public static AlbumCategoryManager getInstance() {

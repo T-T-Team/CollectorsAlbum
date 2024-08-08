@@ -81,16 +81,8 @@ public class CollectorsAlbum {
     }
 
     public static void sendPlayerDatapacks(ServerPlayer player) {
-        getDatapackSyncPayloads().forEach(payload -> PlatformNetworkManager.NETWORK.sendClientMessage(player, payload));
+        PlatformNetworkManager.NETWORK.sendClientMessage(player, new S2C_SendDatapackResources());
         forceAlbumReload(player);
-    }
-
-    public static List<CustomPacketPayload> getDatapackSyncPayloads() {
-        List<CustomPacketPayload> payloads = new ArrayList<>();
-        payloads.add(new S2C_SendDatapackResources<>(AlbumCardManager.getInstance()));
-        payloads.add(new S2C_SendDatapackResources<>(AlbumCategoryManager.getInstance()));
-        payloads.add(new S2C_SendDatapackResources<>(AlbumBonusManager.getInstance()));
-        return payloads;
     }
 
     public static void playerLoggedOut(Player player) {

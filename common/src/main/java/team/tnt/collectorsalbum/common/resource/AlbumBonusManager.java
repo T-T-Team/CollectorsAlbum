@@ -10,8 +10,6 @@ import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonus;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonusType;
 import team.tnt.collectorsalbum.common.resource.bonus.NoBonus;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
-import team.tnt.collectorsalbum.network.S2C_SendDatapackResources;
-import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
 import java.util.ArrayList;
@@ -28,7 +26,6 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Alb
 
     private AlbumBonusManager() {
         super("album/bonus", AlbumBonusType.INSTANCE_CODEC);
-        S2C_SendDatapackResources.registerType(this);
     }
 
     public static AlbumBonusManager getInstance() {
@@ -82,12 +79,6 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Alb
     protected void resolve(ResourceLocation path, AlbumBonus element) {
         this.registeredBonuses.put(path, element);
         this.bonusList.add(element);
-    }
-
-    @Override
-    protected void onReloadComplete(ResourceManager manager, ProfilerFiller profiler) {
-        super.onReloadComplete(manager, profiler);
-        PlatformNetworkManager.NETWORK.sendAllClientMessage(new S2C_SendDatapackResources<>(this));
     }
 
     private AlbumBonus getBonusAtIndex(int index) {

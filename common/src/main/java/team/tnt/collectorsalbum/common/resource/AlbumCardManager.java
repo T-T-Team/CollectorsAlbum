@@ -11,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
 import team.tnt.collectorsalbum.common.card.AlbumCardType;
-import team.tnt.collectorsalbum.network.S2C_SendDatapackResources;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
 import java.util.*;
@@ -31,7 +30,6 @@ public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard>
 
     private AlbumCardManager() {
         super("album/cards", AlbumCardType.INSTANCE_CODEC);
-        S2C_SendDatapackResources.registerType(this);
     }
 
     public static AlbumCardManager getInstance() {
