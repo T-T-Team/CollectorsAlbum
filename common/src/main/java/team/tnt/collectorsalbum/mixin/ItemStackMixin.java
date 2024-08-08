@@ -1,6 +1,5 @@
 package team.tnt.collectorsalbum.mixin;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponentHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;

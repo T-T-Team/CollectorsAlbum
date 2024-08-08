@@ -1,8 +1,8 @@
 package team.tnt.collectorsalbum.common.init;
 
 import team.tnt.collectorsalbum.CollectorsAlbum;
-import team.tnt.collectorsalbum.common.card.AlbumCardType;
 import team.tnt.collectorsalbum.common.CollectorsAlbumRegistries;
+import team.tnt.collectorsalbum.common.card.AlbumCardType;
 import team.tnt.collectorsalbum.common.card.RarityCard;
 import team.tnt.collectorsalbum.common.card.SimpleCard;
 import team.tnt.collectorsalbum.platform.registration.PlatformRegistry;

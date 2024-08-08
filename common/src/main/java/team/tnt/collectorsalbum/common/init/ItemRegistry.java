@@ -1,7 +1,6 @@
 package team.tnt.collectorsalbum.common.init;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import team.tnt.collectorsalbum.CollectorsAlbum;

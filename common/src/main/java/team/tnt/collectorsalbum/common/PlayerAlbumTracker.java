@@ -3,7 +3,6 @@ package team.tnt.collectorsalbum.common;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.init.RegistryTags;
 import team.tnt.collectorsalbum.integrations.PlatformIntegrations;

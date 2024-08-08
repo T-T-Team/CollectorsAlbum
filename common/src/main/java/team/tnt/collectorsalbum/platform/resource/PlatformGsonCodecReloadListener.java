@@ -12,7 +12,6 @@ import org.apache.logging.log4j.message.FormattedMessage;
 import team.tnt.collectorsalbum.network.S2C_SendDatapackResources;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
