@@ -11,6 +11,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import team.tnt.collectorsalbum.platform.Platform;
+import team.tnt.collectorsalbum.platform.Side;
 
 import java.util.List;
 
@@ -41,15 +43,23 @@ public class FabricNetwork implements Network {
 
         PacketHandler<P> handler = holder.handler();
         if (handler != null) {
-            switch (direction) {
-                case CLIENT_TO_SERVER -> ServerPlayNetworking.registerGlobalReceiver(holder.type(), (payload, context) -> handler.handle(payload, context.player()));
-                case SERVER_TO_CLIENT -> ClientPlayNetworking.registerGlobalReceiver(holder.type(), (payload, context) -> handleClientSide(payload, context, handler));
+            Side side = Platform.INSTANCE.getSide();
+            if (direction == PacketDirection.CLIENT_TO_SERVER) {
+                ServerPlayNetworking.registerGlobalReceiver(holder.type(), (payload, context) -> handler.handle(payload, context.player()));
+            } else if (direction == PacketDirection.SERVER_TO_CLIENT) {
+                if (side == Side.CLIENT)
+                    registerInternalClientReceiver(holder.type(), handler);
             }
         }
     }
 
     @Environment(EnvType.CLIENT)
-    private <P extends CustomPacketPayload> void handleClientSide(P payload, ClientPlayNetworking.Context context, PacketHandler<P> handler) {
+    private <P extends CustomPacketPayload> void registerInternalClientReceiver(CustomPacketPayload.Type<P> type, PacketHandler<P> handler) {
+        ClientPlayNetworking.registerGlobalReceiver(type, (payload, context) -> handleClientBoundPayload(payload, context, handler));
+    }
+
+    @Environment(EnvType.CLIENT)
+    private <P extends CustomPacketPayload> void handleClientBoundPayload(P payload, ClientPlayNetworking.Context context, PacketHandler<P> handler) {
         handler.handle(payload, context.player());
     }
 }
