@@ -1,8 +1,0 @@
-{
-  "type": "collectorsalbum:card",
-  "id": "mypack:netherite",
-  "points": 1000,
-  "item": "minecraft:netherite_ingot",
-  "category": "mypack:rare_minerals",
-  "number": 99
-}
