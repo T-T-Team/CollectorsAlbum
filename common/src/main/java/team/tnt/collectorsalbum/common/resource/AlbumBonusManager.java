@@ -53,7 +53,7 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Alb
 
     public boolean hasNextPage(int currentPage) {
         int lastDisplayed = currentPage * 2 + 1;
-        return lastDisplayed >= 0 && lastDisplayed < this.bonusList.size();
+        return lastDisplayed >= 0 && lastDisplayed < this.bonusList.size() - 1;
     }
 
     @Override
