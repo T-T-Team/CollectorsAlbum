@@ -954,6 +954,7 @@
   "collectorsalbum.label.applies": "Applies",
   "collectorsalbum.label.passed": "Passed",
   "collectorsalbum.label.failed": "Failed",
+  "collectorsalbum.label.pack_empty": "Opened card pack is empty",
   "card.rarity.common": "Common",
   "card.rarity.uncommon": "Uncommon",
   "card.rarity.rare": "Rare",
@@ -975,6 +976,7 @@
 
   "screen.collectorsalbum.album.main": "Album",
   "screen.collectorsalbum.album.bonuses": "Bonuses",
+  "screen.collectorsalbum.card_pack_opening_screen": "Card Pack",
 
   "config.screen.collectorsalbum": "Collector's Album Config",
   "config.collectorsalbum.option.packDrops": "Card pack drops",
@@ -1054,10 +1056,17 @@
   "config.collectorsalbum.option.fullMobEffectAmplifier": "Maxed out effect bonus amplifier",
   "config.collectorsalbum.option.fullMobEffectAmplifier.comment.0": "Default effect amplifier given when collecting all cards within single category with Mythical rarity",
 
-
   "config.screen.collectorsalbum-client": "Collector's Album Client Config",
   "config.collectorsalbum-client.option.packOpenAnimation": "Card pack open animation",
   "config.collectorsalbum-client.option.packOpenAnimation.comment.0": "Allows you to skip animation of card pack opening",
+
+  "sound.collectorsalbum.flip_common": "Flip Common",
+  "sound.collectorsalbum.flip_uncommon": "Flip Uncommon",
+  "sound.collectorsalbum.flip_rare": "Flip Rare",
+  "sound.collectorsalbum.flip_epic": "Flip Epic",
+  "sound.collectorsalbum.flip_legendary": "Flip Legendary",
+  "sound.collectorsalbum.flip_mythical": "Flip Mythical",
+  "sound.collectorsalbum.pack_open": "Pack Open",
 
   "curios.identifier.album": "Album",
   "trinkets.slot.hand.album": "Album"

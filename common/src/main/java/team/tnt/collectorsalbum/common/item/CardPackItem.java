@@ -14,6 +14,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
+import team.tnt.collectorsalbum.common.init.SoundRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
 import team.tnt.collectorsalbum.common.resource.drops.NoItemDropProvider;
@@ -32,6 +33,7 @@ public class CardPackItem extends Item {
     public static final int MAX_PACK_CARDS = 18;
     public static final Component USAGE = Component.translatable("collectorsalbum.label.use_open").withStyle(ChatFormatting.GRAY);
     public static final Component LABEL_UNSET = Component.translatable("collectorsalbum.label.not_set").withStyle(ChatFormatting.RED);
+    private static final Component WARN_NO_DROPS = Component.translatable("collectorsalbum.label.pack_empty").withStyle(ChatFormatting.GOLD);
 
     private final ResourceLocation lootDataSourcePath;
 
@@ -48,6 +50,7 @@ public class CardPackItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
         player.startUsingItem(hand);
+        player.playSound(SoundRegistry.PACK_OPEN.get(), 1.0F, 1.0F);
         return InteractionResultHolder.consume(itemStack);
     }
 
@@ -72,9 +75,14 @@ public class CardPackItem extends Item {
             List<ItemStack> validDrops = outputs.getItems().stream()
                     .filter(stack -> cardManager.isCard(stack.getItem()))
                     .collect(Collectors.toList());
-            Collections.shuffle(validDrops);
-            itemStack.set(ItemDataComponentRegistry.PACK_DROPS.get(), validDrops);
-            PlatformNetworkManager.NETWORK.sendClientMessage(player, new S2C_OpenCardPackScreen(validDrops));
+            if (!validDrops.isEmpty()) {
+                Collections.shuffle(validDrops);
+                itemStack.set(ItemDataComponentRegistry.PACK_DROPS.get(), validDrops);
+                PlatformNetworkManager.NETWORK.sendClientMessage(player, new S2C_OpenCardPackScreen(validDrops));
+            } else {
+                player.displayClientMessage(WARN_NO_DROPS, true);
+            }
+            player.getCooldowns().addCooldown(this, 20);
         }
         return itemStack;
     }

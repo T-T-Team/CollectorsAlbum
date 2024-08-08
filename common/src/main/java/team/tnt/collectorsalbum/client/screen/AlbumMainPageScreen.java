@@ -2,6 +2,7 @@ package team.tnt.collectorsalbum.client.screen;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
@@ -91,6 +92,11 @@ public class AlbumMainPageScreen extends Screen {
         this.top = (this.height - this.textureHeight) / 2;
 
         this.addDefaultWidgets();
+    }
+
+    @Override
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        this.renderTransparentBackground(graphics);
     }
 
     protected void addDefaultWidgets() {

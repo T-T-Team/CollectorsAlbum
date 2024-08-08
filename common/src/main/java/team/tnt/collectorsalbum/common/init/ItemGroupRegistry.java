@@ -16,7 +16,7 @@ public final class ItemGroupRegistry {
             .icon(() -> ItemRegistry.ALBUM.get().getDefaultInstance())
             .title(Component.translatable(key.toLanguageKey("itemGroup")))
             .displayItems((params, builder) -> {
-                builder.accept(ItemRegistry.TRADING_STATION.get());
+                //builder.accept(ItemRegistry.TRADING_STATION.get());
                 builder.accept(ItemRegistry.ALBUM.get());
                 builder.accept(ItemRegistry.COMMON_CARD_PACK.get());
                 builder.accept(ItemRegistry.UNCOMMON_CARD_PACK.get());

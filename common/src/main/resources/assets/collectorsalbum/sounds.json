@@ -1,0 +1,44 @@
+{
+  "flip_common": {
+    "subtitle": "sound.collectorsalbum.flip_common",
+    "sounds": [
+      "collectorsalbum:flip_common"
+    ]
+  },
+  "flip_uncommon": {
+    "subtitle": "sound.collectorsalbum.flip_uncommon",
+    "sounds": [
+      "collectorsalbum:flip_uncommon"
+    ]
+  },
+  "flip_rare": {
+    "subtitle": "sound.collectorsalbum.flip_rare",
+    "sounds": [
+      "collectorsalbum:flip_rare"
+    ]
+  },
+  "flip_epic": {
+    "subtitle": "sound.collectorsalbum.flip_epic",
+    "sounds": [
+      "collectorsalbum:flip_epic"
+    ]
+  },
+  "flip_legendary": {
+    "subtitle": "sound.collectorsalbum.flip_legendary",
+    "sounds": [
+      "collectorsalbum:flip_legendary"
+    ]
+  },
+  "flip_mythical": {
+    "subtitle": "sound.collectorsalbum.flip_mythical",
+    "sounds": [
+      "collectorsalbum:flip_mythical"
+    ]
+  },
+  "pack_open": {
+    "subtitle": "sound.collectorsalbum.pack_open",
+    "sounds": [
+      "collectorsalbum:pack_open"
+    ]
+  }
+}

@@ -935,5 +935,5 @@ public final class ItemRegistry {
     public static final PlatformRegistry.Reference<Item> UNCOMMON_WOODEN_SWORD_CARD = REGISTRY.register("uncommon_wooden_sword_card", () -> new Item(new Item.Properties()));
     public static final PlatformRegistry.Reference<Item> UNCOMMON_ZOMBIE_CARD = REGISTRY.register("uncommon_zombie_card", () -> new Item(new Item.Properties()));
 
-    public static final PlatformRegistry.Reference<BlockItem> TRADING_STATION = REGISTRY.register("trading_station", () -> new BlockItem(BlockRegistry.TRADING_STATION.get(), new Item.Properties()));
+    //public static final PlatformRegistry.Reference<BlockItem> TRADING_STATION = REGISTRY.register("trading_station", () -> new BlockItem(BlockRegistry.TRADING_STATION.get(), new Item.Properties()));
 }

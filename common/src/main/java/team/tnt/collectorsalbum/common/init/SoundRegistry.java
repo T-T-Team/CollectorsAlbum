@@ -10,14 +10,15 @@ public final class SoundRegistry {
 
     public static final PlatformRegistry<SoundEvent> REGISTRY = PlatformRegistry.create(BuiltInRegistries.SOUND_EVENT, CollectorsAlbum.MOD_ID);
 
-    public static final PlatformRegistry.Reference<SoundEvent> FLIP_COMMON = REGISTRY.register("flip_common", SoundRegistry::flipSound);
-    public static final PlatformRegistry.Reference<SoundEvent> FLIP_UNCOMMON = REGISTRY.register("flip_uncommon", SoundRegistry::flipSound);
-    public static final PlatformRegistry.Reference<SoundEvent> FLIP_RARE = REGISTRY.register("flip_rare", SoundRegistry::flipSound);
-    public static final PlatformRegistry.Reference<SoundEvent> FLIP_EPIC = REGISTRY.register("flip_epic", SoundRegistry::flipSound);
-    public static final PlatformRegistry.Reference<SoundEvent> FLIP_LEGENDARY = REGISTRY.register("flip_legendary", SoundRegistry::flipSound);
-    public static final PlatformRegistry.Reference<SoundEvent> FLIP_MYTHICAL = REGISTRY.register("flip_mythical", SoundRegistry::flipSound);
+    public static final PlatformRegistry.Reference<SoundEvent> FLIP_COMMON = REGISTRY.register("flip_common", SoundRegistry::simpleSound);
+    public static final PlatformRegistry.Reference<SoundEvent> FLIP_UNCOMMON = REGISTRY.register("flip_uncommon", SoundRegistry::simpleSound);
+    public static final PlatformRegistry.Reference<SoundEvent> FLIP_RARE = REGISTRY.register("flip_rare", SoundRegistry::simpleSound);
+    public static final PlatformRegistry.Reference<SoundEvent> FLIP_EPIC = REGISTRY.register("flip_epic", SoundRegistry::simpleSound);
+    public static final PlatformRegistry.Reference<SoundEvent> FLIP_LEGENDARY = REGISTRY.register("flip_legendary", SoundRegistry::simpleSound);
+    public static final PlatformRegistry.Reference<SoundEvent> FLIP_MYTHICAL = REGISTRY.register("flip_mythical", SoundRegistry::simpleSound);
+    public static final PlatformRegistry.Reference<SoundEvent> PACK_OPEN = REGISTRY.register("pack_open", SoundRegistry::simpleSound);
 
-    private static SoundEvent flipSound(ResourceLocation location) {
+    private static SoundEvent simpleSound(ResourceLocation location) {
         return SoundEvent.createFixedRangeEvent(location, 16);
     }
 }
