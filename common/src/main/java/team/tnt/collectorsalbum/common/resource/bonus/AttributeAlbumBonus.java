@@ -30,7 +30,7 @@ public class AttributeAlbumBonus implements AlbumBonus {
     ).apply(instance, (id, either, op) -> new AttributeModifier(id, either.map(Function.identity(), NumberProvider::doubleValue), op)));
     public static final MapCodec<AttributeAlbumBonus> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BuiltInRegistries.ATTRIBUTE.holderByNameCodec().fieldOf("attribute").forGetter(t -> t.attribute),
-                CONFIGURABLE_MODIFIER_CODEC.fieldOf("modifier").forGetter(t -> t.attributeModifier)
+            CONFIGURABLE_MODIFIER_CODEC.fieldOf("modifier").forGetter(t -> t.attributeModifier)
     ).apply(instance, AttributeAlbumBonus::new));
     private static final String LABEL_ATTRIBUTE = "collectorsalbum.label.bonus.attribute";
     private static final String LABEL_ATTRIBUTE_MODIFIER = "collectorsalbum.label.bonus.attribute_modifier";
