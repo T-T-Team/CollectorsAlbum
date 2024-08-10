@@ -23,6 +23,7 @@ public record CardCategoryFilter(Set<CardRarity> rarities, IntFilter numberFilte
     public static final Component LABEL_FILTER_RARITY = Component.translatable("collectorsalbum.label.filter.rarities");
     public static final Component LABEL_FILTER_NUMBER = Component.translatable("collectorsalbum.label.filter.numbers");
     public static final Component LABEL_FILTER_POINT = Component.translatable("collectorsalbum.label.filter.points");
+    public static final Component LABEL_FILTER_CARDS = Component.translatable("collectorsalbum.label.filter.cards");
 
     public void generateDescriptionLabels(AlbumBonusDescriptionOutput descriptionOutput) {
         if (!rarities.isEmpty()) {
@@ -34,6 +35,9 @@ public record CardCategoryFilter(Set<CardRarity> rarities, IntFilter numberFilte
         }
         if (pointFilter != IntFilter.NO_FILTER) {
             descriptionOutput.text(LABEL_FILTER_POINT, this.pointFilter.getDisplayComponent());
+        }
+        if (cardCountFilter != IntFilter.NO_FILTER) {
+            descriptionOutput.text(LABEL_FILTER_CARDS, this.cardCountFilter.getDisplayComponent());
         }
     }
 }

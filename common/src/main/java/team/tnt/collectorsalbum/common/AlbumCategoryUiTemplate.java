@@ -63,7 +63,7 @@ public final class AlbumCategoryUiTemplate {
         ).apply(instance, TextureTemplate::new));
     }
 
-    public record SlotPositionTemplate(int xAlbumSlotPositionStart, int yAlbumSlotPositionStart, int xSlotSpacing, int ySlotSpacing, int xPlayerSlotPositionStart, int yPlayerSlotPositionStart, int pageWidth, int colums, int rows) {
+    public record SlotPositionTemplate(int xAlbumSlotPositionStart, int yAlbumSlotPositionStart, int xSlotSpacing, int ySlotSpacing, int xPlayerSlotPositionStart, int yPlayerSlotPositionStart, int pageWidth, int columns, int rows) {
         public static final SlotPositionTemplate TEMPLATE = new SlotPositionTemplate(25, 19, 30, 30, 47, 173, 128, 3, 5);
         public static final Codec<SlotPositionTemplate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.INT.optionalFieldOf("xAlbumSlotStart", 25).forGetter(SlotPositionTemplate::xAlbumSlotPositionStart),
@@ -73,7 +73,7 @@ public final class AlbumCategoryUiTemplate {
                 Codec.INT.optionalFieldOf("xPlayerSlotStart", 47).forGetter(SlotPositionTemplate::xPlayerSlotPositionStart),
                 Codec.INT.optionalFieldOf("yPlayerSlotStart", 173).forGetter(SlotPositionTemplate::yPlayerSlotPositionStart),
                 Codec.INT.optionalFieldOf("pageWidth", 128).forGetter(SlotPositionTemplate::pageWidth),
-                Codec.INT.optionalFieldOf("colums", 3).forGetter(SlotPositionTemplate::colums),
+                Codec.INT.optionalFieldOf("columns", 3).forGetter(SlotPositionTemplate::columns),
                 Codec.INT.optionalFieldOf("rows", 5).forGetter(SlotPositionTemplate::rows)
         ).apply(instance, SlotPositionTemplate::new));
     }

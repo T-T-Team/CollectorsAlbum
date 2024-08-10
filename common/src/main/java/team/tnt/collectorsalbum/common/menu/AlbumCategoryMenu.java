@@ -53,14 +53,14 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
             int ySpacing = slotTemplate.ySlotSpacing();
             int pageWidth = slotTemplate.pageWidth();
             int[] cardNumbers = albumCategory.getCardNumbers();
-            int slotsPerPage = slotTemplate.colums() * slotTemplate.rows();
+            int slotsPerPage = slotTemplate.columns() * slotTemplate.rows();
             Container wrapper = new AlbumInventoryWrapper(cardNumbers.length, itemStack, category, album);
             // left page cards
             for (int y = 0; y < slotTemplate.rows(); y++) {
-                for (int x = 0; x < slotTemplate.colums(); x++) {
+                for (int x = 0; x < slotTemplate.columns(); x++) {
                     int cardX = xStart + x * xSpacing;
                     int cardY = yStart + y * ySpacing;
-                    int cardIndex = x + (y * slotTemplate.colums());
+                    int cardIndex = x + (y * slotTemplate.columns());
                     if (cardIndex >= cardNumbers.length)
                         break;
                     addSlot(new CardSlot(wrapper, cardIndex, cardX, cardY, category, cardNumbers[cardIndex]));
@@ -69,13 +69,13 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
             }
             // right page cards
             if (cardNumbers.length >= slotsPerPage) {
-                int cardsLength = slotTemplate.colums() * xSpacing - xSpacing;
+                int cardsLength = slotTemplate.columns() * xSpacing - xSpacing;
                 int rightStartX = pageWidth * 2 - 18 - cardsLength - xStart + 2;
                 for (int y = 0; y < slotTemplate.rows(); y++) {
-                    for (int x = 0; x < slotTemplate.colums(); x++) {
+                    for (int x = 0; x < slotTemplate.columns(); x++) {
                         int cardX = rightStartX + x * xSpacing;
                         int cardY = yStart + y * ySpacing;
-                        int cardIndex = slotsPerPage + x + (y * slotTemplate.colums());
+                        int cardIndex = slotsPerPage + x + (y * slotTemplate.columns());
                         if (cardIndex >= cardNumbers.length)
                             break;
                         addSlot(new CardSlot(wrapper, cardIndex, cardX, cardY, category, cardNumbers[cardIndex]));
