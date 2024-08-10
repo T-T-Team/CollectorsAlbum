@@ -21,6 +21,7 @@ import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonus;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonusType;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
+import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
 import java.util.List;
 
@@ -66,23 +67,23 @@ public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategor
 
     private static S2C_SendDatapackResources decode(FriendlyByteBuf buffer) {
         return new S2C_SendDatapackResources(
-                decodeWithCodec(buffer, AlbumCardType.INSTANCE_CODEC),
-                decodeWithCodec(buffer, AlbumCategoryType.INSTANCE_CODEC),
-                decodeWithCodec(buffer, AlbumBonusType.INSTANCE_CODEC)
+                decodeWithCodec(buffer, AlbumCardType.INSTANCE_CODEC, AlbumCardManager.getInstance()),
+                decodeWithCodec(buffer, AlbumCategoryType.INSTANCE_CODEC, AlbumCategoryManager.getInstance()),
+                decodeWithCodec(buffer, AlbumBonusType.INSTANCE_CODEC, AlbumBonusManager.getInstance())
         );
     }
 
-    private static <T> ValueHolder<T> decodeWithCodec(FriendlyByteBuf buffer, Codec<T> codec) {
+    private static <T> ValueHolder<T> decodeWithCodec(FriendlyByteBuf buffer, Codec<T> codec, PlatformGsonCodecReloadListener<T> listener) {
         Codec<ValueHolder<T>> valueCodec = ValueHolder.codec(codec);
         Tag tag = buffer.readNbt();
         DataResult<ValueHolder<T>> result = valueCodec.parse(NbtOps.INSTANCE, tag);
-        return result.getOrThrow();
+        ValueHolder<T> holder = result.getOrThrow();
+        listener.onNetworkDataReceived(holder.values()); // has to be done immediately due to bad design for categories
+        return holder;
     }
 
     public void onDataReceived(Player player) {
-        AlbumCardManager.getInstance().onNetworkDataReceived(this.cards());
-        AlbumCategoryManager.getInstance().onNetworkDataReceived(this.categories());
-        AlbumBonusManager.getInstance().onNetworkDataReceived(this.bonuses());
+        // Just do nothing, data should be already resolved
     }
 
     private record ValueHolder<T>(List<T> values) {

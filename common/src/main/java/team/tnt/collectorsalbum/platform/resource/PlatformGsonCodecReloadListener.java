@@ -32,7 +32,7 @@ public abstract class PlatformGsonCodecReloadListener<T> extends PlatformGsonRel
         return null;
     }
 
-    public void onNetworkDataReceived(List<T> collection) {
+    public synchronized void onNetworkDataReceived(List<T> collection) {
     }
 
     protected abstract void preApply(Map<ResourceLocation, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler);

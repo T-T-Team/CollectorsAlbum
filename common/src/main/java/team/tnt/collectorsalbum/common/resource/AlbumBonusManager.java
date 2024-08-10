@@ -64,7 +64,7 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Alb
     }
 
     @Override
-    public void onNetworkDataReceived(List<AlbumBonus> collection) {
+    public synchronized void onNetworkDataReceived(List<AlbumBonus> collection) {
         this.bonusList.clear();
         this.bonusList.addAll(collection);
     }

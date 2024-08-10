@@ -14,6 +14,7 @@ import team.tnt.collectorsalbum.common.card.AlbumCardType;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard> {
 
@@ -77,7 +78,7 @@ public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard>
     }
 
     @Override
-    public void onNetworkDataReceived(List<AlbumCard> collection) {
+    public synchronized void onNetworkDataReceived(List<AlbumCard> collection) {
         registeredCards.clear();
         byItemMap.clear();
         collection.forEach(card -> {

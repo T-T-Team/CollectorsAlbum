@@ -84,7 +84,7 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
     }
 
     @Override
-    public void onNetworkDataReceived(List<AlbumCategory> collection) {
+    public synchronized void onNetworkDataReceived(List<AlbumCategory> collection) {
         registeredCategories.clear();
         pagedCategories.clear();
         collection.forEach(category -> registeredCategories.put(category.identifier(), category));
