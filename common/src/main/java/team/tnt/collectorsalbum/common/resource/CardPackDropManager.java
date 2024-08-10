@@ -7,13 +7,14 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProvider;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProviderType;
+import team.tnt.collectorsalbum.common.resource.drops.ItemDropResourceManager;
 import team.tnt.collectorsalbum.common.resource.drops.NoItemDropProvider;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CardPackDropManager extends PlatformGsonCodecReloadListener<ItemDropProvider> {
+public class CardPackDropManager extends PlatformGsonCodecReloadListener<ItemDropProvider> implements ItemDropResourceManager {
 
     private static final CardPackDropManager INSTANCE = new CardPackDropManager();
     private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "card_pack_drops");
@@ -27,6 +28,7 @@ public class CardPackDropManager extends PlatformGsonCodecReloadListener<ItemDro
         return INSTANCE;
     }
 
+    @Override
     public ItemDropProvider getProvider(ResourceLocation id) {
         return this.providerMap.getOrDefault(id, NoItemDropProvider.INSTANCE);
     }

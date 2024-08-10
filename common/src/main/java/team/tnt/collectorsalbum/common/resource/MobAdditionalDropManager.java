@@ -8,18 +8,20 @@ import org.jetbrains.annotations.NotNull;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProvider;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProviderType;
+import team.tnt.collectorsalbum.common.resource.drops.ItemDropResourceManager;
+import team.tnt.collectorsalbum.common.resource.drops.NoItemDropProvider;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MobAdditionalDropManager extends PlatformGsonCodecReloadListener<ItemDropProvider> implements Iterable<ItemDropProvider> {
+public class MobAdditionalDropManager extends PlatformGsonCodecReloadListener<ItemDropProvider> implements Iterable<ItemDropProvider>, ItemDropResourceManager {
 
     private static final MobAdditionalDropManager INSTANCE = new MobAdditionalDropManager();
     private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "mob_additional_drops");
-    private final List<ItemDropProvider> drops = new ArrayList<>();
+    private final Map<ResourceLocation, ItemDropProvider> drops = new LinkedHashMap<>();
 
     private MobAdditionalDropManager() {
         super("album/mobs", ItemDropProviderType.INSTANCE_CODEC);
@@ -37,7 +39,13 @@ public class MobAdditionalDropManager extends PlatformGsonCodecReloadListener<It
     @NotNull
     @Override
     public Iterator<ItemDropProvider> iterator() {
-        return this.drops.iterator();
+        Collection<ItemDropProvider> values = this.drops.values();
+        return values.iterator();
+    }
+
+    @Override
+    public ItemDropProvider getProvider(ResourceLocation path) {
+        return this.drops.getOrDefault(path, NoItemDropProvider.INSTANCE);
     }
 
     @Override
@@ -47,6 +55,6 @@ public class MobAdditionalDropManager extends PlatformGsonCodecReloadListener<It
 
     @Override
     protected void resolve(ResourceLocation path, ItemDropProvider element) {
-        this.drops.add(element);
+        this.drops.put(path, element);
     }
 }
