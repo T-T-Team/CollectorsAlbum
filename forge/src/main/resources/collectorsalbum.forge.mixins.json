@@ -3,7 +3,9 @@
   "minVersion": "${mixin_min_version}",
   "package": "team.tnt.collectorsalbum.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixins": [],
+  "mixins": [
+    "ForgePlayerListMixin"
+  ],
   "client": [],
   "server": [],
   "injectors": {

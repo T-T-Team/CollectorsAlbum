@@ -76,6 +76,7 @@ subprojects {
                 "fabric_version": "${fabric_version}",
                 "fabric_loader_version": "${fabric_loader_version}",
                 "fabric_loom": "${fabric_loom}",
+                "fabric_minecraft_version_range": "${fabric_minecraft_version_range}",
 
                 // Dependencies
                 "configuration_version_range": "${configuration_version_range}"

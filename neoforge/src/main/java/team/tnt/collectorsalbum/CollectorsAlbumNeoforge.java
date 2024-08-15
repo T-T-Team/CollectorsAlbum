@@ -10,6 +10,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -45,7 +46,7 @@ public class CollectorsAlbumNeoforge {
         IEventBus neoBus = NeoForge.EVENT_BUS;
         neoBus.addListener(this::addReloadListeners);
         neoBus.addListener(this::playerTick);
-        neoBus.addListener(this::playerLoggedIn);
+        neoBus.addListener(this::onDatapackSync);
         neoBus.addListener(this::playerLoggedOut);
         neoBus.addListener(this::serverStopping);
 
@@ -63,8 +64,8 @@ public class CollectorsAlbumNeoforge {
         CollectorsAlbum.tickPlayer(event.getEntity());
     }
 
-    private void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        CollectorsAlbum.sendPlayerDatapacks((ServerPlayer) event.getEntity());
+    private void onDatapackSync(OnDatapackSyncEvent event) {
+        CollectorsAlbum.sendPlayerDatapacks(event.getPlayer());
     }
 
     private void playerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {

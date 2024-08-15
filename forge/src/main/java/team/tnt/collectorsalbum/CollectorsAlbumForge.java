@@ -1,6 +1,5 @@
 package team.tnt.collectorsalbum;
 
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -45,7 +44,6 @@ public class CollectorsAlbumForge {
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(this::addReloadListeners);
         forgeBus.addListener(this::playerTick);
-        forgeBus.addListener(this::playerLoggedIn);
         forgeBus.addListener(this::playerLoggedOut);
         forgeBus.addListener(this::serverStopping);
 
@@ -65,10 +63,6 @@ public class CollectorsAlbumForge {
         if (event.phase == TickEvent.Phase.START)
             return;
         CollectorsAlbum.tickPlayer(event.player);
-    }
-
-    private void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        CollectorsAlbum.sendPlayerDatapacks((ServerPlayer) event.getEntity());
     }
 
     private void playerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {

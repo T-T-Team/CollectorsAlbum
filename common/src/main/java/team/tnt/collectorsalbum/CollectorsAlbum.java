@@ -2,7 +2,6 @@ package team.tnt.collectorsalbum;
 
 import dev.toma.configuration.Configuration;
 import dev.toma.configuration.config.format.ConfigFormats;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -11,17 +10,11 @@ import org.apache.logging.log4j.Logger;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumLocatorResult;
 import team.tnt.collectorsalbum.common.PlayerAlbumTracker;
-import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
-import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
-import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.config.CollectorsAlbumConfig;
 import team.tnt.collectorsalbum.integrations.PlatformIntegrations;
 import team.tnt.collectorsalbum.network.NetworkManager;
 import team.tnt.collectorsalbum.network.S2C_SendDatapackResources;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CollectorsAlbum {
 

@@ -11,9 +11,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntity {
+public abstract class FabricPlayerMixin extends LivingEntity {
 
-    public PlayerMixin(EntityType<? extends LivingEntity> entityType, Level level) {
+    public FabricPlayerMixin(EntityType<? extends LivingEntity> entityType, Level level) {
         super(entityType, level);
     }
 

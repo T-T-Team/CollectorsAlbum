@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 
 @Mixin(PlayerList.class)
-public abstract class PlayerListMixin {
+public abstract class FabricPlayerListMixin {
 
     @Inject(
             method = "placeNewPlayer",
-            at = @At("TAIL")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;sendPlayerPermissionLevel(Lnet/minecraft/server/level/ServerPlayer;)V", shift = At.Shift.BY, by = -2)
     )
-    private void collectorsAlbum$playerLoggingIn(Connection connection, ServerPlayer player, CommonListenerCookie cookie, CallbackInfo ci) {
+    private void collectorsAlbum$placeNewPlayer(Connection connection, ServerPlayer player, CommonListenerCookie cookie, CallbackInfo ci) {
         CollectorsAlbum.sendPlayerDatapacks(player);
     }
 
