@@ -1,5 +1,6 @@
 package team.tnt.collectorsalbum.common.item;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.init.SoundRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
@@ -74,10 +76,13 @@ public class CardPackItem extends Item {
             AlbumCardManager cardManager = AlbumCardManager.getInstance();
             List<ItemStack> validDrops = outputs.getItems().stream()
                     .filter(stack -> cardManager.isCard(stack.getItem()))
+                    .map(ItemStack::copy)
                     .collect(Collectors.toList());
+            CollectorsAlbum.LOGGER.debug("{} is opening card pack {} with generated content: {}", entity, this, validDrops);
             if (!validDrops.isEmpty()) {
                 Collections.shuffle(validDrops);
-                itemStack.set(ItemDataComponentRegistry.PACK_DROPS.get(), validDrops);
+                PackContents contents = new PackContents(validDrops);
+                itemStack.set(ItemDataComponentRegistry.PACK_CONTENTS.get(), contents);
                 PlatformNetworkManager.NETWORK.sendClientMessage(player, new S2C_OpenCardPackScreen(validDrops));
             } else {
                 player.displayClientMessage(WARN_NO_DROPS, true);
@@ -107,6 +112,14 @@ public class CardPackItem extends Item {
             components.add(Component.translatable("collectorsalbum.label.custom_drop_table", customTableLabel).withStyle(ChatFormatting.GRAY));
         } else if (this.lootDataSourcePath == null) {
             components.add(Component.translatable("collectorsalbum.label.custom_drop_table", LABEL_UNSET).withStyle(ChatFormatting.GRAY));
+        }
+    }
+
+    public record PackContents(List<ItemStack> contents) {
+        public static final Codec<PackContents> CODEC = ItemStack.CODEC.listOf().xmap(PackContents::new, contents -> contents.contents);
+
+        public boolean isEmpty() {
+            return this.contents.isEmpty();
         }
     }
 }

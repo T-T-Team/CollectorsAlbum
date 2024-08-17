@@ -2,7 +2,6 @@ package team.tnt.collectorsalbum.common.menu;
 
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -227,8 +226,13 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
 
     private static final class AlbumInventoryWrapper extends SimpleContainer {
 
+        private final ItemStack itemStack;
+        private final ResourceLocation category;
+
         AlbumInventoryWrapper(int size, ItemStack itemStack, ResourceLocation category, Album album) {
             super(size);
+            this.itemStack = itemStack;
+            this.category = category;
 
             List<ItemStack> itemStacks = album.getInventory(category);
             for (int i = 0; i < itemStacks.size(); i++) {
@@ -236,15 +240,18 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
                 if (!stack.isEmpty())
                     this.getItems().set(i, stack.copy());
             }
+        }
 
-            this.addListener(container -> {
-                Album currentAlbum = itemStack.get(ItemDataComponentRegistry.ALBUM.get());
-                if (currentAlbum != null) {
-                    NonNullList<ItemStack> updatedItems = ((SimpleContainer) container).getItems();
-                    Album newAlbumInstance = currentAlbum.update(category, updatedItems);
-                    itemStack.set(ItemDataComponentRegistry.ALBUM.get(), newAlbumInstance);
-                }
-            });
+        @Override
+        public void setItem(int index, ItemStack itemStack) {
+            Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+            if (album != null) {
+                Album.Mutable mutable = new Album.Mutable(album);
+                mutable.set(this.category, index, itemStack.copy());
+                Album updated = mutable.toImmutable();
+                this.itemStack.set(ItemDataComponentRegistry.ALBUM.get(), updated);
+            }
+            super.setItem(index, itemStack);
         }
     }
 }

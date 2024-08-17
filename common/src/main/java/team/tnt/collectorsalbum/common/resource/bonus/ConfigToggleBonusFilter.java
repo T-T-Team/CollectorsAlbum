@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.toma.configuration.Configuration;
 import dev.toma.configuration.config.ConfigHolder;
 import dev.toma.configuration.config.value.IConfigValue;
+import dev.toma.configuration.config.value.IConfigValueReadable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
@@ -90,6 +91,7 @@ public class ConfigToggleBonusFilter implements IntermediateAlbumBonus {
 
     @Override
     public boolean canApply(ActionContext context) {
-        return this.config.getValue(this.path, Boolean.class).orElse(false);
+        return this.config.getConfigValue(this.path, Boolean.class).map(value -> value.get(IConfigValueReadable.Mode.SAVED))
+                .orElse(false);
     }
 }

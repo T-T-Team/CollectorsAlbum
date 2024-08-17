@@ -6,26 +6,32 @@ public class AlbumBonusConfig {
 
     @Configurable
     @Configurable.Comment(value = "Allows you to disable the default health boost effect", localize = true)
+    @Configurable.Synchronized
     public boolean healthBonusEnabled = true;
 
     @Configurable
     @Configurable.Comment(value = "Allows you to disable the default 'Tools' category haste effect", localize = true)
+    @Configurable.Synchronized
     public boolean hasteBonusEnabled = true;
 
     @Configurable
     @Configurable.Comment(value = "Allows you to disable the default 'Armor' category resistance effect", localize = true)
+    @Configurable.Synchronized
     public boolean resistanceBonusEnabled = true;
 
     @Configurable
     @Configurable.Comment(value = "Allows you to disable the default 'Mob' category strength effect", localize = true)
+    @Configurable.Synchronized
     public boolean strengthBonusEnabled = true;
 
     @Configurable
     @Configurable.Comment(value = "Allows you to disable the default 'Nature' category regeneration effect", localize = true)
+    @Configurable.Synchronized
     public boolean regenerationBonusEnabled = true;
 
     @Configurable
     @Configurable.Comment(value = "Allows you to disable the default 'Items' category speed effect", localize = true)
+    @Configurable.Synchronized
     public boolean speedBonusEnabled = true;
 
     @Configurable
