@@ -23,7 +23,9 @@ public class TrinketsIntegrationFabric {
                 if (album != null && album.test(foundAlbum)) {
                     return AlbumLocatorResult.found(itemStack, album, -1);
                 }
-                return AlbumLocatorResult.found(itemStack, foundAlbum, -1);
+                if (foundAlbum != null) {
+                    return AlbumLocatorResult.found(itemStack, foundAlbum, -1);
+                }
             }
             return AlbumLocatorResult.notFound();
         }).orElseGet(AlbumLocatorResult::notFound);

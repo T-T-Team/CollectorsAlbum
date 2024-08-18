@@ -25,7 +25,9 @@ public final class CuriosIntegrationNeoforge {
                         if (previousAlbum != null && previousAlbum.test(album)) {
                             return AlbumLocatorResult.found(itemStack, previousAlbum, i);
                         }
-                        return AlbumLocatorResult.found(itemStack, album, i);
+                        if (album != null) {
+                            return AlbumLocatorResult.found(itemStack, album, i);
+                        }
                     }
                 }
                 return AlbumLocatorResult.notFound();
