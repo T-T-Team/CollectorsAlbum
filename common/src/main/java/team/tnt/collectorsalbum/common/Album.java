@@ -9,6 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
 import team.tnt.collectorsalbum.common.card.CardRarity;
 import team.tnt.collectorsalbum.common.card.RarityHolder;
@@ -52,6 +53,9 @@ public final class Album implements Predicate<Album> {
         this.cardsByCategory = new HashMap<>();
         this.categoryInventories = new HashMap<>();
         int pointCounter = 0;
+        if (CollectorsAlbum.LOGGER.isDebugEnabled()) {
+            CollectorsAlbum.LOGGER.debug("Creating album instance from data {}", mutable);
+        }
         AlbumCardManager manager = AlbumCardManager.getInstance();
         for (Map.Entry<ResourceLocation, NonNullList<ItemStack>> entry : mutable.inventories.entrySet()) {
             ResourceLocation key = entry.getKey();
@@ -214,6 +218,11 @@ public final class Album implements Predicate<Album> {
 
         public Album toImmutable() {
             return new Album(this);
+        }
+
+        @Override
+        public String toString() {
+            return "MutableAlbum{inventories=" + inventories + "}";
         }
     }
 }
