@@ -53,9 +53,6 @@ public final class Album implements Predicate<Album> {
         this.cardsByCategory = new HashMap<>();
         this.categoryInventories = new HashMap<>();
         int pointCounter = 0;
-        if (CollectorsAlbum.LOGGER.isDebugEnabled()) {
-            CollectorsAlbum.LOGGER.debug("Creating album instance from data {}", mutable);
-        }
         AlbumCardManager manager = AlbumCardManager.getInstance();
         for (Map.Entry<ResourceLocation, NonNullList<ItemStack>> entry : mutable.inventories.entrySet()) {
             ResourceLocation key = entry.getKey();
