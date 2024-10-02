@@ -98,6 +98,7 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
 
     @Override
     public void removed(Player player) {
+        super.removed(player);
         CollectorsAlbum.forceAlbumReload(player);
     }
 
