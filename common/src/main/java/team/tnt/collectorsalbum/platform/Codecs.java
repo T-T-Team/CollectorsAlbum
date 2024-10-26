@@ -3,12 +3,22 @@ package team.tnt.collectorsalbum.platform;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 public final class Codecs {
 
@@ -27,9 +37,40 @@ public final class Codecs {
             either -> either.map(Function.identity(), Function.identity()),
             Either::left
     );
+    public static final Codec<Holder<Item>> ITEM_NON_AIR_CODEC = Codecs.validate(BuiltInRegistries.ITEM.holderByNameCodec(), item -> item.is(Items.AIR.builtInRegistryHolder().key())
+            ? DataResult.error(() -> "Item must not be minecraft:air!")
+            : DataResult.success(item)
+    );
+    public static final Codec<UUID> UUID_CODEC = Codec.STRING.comapFlatMap(
+            string -> {
+                try {
+                    return DataResult.success(UUID.fromString(string));
+                } catch (Exception e) {
+                    return DataResult.error(() -> "Invalid UUID: " + string + ", " + e.getMessage());
+                }
+            }, UUID::toString
+    );
+    public static final Codec<ItemStack> SINGLE_ITEM_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            ITEM_NON_AIR_CODEC.fieldOf("id").forGetter(ItemStack::getItemHolder),
+            ExtraCodecs.intRange(1, 99).fieldOf("count").orElse(1).forGetter(ItemStack::getCount),
+            CompoundTag.CODEC.optionalFieldOf("tag").forGetter(itemStack -> Optional.ofNullable(itemStack.getTag()))
+    ).apply(instance, (holder, count, tag) -> {
+        ItemStack itemStack = new ItemStack(holder, count);
+        tag.ifPresent(itemStack::setTag);
+        return itemStack;
+    }));
+    public static final Codec<ItemStack> SIMPLE_ITEM_CODEC = ITEM_NON_AIR_CODEC.xmap(ItemStack::new, ItemStack::getItemHolder);
+
+    public static <T> Codec<T> validate(Codec<T> codec, Function<T, DataResult<T>> validator) {
+        return codec.flatXmap(validator, validator);
+    }
+
+    public static <T> MapCodec<T> validate(MapCodec<T> codec, Function<T, DataResult<T>> validator) {
+        return codec.flatXmap(validator, validator);
+    }
 
     public static Codec<Float> rangeInclusiveFloat(float min, float max) {
-        return Codec.FLOAT.validate(f -> f >= min && f <= max
+        return validate(Codec.FLOAT, f -> f >= min && f <= max
                 ? DataResult.success(f)
                 : DataResult.error(() -> String.format("Value [%f] is not within required range [%f;%f]", f, min, max))
         );
@@ -80,31 +121,6 @@ public final class Codecs {
                     return nonNullList;
                 },
                 Function.identity()
-        );
-    }
-
-    public static <BUF extends FriendlyByteBuf, T> StreamCodec<BUF, NonNullList<T>> nonNullListStreamCodec(StreamCodec<BUF, T> codec, Predicate<T> skip, T empty) {
-        return StreamCodec.of(
-                (buf, list) -> {
-                    for (T t : list) {
-                        boolean saved = !skip.test(t);
-                        buf.writeBoolean(saved);
-                        if (saved) {
-                            codec.encode(buf, t);
-                        }
-                    }
-                }, (buf) -> {
-                    int size = buf.readInt();
-                    NonNullList<T> list = NonNullList.withSize(size, empty);
-                    for (int i = 0; i < size; i++) {
-                        boolean saved = buf.readBoolean();
-                        if (saved) {
-                            T t = codec.decode(buf);
-                            list.set(i, t);
-                        }
-                    }
-                    return list;
-                }
         );
     }
 

@@ -32,7 +32,7 @@
     "fabric-api": "*",
     "minecraft": "${fabric_minecraft_version_range}",
     "java": ">=${java_version}",
-    "configuration": "^3.0.0"
+    "configuration": "^3.1.0"
   },
   "custom": {
     "modmenu": {

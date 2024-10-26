@@ -1,8 +1,8 @@
 package team.tnt.collectorsalbum.client.screen;
 
+import dev.toma.configuration.client.widget.WidgetSprites;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
@@ -17,14 +17,14 @@ import java.util.function.BooleanSupplier;
 public class BookmarkWidget extends AbstractWidget {
 
     private static final WidgetSprites LEFT_SIDE = new WidgetSprites(
-            ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/bookmark_left.png"),
-            ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/bookmark_disabled_left.png"),
-            ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/bookmark_hovered_left.png")
+            new ResourceLocation(CollectorsAlbum.MOD_ID, "textures/ui/bookmark_left.png"),
+            new ResourceLocation(CollectorsAlbum.MOD_ID, "textures/ui/bookmark_disabled_left.png"),
+            new ResourceLocation(CollectorsAlbum.MOD_ID, "textures/ui/bookmark_hovered_left.png")
     );
     private static final WidgetSprites RIGHT_SIDE = new WidgetSprites(
-            ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/bookmark_right.png"),
-            ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/bookmark_disabled_right.png"),
-            ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/bookmark_hovered_right.png")
+            new ResourceLocation(CollectorsAlbum.MOD_ID, "textures/ui/bookmark_right.png"),
+            new ResourceLocation(CollectorsAlbum.MOD_ID, "textures/ui/bookmark_disabled_right.png"),
+            new ResourceLocation(CollectorsAlbum.MOD_ID, "textures/ui/bookmark_hovered_right.png")
     );
     private final boolean leftside;
     private final ItemStack icon;

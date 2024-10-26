@@ -21,10 +21,10 @@ public final class CollectorsAlbumRegistries {
 
     public static final class Keys {
 
-        public static final ResourceKey<Registry<AlbumCardType<?>>> CARD_TYPE_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "card_type"));
-        public static final ResourceKey<Registry<AlbumCategoryType<?>>> CARD_CATEGORY_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "category"));
-        public static final ResourceKey<Registry<NumberProviderType<?>>> NUMBER_PROVIDER = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "number_provider"));
-        public static final ResourceKey<Registry<ItemDropProviderType<?>>> ITEM_DROP_PROVIDER = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "item_drop_provider"));
-        public static final ResourceKey<Registry<AlbumBonusType<?>>> ALBUM_BONUS = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_bonus"));
+        public static final ResourceKey<Registry<AlbumCardType<?>>> CARD_TYPE_KEY = ResourceKey.createRegistryKey(new ResourceLocation(CollectorsAlbum.MOD_ID, "card_type"));
+        public static final ResourceKey<Registry<AlbumCategoryType<?>>> CARD_CATEGORY_KEY = ResourceKey.createRegistryKey(new ResourceLocation(CollectorsAlbum.MOD_ID, "category"));
+        public static final ResourceKey<Registry<NumberProviderType<?>>> NUMBER_PROVIDER = ResourceKey.createRegistryKey(new ResourceLocation(CollectorsAlbum.MOD_ID, "number_provider"));
+        public static final ResourceKey<Registry<ItemDropProviderType<?>>> ITEM_DROP_PROVIDER = ResourceKey.createRegistryKey(new ResourceLocation(CollectorsAlbum.MOD_ID, "item_drop_provider"));
+        public static final ResourceKey<Registry<AlbumBonusType<?>>> ALBUM_BONUS = ResourceKey.createRegistryKey(new ResourceLocation(CollectorsAlbum.MOD_ID, "album_bonus"));
     }
 }

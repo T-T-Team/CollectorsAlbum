@@ -2,7 +2,6 @@ package team.tnt.collectorsalbum.common.card;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +25,7 @@ public interface AlbumCard extends Comparable<AlbumCard>, Predicate<CardFilter> 
 
     int cardNumber();
 
-    void appendItemStackHoverTooltip(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltips, TooltipFlag flag);
+    void appendItemStackHoverTooltip(ItemStack itemStack, List<Component> tooltips, TooltipFlag flag);
 
     @Override
     default int compareTo(@NotNull AlbumCard o) {

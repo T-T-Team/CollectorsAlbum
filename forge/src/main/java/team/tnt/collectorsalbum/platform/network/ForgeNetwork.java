@@ -1,29 +1,30 @@
 package team.tnt.collectorsalbum.platform.network;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.network.ChannelBuilder;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.SimpleChannel;
+import net.minecraftforge.network.simple.SimpleChannel;
+import team.tnt.collectorsalbum.platform.Side;
 
 import java.util.List;
 
 public final class ForgeNetwork implements Network {
 
     private SimpleChannel channel;
+    private int messageId;
 
     @Override
-    public void initialize(ResourceLocation identifier, List<PacketHolder<?, ?>> c2s, List<PacketHolder<?, ?>> s2c) {
-        this.channel = ChannelBuilder.named(identifier)
-                .networkProtocolVersion(1)
+    public void initialize(ResourceLocation identifier, Side side, List<PacketHolder<?, ?>> c2s, List<PacketHolder<?, ?>> s2c) {
+        this.channel = NetworkRegistry.ChannelBuilder.named(identifier)
+                .networkProtocolVersion(() -> "1")
+                .clientAcceptedVersions(s -> s.equals("1"))
+                .serverAcceptedVersions(s -> s.equals("1"))
                 .simpleChannel();
 
         for (PacketHolder<?, ?> holder : c2s) {
@@ -35,29 +36,28 @@ public final class ForgeNetwork implements Network {
     }
 
     @Override
-    public void sendServerMessage(CustomPacketPayload payload) {
-        channel.send(payload, PacketDistributor.SERVER.noArg());
+    public void sendServerMessage(NetworkMessage payload) {
+        channel.sendToServer(payload);
     }
 
     @Override
-    public void sendClientMessage(ServerPlayer player, CustomPacketPayload payload) {
-        channel.send(payload, PacketDistributor.PLAYER.with(player));
+    public void sendClientMessage(ServerPlayer player, NetworkMessage payload) {
+        channel.send(PacketDistributor.PLAYER.with(() -> player), payload);
     }
 
-    @SuppressWarnings("unchecked")
-    private <T extends CustomPacketPayload> void registerInternal(PacketHolder<T, ?> holder) {
-        this.channel.messageBuilder(holder.payloadType())
-                .codec((StreamCodec<FriendlyByteBuf, T>) holder.codec())
-                .consumerMainThread((payload, ctx) -> {
-                    if (holder.handler() != null) {
-                        holder.handler().handle(payload, this.getPlayer(ctx));
-                    }
+    private <T extends NetworkMessage> void registerInternal(PacketHolder<T, ?> holder) {
+        this.channel.messageBuilder(holder.payloadType(), messageId++)
+                .encoder(NetworkMessage::write)
+                .decoder(holder.decoder())
+                .consumerMainThread((t, contextSupplier) -> {
+                    Player player = this.getPlayer(contextSupplier.get());
+                    t.handle(player);
                 })
                 .add();
     }
 
-    private Player getPlayer(CustomPayloadEvent.Context ctx) {
-        if (ctx.isServerSide()) {
+    private Player getPlayer(NetworkEvent.Context ctx) {
+        if (ctx.getDirection().getReceptionSide().isServer()) {
             return ctx.getSender();
         } else {
             return getLocalPlayer();

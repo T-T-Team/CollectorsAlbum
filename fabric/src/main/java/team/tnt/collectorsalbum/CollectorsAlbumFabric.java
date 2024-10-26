@@ -8,6 +8,7 @@ import team.tnt.collectorsalbum.common.CollectorsAlbumRegistries;
 import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.*;
 import team.tnt.collectorsalbum.platform.FabricPlatform;
+import team.tnt.collectorsalbum.platform.Side;
 import team.tnt.collectorsalbum.platform.registration.CustomPlatformRegistryBindCallback;
 import team.tnt.collectorsalbum.platform.registration.FabricRegistration;
 import team.tnt.collectorsalbum.platform.resource.FabricReloadListenerWrapper;
@@ -46,7 +47,7 @@ public class CollectorsAlbumFabric implements ModInitializer {
         resourceManagerHelper.registerReloadListener(FabricReloadListenerWrapper.of(CardPackDropManager.getInstance()));
         resourceManagerHelper.registerReloadListener(FabricReloadListenerWrapper.of(MobAdditionalDropManager.getInstance()));
 
-        CollectorsAlbum.NETWORK_MANAGER.bind();
+        CollectorsAlbum.NETWORK_MANAGER.bind(Side.SERVER);
     }
 
     private void registerData() {
@@ -56,7 +57,6 @@ public class CollectorsAlbumFabric implements ModInitializer {
         FabricRegistration.registerCustomRegistry(CollectorsAlbumRegistries.ITEM_DROP_PROVIDER);
         FabricRegistration.registerCustomRegistry(CollectorsAlbumRegistries.ALBUM_BONUS);
         BlockRegistry.REGISTRY.bind();
-        ItemDataComponentRegistry.REGISTRY.bind();
         ItemRegistry.REGISTRY.bind();
         ItemGroupRegistry.REGISTRY.bind();
         SoundRegistry.REGISTRY.bind();

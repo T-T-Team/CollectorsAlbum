@@ -6,7 +6,7 @@ import team.tnt.collectorsalbum.common.CollectorsAlbumRegistries;
 
 public final class AlbumBonusType<B extends AlbumBonus> {
 
-    public static final Codec<AlbumBonus> INSTANCE_CODEC = CollectorsAlbumRegistries.ALBUM_BONUS.byNameCodec().dispatch(AlbumBonus::getType, t -> t.codec);
+    public static final Codec<AlbumBonus> INSTANCE_CODEC = CollectorsAlbumRegistries.ALBUM_BONUS.byNameCodec().dispatch(AlbumBonus::getType, t -> t.codec.codec());
 
     private final MapCodec<B> codec;
 

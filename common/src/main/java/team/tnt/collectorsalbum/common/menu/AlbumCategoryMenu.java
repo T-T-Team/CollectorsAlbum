@@ -15,7 +15,6 @@ import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.AlbumCategoryUiTemplate;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.init.MenuRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
@@ -36,7 +35,7 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
         this.category = category;
 
         ItemStack itemStack = playerInventory.player.getMainHandItem();
-        Album album = itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+        Album album = Album.get(itemStack);
         if (album == null) {
             return;
         }
@@ -239,18 +238,18 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
             for (int i = 0; i < itemStacks.size(); i++) {
                 ItemStack stack = itemStacks.get(i);
                 if (!stack.isEmpty())
-                    this.getItems().set(i, stack.copy());
+                    this.items.set(i, stack.copy());
             }
         }
 
         @Override
         public void setItem(int index, ItemStack itemStack) {
-            Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+            Album album = Album.get(this.itemStack);
             if (album != null) {
                 Album.Mutable mutable = new Album.Mutable(album);
                 mutable.set(this.category, index, itemStack.copy());
                 Album updated = mutable.toImmutable();
-                this.itemStack.set(ItemDataComponentRegistry.ALBUM.get(), updated);
+                Album.set(this.itemStack, updated);
             }
             super.setItem(index, itemStack);
         }

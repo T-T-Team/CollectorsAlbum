@@ -15,11 +15,9 @@ import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.card.CardRarity;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.init.ItemRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -28,7 +26,7 @@ import java.util.Map;
 public class AlbumMainPageScreen extends Screen {
 
     public static final Component TITLE = Component.translatable("screen.collectorsalbum.album.main").withStyle(ChatFormatting.BOLD);
-    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/album.png");
+    public static final ResourceLocation BACKGROUND = new ResourceLocation(CollectorsAlbum.MOD_ID, "textures/ui/album.png");
     public static final int TEXT_COLOR = 0x7B5C4C;
     private static final Component LABEL_RARITIES = Component.translatable("collectorsalbum.text.statistics.rarities_label").withStyle(ChatFormatting.UNDERLINE);
     private static final Component LABEL_CATEGORIES = Component.translatable("collectorsalbum.text.statistics.categories_label").withStyle(ChatFormatting.UNDERLINE);
@@ -48,7 +46,7 @@ public class AlbumMainPageScreen extends Screen {
         int left = (guiWidth - albumWidth) / 2;
         int top = (guiHeight - albumHeight) / 2 + 10;
         int right = left + albumWidth;
-        Duration tooltipDelay = Duration.ofSeconds(1);
+        int tooltipDelay = 1000;
         List<BookmarkWidget> bookmarks = new ArrayList<>();
         BookmarkWidget home = new BookmarkWidget(left - 32, top, 32, 18, true, ItemRegistry.ALBUM.get().getDefaultInstance(), () -> Minecraft.getInstance().screen instanceof AlbumMainPageScreen);
         home.setTooltip(Tooltip.create(TITLE));
@@ -95,8 +93,9 @@ public class AlbumMainPageScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-        this.renderTransparentBackground(graphics);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, delta);
     }
 
     protected void addDefaultWidgets() {
@@ -111,7 +110,7 @@ public class AlbumMainPageScreen extends Screen {
         int titleWidth = font.width(TITLE);
         this.addRenderableOnly(new LabelRenderable(TITLE, left + (128 - titleWidth) / 2, top + 14, TEXT_COLOR));
 
-        Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+        Album album = Album.get(this.itemStack);
         if (album == null)
             return;
         AlbumCategoryManager categoryManager = AlbumCategoryManager.getInstance();
@@ -140,8 +139,8 @@ public class AlbumMainPageScreen extends Screen {
 
         // --- Right page
         // Points info
-        Component points = Component.literal(String.valueOf(album.getPoints())).withColor(0xFFEFAE00).withStyle(ChatFormatting.BOLD);
-        Component pointsLabel = Component.translatable(LANG_KEY_POINTS, points).withColor(TEXT_COLOR);
+        Component points = Component.literal(String.valueOf(album.getPoints())).withStyle(st -> st.withColor(0xFFEFAE00)).withStyle(ChatFormatting.BOLD);
+        Component pointsLabel = Component.translatable(LANG_KEY_POINTS, points).withStyle(st -> st.withColor(TEXT_COLOR));
         this.addRenderableOnly(new LabelRenderable(pointsLabel, left + 145, top + 14, false, 0xFFFFFF));
 
         // Category information
@@ -162,7 +161,7 @@ public class AlbumMainPageScreen extends Screen {
         if (category != null) {
             PageButton button = this.addRenderableWidget(new PageButton(left + 210, top + 156, true, btn -> AlbumNavigationHelper.navigateNextCategory(), true));
             button.setTooltip(Tooltip.create(AlbumNavigationHelper.getNextCategoryTitle()));
-            button.setTooltipDelay(Duration.ofSeconds(1));
+            button.setTooltipDelay(1000);
         }
     }
 }

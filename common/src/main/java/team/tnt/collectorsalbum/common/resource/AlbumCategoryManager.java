@@ -13,7 +13,7 @@ import java.util.*;
 
 public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<AlbumCategory> {
 
-    private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_category_manager");
+    private static final ResourceLocation IDENTIFIER = new ResourceLocation(CollectorsAlbum.MOD_ID, "album_category_manager");
     private static final AlbumCategoryManager INSTANCE = new AlbumCategoryManager();
     private final Map<ResourceLocation, AlbumCategory> registeredCategories = new HashMap<>();
     private final List<AlbumCategory> pagedCategories = new ArrayList<>();

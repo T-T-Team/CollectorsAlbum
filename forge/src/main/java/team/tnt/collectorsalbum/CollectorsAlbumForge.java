@@ -16,6 +16,7 @@ import net.minecraftforge.registries.NewRegistryEvent;
 import team.tnt.collectorsalbum.client.CollectorsAlbumClient;
 import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.*;
+import team.tnt.collectorsalbum.platform.Side;
 import team.tnt.collectorsalbum.platform.registration.ForgeRegistration;
 import team.tnt.collectorsalbum.platform.resource.MenuScreenRegistration;
 
@@ -34,7 +35,6 @@ public class CollectorsAlbumForge {
         ForgeRegistration.subscribeRegistryEvent(eventBus, SoundRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, NumberProviderRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, ItemDropProviderRegistry.REGISTRY);
-        ForgeRegistration.subscribeRegistryEvent(eventBus, ItemDataComponentRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, AlbumBonusRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, MenuRegistry.REGISTRY);
         eventBus.addListener(this::createNewRegistries);
@@ -51,7 +51,8 @@ public class CollectorsAlbumForge {
     }
 
     private void setup(FMLCommonSetupEvent event) {
-        CollectorsAlbum.NETWORK_MANAGER.bind();
+        CollectorsAlbum.NETWORK_MANAGER.bind(null);
+        CollectorsAlbum.NETWORK_MANAGER.close();
     }
 
     private void clientSetup(FMLClientSetupEvent event) {

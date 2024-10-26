@@ -1,35 +1,32 @@
 package team.tnt.collectorsalbum.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.item.CardPackItem;
 import team.tnt.collectorsalbum.platform.PlatformPlayerHelper;
-import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
+import team.tnt.collectorsalbum.platform.network.NetworkMessage;
 
-public record C2S_CompleteOpeningCardPack() implements CustomPacketPayload {
+public record C2S_CompleteOpeningCardPack() implements NetworkMessage {
 
-    public static final ResourceLocation IDENTIFIER = PlatformNetworkManager.generatePacketIdentifier(CollectorsAlbum.MOD_ID, C2S_CompleteOpeningCardPack.class);
-    public static final Type<C2S_CompleteOpeningCardPack> TYPE = new Type<>(IDENTIFIER);
-    public static final StreamCodec<FriendlyByteBuf, C2S_CompleteOpeningCardPack> CODEC = StreamCodec.of(
-            (buffer, payload) -> {},
-            buffer -> new C2S_CompleteOpeningCardPack()
-    );
+    public static final ResourceLocation IDENTIFIER = new ResourceLocation(CollectorsAlbum.MOD_ID, "msg_complete_card_pack_opening");
 
     @Override
-    public Type<? extends CustomPacketPayload> type() {
-        return TYPE;
+    public ResourceLocation getPacketId() {
+        return IDENTIFIER;
     }
 
-    public void onPacketReceived(Player player) {
+    @Override
+    public void write(FriendlyByteBuf buf) {
+    }
+
+    @Override
+    public void handle(Player player) {
         ItemStack itemStack = player.getItemInHand(InteractionHand.MAIN_HAND);
-        CardPackItem.PackContents contents = itemStack.get(ItemDataComponentRegistry.PACK_CONTENTS.get());
+        CardPackItem.PackContents contents = CardPackItem.PackContents.get(itemStack);
         CollectorsAlbum.LOGGER.debug("{} has requested pack content drops. Received content list from item {}: {}", player, itemStack, contents);
         if (contents != null && !contents.isEmpty()) {
             for (ItemStack item : contents.contents()) {
@@ -40,5 +37,9 @@ public record C2S_CompleteOpeningCardPack() implements CustomPacketPayload {
         } else {
             CollectorsAlbum.LOGGER.warn("Could not find generated card pack items on item {}", itemStack);
         }
+    }
+
+    public static C2S_CompleteOpeningCardPack read(FriendlyByteBuf buf) {
+        return new C2S_CompleteOpeningCardPack();
     }
 }

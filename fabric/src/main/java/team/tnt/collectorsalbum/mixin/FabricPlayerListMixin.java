@@ -2,7 +2,6 @@ package team.tnt.collectorsalbum.mixin;
 
 import net.minecraft.network.Connection;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.players.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +16,7 @@ public abstract class FabricPlayerListMixin {
             method = "placeNewPlayer",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/server/players/PlayerList;sendPlayerPermissionLevel(Lnet/minecraft/server/level/ServerPlayer;)V", shift = At.Shift.BY, by = -2)
     )
-    private void collectorsAlbum$placeNewPlayer(Connection connection, ServerPlayer player, CommonListenerCookie cookie, CallbackInfo ci) {
+    private void collectorsAlbum$placeNewPlayer(Connection connection, ServerPlayer player, CallbackInfo ci) {
         CollectorsAlbum.sendPlayerDatapacks(player);
     }
 

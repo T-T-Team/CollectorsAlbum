@@ -3,3 +3,4 @@ accessible method net/minecraft/world/inventory/MenuType <init> (Lnet/minecraft/
 accessible class net/minecraft/world/inventory/MenuType$MenuSupplier
 accessible method net/minecraft/client/gui/screens/MenuScreens register (Lnet/minecraft/world/inventory/MenuType;Lnet/minecraft/client/gui/screens/MenuScreens$ScreenConstructor;)V
 accessible class net/minecraft/client/gui/screens/MenuScreens$ScreenConstructor
+accessible field net/minecraft/world/SimpleContainer items Lnet/minecraft/core/NonNullList;

@@ -6,6 +6,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ExtraCodecs;
@@ -27,7 +28,7 @@ public class AlbumMobEffectBonus implements AlbumBonus {
     public static final MapCodec<AlbumMobEffectBonus> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("rewriteExisting", false).forGetter(t -> t.rewriteExisting),
             Codec.BOOL.optionalFieldOf("forceRemove", false).forGetter(t -> t.forceRemove),
-            MobEffect.CODEC.fieldOf("effect").forGetter(t -> t.effect),
+            BuiltInRegistries.MOB_EFFECT.holderByNameCodec().fieldOf("effect").forGetter(t -> t.effect),
             Codec.either(ExtraCodecs.POSITIVE_INT, NumberProviderType.INSTANCE_CODEC).optionalFieldOf("duration", Either.left(120)).forGetter(t -> Either.right(t.duration)),
             Codec.either(ExtraCodecs.intRange(0, 255), NumberProviderType.INSTANCE_CODEC).optionalFieldOf("amplifier", Either.right(ConstantNumberProvider.ZERO)).forGetter(t -> Either.right(t.amplifier)),
             Codec.BOOL.optionalFieldOf("ambient", true).forGetter(t -> t.ambient),
@@ -63,7 +64,7 @@ public class AlbumMobEffectBonus implements AlbumBonus {
         Player player = context.getOrThrow(ActionContext.PLAYER, Player.class);
         Component amplifier = amplifierValue >= 1 && amplifierValue <= 9 ? Component.literal(" ").append(Component.translatable("enchantment.level." + (amplifierValue + 1))) : CommonComponents.EMPTY;
         Component title = Component.translatable("collectorsalbum.label.bonus.mob_effect.effect", mobEffect.getDisplayName(), amplifier).withStyle(ChatFormatting.BLUE);
-        Component tooltip = Component.translatable("collectorsalbum.label.bonus.mob_effect.duration", MobEffectUtil.formatDuration(this.createEffectInstance(), 1.0F, player.level().tickRateManager().tickrate()));
+        Component tooltip = Component.translatable("collectorsalbum.label.bonus.mob_effect.duration", MobEffectUtil.formatDuration(this.createEffectInstance(), 1.0F));
         description.text(title, tooltip);
     }
 
@@ -72,7 +73,7 @@ public class AlbumMobEffectBonus implements AlbumBonus {
         Player player = context.getOrThrow(ActionContext.PLAYER, Player.class);
         MobEffectInstance instance = this.createEffectInstance();
         if (!player.addEffect(instance) && rewriteExisting) {
-            player.removeEffect(effect);
+            player.removeEffect(effect.value());
             player.addEffect(instance);
         }
     }
@@ -81,7 +82,7 @@ public class AlbumMobEffectBonus implements AlbumBonus {
     public void removed(ActionContext context) {
         if (forceRemove) {
             Player player = context.getOrThrow(ActionContext.PLAYER, Player.class);
-            player.removeEffect(this.effect);
+            player.removeEffect(this.effect.value());
         }
     }
 
@@ -91,6 +92,6 @@ public class AlbumMobEffectBonus implements AlbumBonus {
     }
 
     private MobEffectInstance createEffectInstance() {
-        return new MobEffectInstance(effect, duration.intValue(), amplifier.intValue(), ambient, visible, showIcon);
+        return new MobEffectInstance(effect.value(), duration.intValue(), amplifier.intValue(), ambient, visible, showIcon);
     }
 }

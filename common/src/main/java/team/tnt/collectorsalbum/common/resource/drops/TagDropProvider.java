@@ -43,7 +43,7 @@ public class TagDropProvider implements ItemDropProvider {
         RandomSource random = context.getOrThrow(ActionContext.RANDOM, RandomSource.class);
         Item item = TagHelper.getRandomTagValue(this.tagKey, BuiltInRegistries.ITEM, random);
         if (item != null) {
-            int sizeUpperBound = item.getDefaultMaxStackSize();
+            int sizeUpperBound = item.getMaxStackSize();
             int itemSize = Mth.clamp(this.size.intValue(), 1, sizeUpperBound);
             output.accept(new ItemStack(item, itemSize));
         } else {

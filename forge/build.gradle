@@ -32,7 +32,7 @@ minecraft.reobf = false
 minecraft {
     mappings channel: 'official', version: minecraft_version
 
-    def accessTransformerFile = project(":forge").file("src/main/resources/META-INF/accesstransformer.cfg")
+    def accessTransformerFile = project(":common").file("src/main/resources/META-INF/accesstransformer.cfg")
     if (accessTransformerFile.exists()) {
         accessTransformer = accessTransformerFile
     }
@@ -70,14 +70,23 @@ minecraft {
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
+repositories {
+    maven {
+        name = "Illusive Soulworks maven"
+        url = "https://maven.theillusivec4.top/"
+    }
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${forge_version}"
-
     // Configuration
     implementation("dev.toma.configuration:configuration-${minecraft_version}:${configuration_version}-forge")
 
-    // Note: Hack fix for now, force jopt-simple to be exactly 5.0.4 because Mojang ships that version, but some transitive dependencies request 6.0+
-    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+    // Curios compatibility
+    compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api"))
+    runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
+
+    // Mixins
     annotationProcessor("org.spongepowered:mixin:${mixin_version}:processor")
 
     compileOnly project(":common")

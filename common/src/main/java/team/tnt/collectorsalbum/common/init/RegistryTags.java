@@ -10,7 +10,7 @@ public final class RegistryTags {
 
     public static final class Items {
 
-        public static final TagKey<Item> ALBUM = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album"));
+        public static final TagKey<Item> ALBUM = TagKey.create(Registries.ITEM, new ResourceLocation(CollectorsAlbum.MOD_ID, "album"));
 
         private Items() {}
     }

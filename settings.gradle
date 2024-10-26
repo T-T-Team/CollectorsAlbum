@@ -8,11 +8,6 @@ pluginManagement {
         }
 
         maven {
-            name = "Neoforged"
-            url  = "https://maven.neoforged.net/releases"
-        }
-
-        maven {
             name = "Fabric"
             url  = "https://maven.fabricmc.net/"
         }
@@ -30,6 +25,5 @@ plugins {
 
 rootProject.name = "${root_project}"
 include("common")
-include("neoforge")
 include("forge")
 include("fabric")

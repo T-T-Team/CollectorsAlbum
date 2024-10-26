@@ -1,15 +1,16 @@
 package team.tnt.collectorsalbum.common;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.UUIDUtil;
-import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
 import team.tnt.collectorsalbum.common.card.CardRarity;
 import team.tnt.collectorsalbum.common.card.RarityHolder;
@@ -28,11 +29,16 @@ public final class Album implements Predicate<Album> {
     public static final Codec<ItemStack> NULLABLE_ITEMSTACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             BuiltInRegistries.ITEM.holderByNameCodec().fieldOf("id").forGetter(ItemStack::getItemHolder),
             Codec.INT.optionalFieldOf("count", 1).forGetter(ItemStack::getCount),
-            DataComponentPatch.CODEC.optionalFieldOf("components", DataComponentPatch.EMPTY).forGetter(ItemStack::getComponentsPatch)
-    ).apply(instance, ItemStack::new));
+            CompoundTag.CODEC.optionalFieldOf("tag").forGetter(itemStack -> Optional.ofNullable(itemStack.getTag()))
+    ).apply(instance, (holder, count, optTag) -> {
+        ItemStack itemStack = new ItemStack(holder, count);
+        optTag.ifPresent(itemStack::setTag);
+        return itemStack;
+    }));
+    public static final String NBT_ALBUM_PATH = "collectorsalbum:album";
 
     public static final Codec<Album> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            UUIDUtil.CODEC.fieldOf("albumId").forGetter(t -> t.albumId),
+            Codecs.UUID_CODEC.fieldOf("albumId").forGetter(t -> t.albumId),
             Codec.unboundedMap(
                     ResourceLocation.CODEC,
                     Codecs.setCodec(AlbumCardManager.BY_NAME_CODEC)
@@ -85,6 +91,29 @@ public final class Album implements Predicate<Album> {
 
     public static Album emptyAlbum() {
         return new Album(UUID.randomUUID());
+    }
+
+    public static Album get(ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        if (tag == null || !tag.contains(NBT_ALBUM_PATH, Tag.TAG_COMPOUND)) {
+            return emptyAlbum();
+        }
+        CompoundTag albumTag = tag.getCompound(NBT_ALBUM_PATH);
+        DataResult<Album> result = CODEC.parse(NbtOps.INSTANCE, albumTag);
+        return result.result().orElseGet(Album::emptyAlbum);
+    }
+
+    public static void set(ItemStack stack, Album album) {
+        if (album == null && stack.getTag() != null && stack.getTag().contains(NBT_ALBUM_PATH, Tag.TAG_COMPOUND)) {
+            stack.getTag().remove(NBT_ALBUM_PATH);
+            return;
+        }
+        CompoundTag tag = stack.getOrCreateTag();
+        DataResult<Tag> dataResult = CODEC.encodeStart(NbtOps.INSTANCE, album);
+        Tag result = dataResult.result().orElse(null);
+        if (result instanceof CompoundTag compoundTag) {
+            tag.put(NBT_ALBUM_PATH, compoundTag);
+        }
     }
 
     @Override

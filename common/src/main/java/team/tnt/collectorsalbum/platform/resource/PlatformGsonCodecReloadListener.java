@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.apache.logging.log4j.message.FormattedMessage;
+import team.tnt.collectorsalbum.CollectorsAlbum;
 
 import java.util.List;
 import java.util.Map;
@@ -70,6 +71,6 @@ public abstract class PlatformGsonCodecReloadListener<T> extends PlatformGsonRel
     }
 
     protected T readData(ResourceLocation path, DataResult<T> dataResult) {
-        return dataResult.getOrThrow();
+        return dataResult.getOrThrow(false, CollectorsAlbum.LOGGER::error);
     }
 }

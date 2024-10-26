@@ -17,11 +17,11 @@ import java.util.function.Supplier;
 public record CardUiTemplate(Integer[] effectColors, Integer[] effectDurations, Supplier<SoundEvent> flipSoundRef) {
 
     public static final CardUiTemplate TEMPLATE = new CardUiTemplate(new Integer[] { 0x00FF00 }, new Integer[] { 5 }, SoundRegistry.FLIP_COMMON);
-    public static final Codec<CardUiTemplate> CODEC = RecordCodecBuilder.<CardUiTemplate>create(instance -> instance.group(
+    public static final Codec<CardUiTemplate> CODEC = Codecs.validate(RecordCodecBuilder.create(instance -> instance.group(
             Codecs.array(Codec.INT, Integer[]::new).optionalFieldOf("effectColors", TEMPLATE.effectColors()).forGetter(t -> t.effectColors),
             Codecs.array(Codec.INT, Integer[]::new).optionalFieldOf("effectDurations", TEMPLATE.effectDurations()).forGetter(t -> t.effectDurations),
             Codecs.supplier(BuiltInRegistries.SOUND_EVENT.byNameCodec()).optionalFieldOf("flipSound", TEMPLATE.flipSoundRef()).forGetter(t -> t.flipSoundRef)
-    ).apply(instance, CardUiTemplate::new)).validate(template -> template.effectColors().length == template.effectDurations().length
+    ).apply(instance, CardUiTemplate::new)), template -> template.effectColors().length == template.effectDurations().length
             ? DataResult.success(template)
             : DataResult.error(() -> "Effect duration count has to be the same as effect colors")
     );

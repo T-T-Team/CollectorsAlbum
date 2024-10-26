@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -17,6 +16,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import team.tnt.collectorsalbum.client.screen.AlbumNavigationHelper;
+import team.tnt.collectorsalbum.platform.network.NetworkCodec;
 
 public class FabricPlatform implements Platform {
 
@@ -38,11 +38,11 @@ public class FabricPlatform implements Platform {
     }
 
     @Override
-    public <T> void openMenu(ServerPlayer player, StreamCodec<? super FriendlyByteBuf, T> codec, PlatformMenuProvider<T> provider) {
-        player.openMenu(new ExtendedScreenHandlerFactory<>() {
+    public <T> void openMenu(ServerPlayer player, NetworkCodec<T> codec, PlatformMenuProvider<T> provider) {
+        player.openMenu(new ExtendedScreenHandlerFactory() {
             @Override
-            public Object getScreenOpeningData(ServerPlayer player) {
-                return provider.getMenuData(player);
+            public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
+                codec.encode(buf, provider.getMenuData(player));
             }
 
             @Override
@@ -59,8 +59,8 @@ public class FabricPlatform implements Platform {
     }
 
     @Override
-    public <M extends AbstractContainerMenu, D> MenuType<M> createMenu(MenuFactory<M, D> factory, StreamCodec<? super FriendlyByteBuf, D> dataCodec) {
-        return new ExtendedScreenHandlerType<>(factory::createMenu, dataCodec);
+    public <M extends AbstractContainerMenu, D> MenuType<M> createMenu(MenuFactory<M, D> factory, NetworkCodec<D> codec) {
+        return new ExtendedScreenHandlerType<>((syncId, inventory, buf) -> factory.createMenu(syncId, inventory, codec.decode(buf)));
     }
 
     @Override

@@ -40,11 +40,11 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
 
         PageButton prevPage = addRenderableWidget(new PageButton(leftPos + 22, topPos + 156, false, btn -> AlbumNavigationHelper.navigatePreviousCategory(), true));
         prevPage.setTooltip(Tooltip.create(AlbumNavigationHelper.getPreviousCategoryTitle()));
-        prevPage.setTooltipDelay(Duration.ofSeconds(1));
+        prevPage.setTooltipDelay(1000);
         if (AlbumNavigationHelper.hasNextCategory()) {
             PageButton nextPage = addRenderableWidget(new PageButton(leftPos + 210, topPos + 156, true, btn -> AlbumNavigationHelper.navigateNextCategory(), true));
             nextPage.setTooltip(Tooltip.create(AlbumNavigationHelper.getNextCategoryTitle()));
-            nextPage.setTooltipDelay(Duration.ofSeconds(1));
+            nextPage.setTooltipDelay(1000);
         }
         AlbumCategoryUiTemplate template = category.visualTemplate();
         AlbumMainPageScreen.getBookmarks(width, height, imageWidth, imageHeight, template.bookImageHeight).forEach(this::addRenderableWidget);

@@ -37,6 +37,9 @@ subprojects {
             name = "Configuration"
             url = "https://repsy.io/mvn/toma/public/"
         }
+        flatDir {
+            dir './libs'
+        }
     }
 
     processResources {
@@ -60,12 +63,6 @@ subprojects {
                 "mixin_loader": "${mixin_loader}",
                 "mixin_version": "${mixin_version}",
                 "mixin_min_version": "${mixin_min_version}",
-
-                // Neoforge
-                "neoforge_version": "${neoforge_version}",
-                "neoforge_loader_range": "${neoforge_loader_range}",
-                "neoforge_version_range": "${neoforge_version_range}",
-                "neogradle_userdev": "${neogradle_userdev}",
 
                 // Forge
                 "forge_version": "${forge_version}",

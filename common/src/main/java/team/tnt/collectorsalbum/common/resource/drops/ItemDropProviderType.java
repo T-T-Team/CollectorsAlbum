@@ -6,7 +6,7 @@ import team.tnt.collectorsalbum.common.CollectorsAlbumRegistries;
 
 public final class ItemDropProviderType<I extends ItemDropProvider> {
 
-    public static final Codec<ItemDropProvider> INSTANCE_CODEC = CollectorsAlbumRegistries.ITEM_DROP_PROVIDER.byNameCodec().dispatch(ItemDropProvider::getType, ItemDropProviderType::codec);
+    public static final Codec<ItemDropProvider> INSTANCE_CODEC = CollectorsAlbumRegistries.ITEM_DROP_PROVIDER.byNameCodec().dispatch(ItemDropProvider::getType, itemDropProviderType -> itemDropProviderType.codec().codec());
     private final MapCodec<I> mapCodec;
 
     public ItemDropProviderType(MapCodec<I> mapCodec) {

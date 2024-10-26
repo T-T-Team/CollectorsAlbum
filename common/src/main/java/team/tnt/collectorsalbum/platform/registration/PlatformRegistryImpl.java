@@ -23,7 +23,7 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
 
     @Override
     public <R extends T> Reference<R> register(String elementId, Supplier<R> ref) {
-        ResourceLocation key = ResourceLocation.fromNamespaceAndPath(this.namespace, elementId);
+        ResourceLocation key = new ResourceLocation(this.namespace, elementId);
         RegistryElement<T, R> value = new RegistryElement<>(ref);
         if (this.registeredRefs.put(key, value) != null) {
             throw new IllegalArgumentException("Duplicate key: " + key);
@@ -33,7 +33,7 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
 
     @Override
     public <R extends T> Reference<R> register(String elementId, Function<ResourceLocation, R> ref) {
-        ResourceLocation key = ResourceLocation.fromNamespaceAndPath(this.namespace, elementId);
+        ResourceLocation key = new ResourceLocation(this.namespace, elementId);
         Supplier<R> supplier = () -> ref.apply(key);
         RegistryElement<T, R> value = new RegistryElement<>(supplier);
         if (this.registeredRefs.put(key, value) != null) {

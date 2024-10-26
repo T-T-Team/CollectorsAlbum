@@ -1,7 +1,5 @@
 package team.tnt.collectorsalbum.platform;
 
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
@@ -13,8 +11,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import team.tnt.collectorsalbum.client.screen.AlbumNavigationHelper;
+import team.tnt.collectorsalbum.platform.network.NetworkCodec;
 
 public class ForgePlatform implements Platform {
 
@@ -34,8 +34,8 @@ public class ForgePlatform implements Platform {
     }
 
     @Override
-    public <T> void openMenu(ServerPlayer player, StreamCodec<? super FriendlyByteBuf, T> codec, PlatformMenuProvider<T> provider) {
-        player.openMenu(new SimpleMenuProvider(
+    public <T> void openMenu(ServerPlayer player, NetworkCodec<T> codec, PlatformMenuProvider<T> provider) {
+        NetworkHooks.openScreen(player, new SimpleMenuProvider(
                 provider::createMenu,
                 provider.getTitle()
         ), buf -> {
@@ -45,9 +45,9 @@ public class ForgePlatform implements Platform {
     }
 
     @Override
-    public <M extends AbstractContainerMenu, D> MenuType<M> createMenu(MenuFactory<M, D> factory, StreamCodec<? super FriendlyByteBuf, D> dataCodec) {
+    public <M extends AbstractContainerMenu, D> MenuType<M> createMenu(MenuFactory<M, D> factory, NetworkCodec<D> codec) {
         return IForgeMenuType.create((id, inv, buf) -> {
-            D data = dataCodec.decode(buf);
+            D data = codec.decode(buf);
             return factory.createMenu(id, inv, data);
         });
     }

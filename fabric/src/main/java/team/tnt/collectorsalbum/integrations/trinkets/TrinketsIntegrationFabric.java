@@ -7,7 +7,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumLocatorResult;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.init.RegistryTags;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class TrinketsIntegrationFabric {
             List<Tuple<SlotReference, ItemStack>> equipped = component.getEquipped(stack -> stack.is(RegistryTags.Items.ALBUM));
             for (Tuple<SlotReference, ItemStack> tuple : equipped) {
                 ItemStack itemStack = tuple.getB();
-                Album foundAlbum = itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+                Album foundAlbum = Album.get(itemStack);
                 if (album != null && album.test(foundAlbum)) {
                     return AlbumLocatorResult.found(itemStack, album, -1);
                 }

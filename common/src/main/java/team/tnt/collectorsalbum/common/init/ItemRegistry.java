@@ -13,7 +13,7 @@ public final class ItemRegistry {
 
     public static final PlatformRegistry<Item> REGISTRY = PlatformRegistry.create(BuiltInRegistries.ITEM, CollectorsAlbum.MOD_ID);
 
-    public static final PlatformRegistry.Reference<AlbumItem> ALBUM = REGISTRY.register("album", () -> new AlbumItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).component(ItemDataComponentRegistry.ALBUM.get(), Album.emptyAlbum())));
+    public static final PlatformRegistry.Reference<AlbumItem> ALBUM = REGISTRY.register("album", () -> new AlbumItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
     public static final PlatformRegistry.Reference<CardPackItem> COMMON_CARD_PACK = REGISTRY.register("common_card_pack", key -> new CardPackItem(new Item.Properties(), key));
     public static final PlatformRegistry.Reference<CardPackItem> UNCOMMON_CARD_PACK = REGISTRY.register("uncommon_card_pack", key -> new CardPackItem(new Item.Properties(), key));
     public static final PlatformRegistry.Reference<CardPackItem> RARE_CARD_PACK = REGISTRY.register("rare_card_pack", key -> new CardPackItem(new Item.Properties(), key));

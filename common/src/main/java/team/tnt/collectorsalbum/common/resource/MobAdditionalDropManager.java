@@ -20,7 +20,7 @@ import java.util.Map;
 public class MobAdditionalDropManager extends PlatformGsonCodecReloadListener<ItemDropProvider> implements Iterable<ItemDropProvider>, ItemDropResourceManager {
 
     private static final MobAdditionalDropManager INSTANCE = new MobAdditionalDropManager();
-    private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "mob_additional_drops");
+    private static final ResourceLocation IDENTIFIER = new ResourceLocation(CollectorsAlbum.MOD_ID, "mob_additional_drops");
     private final Map<ResourceLocation, ItemDropProvider> drops = new LinkedHashMap<>();
 
     private MobAdditionalDropManager() {

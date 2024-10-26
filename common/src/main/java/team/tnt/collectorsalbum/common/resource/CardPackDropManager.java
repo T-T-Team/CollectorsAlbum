@@ -17,7 +17,7 @@ import java.util.Map;
 public class CardPackDropManager extends PlatformGsonCodecReloadListener<ItemDropProvider> implements ItemDropResourceManager {
 
     private static final CardPackDropManager INSTANCE = new CardPackDropManager();
-    private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "card_pack_drops");
+    private static final ResourceLocation IDENTIFIER = new ResourceLocation(CollectorsAlbum.MOD_ID, "card_pack_drops");
     private final Map<ResourceLocation, ItemDropProvider> providerMap = new HashMap<>();
 
     private CardPackDropManager() {

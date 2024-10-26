@@ -6,12 +6,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.init.CardTypeRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
+import team.tnt.collectorsalbum.platform.Codecs;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class SimpleCard implements AlbumCard {
 
     public static final MapCodec<SimpleCard> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("id").forGetter(SimpleCard::identifier),
-            ItemStack.SIMPLE_ITEM_CODEC.fieldOf("item").forGetter(SimpleCard::asItem),
+            Codecs.SIMPLE_ITEM_CODEC.fieldOf("item").forGetter(SimpleCard::asItem),
             ResourceLocation.CODEC.fieldOf("category").forGetter(SimpleCard::category),
             CardUiTemplate.CODEC.optionalFieldOf("template", CardUiTemplate.TEMPLATE).forGetter(SimpleCard::template),
             Codec.INT.optionalFieldOf("points", 0).forGetter(SimpleCard::getPoints),
@@ -82,7 +82,7 @@ public class SimpleCard implements AlbumCard {
     }
 
     @Override
-    public void appendItemStackHoverTooltip(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltips, TooltipFlag flag) {
+    public void appendItemStackHoverTooltip(ItemStack itemStack, List<Component> tooltips, TooltipFlag flag) {
         tooltips.add(CardUiTemplate.DEFAULT_CARD_INFO_HEADER);
         tooltips.add(CardUiTemplate.getCardNumberTooltip(this.number));
         tooltips.add(CardUiTemplate.getCardCategoryTooltip(this));

@@ -19,7 +19,7 @@ import java.util.Map;
 
 public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<AlbumBonus> {
 
-    private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_bonus_manager");
+    private static final ResourceLocation IDENTIFIER = new ResourceLocation(CollectorsAlbum.MOD_ID, "album_bonus_manager");
     private static final AlbumBonusManager INSTANCE = new AlbumBonusManager();
     private final Map<ResourceLocation, AlbumBonus> registeredBonuses = new HashMap<>();
     private final List<AlbumBonus> bonusList = new ArrayList<>();

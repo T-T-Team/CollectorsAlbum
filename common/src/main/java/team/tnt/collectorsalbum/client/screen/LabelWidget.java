@@ -34,9 +34,9 @@ public class LabelWidget extends AbstractWidget {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        guiGraphics.enableScissor(this.getX(), this.getY(), this.getRight(), this.getBottom());
+        guiGraphics.enableScissor(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight());
         if (scrolling) {
-            renderScrollingStringInternal(guiGraphics, font, this.getMessage(), this.getX(), this.getX(), this.getY(), this.getRight(), this.getBottom(), textColor);
+            renderScrollingStringInternal(guiGraphics, font, this.getMessage(), this.getX(), this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), textColor);
         } else {
             guiGraphics.drawString(font, this.getMessage(), this.getX(), this.getY(), textColor, false);
         }

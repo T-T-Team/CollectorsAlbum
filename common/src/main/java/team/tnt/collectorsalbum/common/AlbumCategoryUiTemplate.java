@@ -12,8 +12,8 @@ import team.tnt.collectorsalbum.platform.Codecs;
 
 public final class AlbumCategoryUiTemplate {
 
-    public static final ResourceLocation DEFAULT_BACKGROUND = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/album_category.png");
-    public static final ResourceLocation DEFAULT_SLOT = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/album_slot.png");
+    public static final ResourceLocation DEFAULT_BACKGROUND = new ResourceLocation(CollectorsAlbum.MOD_ID, "textures/ui/album_category.png");
+    public static final ResourceLocation DEFAULT_SLOT = new ResourceLocation(CollectorsAlbum.MOD_ID, "textures/ui/album_slot.png");
     public static final Codec<AlbumCategoryUiTemplate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             TextureTemplate.CODEC.optionalFieldOf("backgroundTexture", TextureTemplate.ALBUM_BG).forGetter(t -> t.backgroundTexture),
             TextureTemplate.CODEC.optionalFieldOf("slotTexture", TextureTemplate.SLOT_BG).forGetter(t -> t.slotTexture),

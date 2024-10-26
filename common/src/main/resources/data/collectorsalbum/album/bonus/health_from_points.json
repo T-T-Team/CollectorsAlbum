@@ -14,13 +14,13 @@
           "type": "collectorsalbum:attribute",
           "attribute": "minecraft:generic.max_health",
           "modifier": {
-            "id": "collectorsalbum:health_from_points",
+            "id": "BE7F17F0-F268-4994-81C6-6973F5F0E4E8",
             "amount": {
               "type": "collectorsalbum:config",
               "config": "collectorsalbum",
               "path": "bonusConfig.healthBonusLevelSteps.5"
             },
-            "operation": "add_value"
+            "operation": "ADDITION"
           }
         }
       },
@@ -33,13 +33,13 @@
           "type": "collectorsalbum:attribute",
           "attribute": "minecraft:generic.max_health",
           "modifier": {
-            "id": "collectorsalbum:health_from_points",
+            "id": "BE7F17F0-F268-4994-81C6-6973F5F0E4E8",
             "amount": {
               "type": "collectorsalbum:config",
               "config": "collectorsalbum",
               "path": "bonusConfig.healthBonusLevelSteps.4"
             },
-            "operation": "add_value"
+            "operation": "ADDITION"
           }
         }
       },
@@ -52,13 +52,13 @@
           "type": "collectorsalbum:attribute",
           "attribute": "minecraft:generic.max_health",
           "modifier": {
-            "id": "collectorsalbum:health_from_points",
+            "id": "BE7F17F0-F268-4994-81C6-6973F5F0E4E8",
             "amount": {
               "type": "collectorsalbum:config",
               "config": "collectorsalbum",
               "path": "bonusConfig.healthBonusLevelSteps.3"
             },
-            "operation": "add_value"
+            "operation": "ADDITION"
           }
         }
       },
@@ -71,13 +71,13 @@
           "type": "collectorsalbum:attribute",
           "attribute": "minecraft:generic.max_health",
           "modifier": {
-            "id": "collectorsalbum:health_from_points",
+            "id": "BE7F17F0-F268-4994-81C6-6973F5F0E4E8",
             "amount": {
               "type": "collectorsalbum:config",
               "config": "collectorsalbum",
               "path": "bonusConfig.healthBonusLevelSteps.2"
             },
-            "operation": "add_value"
+            "operation": "ADDITION"
           }
         }
       },
@@ -90,13 +90,13 @@
           "type": "collectorsalbum:attribute",
           "attribute": "minecraft:generic.max_health",
           "modifier": {
-            "id": "collectorsalbum:health_from_points",
+            "id": "BE7F17F0-F268-4994-81C6-6973F5F0E4E8",
             "amount": {
               "type": "collectorsalbum:config",
               "config": "collectorsalbum",
               "path": "bonusConfig.healthBonusLevelSteps.1"
             },
-            "operation": "add_value"
+            "operation": "ADDITION"
           }
         }
       },
@@ -109,13 +109,13 @@
           "type": "collectorsalbum:attribute",
           "attribute": "minecraft:generic.max_health",
           "modifier": {
-            "id": "collectorsalbum:health_from_points",
+            "id": "BE7F17F0-F268-4994-81C6-6973F5F0E4E8",
             "amount": {
               "type": "collectorsalbum:config",
               "config": "collectorsalbum",
               "path": "bonusConfig.healthBonusLevelSteps.0"
             },
-            "operation": "add_value"
+            "operation": "ADDITION"
           }
         }
       }

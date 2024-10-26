@@ -10,12 +10,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonus;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 
-import java.time.Duration;
 import java.util.List;
 
 public class AlbumBonusesScreen extends Screen {
@@ -45,8 +43,9 @@ public class AlbumBonusesScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-        this.renderTransparentBackground(graphics);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float renderTick) {
+        renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, renderTick);
     }
 
     @Override
@@ -57,7 +56,7 @@ public class AlbumBonusesScreen extends Screen {
         AlbumMainPageScreen.getBookmarks(width, height, 256, 256, 180).forEach(this::addRenderableWidget);
         this.addRenderableOnly(new TextureRenderable(AlbumMainPageScreen.BACKGROUND, left, top, 256, 256));
 
-        Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+        Album album = Album.get(this.itemStack);
         if (album == null) {
             Component error = Component.literal("Failed to load album!").withStyle(ChatFormatting.RED);
             this.addRenderableOnly(new LabelRenderable(error, left + (256 - font.width(error)) / 2, top + (180 - font.lineHeight) / 2));
@@ -77,18 +76,18 @@ public class AlbumBonusesScreen extends Screen {
             // previous page btn
             PageButton prevPage = addRenderableWidget(new PageButton(left + 22, top + 156, false, btn -> addPage(-1), true));
             prevPage.setTooltip(Tooltip.create(AlbumNavigationHelper.getPreviousCategoryTitle()));
-            prevPage.setTooltipDelay(Duration.ofSeconds(1));
+            prevPage.setTooltipDelay(1000);
         }
         if (manager.hasNextPage(currentBonusIndex)) {
             // next page btn
             PageButton nextPage = addRenderableWidget(new PageButton(left + 210, top + 156, true, btn -> addPage(1), true));
             nextPage.setTooltip(Tooltip.create(AlbumNavigationHelper.getNextCategoryTitle()));
-            nextPage.setTooltipDelay(Duration.ofSeconds(1));
+            nextPage.setTooltipDelay(1000);
         }
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
         int scale = (int)(-scrollY);
         int next = this.scrollingOffset + scale;
         if (next >= 0 && next + LINE_COUNT <= this.pageSize) {
@@ -110,7 +109,7 @@ public class AlbumBonusesScreen extends Screen {
             LabelWidget widget = this.addRenderableWidget(new LabelWidget(x + offset, y + index * 10, 100 - offset, 10, label, font, AlbumMainPageScreen.TEXT_COLOR, true));
             if (component.hasTooltip()) {
                 widget.setTooltip(Tooltip.create(component.tooltip()));
-                widget.setTooltipDelay(Duration.ofMillis(400));
+                widget.setTooltipDelay(400);
             }
         }
     }

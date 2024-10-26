@@ -3,7 +3,6 @@ package team.tnt.collectorsalbum.common;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.init.RegistryTags;
 import team.tnt.collectorsalbum.integrations.PlatformIntegrations;
 
@@ -29,7 +28,7 @@ public final class PlayerAlbumTracker {
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack itemStack = inventory.getItem(i);
             if (!itemStack.isEmpty() && itemStack.is(RegistryTags.Items.ALBUM)) {
-                Album album = itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+                Album album = Album.get(itemStack);
                 if (previousAlbum != null && previousAlbum.test(album)) {
                     return AlbumLocatorResult.found(itemStack, previousAlbum, i);
                 }
@@ -55,8 +54,10 @@ public final class PlayerAlbumTracker {
         this.playerAlbums.put(playerUuid, Objects.requireNonNull(album));
     }
 
-    public void deleteCachedAlbum(UUID playerUuid) {
-        this.playerAlbums.remove(playerUuid);
+    public void deleteCachedAlbum(UUID playerUuid, Player player) {
+        Album album = this.playerAlbums.remove(playerUuid);
+        if (album != null && player != null)
+            album.removed(player);
     }
 
     public void clearCache() {

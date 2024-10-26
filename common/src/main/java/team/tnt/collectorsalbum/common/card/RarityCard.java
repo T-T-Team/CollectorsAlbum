@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import team.tnt.collectorsalbum.common.AlbumCategory;
@@ -23,7 +22,7 @@ public class RarityCard implements RarityHolder {
     public static final MapCodec<RarityCard> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("id").forGetter(RarityCard::identifier),
             Codecs.simpleEnumCodec(CardRarity.class, text -> text.toUpperCase(Locale.ROOT)).fieldOf("rarity").forGetter(t -> t.rarity),
-            ItemStack.SIMPLE_ITEM_CODEC.fieldOf("item").forGetter(RarityCard::asItem),
+            Codecs.SIMPLE_ITEM_CODEC.fieldOf("item").forGetter(RarityCard::asItem),
             ResourceLocation.CODEC.fieldOf("category").forGetter(RarityCard::category),
             ExtraCodecs.POSITIVE_INT.fieldOf("number").forGetter(RarityCard::cardNumber)
     ).apply(instance, RarityCard::new));
@@ -99,7 +98,7 @@ public class RarityCard implements RarityHolder {
     }
 
     @Override
-    public void appendItemStackHoverTooltip(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltips, TooltipFlag flag) {
+    public void appendItemStackHoverTooltip(ItemStack itemStack, List<Component> tooltips, TooltipFlag flag) {
         tooltips.add(CardUiTemplate.DEFAULT_CARD_INFO_HEADER);
         tooltips.add(CardUiTemplate.getCardNumberTooltip(this.cardNumber));
         tooltips.add(CardUiTemplate.getCardCategoryTooltip(this));

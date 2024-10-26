@@ -37,7 +37,7 @@ import java.util.function.Consumer;
 public class CardPackOpeningScreen extends Screen {
 
     private static final Component TITLE = Component.translatable("screen.collectorsalbum.card_pack_opening_screen");
-    private static final ResourceLocation CARD_BG = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/card_back.png");
+    private static final ResourceLocation CARD_BG = new ResourceLocation(CollectorsAlbum.MOD_ID, "textures/ui/card_back.png");
     private static final int CARD_SIZE = 32;
     private static final int CARD_MARGIN = 8;
 
@@ -75,9 +75,10 @@ public class CardPackOpeningScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-        this.renderTransparentBackground(graphics);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        this.renderBackground(graphics);
         this.emitter.draw(graphics, delta);
+        super.render(graphics, mouseX, mouseY, delta);
     }
 
     @Override
@@ -121,23 +122,27 @@ public class CardPackOpeningScreen extends Screen {
     static void renderFullTexture(ResourceLocation path, Matrix4f pose, float x, float y, float z, float width, float height) {
         RenderSystem.setShaderTexture(0, path);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        BufferBuilder builder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        builder.addVertex(pose, x, y, z).setUv(0.0F, 0.0F);
-        builder.addVertex(pose, x, y + height, z).setUv(0.0F, 1.0F);
-        builder.addVertex(pose, x + width, y + height, z).setUv(1.0F, 1.0F);
-        builder.addVertex(pose, x + width, y, z).setUv(1.0F, 0.0F);
-        BufferUploader.drawWithShader(builder.buildOrThrow());
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder builder = tesselator.getBuilder();
+        builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        builder.vertex(pose, x, y, z).uv(0.0F, 0.0F).endVertex();
+        builder.vertex(pose, x, y + height, z).uv(0.0F, 1.0F).endVertex();
+        builder.vertex(pose, x + width, y + height, z).uv(1.0F, 1.0F).endVertex();
+        builder.vertex(pose, x + width, y, z).uv(1.0F, 0.0F).endVertex();
+        BufferUploader.drawWithShader(builder.end());
     }
 
     static void renderFullColoredTexture(ResourceLocation path, Matrix4f pose, float x, float y, float z, float width, float height, int color) {
         RenderSystem.setShaderTexture(0, path);
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-        BufferBuilder builder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        builder.addVertex(pose, x, y, z).setUv(0.0F, 0.0F).setColor(color);
-        builder.addVertex(pose, x, y + height, z).setUv(0.0F, 1.0F).setColor(color);
-        builder.addVertex(pose, x + width, y + height, z).setUv(1.0F, 1.0F).setColor(color);
-        builder.addVertex(pose, x + width, y, z).setUv(1.0F, 0.0F).setColor(color);
-        BufferUploader.drawWithShader(builder.buildOrThrow());
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder builder = tesselator.getBuilder();
+        builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        builder.vertex(pose, x, y, z).uv(0.0F, 0.0F).color(color).endVertex();
+        builder.vertex(pose, x, y + height, z).uv(0.0F, 1.0F).color(color).endVertex();
+        builder.vertex(pose, x + width, y + height, z).uv(1.0F, 1.0F).color(color).endVertex();
+        builder.vertex(pose, x + width, y, z).uv(1.0F, 0.0F).color(color).endVertex();
+        BufferUploader.drawWithShader(builder.end());
     }
 
     private static final class CardWidget extends AbstractWidget {
@@ -167,7 +172,7 @@ public class CardPackOpeningScreen extends Screen {
             this.card = AlbumCardManager.getInstance().getCardInfo(itemStack.getItem())
                     .orElse(null);
             ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
-            this.itemTexture = ResourceLocation.fromNamespaceAndPath(itemId.getNamespace(), "textures/item/" + itemId.getPath() + ".png"); // not the best way to do it, but should work in most cases
+            this.itemTexture = new ResourceLocation(itemId.getNamespace(), "textures/item/" + itemId.getPath() + ".png"); // not the best way to do it, but should work in most cases
         }
 
         public void setOnIconFlipped(Consumer<CardWidget> onIconFlipped) {
@@ -381,7 +386,7 @@ public class CardPackOpeningScreen extends Screen {
         }
 
         private static ResourceLocation spark(int index) {
-            return ResourceLocation.withDefaultNamespace(String.format("textures/particle/spark_%d.png", index));
+            return new ResourceLocation(String.format("textures/particle/spark_%d.png", index));
         }
     }
 }

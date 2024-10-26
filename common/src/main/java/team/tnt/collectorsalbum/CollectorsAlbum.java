@@ -54,6 +54,7 @@ public class CollectorsAlbum {
         if (album == null) {
             result = tracker.findAlbum(player, null);
             if (!result.exists()) {
+                tracker.deleteCachedAlbum(player.getUUID(), player);
                 return;
             }
             album = result.getAlbum();
@@ -61,8 +62,7 @@ public class CollectorsAlbum {
         } else {
             result = tracker.findAlbum(player, album);
             if (!result.exists() || !result.getAlbum().test(album)) {
-                tracker.deleteCachedAlbum(player.getUUID());
-                album.removed(player);
+                tracker.deleteCachedAlbum(player.getUUID(), player);
                 if (result.getAlbum() != null) {
                     tracker.cacheAlbum(player, result.getAlbum());
                     result.getAlbum().tick(player);
@@ -80,7 +80,7 @@ public class CollectorsAlbum {
 
     public static void playerLoggedOut(Player player) {
         PlayerAlbumTracker tracker = PlayerAlbumTracker.get();
-        tracker.deleteCachedAlbum(player.getUUID());
+        tracker.deleteCachedAlbum(player.getUUID(), player);
     }
 
     public static void serverStopped() {

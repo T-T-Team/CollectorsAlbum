@@ -14,11 +14,10 @@ import team.tnt.collectorsalbum.common.card.AlbumCardType;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard> {
 
-    private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_card_manager");
+    private static final ResourceLocation IDENTIFIER = new ResourceLocation(CollectorsAlbum.MOD_ID, "album_card_manager");
     private static final AlbumCardManager INSTANCE = new AlbumCardManager();
     public static final Codec<AlbumCard> BY_NAME_CODEC = ResourceLocation.CODEC.comapFlatMap(
             identifier -> {

@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 
 public final class AlbumCategoryType<C extends AlbumCategory> {
 
-    public static final Codec<AlbumCategory> INSTANCE_CODEC = CollectorsAlbumRegistries.CATEGORY.byNameCodec().dispatch(AlbumCategory::getType, AlbumCategoryType::codec);
+    public static final Codec<AlbumCategory> INSTANCE_CODEC = CollectorsAlbumRegistries.CATEGORY.byNameCodec().dispatch(AlbumCategory::getType, t -> t.codec().codec());
     private final MapCodec<C> codec;
 
     public AlbumCategoryType(MapCodec<C> codec) {
