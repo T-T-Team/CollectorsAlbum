@@ -7,10 +7,10 @@
   ],
   "key": {
     "C": {
-      "tag": "collectorsalbum:cards/uncommon"
+      "tag": "collectorsalbum:cards/mythical"
     }
   },
   "result": {
-    "id": "collectorsalbum:uncommon_repacked_card_pack"
+    "item": "collectorsalbum:mythical_repacked_card_pack"
   }
 }

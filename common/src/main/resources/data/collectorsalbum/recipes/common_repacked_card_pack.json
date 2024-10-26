@@ -7,10 +7,10 @@
   ],
   "key": {
     "C": {
-      "tag": "collectorsalbum:cards/epic"
+      "tag": "collectorsalbum:cards/common"
     }
   },
   "result": {
-    "id": "collectorsalbum:epic_repacked_card_pack"
+    "item": "collectorsalbum:common_repacked_card_pack"
   }
 }
