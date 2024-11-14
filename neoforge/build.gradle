@@ -1,3 +1,5 @@
+import net.darkhax.curseforgegradle.*
+
 buildscript {
     repositories {
         mavenCentral()
@@ -15,11 +17,13 @@ plugins {
     id 'idea'
     id 'java'
     id 'net.neoforged.gradle.userdev' version "${neogradle_userdev}"
+    id 'net.darkhax.curseforgegradle' version "${cursegradle_plugin_version}"
+    id 'com.modrinth.minotaur' version "${modrinth_plugin_version}"
 }
 
-version = "${project.minecraft_version}-${project.version}"
+version = project.version
 group = project.mod_group
-archivesBaseName = "${project.mod_id}" + "-neoforge"
+archivesBaseName = "${project.mod_id}-neoforge-${project.minecraft_version}"
 
 def at = project(":common").file("src/main/resources/META-INF/accesstransformer.cfg")
 if (at.exists()) {
@@ -87,3 +91,40 @@ jar {
 
     exclude("${mod_id}.accesswidener")
 }
+
+tasks.register('publishToCurseForge', TaskPublishCurseForge) {
+    dependsOn(tasks.jar)
+    apiToken = CURSEFORGE_TOKEN
+    debugMode = debug.toBoolean()
+
+    def uploadFile = upload(curseforge_project_id, tasks.jar.archiveFile)
+    uploadFile.changelogType = Constants.CHANGELOG_MARKDOWN
+    uploadFile.changelog = file("../CHANGELOG.md").exists() ? file('../CHANGELOG.md') : "-- No changelog provided --"
+    uploadFile.releaseType = Constants.RELEASE_TYPE_RELEASE
+    uploadFile.displayName = "${mod_id}-neoforge-${minecraft_version}-${version}"
+    uploadFile.addModLoader('NeoForge')
+    uploadFile.addEnvironment('Client', 'Server')
+    uploadFile.addJavaVersion("Java 21")
+    uploadFile.addRequirement("configuration")
+    compatible_mc_versions.split(",").each { gameVersion ->
+        uploadFile.addGameVersion(gameVersion)
+    }
+}
+
+List compatibleVersions = compatible_mc_versions.split(",")
+modrinth {
+    token = MODRINTH_TOKEN
+    projectId = modrinth_project_id
+    versionNumber = "${version}"
+    versionName = "${mod_id}-fabric-${minecraft_version}-${version}"
+    versionType = "release"
+    uploadFile = jar
+    gameVersions = compatibleVersions
+    debugMode = debug.toBoolean()
+    changelog = file("../CHANGELOG.md").exists() ? file("../CHANGELOG.md").text : "-- No changelog provided --"
+    loaders = ["neoforge"]
+    dependencies {
+        required.project "configuration"
+    }
+}
+tasks.modrinth.dependsOn(tasks.jar)

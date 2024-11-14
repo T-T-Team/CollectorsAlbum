@@ -1,3 +1,5 @@
+import net.darkhax.curseforgegradle.*
+
 buildscript {
     repositories {
         mavenCentral()
@@ -10,11 +12,13 @@ buildscript {
 plugins {
     id 'fabric-loom' version "${fabric_loom}"
     id 'idea'
+    id 'net.darkhax.curseforgegradle' version "${cursegradle_plugin_version}"
+    id 'com.modrinth.minotaur' version "${modrinth_plugin_version}"
 }
 
-version = "${project.minecraft_version}-${project.version}"
+version = project.version
 group = project.mod_group
-archivesBaseName = "${project.mod_id}" + "-fabric"
+archivesBaseName = "${project.mod_id}-fabric-${project.minecraft_version}"
 
 repositories {
     maven {
@@ -91,3 +95,40 @@ processResources {
 tasks.withType(JavaCompile) {
     source(project(":common").sourceSets.main.allSource)
 }
+
+tasks.register('publishToCurseForge', TaskPublishCurseForge) {
+    dependsOn(tasks.remapJar)
+    apiToken = CURSEFORGE_TOKEN
+    debugMode = debug.toBoolean()
+
+    def uploadFile = upload(curseforge_project_id, tasks.remapJar.archiveFile)
+    uploadFile.changelogType = Constants.CHANGELOG_MARKDOWN
+    uploadFile.changelog = file("../CHANGELOG.md").exists() ? file('../CHANGELOG.md').text : "-- No changelog provided --"
+    uploadFile.releaseType = Constants.RELEASE_TYPE_RELEASE
+    uploadFile.displayName = "${mod_id}-fabric-${minecraft_version}-${version}"
+    uploadFile.addModLoader('Fabric')
+    uploadFile.addEnvironment('Client', 'Server')
+    uploadFile.addJavaVersion("Java 21")
+    uploadFile.addRequirement("configuration")
+    compatible_mc_versions.split(",").each { gameVersion ->
+        uploadFile.addGameVersion(gameVersion)
+    }
+}
+
+List compatibleVersions = compatible_mc_versions.split(",")
+modrinth {
+    token = MODRINTH_TOKEN
+    projectId = modrinth_project_id
+    versionNumber = "${version}"
+    versionName = "${mod_id}-fabric-${minecraft_version}-${version}"
+    versionType = "release"
+    uploadFile = remapJar
+    gameVersions = compatibleVersions
+    debugMode = debug.toBoolean()
+    changelog = file("../CHANGELOG.md").exists() ? file("../CHANGELOG.md").text : "-- No changelog provided --"
+    loaders = ["fabric"]
+    dependencies {
+        required.project "configuration"
+    }
+}
+tasks.modrinth.dependsOn(tasks.remapJar)
