@@ -1,2 +1,3 @@
-# 2.1.4
-- Added zh_cn localization (credits to [@Number_Sir](https://github.com/NumberSir))
+# 2.1.5
+- Fixed card duplication when using shift-click to extract cards from album #27
+- Fixed server side disconnect when sending datapacks to all connected clients #28
