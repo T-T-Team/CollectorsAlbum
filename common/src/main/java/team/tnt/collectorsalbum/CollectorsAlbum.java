@@ -74,8 +74,11 @@ public class CollectorsAlbum {
     }
 
     public static void sendPlayerDatapacks(ServerPlayer player) {
-        PlatformNetworkManager.NETWORK.sendClientMessage(player, new S2C_SendDatapackResources());
-        forceAlbumReload(player);
+        if (player != null) {
+            LOGGER.debug("Sending server resources to client {}", player.getUUID());
+            PlatformNetworkManager.NETWORK.sendClientMessage(player, new S2C_SendDatapackResources());
+            forceAlbumReload(player);
+        }
     }
 
     public static void playerLoggedOut(Player player) {

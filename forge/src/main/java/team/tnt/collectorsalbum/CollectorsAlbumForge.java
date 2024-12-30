@@ -22,10 +22,10 @@ import team.tnt.collectorsalbum.platform.resource.MenuScreenRegistration;
 @Mod(CollectorsAlbum.MOD_ID)
 public class CollectorsAlbumForge {
 
-    public CollectorsAlbumForge() {
+    public CollectorsAlbumForge(FMLJavaModLoadingContext ctx) {
         CollectorsAlbum.init();
 
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus eventBus = ctx.getModEventBus();
         ForgeRegistration.subscribeRegistryEvent(eventBus, BlockRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, ItemRegistry.REGISTRY);
         ForgeRegistration.subscribeRegistryEvent(eventBus, ItemGroupRegistry.REGISTRY);

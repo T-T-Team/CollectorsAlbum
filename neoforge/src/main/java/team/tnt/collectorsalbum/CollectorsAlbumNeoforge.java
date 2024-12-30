@@ -22,6 +22,8 @@ import team.tnt.collectorsalbum.platform.network.NeoforgeNetwork;
 import team.tnt.collectorsalbum.platform.registration.NeoforgeRegistration;
 import team.tnt.collectorsalbum.platform.resource.MenuScreenRegistration;
 
+import java.util.stream.Stream;
+
 @Mod(CollectorsAlbum.MOD_ID)
 public class CollectorsAlbumNeoforge {
 
@@ -65,7 +67,8 @@ public class CollectorsAlbumNeoforge {
     }
 
     private void onDatapackSync(OnDatapackSyncEvent event) {
-        CollectorsAlbum.sendPlayerDatapacks(event.getPlayer());
+        Stream<ServerPlayer> affectedPlayers = event.getRelevantPlayers();
+        affectedPlayers.forEach(CollectorsAlbum::sendPlayerDatapacks);
     }
 
     private void playerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
