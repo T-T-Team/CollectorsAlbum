@@ -11,6 +11,13 @@ subprojects {
     // Uncomment to generate javadoc file
     //java.withJavadocJar()
 
+    // Fixes Forge builds
+    configurations.configureEach {
+        resolutionStrategy {
+            force 'net.sf.jopt-simple:jopt-simple:5.0.4'
+        }
+    }
+
     jar {
         manifest {
             attributes([
