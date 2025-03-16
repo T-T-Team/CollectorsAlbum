@@ -1,5 +1,6 @@
 package team.tnt.collectorsalbum.common.resource.drops;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.Registries;
@@ -17,17 +18,20 @@ public class EntityFilterItemDropProvider implements ItemDropProvider {
     public static final MapCodec<EntityFilterItemDropProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             TagKey.codec(Registries.ENTITY_TYPE).fieldOf("filter").forGetter(t -> t.filter),
             ItemDropProviderType.INSTANCE_CODEC.fieldOf("pass").forGetter(t -> t.pass),
-            ItemDropProviderType.INSTANCE_CODEC.optionalFieldOf("fail", NoItemDropProvider.INSTANCE).forGetter(t -> t.fail)
+            ItemDropProviderType.INSTANCE_CODEC.optionalFieldOf("fail", NoItemDropProvider.INSTANCE).forGetter(t -> t.fail),
+            Codec.BOOL.optionalFieldOf("blacklist", false).forGetter(t -> t.blacklist)
     ).apply(instance, EntityFilterItemDropProvider::new));
 
     private final TagKey<EntityType<?>> filter;
     private final ItemDropProvider pass;
     private final ItemDropProvider fail;
+    private final boolean blacklist;
 
-    public EntityFilterItemDropProvider(TagKey<EntityType<?>> filter, ItemDropProvider pass, ItemDropProvider fail) {
+    public EntityFilterItemDropProvider(TagKey<EntityType<?>> filter, ItemDropProvider pass, ItemDropProvider fail, boolean blacklist) {
         this.filter = filter;
         this.pass = pass;
         this.fail = fail;
+        this.blacklist = blacklist;
     }
 
     @Override
@@ -38,10 +42,12 @@ public class EntityFilterItemDropProvider implements ItemDropProvider {
             return;
         }
         EntityType<?> entityType = entity.getType();
+        ItemDropProvider pass = this.blacklist ? this.fail : this.pass;
+        ItemDropProvider fail = this.blacklist ? this.pass : this.fail;
         if (entityType.is(this.filter)) {
-            this.pass.generateDrops(context, output);
+            pass.generateDrops(context, output);
         } else {
-            this.fail.generateDrops(context, output);
+            fail.generateDrops(context, output);
         }
     }
 
