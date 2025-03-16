@@ -166,8 +166,7 @@ public class CardPackOpeningScreen extends Screen {
             this.targetY = targetY;
             this.card = AlbumCardManager.getInstance().getCardInfo(itemStack.getItem())
                     .orElse(null);
-            ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
-            this.itemTexture = ResourceLocation.fromNamespaceAndPath(itemId.getNamespace(), "textures/item/" + itemId.getPath() + ".png"); // not the best way to do it, but should work in most cases
+            this.itemTexture = getCardTexture(this.card, itemStack);
         }
 
         public void setOnIconFlipped(Consumer<CardWidget> onIconFlipped) {
@@ -290,6 +289,19 @@ public class CardPackOpeningScreen extends Screen {
                 return;
             }
             ++this.flipCurrent;
+        }
+
+        private static ResourceLocation getCardTexture(AlbumCard card, ItemStack itemStack) {
+            if (card == null) {
+                return getDefaultItemTexture(itemStack);
+            }
+            CardUiTemplate template = card.template();
+            return template.cardTexture() != null ? template.cardTexture() : getDefaultItemTexture(itemStack);
+        }
+
+        private static ResourceLocation getDefaultItemTexture(ItemStack itemStack) {
+            ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
+            return ResourceLocation.fromNamespaceAndPath(itemId.getNamespace(), "textures/item/" + itemId.getPath() + ".png");
         }
     }
 

@@ -13,10 +13,7 @@ import team.tnt.collectorsalbum.common.init.CardTypeRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.platform.Codecs;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class RarityCard implements RarityHolder {
 
@@ -25,7 +22,8 @@ public class RarityCard implements RarityHolder {
             Codecs.simpleEnumCodec(CardRarity.class, text -> text.toUpperCase(Locale.ROOT)).fieldOf("rarity").forGetter(t -> t.rarity),
             ItemStack.SIMPLE_ITEM_CODEC.fieldOf("item").forGetter(RarityCard::asItem),
             ResourceLocation.CODEC.fieldOf("category").forGetter(RarityCard::category),
-            ExtraCodecs.POSITIVE_INT.fieldOf("number").forGetter(RarityCard::cardNumber)
+            ExtraCodecs.POSITIVE_INT.fieldOf("number").forGetter(RarityCard::cardNumber),
+            ResourceLocation.CODEC.optionalFieldOf("cardTexture").forGetter(t -> Optional.ofNullable(t.template.cardTexture()))
     ).apply(instance, RarityCard::new));
 
     private final ResourceLocation cardIdentifier;
@@ -37,13 +35,13 @@ public class RarityCard implements RarityHolder {
 
     private AlbumCategory cachedCategory;
 
-    public RarityCard(ResourceLocation cardIdentifier, CardRarity rarity, ItemStack itemStack, ResourceLocation categoryIdentifier, int cardNumber) {
+    public RarityCard(ResourceLocation cardIdentifier, CardRarity rarity, ItemStack itemStack, ResourceLocation categoryIdentifier, int cardNumber, Optional<ResourceLocation> cardTexture) {
         this.cardIdentifier = cardIdentifier;
         this.rarity = rarity;
         this.itemStack = itemStack;
         this.categoryIdentifier = categoryIdentifier;
         this.cardNumber = cardNumber;
-        this.template = new CardUiTemplate(rarity.getColors(), rarity.getDurations(), rarity.getFlipSoundRef());
+        this.template = new CardUiTemplate(rarity.getColors(), rarity.getDurations(), rarity.getFlipSoundRef(), cardTexture.orElse(null));
     }
 
     @Override
