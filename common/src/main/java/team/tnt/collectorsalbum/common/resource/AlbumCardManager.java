@@ -14,7 +14,6 @@ import team.tnt.collectorsalbum.common.card.AlbumCardType;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard> {
 
