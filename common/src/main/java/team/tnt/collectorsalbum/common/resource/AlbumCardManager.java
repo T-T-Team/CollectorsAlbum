@@ -14,6 +14,7 @@ import team.tnt.collectorsalbum.common.card.AlbumCardType;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard> {
 
@@ -48,9 +49,19 @@ public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard>
         return byItemMap.containsKey(item);
     }
 
+    public boolean isCard(ItemStack itemStack) {
+        return this.isCard(itemStack.getItem());
+    }
+
     @Override
     public ResourceLocation identifier() {
         return IDENTIFIER;
+    }
+
+    public List<ItemStack> processDrops(List<ItemStack> drops) {
+        return drops.stream().filter(this::isCard)
+                .map(ItemStack::copy)
+                .collect(Collectors.toList());
     }
 
     @Override

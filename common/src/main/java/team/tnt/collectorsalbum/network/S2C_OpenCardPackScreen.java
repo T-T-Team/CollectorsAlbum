@@ -8,18 +8,23 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.client.CollectorsAlbumClient;
+import team.tnt.collectorsalbum.common.item.PackContents;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 
 import java.util.List;
 
-public record S2C_OpenCardPackScreen(List<ItemStack> items) implements CustomPacketPayload {
+public record S2C_OpenCardPackScreen(PackContents contents) implements CustomPacketPayload {
 
     public static final ResourceLocation IDENTIFIER = PlatformNetworkManager.generatePacketIdentifier(CollectorsAlbum.MOD_ID, S2C_OpenCardPackScreen.class);
     public static final Type<S2C_OpenCardPackScreen> TYPE = new Type<>(IDENTIFIER);
     public static final StreamCodec<RegistryFriendlyByteBuf, S2C_OpenCardPackScreen> CODEC = StreamCodec.composite(
-            ItemStack.LIST_STREAM_CODEC, S2C_OpenCardPackScreen::items,
+            ItemStack.LIST_STREAM_CODEC, pkt -> pkt.contents().drops(),
             S2C_OpenCardPackScreen::new
     );
+
+    public S2C_OpenCardPackScreen(List<ItemStack> drops) {
+        this(new PackContents(drops));
+    }
 
     @Override
     public Type<? extends CustomPacketPayload> type() {
@@ -27,6 +32,6 @@ public record S2C_OpenCardPackScreen(List<ItemStack> items) implements CustomPac
     }
 
     public void onPacketReceived(Player player) {
-        CollectorsAlbumClient.handlePackOpening(items());
+        CollectorsAlbumClient.handlePackOpening(contents().drops());
     }
 }

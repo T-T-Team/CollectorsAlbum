@@ -6,11 +6,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import team.tnt.collectorsalbum.CollectorsAlbum;
+import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 
 import java.util.List;
@@ -32,5 +35,22 @@ public abstract class ItemStackMixin implements DataComponentHolder {
         Item item = itemStack.getItem();
         AlbumCardManager manager = AlbumCardManager.getInstance();
         manager.getCardInfo(item).ifPresent(info -> info.appendItemStackHoverTooltip(itemStack, ctx, components, flag));
+        if (itemStack.has(ItemDataComponentRegistry.PACK_DROPS_TABLE.get())) {
+            CollectorsAlbum.addCardPackTooltip(itemStack, ctx, components, flag);
+        }
+    }
+
+    @Inject(
+            method = "getUseAnimation",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
+    )
+    private void collectorsAlbum$getUseAnimationForPack(CallbackInfoReturnable<UseAnim> cir) {
+        ItemStack itemStack = (ItemStack) (Object) this;
+        if (itemStack.has(ItemDataComponentRegistry.PACK_DROPS_TABLE.get())) {
+            cir.setReturnValue(UseAnim.BOW);
+        }
     }
 }

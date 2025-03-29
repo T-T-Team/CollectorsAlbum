@@ -1,6 +1,11 @@
 package team.tnt.collectorsalbum;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
@@ -11,7 +16,9 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
@@ -51,6 +58,9 @@ public class CollectorsAlbumNeoforge {
         neoBus.addListener(this::onDatapackSync);
         neoBus.addListener(this::playerLoggedOut);
         neoBus.addListener(this::serverStopping);
+        neoBus.addListener(this::onItemStartUse);
+        neoBus.addListener(this::setPackUseDuration);
+        neoBus.addListener(this::generateDrops);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             CollectorsAlbumClient.construct();
@@ -94,5 +104,35 @@ public class CollectorsAlbumNeoforge {
     @OnlyIn(Dist.CLIENT)
     private void registerScreens(RegisterMenuScreensEvent event) {
         MenuScreenRegistration.bindRefs(event::register);
+    }
+
+    private void onItemStartUse(PlayerInteractEvent.RightClickItem event) {
+        if (event.isCanceled())
+            return;
+        Player player = event.getEntity();
+        InteractionHand hand = event.getHand();
+        ItemStack itemStack = player.getItemInHand(hand);
+        if (itemStack.has(ItemDataComponentRegistry.PACK_DROPS_TABLE)) {
+            player.startUsingItem(hand);
+            player.playSound(SoundRegistry.PACK_OPEN.get(), 1.0F, 1.0F);
+            event.setCancellationResult(InteractionResult.CONSUME);
+        }
+    }
+
+    private void setPackUseDuration(LivingEntityUseItemEvent.Start event) {
+        if (event.isCanceled())
+            return;
+        ItemStack itemStack = event.getItem();
+        if (itemStack.has(ItemDataComponentRegistry.PACK_DROPS_TABLE)) {
+            event.setDuration(20);
+        }
+    }
+
+    private void generateDrops(LivingEntityUseItemEvent.Finish event) {
+        LivingEntity entity = event.getEntity();
+        ItemStack itemStack = entity.getItemInHand(InteractionHand.MAIN_HAND);
+        if (itemStack.has(ItemDataComponentRegistry.PACK_DROPS_TABLE) && entity instanceof ServerPlayer player) {
+            CollectorsAlbum.openPack(player);
+        }
     }
 }

@@ -9,7 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
-import team.tnt.collectorsalbum.common.item.CardPackItem;
+import team.tnt.collectorsalbum.common.item.PackContents;
 import team.tnt.collectorsalbum.platform.PlatformPlayerHelper;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 
@@ -29,10 +29,10 @@ public record C2S_CompleteOpeningCardPack() implements CustomPacketPayload {
 
     public void onPacketReceived(Player player) {
         ItemStack itemStack = player.getItemInHand(InteractionHand.MAIN_HAND);
-        CardPackItem.PackContents contents = itemStack.get(ItemDataComponentRegistry.PACK_CONTENTS.get());
+        PackContents contents = itemStack.get(ItemDataComponentRegistry.PACK_CONTENTS.get());
         CollectorsAlbum.LOGGER.debug("{} has requested pack content drops. Received content list from item {}: {}", player, itemStack, contents);
         if (contents != null && !contents.isEmpty()) {
-            for (ItemStack item : contents.contents()) {
+            for (ItemStack item : contents.drops()) {
                 PlatformPlayerHelper.giveItemStackOrDrop(player, item.copy());
             }
             if (!player.isCreative())

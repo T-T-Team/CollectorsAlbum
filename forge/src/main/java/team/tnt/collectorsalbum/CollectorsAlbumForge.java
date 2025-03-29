@@ -1,10 +1,18 @@
 package team.tnt.collectorsalbum;
 
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -46,6 +54,9 @@ public class CollectorsAlbumForge {
         forgeBus.addListener(this::playerTick);
         forgeBus.addListener(this::playerLoggedOut);
         forgeBus.addListener(this::serverStopping);
+        forgeBus.addListener(this::onItemStartUse);
+        forgeBus.addListener(this::setPackUseDuration);
+        forgeBus.addListener(this::generateDrops);
 
         DistExecutor.runWhenOn(Dist.CLIENT, () -> CollectorsAlbumClient::construct);
     }
@@ -83,5 +94,35 @@ public class CollectorsAlbumForge {
 
     private void createNewRegistries(NewRegistryEvent event) {
         ForgeRegistration.bindCustomRegistries(event);
+    }
+
+    private void onItemStartUse(PlayerInteractEvent.RightClickItem event) {
+        if (event.isCanceled())
+            return;
+        Player player = event.getEntity();
+        InteractionHand hand = event.getHand();
+        ItemStack itemStack = player.getItemInHand(hand);
+        if (itemStack.has(ItemDataComponentRegistry.PACK_DROPS_TABLE.get())) {
+            player.startUsingItem(hand);
+            player.playSound(SoundRegistry.PACK_OPEN.get(), 1.0F, 1.0F);
+            event.setCancellationResult(InteractionResult.CONSUME);
+        }
+    }
+
+    private void setPackUseDuration(LivingEntityUseItemEvent.Start event) {
+        if (event.isCanceled())
+            return;
+        ItemStack itemStack = event.getItem();
+        if (itemStack.has(ItemDataComponentRegistry.PACK_DROPS_TABLE.get())) {
+            event.setDuration(20);
+        }
+    }
+
+    private void generateDrops(LivingEntityUseItemEvent.Finish event) {
+        LivingEntity entity = event.getEntity();
+        ItemStack itemStack = entity.getItemInHand(InteractionHand.MAIN_HAND);
+        if (itemStack.has(ItemDataComponentRegistry.PACK_DROPS_TABLE.get()) && entity instanceof ServerPlayer player) {
+            CollectorsAlbum.openPack(player);
+        }
     }
 }

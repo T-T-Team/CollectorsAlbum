@@ -6,7 +6,6 @@ import net.minecraft.world.item.Rarity;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.item.AlbumItem;
-import team.tnt.collectorsalbum.common.item.CardPackItem;
 import team.tnt.collectorsalbum.platform.registration.PlatformRegistry;
 
 public final class ItemRegistry {
@@ -14,24 +13,24 @@ public final class ItemRegistry {
     public static final PlatformRegistry<Item> REGISTRY = PlatformRegistry.create(BuiltInRegistries.ITEM, CollectorsAlbum.MOD_ID);
 
     public static final PlatformRegistry.Reference<AlbumItem> ALBUM = REGISTRY.register("album", () -> new AlbumItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).component(ItemDataComponentRegistry.ALBUM.get(), Album.emptyAlbum())));
-    public static final PlatformRegistry.Reference<CardPackItem> COMMON_CARD_PACK = REGISTRY.register("common_card_pack", key -> new CardPackItem(new Item.Properties(), key));
-    public static final PlatformRegistry.Reference<CardPackItem> UNCOMMON_CARD_PACK = REGISTRY.register("uncommon_card_pack", key -> new CardPackItem(new Item.Properties(), key));
-    public static final PlatformRegistry.Reference<CardPackItem> RARE_CARD_PACK = REGISTRY.register("rare_card_pack", key -> new CardPackItem(new Item.Properties(), key));
-    public static final PlatformRegistry.Reference<CardPackItem> EPIC_CARD_PACK = REGISTRY.register("epic_card_pack", key -> new CardPackItem(new Item.Properties(), key));
-    public static final PlatformRegistry.Reference<CardPackItem> LEGENDARY_CARD_PACK = REGISTRY.register("legendary_card_pack", key -> new CardPackItem(new Item.Properties(), key));
-    public static final PlatformRegistry.Reference<CardPackItem> MYTHICAL_CARD_PACK = REGISTRY.register("mythical_card_pack", key -> new CardPackItem(new Item.Properties(), key));
-    public static final PlatformRegistry.Reference<CardPackItem> COMMON_REPACKED_CARD_PACK = REGISTRY.register("common_repacked_card_pack", key -> new CardPackItem(new Item.Properties(), key));
-    public static final PlatformRegistry.Reference<CardPackItem> UNCOMMON_REPACKED_CARD_PACK = REGISTRY.register("uncommon_repacked_card_pack", key -> new CardPackItem(new Item.Properties(), key));
-    public static final PlatformRegistry.Reference<CardPackItem> RARE_REPACKED_CARD_PACK = REGISTRY.register("rare_repacked_card_pack", key -> new CardPackItem(new Item.Properties(), key));
-    public static final PlatformRegistry.Reference<CardPackItem> EPIC_REPACKED_CARD_PACK = REGISTRY.register("epic_repacked_card_pack", key -> new CardPackItem(new Item.Properties(), key));
-    public static final PlatformRegistry.Reference<CardPackItem> LEGENDARY_REPACKED_CARD_PACK = REGISTRY.register("legendary_repacked_card_pack", key -> new CardPackItem(new Item.Properties(), key));
-    public static final PlatformRegistry.Reference<CardPackItem> MYTHICAL_REPACKED_CARD_PACK = REGISTRY.register("mythical_repacked_card_pack", key -> new CardPackItem(new Item.Properties(), key));
-    public static final PlatformRegistry.Reference<CardPackItem> COMMON_CUSTOM_CARD_PACK = REGISTRY.register("common_custom_card_pack", () -> new CardPackItem(new Item.Properties()));
-    public static final PlatformRegistry.Reference<CardPackItem> UNCOMMON_CUSTOM_CARD_PACK = REGISTRY.register("uncommon_custom_card_pack", () -> new CardPackItem(new Item.Properties()));
-    public static final PlatformRegistry.Reference<CardPackItem> RARE_CUSTOM_CARD_PACK = REGISTRY.register("rare_custom_card_pack", () -> new CardPackItem(new Item.Properties()));
-    public static final PlatformRegistry.Reference<CardPackItem> EPIC_CUSTOM_CARD_PACK = REGISTRY.register("epic_custom_card_pack", () -> new CardPackItem(new Item.Properties()));
-    public static final PlatformRegistry.Reference<CardPackItem> LEGENDARY_CUSTOM_CARD_PACK = REGISTRY.register("legendary_custom_card_pack", () -> new CardPackItem(new Item.Properties()));
-    public static final PlatformRegistry.Reference<CardPackItem> MYTHICAL_CUSTOM_CARD_PACK = REGISTRY.register("mythical_custom_card_pack", () -> new CardPackItem(new Item.Properties()));
+    public static final PlatformRegistry.Reference<Item> COMMON_CARD_PACK = REGISTRY.register("common_card_pack", key -> new Item(new Item.Properties().component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), key)));
+    public static final PlatformRegistry.Reference<Item> UNCOMMON_CARD_PACK = REGISTRY.register("uncommon_card_pack", key -> new Item(new Item.Properties().component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), key)));
+    public static final PlatformRegistry.Reference<Item> RARE_CARD_PACK = REGISTRY.register("rare_card_pack", key -> new Item(new Item.Properties().component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), key)));
+    public static final PlatformRegistry.Reference<Item> EPIC_CARD_PACK = REGISTRY.register("epic_card_pack", key -> new Item(new Item.Properties().component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), key)));
+    public static final PlatformRegistry.Reference<Item> LEGENDARY_CARD_PACK = REGISTRY.register("legendary_card_pack", key -> new Item(new Item.Properties().component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), key)));
+    public static final PlatformRegistry.Reference<Item> MYTHICAL_CARD_PACK = REGISTRY.register("mythical_card_pack", key -> new Item(new Item.Properties().component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), key)));
+    public static final PlatformRegistry.Reference<Item> COMMON_REPACKED_CARD_PACK = REGISTRY.register("common_repacked_card_pack", key -> new Item(new Item.Properties().component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), key)));
+    public static final PlatformRegistry.Reference<Item> UNCOMMON_REPACKED_CARD_PACK = REGISTRY.register("uncommon_repacked_card_pack", key -> new Item(new Item.Properties().component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), key)));
+    public static final PlatformRegistry.Reference<Item> RARE_REPACKED_CARD_PACK = REGISTRY.register("rare_repacked_card_pack", key -> new Item(new Item.Properties().component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), key)));
+    public static final PlatformRegistry.Reference<Item> EPIC_REPACKED_CARD_PACK = REGISTRY.register("epic_repacked_card_pack", key -> new Item(new Item.Properties().component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), key)));
+    public static final PlatformRegistry.Reference<Item> LEGENDARY_REPACKED_CARD_PACK = REGISTRY.register("legendary_repacked_card_pack", key -> new Item(new Item.Properties().component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), key)));
+    public static final PlatformRegistry.Reference<Item> MYTHICAL_REPACKED_CARD_PACK = REGISTRY.register("mythical_repacked_card_pack", key -> new Item(new Item.Properties().component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), key)));
+    public static final PlatformRegistry.Reference<Item> COMMON_CUSTOM_CARD_PACK = REGISTRY.register("common_custom_card_pack", () -> new Item(new Item.Properties()));
+    public static final PlatformRegistry.Reference<Item> UNCOMMON_CUSTOM_CARD_PACK = REGISTRY.register("uncommon_custom_card_pack", () -> new Item(new Item.Properties()));
+    public static final PlatformRegistry.Reference<Item> RARE_CUSTOM_CARD_PACK = REGISTRY.register("rare_custom_card_pack", () -> new Item(new Item.Properties()));
+    public static final PlatformRegistry.Reference<Item> EPIC_CUSTOM_CARD_PACK = REGISTRY.register("epic_custom_card_pack", () -> new Item(new Item.Properties()));
+    public static final PlatformRegistry.Reference<Item> LEGENDARY_CUSTOM_CARD_PACK = REGISTRY.register("legendary_custom_card_pack", () -> new Item(new Item.Properties()));
+    public static final PlatformRegistry.Reference<Item> MYTHICAL_CUSTOM_CARD_PACK = REGISTRY.register("mythical_custom_card_pack", () -> new Item(new Item.Properties()));
 
     public static final PlatformRegistry.Reference<Item> COMMON_ACACIA_SAPLING_CARD = REGISTRY.register("common_acacia_sapling_card", () -> new Item(new Item.Properties()));
     public static final PlatformRegistry.Reference<Item> COMMON_ALLIUM_CARD = REGISTRY.register("common_allium_card", () -> new Item(new Item.Properties()));

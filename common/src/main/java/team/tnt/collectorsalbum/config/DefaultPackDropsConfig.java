@@ -1,17 +1,16 @@
 package team.tnt.collectorsalbum.config;
 
 import dev.toma.configuration.config.Configurable;
-import team.tnt.collectorsalbum.common.item.CardPackItem;
 
 public final class DefaultPackDropsConfig {
 
     @Configurable
-    @Configurable.Range(min = 1, max = CardPackItem.MAX_PACK_CARDS)
+    @Configurable.Range(min = 1, max = 18)
     @Configurable.Comment(value = "Defines how many cards will be dropped from normal card packs", localize = true)
     public int packDropsCount = 5;
 
     @Configurable
-    @Configurable.Range(min = 1, max = CardPackItem.MAX_PACK_CARDS)
+    @Configurable.Range(min = 1, max = 18)
     @Configurable.Comment(value = "Defines how many cards will be dropped from repacked card packs", localize = true)
     public int repackedDropsCount = 3;
 

@@ -6,7 +6,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "FabricPlayerListMixin",
-    "FabricPlayerMixin"
+    "FabricPlayerMixin",
+    "FabricItemStackMixin"
   ],
   "client": [],
   "server": [],

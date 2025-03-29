@@ -18,30 +18,12 @@ public final class ItemGroupRegistry {
             .displayItems((params, builder) -> {
                 //builder.accept(ItemRegistry.TRADING_STATION.get());
                 builder.accept(ItemRegistry.ALBUM.get());
-                builder.accept(ItemRegistry.COMMON_CARD_PACK.get());
-                builder.accept(ItemRegistry.UNCOMMON_CARD_PACK.get());
-                builder.accept(ItemRegistry.RARE_CARD_PACK.get());
-                builder.accept(ItemRegistry.EPIC_CARD_PACK.get());
-                builder.accept(ItemRegistry.LEGENDARY_CARD_PACK.get());
-                builder.accept(ItemRegistry.MYTHICAL_CARD_PACK.get());
-                builder.accept(ItemRegistry.COMMON_REPACKED_CARD_PACK.get());
-                builder.accept(ItemRegistry.UNCOMMON_REPACKED_CARD_PACK.get());
-                builder.accept(ItemRegistry.RARE_REPACKED_CARD_PACK.get());
-                builder.accept(ItemRegistry.EPIC_REPACKED_CARD_PACK.get());
-                builder.accept(ItemRegistry.LEGENDARY_REPACKED_CARD_PACK.get());
-                builder.accept(ItemRegistry.MYTHICAL_REPACKED_CARD_PACK.get());
                 BuiltInRegistries.ITEM.stream()
                         .filter(item -> {
                             ResourceLocation identifier = BuiltInRegistries.ITEM.getKey(item);
                             return identifier.getNamespace().equals(CollectorsAlbum.MOD_ID) && item.getClass().equals(Item.class);
                         })
                         .forEach(builder::accept);
-                builder.accept(ItemRegistry.COMMON_CUSTOM_CARD_PACK.get());
-                builder.accept(ItemRegistry.UNCOMMON_CUSTOM_CARD_PACK.get());
-                builder.accept(ItemRegistry.RARE_CUSTOM_CARD_PACK.get());
-                builder.accept(ItemRegistry.EPIC_CUSTOM_CARD_PACK.get());
-                builder.accept(ItemRegistry.LEGENDARY_CUSTOM_CARD_PACK.get());
-                builder.accept(ItemRegistry.MYTHICAL_CUSTOM_CARD_PACK.get());
             })
             .build()
     );
