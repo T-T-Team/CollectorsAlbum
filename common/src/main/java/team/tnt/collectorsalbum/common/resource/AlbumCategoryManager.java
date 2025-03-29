@@ -66,6 +66,9 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
 
     @Override
     protected void resolve(ResourceLocation path, AlbumCategory element) {
+        if (element.getCardNumbers().length == 0) {
+            return;
+        }
         if (this.registeredCategories.putIfAbsent(path, element) != null) {
             throw new IllegalArgumentException("Duplicate card category: " + element.identifier());
         }
