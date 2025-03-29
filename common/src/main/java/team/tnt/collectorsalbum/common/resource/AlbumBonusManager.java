@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import team.tnt.collectorsalbum.CollectorsAlbum;
+import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonus;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonusType;
 import team.tnt.collectorsalbum.common.resource.bonus.NoBonus;
@@ -66,7 +67,7 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Alb
     @Override
     public synchronized void onNetworkDataReceived(List<AlbumBonus> collection) {
         this.bonusList.clear();
-        this.bonusList.addAll(collection);
+        collection.stream().filter(bonus -> bonus != NoBonus.INSTANCE).forEach(bonusList::add);
     }
 
     @Override
