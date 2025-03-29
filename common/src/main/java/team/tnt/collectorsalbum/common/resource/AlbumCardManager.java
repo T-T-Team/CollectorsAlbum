@@ -72,6 +72,9 @@ public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard>
 
     @Override
     protected void resolve(ResourceLocation path, AlbumCard element) {
+        if (!element.enabled()) {
+            return;
+        }
         if (this.registeredCards.putIfAbsent(element.identifier(), element) != null) {
             throw new IllegalArgumentException("Duplicate card with ID: " + element.identifier());
         }

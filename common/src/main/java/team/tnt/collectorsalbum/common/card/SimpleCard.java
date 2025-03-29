@@ -18,6 +18,7 @@ import java.util.List;
 public class SimpleCard implements AlbumCard {
 
     public static final MapCodec<SimpleCard> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Codec.BOOL.optionalFieldOf("enabled", true).forGetter(SimpleCard::enabled),
             ResourceLocation.CODEC.fieldOf("id").forGetter(SimpleCard::identifier),
             ItemStack.SIMPLE_ITEM_CODEC.fieldOf("item").forGetter(SimpleCard::asItem),
             ResourceLocation.CODEC.fieldOf("category").forGetter(SimpleCard::category),
@@ -26,6 +27,7 @@ public class SimpleCard implements AlbumCard {
             ExtraCodecs.POSITIVE_INT.fieldOf("number").forGetter(SimpleCard::cardNumber)
     ).apply(instance, SimpleCard::new));
 
+    private final boolean enabled;
     private final ResourceLocation cardId;
     private final ItemStack item;
     private final ResourceLocation category;
@@ -34,13 +36,19 @@ public class SimpleCard implements AlbumCard {
     private final int number;
     private AlbumCategory cachedCategory;
 
-    public SimpleCard(ResourceLocation cardId, ItemStack item, ResourceLocation category, CardUiTemplate template, int points, int number) {
+    public SimpleCard(boolean enabled, ResourceLocation cardId, ItemStack item, ResourceLocation category, CardUiTemplate template, int points, int number) {
+        this.enabled = enabled;
         this.cardId = cardId;
         this.item = item;
         this.category = category;
         this.template = template;
         this.points = points;
         this.number = number;
+    }
+
+    @Override
+    public boolean enabled() {
+        return this.enabled;
     }
 
     @Override

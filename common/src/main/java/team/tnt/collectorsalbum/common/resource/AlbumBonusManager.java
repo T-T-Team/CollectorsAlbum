@@ -41,6 +41,10 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Alb
         this.bonusList.forEach(bonus -> bonus.removed(context));
     }
 
+    public boolean hasBonuses() {
+        return !this.bonusList.isEmpty();
+    }
+
     public Pair<AlbumBonus, AlbumBonus> getBonusesForPage(int page) {
         int leftIdx = page * 2;
         int rightIdx = leftIdx + 1;

@@ -17,6 +17,7 @@ import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.card.CardRarity;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.init.ItemRegistry;
+import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 
 import java.time.Duration;
@@ -55,13 +56,16 @@ public class AlbumMainPageScreen extends Screen {
         home.setTooltipDelay(tooltipDelay);
         home.setAction(AlbumNavigationHelper::navigateHomepage);
 
-        BookmarkWidget bonuses = new BookmarkWidget(left - 32, top + 20, 32, 18, true, Items.EMERALD.getDefaultInstance(), () -> Minecraft.getInstance().screen instanceof AlbumBonusesScreen);
-        bonuses.setTooltip(Tooltip.create(AlbumBonusesScreen.TITLE));
-        bonuses.setTooltipDelay(tooltipDelay);
-        bonuses.setAction(AlbumNavigationHelper::navigateBonusesPage);
-
         bookmarks.add(home);
-        bookmarks.add(bonuses);
+
+        AlbumBonusManager bonusManager = AlbumBonusManager.getInstance();
+        if (bonusManager.hasBonuses()) {
+            BookmarkWidget bonuses = new BookmarkWidget(left - 32, top + 20, 32, 18, true, Items.EMERALD.getDefaultInstance(), () -> Minecraft.getInstance().screen instanceof AlbumBonusesScreen);
+            bonuses.setTooltip(Tooltip.create(AlbumBonusesScreen.TITLE));
+            bonuses.setTooltipDelay(tooltipDelay);
+            bonuses.setAction(AlbumNavigationHelper::navigateBonusesPage);
+            bookmarks.add(bonuses);
+        }
 
         List<AlbumCategory> categories = AlbumNavigationHelper.listCategoriesForBookmarks(bookImageHeight - 20);
         int index = 0;

@@ -1,5 +1,6 @@
 package team.tnt.collectorsalbum.common.card;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
@@ -18,6 +19,7 @@ import java.util.*;
 public class RarityCard implements RarityHolder {
 
     public static final MapCodec<RarityCard> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Codec.BOOL.optionalFieldOf("enabled", true).forGetter(AlbumCard::enabled),
             ResourceLocation.CODEC.fieldOf("id").forGetter(RarityCard::identifier),
             Codecs.simpleEnumCodec(CardRarity.class, text -> text.toUpperCase(Locale.ROOT)).fieldOf("rarity").forGetter(t -> t.rarity),
             ItemStack.SIMPLE_ITEM_CODEC.fieldOf("item").forGetter(RarityCard::asItem),
@@ -26,6 +28,7 @@ public class RarityCard implements RarityHolder {
             ResourceLocation.CODEC.optionalFieldOf("cardTexture").forGetter(t -> Optional.ofNullable(t.template.cardTexture()))
     ).apply(instance, RarityCard::new));
 
+    private final boolean enabled;
     private final ResourceLocation cardIdentifier;
     private final CardRarity rarity;
     private final ItemStack itemStack;
@@ -35,13 +38,19 @@ public class RarityCard implements RarityHolder {
 
     private AlbumCategory cachedCategory;
 
-    public RarityCard(ResourceLocation cardIdentifier, CardRarity rarity, ItemStack itemStack, ResourceLocation categoryIdentifier, int cardNumber, Optional<ResourceLocation> cardTexture) {
+    public RarityCard(boolean enabled, ResourceLocation cardIdentifier, CardRarity rarity, ItemStack itemStack, ResourceLocation categoryIdentifier, int cardNumber, Optional<ResourceLocation> cardTexture) {
+        this.enabled = enabled;
         this.cardIdentifier = cardIdentifier;
         this.rarity = rarity;
         this.itemStack = itemStack;
         this.categoryIdentifier = categoryIdentifier;
         this.cardNumber = cardNumber;
         this.template = new CardUiTemplate(rarity.getColors(), rarity.getDurations(), rarity.getFlipSoundRef(), cardTexture.orElse(null));
+    }
+
+    @Override
+    public boolean enabled() {
+        return this.enabled;
     }
 
     @Override

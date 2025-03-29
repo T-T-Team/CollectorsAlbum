@@ -28,15 +28,19 @@ public interface AlbumCard extends Comparable<AlbumCard>, Predicate<CardFilter> 
 
     void appendItemStackHoverTooltip(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltips, TooltipFlag flag);
 
-    @Override
-    default int compareTo(@NotNull AlbumCard o) {
-        return this.getPoints() - o.getPoints();
-    }
-
     AlbumCardType<?> getType();
+
+    default boolean enabled() {
+        return true;
+    }
 
     default AlbumCategory getLinkedCategory() {
         AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
         return manager.findById(this.category()).orElseThrow();
+    }
+
+    @Override
+    default int compareTo(@NotNull AlbumCard o) {
+        return this.getPoints() - o.getPoints();
     }
 }
