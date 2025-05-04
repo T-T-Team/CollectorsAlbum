@@ -123,10 +123,10 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
 
             if (index >= 0 && index < slotsCount) {
                 // Extraction
-                slot.setChanged();
                 if (!moveItemStackTo(slotItem, slotsCount, slotsCount + 36, true)) {
                     return ItemStack.EMPTY;
                 }
+                slot.setChanged();
             } else if (index >= slotsCount && index < slotsCount + 36) {
                 // Insert to album
                 AlbumCard albumCard = this.getCardInfo(slotItem);
@@ -252,6 +252,21 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
                 Album.set(this.itemStack, updated);
             }
             super.setItem(index, itemStack);
+        }
+
+        @Override
+        public void setChanged() {
+            Album album = Album.get(this.itemStack);
+            if (album != null) {
+                List<ItemStack> itemStacks = this.items;
+                Album.Mutable mutableAlbum = new Album.Mutable(album);
+                for (int i = 0; i < itemStacks.size(); i++) {
+                    ItemStack stack = itemStacks.get(i);
+                    mutableAlbum.set(this.category, i, stack.copy());
+                }
+                Album.set(this.itemStack, mutableAlbum.toImmutable());
+            }
+            super.setChanged();
         }
     }
 }
