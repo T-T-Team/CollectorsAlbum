@@ -69,7 +69,7 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
         if (element.getCardNumbers().length == 0) {
             return;
         }
-        if (this.registeredCategories.putIfAbsent(path, element) != null) {
+        if (this.registeredCategories.putIfAbsent(element.identifier(), element) != null) {
             throw new IllegalArgumentException("Duplicate card category: " + element.identifier());
         }
     }
