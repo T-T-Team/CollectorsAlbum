@@ -108,7 +108,8 @@ public class SimpleCard implements AlbumCard {
     @Override
     public AlbumCategory getLinkedCategory() {
         if (this.cachedCategory == null) {
-            this.cachedCategory = AlbumCategoryManager.getInstance().findById(this.category).orElseThrow();
+            this.cachedCategory = AlbumCategoryManager.getInstance().findById(this.category)
+                    .orElseThrow(() -> new IllegalStateException("Could not find category with id " + this.category.toString() + " for card " + this.cardId.toString()));
         }
         return this.cachedCategory;
     }
