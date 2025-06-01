@@ -9,6 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
 import team.tnt.collectorsalbum.common.card.CardRarity;
 import team.tnt.collectorsalbum.common.card.RarityHolder;
@@ -59,11 +60,14 @@ public final class Album implements Predicate<Album> {
             for (int i = 0; i < inventory.size(); i++) {
                 ItemStack itemStack = inventory.get(i);
                 if (!itemStack.isEmpty()) {
-                    AlbumCard card = manager.getCardInfo(itemStack.getItem())
-                            .orElseThrow(() -> new IllegalArgumentException(String.format("Attempting to save undefined card for item %s into album", itemStack)));
-                    this.cardsByCategory.computeIfAbsent(key, t -> new HashSet<>()).add(card);
-                    this.categoryInventories.computeIfAbsent(key, t -> NonNullList.withSize(inventory.size(), ItemStack.EMPTY)).set(i, itemStack.copy());
-                    pointCounter += card.getPoints();
+                    AlbumCard card = manager.getCardInfo(itemStack.getItem()).orElse(null);
+                    if (card != null) {
+                        this.cardsByCategory.computeIfAbsent(key, t -> new HashSet<>()).add(card);
+                        this.categoryInventories.computeIfAbsent(key, t -> NonNullList.withSize(inventory.size(), ItemStack.EMPTY)).set(i, itemStack.copy());
+                        pointCounter += card.getPoints();
+                    } else {
+                        CollectorsAlbum.LOGGER.warn("Couldn't find album card for key {} in album {}, ignoring", key, albumId);
+                    }
                 }
             }
         }
