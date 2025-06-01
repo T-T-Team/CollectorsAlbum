@@ -40,8 +40,8 @@ public record CardUiTemplate(Integer[] effectColors, Integer[] effectDurations, 
         return Component.translatable(ITEM_TOOLTIP_NUMBER_KEY, numberLabel).withStyle(ChatFormatting.GRAY);
     }
 
-    public static MutableComponent getCardNumberTooltip(int number) {
-        Component label = Component.literal("#" + number).withStyle(ChatFormatting.YELLOW);
+    public static MutableComponent getCardNumberTooltip(String prefix, int number) {
+        Component label = Component.literal(prefix + number).withStyle(ChatFormatting.YELLOW);
         return getCardNumberTooltip(label);
     }
 

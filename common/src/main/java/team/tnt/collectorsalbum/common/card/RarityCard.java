@@ -10,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import team.tnt.collectorsalbum.common.AlbumCategory;
+import team.tnt.collectorsalbum.common.AlbumCategoryUiTemplate;
 import team.tnt.collectorsalbum.common.init.CardTypeRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.platform.Codecs;
@@ -108,7 +109,8 @@ public class RarityCard implements RarityHolder {
     @Override
     public void appendItemStackHoverTooltip(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltips, TooltipFlag flag) {
         tooltips.add(CardUiTemplate.DEFAULT_CARD_INFO_HEADER);
-        tooltips.add(CardUiTemplate.getCardNumberTooltip(this.cardNumber));
+        String prefix = this.cachedCategory != null ? this.cachedCategory.visualTemplate().cardNumberPrefix : AlbumCategoryUiTemplate.DEFAULT_TEMPLATE.cardNumberPrefix;
+        tooltips.add(CardUiTemplate.getCardNumberTooltip(prefix, this.cardNumber));
         tooltips.add(CardUiTemplate.getCardCategoryTooltip(this));
         tooltips.add(CardUiTemplate.getCardRarityTooltip(this.rarity));
         tooltips.add(CardUiTemplate.getCardPointsTooltip(this));

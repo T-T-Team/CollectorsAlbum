@@ -72,13 +72,15 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
                 Slot cardSlot = cardSlots.get(slot);
                 blitTextureTemplate(guiGraphics, leftPos + cardSlot.x - 1, topPos + cardSlot.y - 1, template.slotTexture);
                 if (template.renderSlotCardNumbers && !cardSlot.hasItem()) {
-                    Component num = Component.literal("#" + cardNumbers[slot]);
+                    Component num = Component.literal(template.cardNumberPrefix + cardNumbers[slot]);
                     PoseStack pose = guiGraphics.pose();
+                    guiGraphics.enableScissor(leftPos + cardSlot.x, topPos + cardSlot.y, leftPos + cardSlot.x + template.slotTexture.width() - 2, topPos + cardSlot.y + template.slotTexture.height() - 2);
                     pose.pushPose();
                     pose.translate(leftPos + cardSlot.x + 1, topPos + cardSlot.y + 1, 0);
                     pose.scale(0.75F, 0.75F, 0.75F);
                     guiGraphics.drawString(font, num, 0, 0, template.slotCardNumberTextColor, false);
                     pose.popPose();
+                    guiGraphics.disableScissor();
                 }
             }
         }
