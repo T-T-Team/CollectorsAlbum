@@ -117,8 +117,7 @@ public class RarityCard implements RarityHolder {
     @Override
     public AlbumCategory getLinkedCategory() {
         if (this.cachedCategory == null) {
-            this.cachedCategory = AlbumCategoryManager.getInstance().findById(this.categoryIdentifier)
-                    .orElseThrow(() -> new IllegalStateException("Could not find category with id " + this.categoryIdentifier.toString() + " for card " + this.cardIdentifier.toString()));
+            this.cachedCategory = AlbumCategoryManager.getInstance().findById(this.categoryIdentifier).orElse(null);
         }
         return this.cachedCategory;
     }

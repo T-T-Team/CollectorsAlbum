@@ -34,6 +34,7 @@ public record CardUiTemplate(Integer[] effectColors, Integer[] effectDurations, 
     public static final String ITEM_TOOLTIP_CATEGORY_KEY = "collectorsalbum.tooltip.card.category";
     public static final String ITEM_TOOLTIP_RARITY_KEY = "collectorsalbum.tooltip.card.rarity";
     public static final String ITEM_TOOLTIP_VALUE_KEY = "collectorsalbum.tooltip.card.value";
+    public static final String INVALID_CATEGORY_KEY = "collectorsalbum.tooltip.card.category.invalid";
 
     public static MutableComponent getCardNumberTooltip(Component numberLabel) {
         return Component.translatable(ITEM_TOOLTIP_NUMBER_KEY, numberLabel).withStyle(ChatFormatting.GRAY);
@@ -45,7 +46,13 @@ public record CardUiTemplate(Integer[] effectColors, Integer[] effectDurations, 
     }
 
     public static MutableComponent getCardCategoryTooltip(AlbumCard card) {
-        return getCardCategoryTooltip(card.getLinkedCategory());
+        AlbumCategory category = card.getLinkedCategory();
+        if (category == null) {
+            Component categoryIdentifier = Component.literal(card.category().toString()).withStyle(ChatFormatting.UNDERLINE, ChatFormatting.RED);
+            return Component.translatable(INVALID_CATEGORY_KEY, categoryIdentifier).withStyle(ChatFormatting.RED);
+        } else {
+            return getCardCategoryTooltip(category);
+        }
     }
 
     public static MutableComponent getCardCategoryTooltip(AlbumCategory category) {

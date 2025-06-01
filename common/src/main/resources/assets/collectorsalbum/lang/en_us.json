@@ -967,6 +967,7 @@
   "collectorsalbum.tooltip.card.category": "Category: %s",
   "collectorsalbum.tooltip.card.rarity": "Rarity: %s",
   "collectorsalbum.tooltip.card.value": "Value: %s",
+  "collectorsalbum.tooltip.card.category.invalid": "Category %s not found!",
   "collectorsalbum.text.points.value": "%s pts",
   "collectorsalbum.text.statistics.collected": "Cards: %s / %s",
   "collectorsalbum.text.statistics.points": "%s points",

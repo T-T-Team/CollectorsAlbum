@@ -6,6 +6,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 
@@ -34,9 +35,10 @@ public interface AlbumCard extends Comparable<AlbumCard>, Predicate<CardFilter> 
         return true;
     }
 
+    @Nullable
     default AlbumCategory getLinkedCategory() {
         AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
-        return manager.findById(this.category()).orElseThrow();
+        return manager.findById(this.category()).orElse(null);
     }
 
     @Override
