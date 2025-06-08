@@ -1,4 +1,4 @@
-# Release 2.3.0
-- Category templates now accept `cardNumberPrefix` string attribute to allow displayed card number prefix customization - [Documentation](https://github.com/T-T-Team/CollectorsAlbum/wiki/Categories#json-structure)
-- Fixed crash when displaying tooltip for card with unknown category
-- Fixed crash when album contains non-card item
+# Release 2.4.0
+- Category filters now accept `categoryPoints` number filter to filter based on card points within one category - [Documentation](https://github.com/T-T-Team/CollectorsAlbum/wiki/Bonuses#json-schema-6)
+- Category points are now displayed in each category below title
+- Improvements to category title text
