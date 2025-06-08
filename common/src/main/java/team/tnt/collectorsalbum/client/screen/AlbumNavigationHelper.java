@@ -54,6 +54,10 @@ public final class AlbumNavigationHelper {
         Minecraft.getInstance().setScreen(new AlbumBonusesScreen(lastItemStack));
     }
 
+    public static ItemStack getStoredAlbum() {
+        return lastItemStack;
+    }
+
     public static void navigateNextCategory() {
         AlbumCategory category = peekCategory(currentCategoryPage + 1);
         if (category != null) {

@@ -10,20 +10,22 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
 
-public record CardCategoryFilter(Set<CardRarity> rarities, IntFilter numberFilter, IntFilter pointFilter, IntFilter cardCountFilter) implements CardFilter {
+public record CardCategoryFilter(Set<CardRarity> rarities, IntFilter numberFilter, IntFilter pointFilter, IntFilter cardCountFilter, IntFilter categoryPointFilter) implements CardFilter {
 
     public static final Codec<CardCategoryFilter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codecs.setCodec(Codecs.simpleEnumCodec(CardRarity.class, s -> s.toUpperCase(Locale.ROOT))).optionalFieldOf("rarities", Collections.emptySet()).forGetter(CardCategoryFilter::rarities),
             IntFilter.CODEC.optionalFieldOf("numbers", IntFilter.NO_FILTER).forGetter(CardCategoryFilter::numberFilter),
             IntFilter.CODEC.optionalFieldOf("points", IntFilter.NO_FILTER).forGetter(CardCategoryFilter::pointFilter),
-            IntFilter.CODEC.optionalFieldOf("cards", IntFilter.NO_FILTER).forGetter(CardCategoryFilter::cardCountFilter)
+            IntFilter.CODEC.optionalFieldOf("cards", IntFilter.NO_FILTER).forGetter(CardCategoryFilter::cardCountFilter),
+            IntFilter.CODEC.optionalFieldOf("categoryPoints", IntFilter.NO_FILTER).forGetter(CardCategoryFilter::categoryPointFilter)
     ).apply(instance, CardCategoryFilter::new));
-    public static final CardCategoryFilter NO_FILTER = new CardCategoryFilter(Collections.emptySet(), IntFilter.NO_FILTER, IntFilter.NO_FILTER, IntFilter.NO_FILTER);
+    public static final CardCategoryFilter NO_FILTER = new CardCategoryFilter(Collections.emptySet(), IntFilter.NO_FILTER, IntFilter.NO_FILTER, IntFilter.NO_FILTER, IntFilter.NO_FILTER);
     public static final Component LABEL_FILTER = Component.translatable("collectorsalbum.label.filter");
     public static final Component LABEL_FILTER_RARITY = Component.translatable("collectorsalbum.label.filter.rarities");
     public static final Component LABEL_FILTER_NUMBER = Component.translatable("collectorsalbum.label.filter.numbers");
     public static final Component LABEL_FILTER_POINT = Component.translatable("collectorsalbum.label.filter.points");
     public static final Component LABEL_FILTER_CARDS = Component.translatable("collectorsalbum.label.filter.cards");
+    public static final Component LABEL_FILTER_CATEGORY_POINTS = Component.translatable("collectorsalbum.label.filter.category_points");
 
     public void generateDescriptionLabels(AlbumBonusDescriptionOutput descriptionOutput) {
         if (!rarities.isEmpty()) {
@@ -38,6 +40,9 @@ public record CardCategoryFilter(Set<CardRarity> rarities, IntFilter numberFilte
         }
         if (cardCountFilter != IntFilter.NO_FILTER) {
             descriptionOutput.text(LABEL_FILTER_CARDS, this.cardCountFilter.getDisplayComponent());
+        }
+        if (categoryPointFilter != IntFilter.NO_FILTER) {
+            descriptionOutput.text(LABEL_FILTER_CATEGORY_POINTS, this.categoryPointFilter.getDisplayComponent());
         }
     }
 }

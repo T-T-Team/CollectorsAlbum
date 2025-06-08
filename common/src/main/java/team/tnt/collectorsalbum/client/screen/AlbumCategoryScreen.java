@@ -1,15 +1,23 @@
 package team.tnt.collectorsalbum.client.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import team.tnt.collectorsalbum.CollectorsAlbum;
+import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.AlbumCategoryUiTemplate;
+import team.tnt.collectorsalbum.common.card.AlbumCard;
+import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.menu.AlbumCategoryMenu;
 
 import java.time.Duration;
@@ -19,6 +27,7 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
 
     private final AlbumCategory category;
     private final List<Slot> cardSlots;
+    private final ItemStack itemStack;
 
     public AlbumCategoryScreen(AlbumCategoryMenu menu, Inventory inventory, Component title, AlbumCategory category) {
         super(menu, inventory, title);
@@ -27,6 +36,7 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
         this.imageWidth = template.backgroundTexture.textureWidth();
         this.imageHeight = template.backgroundTexture.textureHeight();
         this.cardSlots = menu.slots.stream().filter(slot -> !(slot.container instanceof Inventory)).toList();
+        this.itemStack = AlbumNavigationHelper.getStoredAlbum();
     }
 
     public AlbumCategory getCategory() {
@@ -37,6 +47,13 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
     protected void init() {
         super.init();
         AlbumNavigationHelper.restoreMousePositionFromSnapshot();
+
+        Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+        if (album == null) {
+            CollectorsAlbum.LOGGER.error("Failed to open album category {} due to invalid album item: {}", category.identifier(), itemStack);
+            AlbumNavigationHelper.navigateHomepage();
+            return;
+        }
 
         PageButton prevPage = addRenderableWidget(new PageButton(leftPos + 22, topPos + 156, false, btn -> AlbumNavigationHelper.navigatePreviousCategory(), true));
         prevPage.setTooltip(Tooltip.create(AlbumNavigationHelper.getPreviousCategoryTitle()));
@@ -58,8 +75,18 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int $$1, int $$2) {
-        int width = font.width(category.getDisplayText());
-        graphics.drawString(font, category.getDisplayText(), (imageWidth - width) / 2, -15, 0xFFFFFF, false);
+        Component categoryLabel = category.getDisplayText();
+        Style displayTextStyle = categoryLabel.getStyle().withItalic(true);
+        MutableComponent displayLabel = categoryLabel.copy().withStyle(ChatFormatting.BOLD);
+        int width = font.width(displayLabel);
+        graphics.drawString(font, displayLabel, (imageWidth - width) / 2, -25, 0xFFFFFF, false);
+
+        Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+        if (album != null) {
+            int points = album.getCardsForCategory(this.category.identifier()).stream().mapToInt(AlbumCard::getPoints).sum();
+            Component pointLabel = AlbumMainPageScreen.getPointLabel(points).withStyle(displayTextStyle);
+            graphics.drawString(font, pointLabel, (imageWidth - font.width(pointLabel)) / 2, -15, 0xFFFFFF, false);
+        }
     }
 
     @Override

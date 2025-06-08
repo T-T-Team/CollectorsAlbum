@@ -952,6 +952,7 @@
   "collectorsalbum.label.filter.points": "Points",
   "collectorsalbum.label.filter.numbers": "Numbers",
   "collectorsalbum.label.filter.cards": "Cards",
+  "collectorsalbum.label.filter.category_points": "Category points",
   "collectorsalbum.label.applies": "Applies",
   "collectorsalbum.label.passed": "Passed",
   "collectorsalbum.label.failed": "Failed",

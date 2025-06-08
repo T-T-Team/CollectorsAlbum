@@ -53,7 +53,7 @@ public class AlbumCategoryCardBonusFilter implements IntermediateAlbumBonus {
                 description.nested(() -> this.filter.generateDescriptionLabels(description));
             }
             boolean canApply = this.canApply(description.getContext());
-            Component matchingCards = Component.literal(String.valueOf(this.getMatchingCards(description.getContext())))
+            Component matchingCards = Component.literal(String.valueOf(this.getMatchingCards(description.getContext()).size()))
                     .withStyle(AlbumBonusDescriptionOutput.getBooleanColor(canApply));
             Component matched = Component.translatable(MATCHED, matchingCards);
             description.text(matched, this.filter.cardCountFilter().getDisplayComponent());
@@ -87,15 +87,15 @@ public class AlbumCategoryCardBonusFilter implements IntermediateAlbumBonus {
 
     @Override
     public boolean canApply(ActionContext context) {
-        int matching = this.getMatchingCards(context);
-        return this.filter.cardCountFilter().test(matching);
+        List<AlbumCard> matching = this.getMatchingCards(context);
+        int categoryValue = matching.stream().mapToInt(AlbumCard::getPoints).sum();
+        return this.filter.categoryPointFilter().test(categoryValue) && this.filter.cardCountFilter().test(matching.size());
     }
 
-    private int getMatchingCards(ActionContext context) {
+    private List<AlbumCard> getMatchingCards(ActionContext context) {
         return context.get(ActionContext.ALBUM, Album.class).map(album -> {
             Collection<AlbumCard> cards = album.getCardsForCategory(this.category);
-            List<AlbumCard> validCards = cards.stream().filter(card -> card.test(this.filter)).toList();
-            return validCards.size();
-        }).orElse(0);
+            return cards.stream().filter(card -> card.test(this.filter)).toList();
+        }).orElse(Collections.emptyList());
     }
 }

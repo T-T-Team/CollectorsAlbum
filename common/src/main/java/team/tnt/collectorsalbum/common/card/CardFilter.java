@@ -9,4 +9,6 @@ public interface CardFilter {
     IntFilter numberFilter();
 
     IntFilter pointFilter();
+
+    IntFilter categoryPointFilter();
 }

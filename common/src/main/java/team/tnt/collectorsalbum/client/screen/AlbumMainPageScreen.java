@@ -103,6 +103,10 @@ public class AlbumMainPageScreen extends Screen {
         this.renderTransparentBackground(graphics);
     }
 
+    public static MutableComponent getPointLabel(int points) {
+        return Component.translatable(LANG_KEY_POINTS, points);
+    }
+
     protected void addDefaultWidgets() {
         List<BookmarkWidget> bookmarks = getBookmarks(width, height, textureWidth, textureHeight, 180);
         for (BookmarkWidget bookmark : bookmarks) {
