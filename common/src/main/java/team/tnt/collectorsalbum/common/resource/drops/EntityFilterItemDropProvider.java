@@ -13,6 +13,8 @@ import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
+import java.util.stream.Stream;
+
 public class EntityFilterItemDropProvider implements ItemDropProvider {
 
     public static final MapCodec<EntityFilterItemDropProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -54,5 +56,10 @@ public class EntityFilterItemDropProvider implements ItemDropProvider {
     @Override
     public ItemDropProviderType<?> getType() {
         return ItemDropProviderRegistry.ENTITY_FILTER.get();
+    }
+
+    @Override
+    public Stream<ItemStack> view() {
+        return Stream.empty();
     }
 }

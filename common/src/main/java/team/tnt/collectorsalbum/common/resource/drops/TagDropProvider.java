@@ -22,6 +22,7 @@ import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 import team.tnt.collectorsalbum.util.TagHelper;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class TagDropProvider implements ItemDropProvider {
 
@@ -54,5 +55,10 @@ public class TagDropProvider implements ItemDropProvider {
     @Override
     public ItemDropProviderType<?> getType() {
         return ItemDropProviderRegistry.TAG_DROP_PROVIDER.get();
+    }
+
+    @Override
+    public Stream<ItemStack> view() {
+        return TagHelper.getTagValues(this.tagKey, BuiltInRegistries.ITEM).stream().map(Item::getDefaultInstance);
     }
 }

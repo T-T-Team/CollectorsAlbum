@@ -21,6 +21,9 @@
     ],
     "client": [
       "team.tnt.collectorsalbum.CollectorsAlbumClientFabric"
+    ],
+    "jei_mod_plugin": [
+      "team.tnt.collectorsalbum.integrations.jei.JeiIntegrationPlugin"
     ]
   },
   "mixins": [

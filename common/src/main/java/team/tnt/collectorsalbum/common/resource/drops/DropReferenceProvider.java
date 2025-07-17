@@ -11,6 +11,8 @@ import team.tnt.collectorsalbum.common.resource.MobAdditionalDropManager;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
+import java.util.stream.Stream;
+
 public class DropReferenceProvider implements ItemDropProvider {
 
     public static final MapCodec<DropReferenceProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -34,5 +36,10 @@ public class DropReferenceProvider implements ItemDropProvider {
     @Override
     public ItemDropProviderType<?> getType() {
         return ItemDropProviderRegistry.REFERENCE.get();
+    }
+
+    @Override
+    public Stream<ItemStack> view() {
+        return CardPackDropManager.getInstance().getProvider(this.reference).view();
     }
 }

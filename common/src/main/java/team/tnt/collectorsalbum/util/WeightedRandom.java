@@ -57,6 +57,10 @@ public class WeightedRandom<T> implements Supplier<T> {
         return defaultValue;
     }
 
+    public List<WeightedItem<T>> getEntries() {
+        return items;
+    }
+
     private int getTotal() {
         return this.items.stream().mapToInt(WeightedItem::getWeight).sum();
     }

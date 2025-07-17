@@ -14,6 +14,7 @@ import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class RepeatedItemDropProvider implements ItemDropProvider {
 
@@ -41,5 +42,10 @@ public class RepeatedItemDropProvider implements ItemDropProvider {
     @Override
     public ItemDropProviderType<?> getType() {
         return ItemDropProviderRegistry.REPEATED_DROP_PROVIDER.get();
+    }
+
+    @Override
+    public Stream<ItemStack> view() {
+        return this.item.view();
     }
 }

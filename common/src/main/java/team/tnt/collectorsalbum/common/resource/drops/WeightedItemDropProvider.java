@@ -8,6 +8,8 @@ import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 import team.tnt.collectorsalbum.util.WeightedRandom;
 
+import java.util.stream.Stream;
+
 public class WeightedItemDropProvider implements ItemDropProvider {
 
     public static final MapCodec<WeightedItemDropProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -31,5 +33,13 @@ public class WeightedItemDropProvider implements ItemDropProvider {
     @Override
     public ItemDropProviderType<?> getType() {
         return ItemDropProviderRegistry.WEIGHTED_DROP_PROVIDER.get();
+    }
+
+    @Override
+    public Stream<ItemStack> view() {
+        return this.items.getEntries().stream()
+                .filter(item -> item.getWeight() > 0)
+                .map(WeightedRandom.WeightedItem::item)
+                .flatMap(ItemDropProvider::view);
     }
 }

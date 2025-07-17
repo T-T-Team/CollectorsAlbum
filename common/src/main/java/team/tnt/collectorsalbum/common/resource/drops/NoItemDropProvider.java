@@ -6,6 +6,8 @@ import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
+import java.util.stream.Stream;
+
 public final class NoItemDropProvider implements ItemDropProvider {
 
     public static final NoItemDropProvider INSTANCE = new NoItemDropProvider();
@@ -20,5 +22,10 @@ public final class NoItemDropProvider implements ItemDropProvider {
     @Override
     public ItemDropProviderType<?> getType() {
         return ItemDropProviderRegistry.NO_DROP_PROVIDER.get();
+    }
+
+    @Override
+    public Stream<ItemStack> view() {
+        return Stream.empty();
     }
 }

@@ -15,6 +15,7 @@ import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 import team.tnt.collectorsalbum.platform.Codecs;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class RandomChanceFilterItemDropProvider implements ItemDropProvider {
 
@@ -44,5 +45,10 @@ public class RandomChanceFilterItemDropProvider implements ItemDropProvider {
     @Override
     public ItemDropProviderType<?> getType() {
         return ItemDropProviderRegistry.RANDOM_CHANCE.get();
+    }
+
+    @Override
+    public Stream<ItemStack> view() {
+        return this.chance.floatValue() > 0.0F ? this.item.view() : Stream.empty();
     }
 }

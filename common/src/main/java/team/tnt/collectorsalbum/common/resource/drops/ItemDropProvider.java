@@ -4,9 +4,13 @@ import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
+import java.util.stream.Stream;
+
 public interface ItemDropProvider {
 
     void generateDrops(ActionContext context, OutputBuilder<ItemStack> output);
 
     ItemDropProviderType<?> getType();
+
+    Stream<ItemStack> view();
 }

@@ -941,7 +941,6 @@
   "collectorsalbum.label.bonus.point_filter": "Point filter",
   "collectorsalbum.label.bonus.mob_effect.effect": "%s%s",
   "collectorsalbum.label.bonus.mob_effect.duration": "Duration: %s",
-
   "collectorsalbum.label.press_open": "Press Right mouse button to open",
   "collectorsalbum.label.use_open": "Hold Right mouse button to open",
   "collectorsalbum.label.custom_drop_table": "Drop table: %s",
@@ -957,6 +956,7 @@
   "collectorsalbum.label.passed": "Passed",
   "collectorsalbum.label.failed": "Failed",
   "collectorsalbum.label.pack_empty": "Opened card pack is empty",
+  "collectorsalbum.label.jei.pack_drop.title": "Card Pack Drops",
   "card.rarity.common": "Common",
   "card.rarity.uncommon": "Uncommon",
   "card.rarity.rare": "Rare",
@@ -1070,6 +1070,19 @@
   "sound.collectorsalbum.flip_legendary": "Flip Legendary",
   "sound.collectorsalbum.flip_mythical": "Flip Mythical",
   "sound.collectorsalbum.pack_open": "Pack Open",
+
+  "pack_drop.collectorsalbum.common_card_pack": "§7Common Card Pack§r",
+  "pack_drop.collectorsalbum.common_repacked_card_pack": "§7Common Repacked Card Pack§r",
+  "pack_drop.collectorsalbum.uncommon_card_pack": "§aUncommon Card Pack§r",
+  "pack_drop.collectorsalbum.uncommon_repacked_card_pack": "§aUncommon Repacked Card Pack§r",
+  "pack_drop.collectorsalbum.rare_card_pack": "§9Rare Card Pack§r",
+  "pack_drop.collectorsalbum.rare_repacked_card_pack": "§9Rare Repacked Card Pack§r",
+  "pack_drop.collectorsalbum.epic_card_pack": "§5Epic Card Pack§r",
+  "pack_drop.collectorsalbum.epic_repacked_card_pack": "§5Epic Repacked Card Pack§r",
+  "pack_drop.collectorsalbum.legendary_card_pack": "§6Legendary Card Pack§r",
+  "pack_drop.collectorsalbum.legendary_repacked_card_pack": "§6Legendary Repacked Card Pack§r",
+  "pack_drop.collectorsalbum.mythical_card_pack": "§cMythical Card Pack§r",
+  "pack_drop.collectorsalbum.mythical_repacked_card_pack": "§cMythical Repacked Card Pack§r",
 
   "curios.identifier.album": "Album",
   "trinkets.slot.hand.album": "Album"

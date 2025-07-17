@@ -8,6 +8,7 @@ import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class ListItemDropProvider implements ItemDropProvider {
 
@@ -31,5 +32,10 @@ public class ListItemDropProvider implements ItemDropProvider {
     @Override
     public ItemDropProviderType<?> getType() {
         return ItemDropProviderRegistry.LIST_DROP_PROVIDER.get();
+    }
+
+    @Override
+    public Stream<ItemStack> view() {
+        return this.items.stream().flatMap(ItemDropProvider::view);
     }
 }
