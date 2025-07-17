@@ -80,13 +80,13 @@ dependencies {
     // Configuration
     implementation("dev.toma.configuration:configuration-${minecraft_version}:${configuration_version}-forge")
 
+    // JEI
+    compileOnly "mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"
+    implementation "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
+
     // Note: Hack fix for now, force jopt-simple to be exactly 5.0.4 because Mojang ships that version, but some transitive dependencies request 6.0+
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
     annotationProcessor("org.spongepowered:mixin:${mixin_version}:processor")
-
-    // JEI
-    compileOnly "mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"
-    runtimeOnly "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
 
     compileOnly project(":common")
 }
