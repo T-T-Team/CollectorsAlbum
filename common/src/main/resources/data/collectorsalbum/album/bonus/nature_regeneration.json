@@ -15,13 +15,9 @@
           }
         },
         "item": {
-          "type": "collectorsalbum:effect",
-          "effect": "minecraft:regeneration",
-          "amplifier": {
-            "type": "collectorsalbum:config",
-            "config": "collectorsalbum",
-            "path": "bonusConfig.fullMobEffectAmplifier"
-          }
+          "type": "collectorsalbum:player_health",
+          "amount": 1.0,
+          "interval": 25
         }
       },
       {
@@ -33,13 +29,9 @@
           }
         },
         "item": {
-          "type": "collectorsalbum:effect",
-          "effect": "minecraft:regeneration",
-          "amplifier": {
-            "type": "collectorsalbum:config",
-            "config": "collectorsalbum",
-            "path": "bonusConfig.baseMobEffectAmplifier"
-          }
+          "type": "collectorsalbum:player_health",
+          "amount": 1.0,
+          "interval": 50
         }
       }
     ]

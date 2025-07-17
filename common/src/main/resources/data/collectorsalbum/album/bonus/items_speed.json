@@ -15,12 +15,12 @@
           }
         },
         "item": {
-          "type": "collectorsalbum:effect",
-          "effect": "minecraft:speed",
-          "amplifier": {
-            "type": "collectorsalbum:config",
-            "config": "collectorsalbum",
-            "path": "bonusConfig.fullMobEffectAmplifier"
+          "type": "collectorsalbum:attribute",
+          "attribute": "minecraft:generic.movement_speed",
+          "modifier": {
+            "id": "collectorsalbum:items_speed",
+            "amount": 0.4,
+            "operation": "add_multiplied_total"
           }
         }
       },
@@ -33,12 +33,12 @@
           }
         },
         "item": {
-          "type": "collectorsalbum:effect",
-          "effect": "minecraft:speed",
-          "amplifier": {
-            "type": "collectorsalbum:config",
-            "config": "collectorsalbum",
-            "path": "bonusConfig.baseMobEffectAmplifier"
+          "type": "collectorsalbum:attribute",
+          "attribute": "minecraft:generic.movement_speed",
+          "modifier": {
+            "id": "collectorsalbum:items_speed",
+            "amount": 0.2,
+            "operation": "add_multiplied_total"
           }
         }
       }
