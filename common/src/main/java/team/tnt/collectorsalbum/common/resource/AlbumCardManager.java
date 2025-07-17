@@ -16,7 +16,7 @@ import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListene
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard> {
+public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard> implements SynchronizedResource<AlbumCard> {
 
     private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_card_manager");
     private static final AlbumCardManager INSTANCE = new AlbumCardManager();
@@ -86,12 +86,12 @@ public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard>
     }
 
     @Override
-    public List<AlbumCard> getNetworkData() {
+    public List<AlbumCard> getDataForSync() {
         return new ArrayList<>(this.registeredCards.values());
     }
 
     @Override
-    public synchronized void onNetworkDataReceived(List<AlbumCard> collection) {
+    public synchronized void receiveNetworkData(List<AlbumCard> collection) {
         registeredCards.clear();
         byItemMap.clear();
         collection.forEach(card -> {

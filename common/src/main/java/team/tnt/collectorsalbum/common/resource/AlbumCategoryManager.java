@@ -11,7 +11,7 @@ import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListene
 
 import java.util.*;
 
-public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<AlbumCategory> {
+public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<AlbumCategory> implements SynchronizedResource<AlbumCategory> {
 
     private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_category_manager");
     private static final AlbumCategoryManager INSTANCE = new AlbumCategoryManager();
@@ -82,12 +82,12 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
     }
 
     @Override
-    public List<AlbumCategory> getNetworkData() {
+    public List<AlbumCategory> getDataForSync() {
         return new ArrayList<>(registeredCategories.values());
     }
 
     @Override
-    public synchronized void onNetworkDataReceived(List<AlbumCategory> collection) {
+    public synchronized void receiveNetworkData(List<AlbumCategory> collection) {
         registeredCategories.clear();
         pagedCategories.clear();
         collection.forEach(category -> registeredCategories.put(category.identifier(), category));

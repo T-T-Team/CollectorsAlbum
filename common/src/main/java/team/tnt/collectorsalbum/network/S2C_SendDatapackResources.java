@@ -15,17 +15,14 @@ import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.AlbumCategoryType;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
 import team.tnt.collectorsalbum.common.card.AlbumCardType;
-import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
-import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
-import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
+import team.tnt.collectorsalbum.common.resource.*;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonus;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonusType;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
-import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
 import java.util.List;
 
-public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategory> categories, List<AlbumBonus> bonuses) implements CustomPacketPayload {
+public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategory> categories, List<AlbumBonus> bonuses, List<CardPackDropManager.DropEntry> drops) implements CustomPacketPayload {
 
     private static final ResourceLocation IDENTIFIER = PlatformNetworkManager.generatePacketIdentifier(CollectorsAlbum.MOD_ID, S2C_SendDatapackResources.class);
     public static final Type<S2C_SendDatapackResources> TYPE = new Type<>(IDENTIFIER);
@@ -36,14 +33,15 @@ public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategor
 
     public S2C_SendDatapackResources() {
         this(
-                AlbumCardManager.getInstance().getNetworkData(),
-                AlbumCategoryManager.getInstance().getNetworkData(),
-                AlbumBonusManager.getInstance().getNetworkData()
+                AlbumCardManager.getInstance().getDataForSync(),
+                AlbumCategoryManager.getInstance().getDataForSync(),
+                AlbumBonusManager.getInstance().getDataForSync(),
+                CardPackDropManager.getInstance().getDataForSync()
         );
     }
 
-    private S2C_SendDatapackResources(ValueHolder<AlbumCard> cardHolder, ValueHolder<AlbumCategory> categoryHolder, ValueHolder<AlbumBonus> bonusHolder) {
-        this(cardHolder.values, categoryHolder.values, bonusHolder.values);
+    private S2C_SendDatapackResources(ValueHolder<AlbumCard> cardHolder, ValueHolder<AlbumCategory> categoryHolder, ValueHolder<AlbumBonus> bonusHolder, ValueHolder<CardPackDropManager.DropEntry> dropHolder) {
+        this(cardHolder.values, categoryHolder.values, bonusHolder.values, dropHolder.values);
     }
 
     @Override
@@ -55,6 +53,7 @@ public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategor
         this.encodeWithCodec(buffer, AlbumCardType.INSTANCE_CODEC, this.cards());
         this.encodeWithCodec(buffer, AlbumCategoryType.INSTANCE_CODEC, this.categories());
         this.encodeWithCodec(buffer, AlbumBonusType.INSTANCE_CODEC, this.bonuses());
+        this.encodeWithCodec(buffer, CardPackDropManager.DropEntry.CODEC, this.drops());
     }
 
     private <T> void encodeWithCodec(FriendlyByteBuf buf, Codec<T> codec, List<T> list) {
@@ -69,16 +68,17 @@ public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategor
         return new S2C_SendDatapackResources(
                 decodeWithCodec(buffer, AlbumCardType.INSTANCE_CODEC, AlbumCardManager.getInstance()),
                 decodeWithCodec(buffer, AlbumCategoryType.INSTANCE_CODEC, AlbumCategoryManager.getInstance()),
-                decodeWithCodec(buffer, AlbumBonusType.INSTANCE_CODEC, AlbumBonusManager.getInstance())
+                decodeWithCodec(buffer, AlbumBonusType.INSTANCE_CODEC, AlbumBonusManager.getInstance()),
+                decodeWithCodec(buffer, CardPackDropManager.DropEntry.CODEC, CardPackDropManager.getInstance())
         );
     }
 
-    private static <T> ValueHolder<T> decodeWithCodec(FriendlyByteBuf buffer, Codec<T> codec, PlatformGsonCodecReloadListener<T> listener) {
+    private static <T> ValueHolder<T> decodeWithCodec(FriendlyByteBuf buffer, Codec<T> codec, SynchronizedResource<T> listener) {
         Codec<ValueHolder<T>> valueCodec = ValueHolder.codec(codec);
         Tag tag = buffer.readNbt();
         DataResult<ValueHolder<T>> result = valueCodec.parse(NbtOps.INSTANCE, tag);
         ValueHolder<T> holder = result.getOrThrow();
-        listener.onNetworkDataReceived(holder.values()); // has to be done immediately due to bad design for categories
+        listener.receiveNetworkData(holder.values()); // has to be done immediately due to bad design for categories
         return holder;
     }
 

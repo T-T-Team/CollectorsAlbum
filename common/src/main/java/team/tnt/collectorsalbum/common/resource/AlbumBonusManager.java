@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<AlbumBonus> {
+public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<AlbumBonus> implements SynchronizedResource<AlbumBonus> {
 
     private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_bonus_manager");
     private static final AlbumBonusManager INSTANCE = new AlbumBonusManager();
@@ -64,14 +64,14 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Alb
     }
 
     @Override
-    public List<AlbumBonus> getNetworkData() {
+    public List<AlbumBonus> getDataForSync() {
         return new ArrayList<>(this.registeredBonuses.values());
     }
 
     @Override
-    public synchronized void onNetworkDataReceived(List<AlbumBonus> collection) {
+    public synchronized void receiveNetworkData(List<AlbumBonus> data) {
         this.bonusList.clear();
-        collection.stream().filter(bonus -> bonus != NoBonus.INSTANCE).forEach(bonusList::add);
+        data.stream().filter(bonus -> bonus != NoBonus.INSTANCE).forEach(bonusList::add);
     }
 
     @Override
