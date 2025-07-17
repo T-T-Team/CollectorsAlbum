@@ -72,11 +72,6 @@ public class DefaultAlbumCategory implements AlbumCategory {
     }
 
     @Override
-    public boolean accepts(AlbumCard card) {
-        return this.cards.contains(card);
-    }
-
-    @Override
     public AlbumCategoryType<?> getType() {
         return CategoryRegistry.CATEGORY.get();
     }

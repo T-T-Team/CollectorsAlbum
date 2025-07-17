@@ -78,7 +78,7 @@ public final class Album implements Predicate<Album> {
         this(albumId, new HashMap<>(), new HashMap<>());
     }
 
-    private Album(UUID albumId, Map<ResourceLocation, Set<AlbumCard>> cardsByCategory, Map<ResourceLocation, NonNullList<ItemStack>> categoryInventories) {
+    public Album(UUID albumId, Map<ResourceLocation, Set<AlbumCard>> cardsByCategory, Map<ResourceLocation, NonNullList<ItemStack>> categoryInventories) {
         this.albumId = albumId;
         this.cardsByCategory = cardsByCategory;
         this.categoryInventories = categoryInventories;

@@ -1,6 +1,7 @@
 package team.tnt.collectorsalbum;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -11,6 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import team.tnt.collectorsalbum.common.CollectorsAlbumRegistries;
+import team.tnt.collectorsalbum.common.command.CollectorsAlbumCommand;
 import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.*;
 import team.tnt.collectorsalbum.platform.FabricPlatform;
@@ -30,6 +32,9 @@ public class CollectorsAlbumFabric implements ModInitializer {
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> CollectorsAlbum.serverStopped());
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> FabricPlatform.server = null);
         UseItemCallback.EVENT.register(this::startPackOpening);
+        CommandRegistrationCallback.EVENT.register(
+                (commandDispatcher, commandBuildContext, commandSelection) -> CollectorsAlbumCommand.register(commandDispatcher)
+        );
         CustomPlatformRegistryBindCallback.EVENT.register(registry -> {
             if (registry.key().equals(CollectorsAlbumRegistries.Keys.CARD_TYPE_KEY)) {
                 CardTypeRegistry.REGISTRY.bind();

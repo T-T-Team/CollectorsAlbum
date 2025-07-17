@@ -941,8 +941,6 @@
   "collectorsalbum.label.bonus.point_filter": "Point filter",
   "collectorsalbum.label.bonus.mob_effect.effect": "%s%s",
   "collectorsalbum.label.bonus.mob_effect.duration": "Duration: %s",
-  "collectorsalbum.label.bonus.player_health.heal": "Recover %s health every %s seconds",
-  "collectorsalbum.label.bonus.player_health.hurt": "Lose %s health every %s seconds",
   "collectorsalbum.label.press_open": "Press Right mouse button to open",
   "collectorsalbum.label.use_open": "Hold Right mouse button to open",
   "collectorsalbum.label.custom_drop_table": "Drop table: %s",

@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.NewRegistryEvent;
 import team.tnt.collectorsalbum.client.CollectorsAlbumClient;
+import team.tnt.collectorsalbum.common.command.CollectorsAlbumCommand;
 import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.*;
 import team.tnt.collectorsalbum.platform.registration.ForgeRegistration;
@@ -57,6 +59,7 @@ public class CollectorsAlbumForge {
         forgeBus.addListener(this::onItemStartUse);
         forgeBus.addListener(this::setPackUseDuration);
         forgeBus.addListener(this::generateDrops);
+        forgeBus.addListener(this::addCommands);
 
         DistExecutor.runWhenOn(Dist.CLIENT, () -> CollectorsAlbumClient::construct);
     }
@@ -124,5 +127,9 @@ public class CollectorsAlbumForge {
         if (itemStack.has(ItemDataComponentRegistry.PACK_DROPS_TABLE.get()) && entity instanceof ServerPlayer player) {
             CollectorsAlbum.openPack(player);
         }
+    }
+
+    private void addCommands(RegisterCommandsEvent event) {
+        CollectorsAlbumCommand.register(event.getDispatcher());
     }
 }

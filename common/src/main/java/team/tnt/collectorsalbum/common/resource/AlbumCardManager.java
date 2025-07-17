@@ -64,6 +64,10 @@ public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard>
                 .collect(Collectors.toList());
     }
 
+    public Map<Item, AlbumCard> getByItemMap() {
+        return Collections.unmodifiableMap(this.byItemMap);
+    }
+
     @Override
     protected void preApply(Map<ResourceLocation, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler) {
         this.registeredCards.clear();

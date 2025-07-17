@@ -18,5 +18,4 @@ public final class AlbumBonusRegistry {
 
     public static final PlatformRegistry.Reference<AlbumBonusType<AttributeAlbumBonus>> ATTRIBUTE = REGISTRY.register("attribute", () -> new AlbumBonusType<>(AttributeAlbumBonus.CODEC));
     public static final PlatformRegistry.Reference<AlbumBonusType<AlbumMobEffectBonus>> MOB_EFFECT = REGISTRY.register("effect", () -> new AlbumBonusType<>(AlbumMobEffectBonus.CODEC));
-    public static final PlatformRegistry.Reference<AlbumBonusType<PlayerHealthBonus>> PLAYER_HEALTH = REGISTRY.register("player_health", () -> new AlbumBonusType<>(PlayerHealthBonus.CODEC));
 }

@@ -16,6 +16,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -23,6 +24,7 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import team.tnt.collectorsalbum.client.CollectorsAlbumClient;
+import team.tnt.collectorsalbum.common.command.CollectorsAlbumCommand;
 import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.*;
 import team.tnt.collectorsalbum.platform.network.NeoforgeNetwork;
@@ -61,6 +63,7 @@ public class CollectorsAlbumNeoforge {
         neoBus.addListener(this::onItemStartUse);
         neoBus.addListener(this::setPackUseDuration);
         neoBus.addListener(this::generateDrops);
+        neoBus.addListener(this::addCommands);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             CollectorsAlbumClient.construct();
@@ -101,7 +104,11 @@ public class CollectorsAlbumNeoforge {
         NeoforgeRegistration.bindNewRegistries(event);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    private void addCommands(RegisterCommandsEvent event) {
+        CollectorsAlbumCommand.register(event.getDispatcher());
+    }
+
+    @OnlyIn(Dist.CLIENT) // TODO move to client only class
     private void registerScreens(RegisterMenuScreensEvent event) {
         MenuScreenRegistration.bindRefs(event::register);
     }
