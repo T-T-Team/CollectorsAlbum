@@ -6,17 +6,6 @@ subprojects {
     apply plugin: 'java'
 
     java.toolchain.languageVersion = JavaLanguageVersion.of("${java_version}")
-    // Uncomment to generate sources jar file
-    //java.withSourcesJar()
-    // Uncomment to generate javadoc file
-    //java.withJavadocJar()
-
-    // Fixes Forge builds
-    configurations.configureEach {
-        resolutionStrategy {
-            force 'net.sf.jopt-simple:jopt-simple:5.0.4'
-        }
-    }
 
     jar {
         manifest {
@@ -43,6 +32,14 @@ subprojects {
         maven {
             name = "Configuration"
             url = "https://api.repsy.io/mvn/toma/public/"
+        }
+        maven {
+            name = "Jared's maven"
+            url = "https://maven.blamejared.com/"
+        }
+        maven {
+            name = "ModMaven"
+            url = "https://modmaven.dev"
         }
     }
 

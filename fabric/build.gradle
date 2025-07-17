@@ -42,6 +42,9 @@ dependencies {
     modImplementation("dev.emi:trinkets:${trinkets_version}")
     // Configuration
     modImplementation("dev.toma.configuration:configuration-${minecraft_version}:${configuration_version}-fabric")
+    // JEI
+    modCompileOnly "mezz.jei:jei-${minecraft_version}-fabric-api:${jei_version}"
+    modRuntimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
 
     compileOnly project(":common")
 }

@@ -51,8 +51,8 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 
 repositories {
     maven {
-        name = "Curios Continuation" // TODO replace with official curios once released on 1.21
-        url = uri("https://maven.octo-studios.com/releases")
+        name = "Illusive Soulworks maven"
+        url = uri("https://maven.theillusivec4.top/")
     }
 }
 
@@ -60,10 +60,15 @@ dependencies {
     implementation "net.neoforged:neoforge:${project.neoforge_version}"
 
     // Curios
-    implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
+    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     // Configuration
     implementation "dev.toma.configuration:configuration-${minecraft_version}:${configuration_version}-neoforge"
+
+    // JEI
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
     compileOnly project(":common")
 }

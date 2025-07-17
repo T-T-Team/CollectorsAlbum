@@ -22,4 +22,6 @@ minecraft {
 dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: "${mixin_version}"
     compileOnly "dev.toma.configuration:configuration-${minecraft_version}:${configuration_version}-common"
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-common:${jei_version}"
 }
