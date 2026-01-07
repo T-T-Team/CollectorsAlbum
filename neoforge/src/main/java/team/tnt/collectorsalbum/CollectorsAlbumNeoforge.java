@@ -6,13 +6,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
@@ -31,7 +27,6 @@ import team.tnt.collectorsalbum.integrations.PlatformIntegrations;
 import team.tnt.collectorsalbum.integrations.curios.CuriosPlugin;
 import team.tnt.collectorsalbum.platform.network.NeoforgeNetwork;
 import team.tnt.collectorsalbum.platform.registration.NeoforgeRegistration;
-import team.tnt.collectorsalbum.platform.resource.MenuScreenRegistration;
 
 import java.util.stream.Stream;
 
@@ -67,11 +62,6 @@ public class CollectorsAlbumNeoforge {
         neoBus.addListener(this::setPackUseDuration);
         neoBus.addListener(this::generateDrops);
         neoBus.addListener(this::addCommands);
-
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            CollectorsAlbumClient.construct();
-            eventBus.addListener(this::registerScreens);
-        }
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
@@ -109,11 +99,6 @@ public class CollectorsAlbumNeoforge {
 
     private void addCommands(RegisterCommandsEvent event) {
         CollectorsAlbumCommand.register(event.getDispatcher());
-    }
-
-    @OnlyIn(Dist.CLIENT) // TODO move to client only class
-    private void registerScreens(RegisterMenuScreensEvent event) {
-        MenuScreenRegistration.bindRefs(event::register);
     }
 
     private void onItemStartUse(PlayerInteractEvent.RightClickItem event) {
