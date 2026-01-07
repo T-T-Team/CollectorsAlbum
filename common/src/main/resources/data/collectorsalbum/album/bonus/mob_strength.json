@@ -1,47 +1,63 @@
 {
-  "type": "collectorsalbum:config_toggle",
-  "config": "collectorsalbum",
-  "path": "bonusConfig.strengthBonusEnabled",
-  "enabled": {
-    "type": "collectorsalbum:first_applicable",
-    "items": [
-      {
-        "type": "collectorsalbum:category_cards",
-        "category": "collectorsalbum:mobs",
-        "filter": {
-          "rarities": ["mythical"],
-          "cards": {
-            "min": 30
+  "title": {
+    "translate": "bonus.collectorsalbum.mob_strength.title"
+  },
+  "description": {
+    "translate": "bonus.collectorsalbum.mob_strength.description"
+  },
+  "value": {
+    "type": "collectorsalbum:config_toggle",
+    "config": "collectorsalbum",
+    "path": "bonusConfig.strengthBonusEnabled",
+    "enabled": {
+      "type": "collectorsalbum:first_applicable",
+      "items": [
+        {
+          "type": "collectorsalbum:category_cards",
+          "category": "collectorsalbum:mobs",
+          "filter": {
+            "rarities": ["mythical"],
+            "cards": {
+              "min": 30
+            }
+          },
+          "item": {
+            "type": "collectorsalbum:attribute",
+            "attribute": "minecraft:generic.attack_damage",
+            "modifier": {
+              "id": "collectorsalbum:mob_strength",
+              "amount": 6.0,
+              "operation": "add_value"
+            },
+            "label": {
+              "translate": "bonus.collectorsalbum.mob_strength.label.step"
+            },
+            "contextual": true
           }
         },
-        "item": {
-          "type": "collectorsalbum:attribute",
-          "attribute": "minecraft:generic.attack_damage",
-          "modifier": {
-            "id": "collectorsalbum:mob_strength",
-            "amount": 6.0,
-            "operation": "add_value"
+        {
+          "type": "collectorsalbum:category_cards",
+          "category": "collectorsalbum:mobs",
+          "filter": {
+            "cards": {
+              "min": 30
+            }
+          },
+          "item": {
+            "type": "collectorsalbum:attribute",
+            "attribute": "minecraft:generic.attack_damage",
+            "modifier": {
+              "id": "collectorsalbum:mob_strength",
+              "amount": 3.0,
+              "operation": "add_value"
+            },
+            "label": {
+              "translate": "bonus.collectorsalbum.mob_strength.label.step"
+            },
+            "contextual": true
           }
         }
-      },
-      {
-        "type": "collectorsalbum:category_cards",
-        "category": "collectorsalbum:mobs",
-        "filter": {
-          "cards": {
-            "min": 30
-          }
-        },
-        "item": {
-          "type": "collectorsalbum:attribute",
-          "attribute": "minecraft:generic.attack_damage",
-          "modifier": {
-            "id": "collectorsalbum:mob_strength",
-            "amount": 3.0,
-            "operation": "add_value"
-          }
-        }
-      }
-    ]
+      ]
+    }
   }
 }

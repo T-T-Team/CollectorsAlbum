@@ -6,12 +6,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import team.tnt.collectorsalbum.common.Album;
-import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
-import team.tnt.collectorsalbum.common.AlbumCategory;
-import team.tnt.collectorsalbum.common.CommonLabels;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
 import team.tnt.collectorsalbum.common.card.CardCategoryFilter;
-import team.tnt.collectorsalbum.common.card.CardUiTemplate;
+import team.tnt.collectorsalbum.common.card.CardRarity;
+import team.tnt.collectorsalbum.common.card.IntFilter;
 import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
@@ -19,11 +17,11 @@ import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
-public class AlbumCategoryCardBonusFilter implements IntermediateAlbumBonus {
+public record AlbumCategoryCardBonusFilter(ResourceLocation category, CardCategoryFilter filter, AlbumBonus item) implements IntermediateAlbumBonus {
 
     public static final Component UNKNOWN_CATEGORY_LABEL = Component.translatable("collectorsalbum.label.unknown").withStyle(ChatFormatting.RED);
-    public static final String MATCHED = "collectorsalbum.label.bonus.matched_cards";
 
     public static final MapCodec<AlbumCategoryCardBonusFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("category").forGetter(t -> t.category),
@@ -31,34 +29,61 @@ public class AlbumCategoryCardBonusFilter implements IntermediateAlbumBonus {
             AlbumBonusType.INSTANCE_CODEC.fieldOf("item").forGetter(t -> t.item)
     ).apply(instance, AlbumCategoryCardBonusFilter::new));
 
-    private final ResourceLocation category;
-    private final CardCategoryFilter filter;
-    private final AlbumBonus item;
-
-    public AlbumCategoryCardBonusFilter(ResourceLocation category, CardCategoryFilter filter, AlbumBonus item) {
-        this.category = category;
-        this.filter = filter;
-        this.item = item;
-    }
-
     @Override
-    public void addDescription(AlbumBonusDescriptionOutput description) {
+    public void appendDetails(SectionOutput writer, ActionContext ctx) {
+        if (this.filter == CardCategoryFilter.NO_FILTER)
+            return;
+        Album album = ctx.get(ActionContext.ALBUM, Album.class).orElse(null);
+        if (album == null)
+            return;
+        Collection<AlbumCard> cards = album.getCardsForCategory(this.category);
+        int matching = (int) cards.stream().filter(card -> card.test(this.filter)).count();
         Component categoryDisplayLabel = AlbumCategoryManager.getInstance().findById(this.category)
-                .map(AlbumCategory::getDisplayText).orElse(UNKNOWN_CATEGORY_LABEL);
-        Component categoryIdentifierLabel = Component.literal(this.category.toString());
-        description.text(Component.translatable(CardUiTemplate.ITEM_TOOLTIP_CATEGORY_KEY, categoryDisplayLabel), categoryIdentifierLabel);
-        description.nested(() -> {
-            if (this.filter != CardCategoryFilter.NO_FILTER) {
-                description.text(CardCategoryFilter.LABEL_FILTER);
-                description.nested(() -> this.filter.generateDescriptionLabels(description));
-            }
-            boolean canApply = this.canApply(description.getContext());
-            Component matchingCards = Component.literal(String.valueOf(this.getMatchingCards(description.getContext()).size()))
-                    .withStyle(AlbumBonusDescriptionOutput.getBooleanColor(canApply));
-            Component matched = Component.translatable(MATCHED, matchingCards);
-            description.text(matched, this.filter.cardCountFilter().getDisplayComponent());
-            description.condition(CommonLabels.APPLIES, CommonLabels.getBoolState(canApply), canApply, this);
-        });
+                .map(category -> (Component) category.getDisplayText().copy().withStyle(ChatFormatting.RESET))
+                .orElse(UNKNOWN_CATEGORY_LABEL);
+
+        boolean allFulfilled = this.canApply(ctx);
+        writer.condition(allFulfilled, Component.translatable("collectorsalbum.label.bonus.category_filter", categoryDisplayLabel, matching));
+
+        // matching rarities
+        Set<CardRarity> requiredRarities = this.filter.rarities();
+        if (!requiredRarities.isEmpty()) {
+            int count = this.getMatchingCards(cards, this.filter.filterRarities());
+            String rarities = String.join(",", requiredRarities.stream().map(rarity -> rarity.getDisplayText().getString()).toList());
+            Component text = Component.literal("   ").append(Component.translatable("collectorsalbum.label.bonus.category_filter.rarities", rarities, count));
+            writer.condition(allFulfilled, text);
+        }
+
+        // card numbers
+        IntFilter numberFilter = this.filter.numberFilter();
+        if (numberFilter != IntFilter.NO_FILTER) {
+            int count = this.getMatchingCards(cards, this.filter.filterNumbers());
+            Component range = numberFilter.getDisplayComponent();
+            writer.condition(allFulfilled, Component.literal("   ").append(Component.translatable("collectorsalbum.label.bonus.category_filter.card_numbers", range, count)));
+        }
+
+        // card value
+        IntFilter pointFilter = this.filter.pointFilter();
+        if (pointFilter != IntFilter.NO_FILTER) {
+            int count = this.getMatchingCards(cards, this.filter.filterPoints());
+            Component range = pointFilter.getDisplayComponent();
+            writer.condition(allFulfilled, Component.literal("   ").append(Component.translatable("collectorsalbum.label.bonus.category_filter.card_points", range, count)));
+        }
+
+        // collected matching cards
+        IntFilter collectedFilter = this.filter.cardCountFilter();
+        if (collectedFilter != IntFilter.NO_FILTER) {
+            Component range = collectedFilter.getDisplayComponent();
+            writer.condition(allFulfilled, Component.literal("   ").append(Component.translatable("collectorsalbum.label.bonus.category_filter.collected_cards", range, cards.size())));
+        }
+
+        // category points
+        IntFilter pointsFilter = this.filter.categoryPointFilter();
+        if (pointsFilter != IntFilter.NO_FILTER) {
+            int categoryValue = cards.stream().filter(card -> card.test(this.filter)).mapToInt(AlbumCard::getPoints).sum();
+            Component range = pointsFilter.getDisplayComponent();
+            writer.condition(allFulfilled, Component.literal("   ").append(Component.translatable("collectorsalbum.label.bonus.category_filter.category_points", range, categoryValue)));
+        }
     }
 
     @Override
@@ -97,5 +122,9 @@ public class AlbumCategoryCardBonusFilter implements IntermediateAlbumBonus {
             Collection<AlbumCard> cards = album.getCardsForCategory(this.category);
             return cards.stream().filter(card -> card.test(this.filter)).toList();
         }).orElse(Collections.emptyList());
+    }
+
+    private int getMatchingCards(Collection<AlbumCard> cards, CardCategoryFilter filter) {
+        return (int) cards.stream().filter(card -> card.test(filter)).count();
     }
 }

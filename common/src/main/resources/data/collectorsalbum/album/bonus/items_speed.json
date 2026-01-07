@@ -1,47 +1,61 @@
 {
-  "type": "collectorsalbum:config_toggle",
-  "config": "collectorsalbum",
-  "path": "bonusConfig.speedBonusEnabled",
-  "enabled": {
-    "type": "collectorsalbum:first_applicable",
-    "items": [
-      {
-        "type": "collectorsalbum:category_cards",
-        "category": "collectorsalbum:items",
-        "filter": {
-          "rarities": ["mythical"],
-          "cards": {
-            "min": 30
+  "title": {
+    "translate": "bonus.collectorsalbum.items_speed.title"
+  },
+  "description": {
+    "translate": "bonus.collectorsalbum.items_speed.description"
+  },
+  "value": {
+    "type": "collectorsalbum:config_toggle",
+    "config": "collectorsalbum",
+    "path": "bonusConfig.speedBonusEnabled",
+    "enabled": {
+      "type": "collectorsalbum:first_applicable",
+      "items": [
+        {
+          "type": "collectorsalbum:category_cards",
+          "category": "collectorsalbum:items",
+          "filter": {
+            "rarities": ["mythical"],
+            "cards": {
+              "min": 30
+            }
+          },
+          "item": {
+            "type": "collectorsalbum:attribute",
+            "attribute": "minecraft:generic.movement_speed",
+            "modifier": {
+              "id": "collectorsalbum:items_speed",
+              "amount": 0.4,
+              "operation": "add_multiplied_total"
+            },
+            "label": {
+              "translate": "bonus.collectorsalbum.items_speed.label.step_full"
+            }
           }
         },
-        "item": {
-          "type": "collectorsalbum:attribute",
-          "attribute": "minecraft:generic.movement_speed",
-          "modifier": {
-            "id": "collectorsalbum:items_speed",
-            "amount": 0.4,
-            "operation": "add_multiplied_total"
+        {
+          "type": "collectorsalbum:category_cards",
+          "category": "collectorsalbum:items",
+          "filter": {
+            "cards": {
+              "min": 30
+            }
+          },
+          "item": {
+            "type": "collectorsalbum:attribute",
+            "attribute": "minecraft:generic.movement_speed",
+            "modifier": {
+              "id": "collectorsalbum:items_speed",
+              "amount": 0.2,
+              "operation": "add_multiplied_total"
+            },
+            "label": {
+              "translate": "bonus.collectorsalbum.items_speed.label.step_partial"
+            }
           }
         }
-      },
-      {
-        "type": "collectorsalbum:category_cards",
-        "category": "collectorsalbum:items",
-        "filter": {
-          "cards": {
-            "min": 30
-          }
-        },
-        "item": {
-          "type": "collectorsalbum:attribute",
-          "attribute": "minecraft:generic.movement_speed",
-          "modifier": {
-            "id": "collectorsalbum:items_speed",
-            "amount": 0.2,
-            "operation": "add_multiplied_total"
-          }
-        }
-      }
-    ]
+      ]
+    }
   }
 }

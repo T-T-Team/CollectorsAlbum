@@ -9,4 +9,9 @@ public interface IntermediateAlbumBonus extends AlbumBonus {
     boolean canApply(ActionContext context);
 
     List<AlbumBonus> children();
+
+    default SectionOutput appendItemDetailsWithModifiers(SectionOutput output, ActionContext context, AlbumBonus child) {
+        this.appendDetails(output, context);
+        return output;
+    }
 }

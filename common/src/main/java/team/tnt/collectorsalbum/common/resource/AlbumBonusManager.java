@@ -1,15 +1,13 @@
 package team.tnt.collectorsalbum.common.resource;
 
 import com.google.gson.JsonElement;
-import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import team.tnt.collectorsalbum.CollectorsAlbum;
-import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
-import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonus;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonusType;
-import team.tnt.collectorsalbum.common.resource.bonus.NoBonus;
+import team.tnt.collectorsalbum.common.resource.bonus.BonusHolder;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
@@ -18,15 +16,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<AlbumBonus> implements SynchronizedResource<AlbumBonus> {
+public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<BonusHolder> implements SynchronizedResource<BonusHolder> {
+
+    public static final Codec<BonusHolder> CODEC = Codec.withAlternative(
+            BonusHolder.CODEC,
+            AlbumBonusType.INSTANCE_CODEC,
+            BonusHolder::unnamed
+    );
 
     private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_bonus_manager");
     private static final AlbumBonusManager INSTANCE = new AlbumBonusManager();
-    private final Map<ResourceLocation, AlbumBonus> registeredBonuses = new HashMap<>();
-    private final List<AlbumBonus> bonusList = new ArrayList<>();
+    private final Map<ResourceLocation, BonusHolder> registeredBonuses = new HashMap<>();
+    private final List<BonusHolder> bonusList = new ArrayList<>();
 
     private AlbumBonusManager() {
-        super("album/bonus", AlbumBonusType.INSTANCE_CODEC);
+        super("album/bonus", CODEC);
     }
 
     public static AlbumBonusManager getInstance() {
@@ -34,28 +38,19 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Alb
     }
 
     public void applyBonuses(ActionContext context) {
-        this.bonusList.forEach(bonus -> bonus.apply(context));
+        this.bonusList.forEach(bonus -> bonus.value().apply(context));
     }
 
     public void removeBonuses(ActionContext context) {
-        this.bonusList.forEach(bonus -> bonus.removed(context));
+        this.bonusList.forEach(bonus -> bonus.value().removed(context));
     }
 
     public boolean hasBonuses() {
         return !this.bonusList.isEmpty();
     }
 
-    public Pair<AlbumBonus, AlbumBonus> getBonusesForPage(int page) {
-        int leftIdx = page * 2;
-        int rightIdx = leftIdx + 1;
-        AlbumBonus left = this.getBonusAtIndex(leftIdx);
-        AlbumBonus right = this.getBonusAtIndex(rightIdx);
-        return Pair.of(left, right);
-    }
-
-    public boolean hasNextPage(int currentPage) {
-        int lastDisplayed = currentPage * 2 + 1;
-        return lastDisplayed >= 0 && lastDisplayed < this.bonusList.size() - 1;
+    public List<BonusHolder> listAllBonuses() {
+        return this.bonusList;
     }
 
     @Override
@@ -64,14 +59,14 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Alb
     }
 
     @Override
-    public List<AlbumBonus> getDataForSync() {
+    public List<BonusHolder> getDataForSync() {
         return new ArrayList<>(this.registeredBonuses.values());
     }
 
     @Override
-    public synchronized void receiveNetworkData(List<AlbumBonus> data) {
+    public synchronized void receiveNetworkData(List<BonusHolder> data) {
         this.bonusList.clear();
-        data.stream().filter(bonus -> bonus != NoBonus.INSTANCE).forEach(bonusList::add);
+        data.stream().filter(BonusHolder::isEnabled).forEach(bonusList::add);
     }
 
     @Override
@@ -81,15 +76,8 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Alb
     }
 
     @Override
-    protected void resolve(ResourceLocation path, AlbumBonus element) {
+    protected void resolve(ResourceLocation path, BonusHolder element) {
         this.registeredBonuses.put(path, element);
         this.bonusList.add(element);
-    }
-
-    private AlbumBonus getBonusAtIndex(int index) {
-        if (index < 0 || index >= this.bonusList.size()) {
-            return NoBonus.INSTANCE;
-        }
-        return this.bonusList.get(index);
     }
 }

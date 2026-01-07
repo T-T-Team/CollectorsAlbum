@@ -1,11 +1,10 @@
 package team.tnt.collectorsalbum.common.resource.bonus;
 
 import com.mojang.serialization.MapCodec;
-import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
 import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 
-public class NoBonus implements AlbumBonus {
+public final class NoBonus implements AlbumBonus {
 
     public static final NoBonus INSTANCE = new NoBonus();
     public static final MapCodec<NoBonus> CODEC = MapCodec.unit(INSTANCE);
@@ -18,10 +17,6 @@ public class NoBonus implements AlbumBonus {
 
     @Override
     public void removed(ActionContext context) {
-    }
-
-    @Override
-    public void addDescription(AlbumBonusDescriptionOutput description) {
     }
 
     @Override

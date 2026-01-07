@@ -2,8 +2,6 @@ package team.tnt.collectorsalbum.common.card;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.chat.Component;
-import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
 import team.tnt.collectorsalbum.platform.Codecs;
 
 import java.util.Collections;
@@ -20,29 +18,24 @@ public record CardCategoryFilter(Set<CardRarity> rarities, IntFilter numberFilte
             IntFilter.CODEC.optionalFieldOf("categoryPoints", IntFilter.NO_FILTER).forGetter(CardCategoryFilter::categoryPointFilter)
     ).apply(instance, CardCategoryFilter::new));
     public static final CardCategoryFilter NO_FILTER = new CardCategoryFilter(Collections.emptySet(), IntFilter.NO_FILTER, IntFilter.NO_FILTER, IntFilter.NO_FILTER, IntFilter.NO_FILTER);
-    public static final Component LABEL_FILTER = Component.translatable("collectorsalbum.label.filter");
-    public static final Component LABEL_FILTER_RARITY = Component.translatable("collectorsalbum.label.filter.rarities");
-    public static final Component LABEL_FILTER_NUMBER = Component.translatable("collectorsalbum.label.filter.numbers");
-    public static final Component LABEL_FILTER_POINT = Component.translatable("collectorsalbum.label.filter.points");
-    public static final Component LABEL_FILTER_CARDS = Component.translatable("collectorsalbum.label.filter.cards");
-    public static final Component LABEL_FILTER_CATEGORY_POINTS = Component.translatable("collectorsalbum.label.filter.category_points");
 
-    public void generateDescriptionLabels(AlbumBonusDescriptionOutput descriptionOutput) {
-        if (!rarities.isEmpty()) {
-            Component raritiesTooltip = Component.literal("[" + String.join(",", this.rarities().stream().map(rarity -> rarity.getDisplayText().getString()).toList()) + "]");
-            descriptionOutput.text(LABEL_FILTER_RARITY, raritiesTooltip);
-        }
-        if (numberFilter != IntFilter.NO_FILTER) {
-            descriptionOutput.text(LABEL_FILTER_NUMBER, this.numberFilter.getDisplayComponent());
-        }
-        if (pointFilter != IntFilter.NO_FILTER) {
-            descriptionOutput.text(LABEL_FILTER_POINT, this.pointFilter.getDisplayComponent());
-        }
-        if (cardCountFilter != IntFilter.NO_FILTER) {
-            descriptionOutput.text(LABEL_FILTER_CARDS, this.cardCountFilter.getDisplayComponent());
-        }
-        if (categoryPointFilter != IntFilter.NO_FILTER) {
-            descriptionOutput.text(LABEL_FILTER_CATEGORY_POINTS, this.categoryPointFilter.getDisplayComponent());
-        }
+    public CardCategoryFilter filterRarities() {
+        return new CardCategoryFilter(this.rarities, IntFilter.NO_FILTER, IntFilter.NO_FILTER, IntFilter.NO_FILTER, IntFilter.NO_FILTER);
+    }
+
+    public CardCategoryFilter filterNumbers() {
+        return new CardCategoryFilter(Collections.emptySet(), this.numberFilter, IntFilter.NO_FILTER, IntFilter.NO_FILTER, IntFilter.NO_FILTER);
+    }
+
+    public CardCategoryFilter filterPoints() {
+        return new CardCategoryFilter(Collections.emptySet(), IntFilter.NO_FILTER, this.pointFilter, IntFilter.NO_FILTER, IntFilter.NO_FILTER);
+    }
+
+    public CardCategoryFilter filterCards() {
+        return new CardCategoryFilter(Collections.emptySet(), IntFilter.NO_FILTER, IntFilter.NO_FILTER, this.cardCountFilter, IntFilter.NO_FILTER);
+    }
+
+    public CardCategoryFilter filterCategoryPoints() {
+        return new CardCategoryFilter(Collections.emptySet(), IntFilter.NO_FILTER, IntFilter.NO_FILTER, IntFilter.NO_FILTER, this.categoryPointFilter);
     }
 }

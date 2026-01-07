@@ -4,16 +4,13 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.entity.player.Player;
-import team.tnt.collectorsalbum.common.AlbumBonusDescriptionOutput;
 import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.function.ConstantNumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
@@ -22,7 +19,9 @@ import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 
 import java.util.function.Function;
 
-public class AlbumMobEffectBonus implements AlbumBonus {
+public record AlbumMobEffectBonus(boolean rewriteExisting, boolean forceRemove, Holder<MobEffect> effect,
+                                  NumberProvider duration, NumberProvider amplifier, boolean ambient, boolean visible,
+                                  boolean showIcon) implements AlbumBonus {
 
     public static final MapCodec<AlbumMobEffectBonus> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("rewriteExisting", false).forGetter(t -> t.rewriteExisting),
@@ -35,36 +34,17 @@ public class AlbumMobEffectBonus implements AlbumBonus {
             Codec.BOOL.optionalFieldOf("showIcon", true).forGetter(t -> t.showIcon)
     ).apply(instance, AlbumMobEffectBonus::new));
 
-    private final boolean rewriteExisting;
-    private final boolean forceRemove;
-    private final Holder<MobEffect> effect;
-    private final NumberProvider duration;
-    private final NumberProvider amplifier;
-    private final boolean ambient;
-    private final boolean visible;
-    private final boolean showIcon;
-
     public AlbumMobEffectBonus(boolean rewriteExisting, boolean forceRemove, Holder<MobEffect> effect, Either<Integer, NumberProvider> duration, Either<Integer, NumberProvider> amplifier, boolean ambient, boolean visible, boolean showIcon) {
-        this.rewriteExisting = rewriteExisting;
-        this.forceRemove = forceRemove;
-        this.effect = effect;
-        this.duration = duration.map(ConstantNumberProvider::new, Function.identity());
-        this.amplifier = amplifier.map(ConstantNumberProvider::new, Function.identity());
-        this.ambient = ambient;
-        this.visible = visible;
-        this.showIcon = showIcon;
+        this(rewriteExisting, forceRemove, effect, duration.map(ConstantNumberProvider::new, Function.identity()), amplifier.map(ConstantNumberProvider::new, Function.identity()), ambient, visible, showIcon);
     }
 
     @Override
-    public void addDescription(AlbumBonusDescriptionOutput description) {
+    public void appendDetails(SectionOutput writer, ActionContext ctx) {
         MobEffect mobEffect = this.effect.value();
         int amplifierValue = this.amplifier.intValue();
-        ActionContext context = description.getContext();
-        Player player = context.getOrThrow(ActionContext.PLAYER, Player.class);
         Component amplifier = amplifierValue >= 1 && amplifierValue <= 9 ? Component.literal(" ").append(Component.translatable("enchantment.level." + (amplifierValue + 1))) : CommonComponents.EMPTY;
-        Component title = Component.translatable("collectorsalbum.label.bonus.mob_effect.effect", mobEffect.getDisplayName(), amplifier).withStyle(ChatFormatting.BLUE);
-        Component tooltip = Component.translatable("collectorsalbum.label.bonus.mob_effect.duration", MobEffectUtil.formatDuration(this.createEffectInstance(), 1.0F, player.level().tickRateManager().tickrate()));
-        description.text(title, tooltip);
+        Component title = Component.translatable("collectorsalbum.label.bonus.mob_effect.effect", mobEffect.getDisplayName(), amplifier);
+        writer.withTitle(title);
     }
 
     @Override

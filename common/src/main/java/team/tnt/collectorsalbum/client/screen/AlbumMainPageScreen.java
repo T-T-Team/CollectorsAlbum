@@ -45,6 +45,7 @@ public class AlbumMainPageScreen extends Screen {
         this.itemStack = itemStack;
     }
 
+    // TODO refactor, custom (event) bookmarks
     public static List<BookmarkWidget> getBookmarks(int guiWidth, int guiHeight, int albumWidth, int albumHeight, int bookImageHeight) {
         int left = (guiWidth - albumWidth) / 2;
         int top = (guiHeight - albumHeight) / 2 + 10;
@@ -60,8 +61,8 @@ public class AlbumMainPageScreen extends Screen {
 
         AlbumBonusManager bonusManager = AlbumBonusManager.getInstance();
         if (bonusManager.hasBonuses()) {
-            BookmarkWidget bonuses = new BookmarkWidget(left - 32, top + 20, 32, 18, true, Items.EMERALD.getDefaultInstance(), () -> Minecraft.getInstance().screen instanceof AlbumBonusesScreen);
-            bonuses.setTooltip(Tooltip.create(AlbumBonusesScreen.TITLE));
+            BookmarkWidget bonuses = new BookmarkWidget(left - 32, top + 20, 32, 18, true, Items.EMERALD.getDefaultInstance(), () -> Minecraft.getInstance().screen instanceof AlbumBonusScreen);
+            bonuses.setTooltip(Tooltip.create(AlbumBonusScreen.TITLE));
             bonuses.setTooltipDelay(tooltipDelay);
             bonuses.setAction(AlbumNavigationHelper::navigateBonusesPage);
             bookmarks.add(bonuses);

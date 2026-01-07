@@ -1,47 +1,55 @@
 {
-  "type": "collectorsalbum:config_toggle",
-  "config": "collectorsalbum",
-  "path": "bonusConfig.resistanceBonusEnabled",
-  "enabled": {
-    "type": "collectorsalbum:first_applicable",
-    "items": [
-      {
-        "type": "collectorsalbum:category_cards",
-        "category": "collectorsalbum:armor",
-        "filter": {
-          "rarities": ["mythical"],
-          "cards": {
-            "min": 30
+  "title": {
+    "translate": "bonus.collectorsalbum.armor_resist.title"
+  },
+  "description": {
+    "translate": "bonus.collectorsalbum.armor_resist.description"
+  },
+  "value": {
+    "type": "collectorsalbum:config_toggle",
+    "config": "collectorsalbum",
+    "path": "bonusConfig.resistanceBonusEnabled",
+    "enabled": {
+      "type": "collectorsalbum:first_applicable",
+      "items": [
+        {
+          "type": "collectorsalbum:category_cards",
+          "category": "collectorsalbum:armor",
+          "filter": {
+            "rarities": ["mythical"],
+            "cards": {
+              "min": 30
+            }
+          },
+          "item": {
+            "type": "collectorsalbum:effect",
+            "effect": "minecraft:resistance",
+            "amplifier": {
+              "type": "collectorsalbum:config",
+              "config": "collectorsalbum",
+              "path": "bonusConfig.fullMobEffectAmplifier"
+            }
           }
         },
-        "item": {
-          "type": "collectorsalbum:effect",
-          "effect": "minecraft:resistance",
-          "amplifier": {
-            "type": "collectorsalbum:config",
-            "config": "collectorsalbum",
-            "path": "bonusConfig.fullMobEffectAmplifier"
+        {
+          "type": "collectorsalbum:category_cards",
+          "category": "collectorsalbum:armor",
+          "filter": {
+            "cards": {
+              "min": 30
+            }
+          },
+          "item": {
+            "type": "collectorsalbum:effect",
+            "effect": "minecraft:resistance",
+            "amplifier": {
+              "type": "collectorsalbum:config",
+              "config": "collectorsalbum",
+              "path": "bonusConfig.baseMobEffectAmplifier"
+            }
           }
         }
-      },
-      {
-        "type": "collectorsalbum:category_cards",
-        "category": "collectorsalbum:armor",
-        "filter": {
-          "cards": {
-            "min": 30
-          }
-        },
-        "item": {
-          "type": "collectorsalbum:effect",
-          "effect": "minecraft:resistance",
-          "amplifier": {
-            "type": "collectorsalbum:config",
-            "config": "collectorsalbum",
-            "path": "bonusConfig.baseMobEffectAmplifier"
-          }
-        }
-      }
-    ]
+      ]
+    }
   }
 }

@@ -16,13 +16,12 @@ import team.tnt.collectorsalbum.common.AlbumCategoryType;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
 import team.tnt.collectorsalbum.common.card.AlbumCardType;
 import team.tnt.collectorsalbum.common.resource.*;
-import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonus;
-import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonusType;
+import team.tnt.collectorsalbum.common.resource.bonus.BonusHolder;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 
 import java.util.List;
 
-public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategory> categories, List<AlbumBonus> bonuses, List<CardPackDropManager.DropEntry> drops) implements CustomPacketPayload {
+public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategory> categories, List<BonusHolder> bonuses, List<CardPackDropManager.DropEntry> drops) implements CustomPacketPayload {
 
     private static final ResourceLocation IDENTIFIER = PlatformNetworkManager.generatePacketIdentifier(CollectorsAlbum.MOD_ID, S2C_SendDatapackResources.class);
     public static final Type<S2C_SendDatapackResources> TYPE = new Type<>(IDENTIFIER);
@@ -40,7 +39,7 @@ public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategor
         );
     }
 
-    private S2C_SendDatapackResources(ValueHolder<AlbumCard> cardHolder, ValueHolder<AlbumCategory> categoryHolder, ValueHolder<AlbumBonus> bonusHolder, ValueHolder<CardPackDropManager.DropEntry> dropHolder) {
+    private S2C_SendDatapackResources(ValueHolder<AlbumCard> cardHolder, ValueHolder<AlbumCategory> categoryHolder, ValueHolder<BonusHolder> bonusHolder, ValueHolder<CardPackDropManager.DropEntry> dropHolder) {
         this(cardHolder.values, categoryHolder.values, bonusHolder.values, dropHolder.values);
     }
 
@@ -52,7 +51,7 @@ public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategor
     private void encode(FriendlyByteBuf buffer) {
         this.encodeWithCodec(buffer, AlbumCardType.INSTANCE_CODEC, this.cards());
         this.encodeWithCodec(buffer, AlbumCategoryType.INSTANCE_CODEC, this.categories());
-        this.encodeWithCodec(buffer, AlbumBonusType.INSTANCE_CODEC, this.bonuses());
+        this.encodeWithCodec(buffer, AlbumBonusManager.CODEC, this.bonuses());
         this.encodeWithCodec(buffer, CardPackDropManager.DropEntry.CODEC, this.drops());
     }
 
@@ -68,7 +67,7 @@ public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategor
         return new S2C_SendDatapackResources(
                 decodeWithCodec(buffer, AlbumCardType.INSTANCE_CODEC, AlbumCardManager.getInstance()),
                 decodeWithCodec(buffer, AlbumCategoryType.INSTANCE_CODEC, AlbumCategoryManager.getInstance()),
-                decodeWithCodec(buffer, AlbumBonusType.INSTANCE_CODEC, AlbumBonusManager.getInstance()),
+                decodeWithCodec(buffer, AlbumBonusManager.CODEC, AlbumBonusManager.getInstance()),
                 decodeWithCodec(buffer, CardPackDropManager.DropEntry.CODEC, CardPackDropManager.getInstance())
         );
     }
