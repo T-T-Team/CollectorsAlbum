@@ -10,8 +10,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
 
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -33,7 +31,6 @@ jobs:
         uses: Toma1O6/file-read-action@v1
         with:
           file: 'CHANGELOG.md'
-          max-lines: '31'
           max-chars: '4096'
 
       - name: Trigger discord webhook
