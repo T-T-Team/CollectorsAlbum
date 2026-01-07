@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    "PCP",
+    " P "
+  ],
+  "key": {
+    "C": {
+      "tag": "collectorsalbum:cards/epic"
+    },
+    "P": {
+      "item": "collectorsalbum:rare_card_pack"
+    }
+  },
+  "result": {
+    "id": "collectorsalbum:epic_card_pack"
+  }
+}

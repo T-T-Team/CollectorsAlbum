@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    "PCP",
+    " P "
+  ],
+  "key": {
+    "C": {
+      "tag": "collectorsalbum:cards/uncommon"
+    },
+    "P": {
+      "item": "collectorsalbum:common_card_pack"
+    }
+  },
+  "result": {
+    "id": "collectorsalbum:uncommon_card_pack"
+  }
+}

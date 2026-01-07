@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    "PCP",
+    " P "
+  ],
+  "key": {
+    "C": {
+      "tag": "collectorsalbum:cards/legendary"
+    },
+    "P": {
+      "item": "collectorsalbum:epic_card_pack"
+    }
+  },
+  "result": {
+    "id": "collectorsalbum:legendary_card_pack"
+  }
+}
