@@ -15,6 +15,8 @@ import team.tnt.collectorsalbum.common.CollectorsAlbumRegistries;
 import team.tnt.collectorsalbum.common.command.CollectorsAlbumCommand;
 import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.*;
+import team.tnt.collectorsalbum.integrations.PlatformIntegrations;
+import team.tnt.collectorsalbum.integrations.trinkets.TrinketPlugin;
 import team.tnt.collectorsalbum.platform.FabricPlatform;
 import team.tnt.collectorsalbum.platform.registration.CustomPlatformRegistryBindCallback;
 import team.tnt.collectorsalbum.platform.registration.FabricRegistration;
@@ -23,6 +25,7 @@ import team.tnt.collectorsalbum.platform.resource.FabricReloadListenerWrapper;
 public class CollectorsAlbumFabric implements ModInitializer {
 
     public CollectorsAlbumFabric() {
+        PlatformIntegrations.registerStartupPlugin("trinkets", TrinketPlugin::instance);
         CollectorsAlbum.init();
     }
 

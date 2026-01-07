@@ -154,6 +154,10 @@ public final class Album implements Predicate<Album> {
         manager.removeBonuses(context);
     }
 
+    public UUID getAlbumId() {
+        return albumId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

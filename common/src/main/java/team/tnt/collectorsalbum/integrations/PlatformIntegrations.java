@@ -1,9 +1,9 @@
 package team.tnt.collectorsalbum.integrations;
 
-import net.minecraft.world.entity.player.Player;
-import team.tnt.collectorsalbum.common.Album;
-import team.tnt.collectorsalbum.common.AlbumLocatorResult;
-import team.tnt.collectorsalbum.platform.JavaServiceLoader;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
+import team.tnt.collectorsalbum.CollectorsAlbum;
+import team.tnt.collectorsalbum.common.tracking.PlayerAlbumTracker;
 import team.tnt.collectorsalbum.platform.Platform;
 
 import java.util.ArrayList;
@@ -12,25 +12,21 @@ import java.util.function.Supplier;
 
 public final class PlatformIntegrations {
 
-    private static final List<ModAlbumFinder> ALBUM_FINDERS = new ArrayList<>();
+    private static final Marker MARKER = MarkerManager.getMarker("Integrations");
+    private static final List<StartupPlugin> STARTUP_PLUGINS = new ArrayList<>();
 
-    public static final PlayerAlbumLocatorRegistration LOCATOR_REGISTRATION = JavaServiceLoader.loadService(PlayerAlbumLocatorRegistration.class);
-
-    public static void registerAlbumFinders() {
-        LOCATOR_REGISTRATION.register((namespace, locator) -> ALBUM_FINDERS.add(new ModAlbumFinder(namespace, locator)));
-    }
-
-    public static AlbumLocatorResult getAlbumLocatorResult(Player player, Album previousAlbum) {
-        for (ModAlbumFinder finder : ALBUM_FINDERS) {
-            if (Platform.INSTANCE.isModLoaded(finder.mod())) {
-                AlbumLocatorResult result = finder.locator().get().find(player, previousAlbum);
-                if (result.exists()) {
-                    return result;
-                }
-            }
+    public static void registerStartupPlugin(String mod, Supplier<StartupPlugin> plugin) {
+        CollectorsAlbum.LOGGER.debug(MARKER, "Attempting to register startup plugin for '{}' mod", mod);
+        if (Platform.INSTANCE.isModLoaded(mod)) {
+            StartupPlugin startupPlugin = plugin.get();
+            CollectorsAlbum.LOGGER.info(MARKER, "Mod '{}' is loaded, registering plugin {}", mod, startupPlugin);
+            STARTUP_PLUGINS.add(startupPlugin);
         }
-        return AlbumLocatorResult.notFound();
     }
 
-    public record ModAlbumFinder(String mod, Supplier<PlayerAlbumLocatorRegistration.AlbumFinder> locator) {}
+    public static void onStartup() {
+        STARTUP_PLUGINS.forEach(StartupPlugin::onStartup);
+        // register as last
+        PlayerAlbumTracker.get().registerFinder(PlayerAlbumTracker.VANILLA);
+    }
 }

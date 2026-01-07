@@ -27,6 +27,8 @@ import team.tnt.collectorsalbum.client.CollectorsAlbumClient;
 import team.tnt.collectorsalbum.common.command.CollectorsAlbumCommand;
 import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.*;
+import team.tnt.collectorsalbum.integrations.PlatformIntegrations;
+import team.tnt.collectorsalbum.integrations.curios.CuriosPlugin;
 import team.tnt.collectorsalbum.platform.network.NeoforgeNetwork;
 import team.tnt.collectorsalbum.platform.registration.NeoforgeRegistration;
 import team.tnt.collectorsalbum.platform.resource.MenuScreenRegistration;
@@ -37,6 +39,7 @@ import java.util.stream.Stream;
 public class CollectorsAlbumNeoforge {
 
     public CollectorsAlbumNeoforge(IEventBus eventBus) {
+        PlatformIntegrations.registerStartupPlugin("curios", CuriosPlugin::instance);
         CollectorsAlbum.init();
 
         eventBus.addListener(this::addRegistries);

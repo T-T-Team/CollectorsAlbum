@@ -14,9 +14,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import team.tnt.collectorsalbum.common.Album;
-import team.tnt.collectorsalbum.common.AlbumLocatorResult;
-import team.tnt.collectorsalbum.common.PlayerAlbumTracker;
+import team.tnt.collectorsalbum.common.tracking.PlayerAlbumTracker;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.item.PackContents;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
@@ -48,7 +46,7 @@ public class CollectorsAlbum {
     public static void init() {
         config = Configuration.registerConfig(CollectorsAlbumConfig.class, ConfigFormats.YAML).getConfigInstance();
         registerPackets();
-        PlatformIntegrations.registerAlbumFinders();
+        PlatformIntegrations.onStartup();
     }
 
     public static CollectorsAlbumConfig getConfig() {
@@ -61,38 +59,15 @@ public class CollectorsAlbum {
         if (level.isClientSide() || time % 100L != 0L) {
             return;
         }
-        actuallyTickPlayer(player);
+        PlayerAlbumTracker.get().update(player);
     }
 
     public static void forceAlbumReload(Player player) {
-        if (!player.level().isClientSide())
-            actuallyTickPlayer(player);
-    }
-
-    private static void actuallyTickPlayer(Player player) {
-        PlayerAlbumTracker tracker = PlayerAlbumTracker.get();
-        Album album = tracker.getAlbum(player).orElse(null);
-        AlbumLocatorResult result;
-        if (album == null) {
-            result = tracker.findAlbum(player, null);
-            if (!result.exists()) {
-                return;
-            }
-            album = result.getAlbum();
-            tracker.cacheAlbum(player, album);
-        } else {
-            result = tracker.findAlbum(player, album);
-            if (!result.exists() || !result.getAlbum().test(album)) {
-                tracker.deleteCachedAlbum(player.getUUID());
-                album.removed(player);
-                if (result.getAlbum() != null) {
-                    tracker.cacheAlbum(player, result.getAlbum());
-                    result.getAlbum().tick(player);
-                }
-                return;
-            }
+        if (!player.level().isClientSide()) {
+            PlayerAlbumTracker tracker = PlayerAlbumTracker.get();
+            tracker.deleteCachedAlbum(player);
+            tracker.update(player);
         }
-        album.tick(player);
     }
 
     public static void sendPlayerDatapacks(ServerPlayer player) {
@@ -105,7 +80,7 @@ public class CollectorsAlbum {
 
     public static void playerLoggedOut(Player player) {
         PlayerAlbumTracker tracker = PlayerAlbumTracker.get();
-        tracker.deleteCachedAlbum(player.getUUID());
+        tracker.deleteCachedAlbum(player);
     }
 
     public static void serverStopped() {
