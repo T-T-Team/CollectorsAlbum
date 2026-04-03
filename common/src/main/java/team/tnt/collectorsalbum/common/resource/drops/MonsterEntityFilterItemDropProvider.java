@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
@@ -42,7 +43,7 @@ public class MonsterEntityFilterItemDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public Stream<ItemStack> view() {
+    public Stream<ItemStackTemplate> view() {
         return Stream.empty();
     }
 }

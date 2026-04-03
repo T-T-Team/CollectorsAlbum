@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.toma.configuration.Configuration;
-import dev.toma.configuration.config.ConfigHolder;
+import dev.toma.configuration.config.ConfigValueLocation;
 import team.tnt.collectorsalbum.common.init.NumberProviderRegistry;
 
 import java.util.Optional;
@@ -13,25 +13,22 @@ import java.util.function.Function;
 public class ConfigValueIntProvider implements NumberProvider {
 
     public static final MapCodec<ConfigValueIntProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.STRING.fieldOf("config").forGetter(t -> t.config),
-            Codec.STRING.fieldOf("path").forGetter(t -> t.path),
+            ConfigValueLocation.CODEC.fieldOf("location").forGetter(t -> t.location),
             Codec.DOUBLE.optionalFieldOf("defaultValue", 0.0).forGetter(t -> t.defaultValue)
     ).apply(instance, ConfigValueIntProvider::new));
 
-    private final String config;
-    private final String path;
+    private final ConfigValueLocation location;
     private final double defaultValue;
 
-    public ConfigValueIntProvider(String configId, String path, double defaultValue) {
-        this.config = configId;
-        this.path = path;
+    public ConfigValueIntProvider(ConfigValueLocation location, double defaultValue) {
+        this.location = location;
         this.defaultValue = defaultValue;
     }
 
     @Override
     public <N extends Number> N getNumber(Function<Number, N> mapper) {
-        Optional<ConfigHolder<Object>> holder = Configuration.getConfig(this.config);
-        Number number = holder.flatMap(cfg -> cfg.getValue(this.path, Number.class)).orElse(this.defaultValue);
+        Optional<Number> value = Configuration.getConfigValue(this.location, Number.class);
+        Number number = value.orElse(this.defaultValue);
         return mapper.apply(number);
     }
 

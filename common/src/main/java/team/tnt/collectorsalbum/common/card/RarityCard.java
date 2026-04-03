@@ -3,8 +3,9 @@ package team.tnt.collectorsalbum.common.card;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,29 +22,29 @@ public class RarityCard implements RarityHolder {
 
     public static final MapCodec<RarityCard> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("enabled", true).forGetter(AlbumCard::enabled),
-            ResourceLocation.CODEC.fieldOf("id").forGetter(RarityCard::identifier),
+            Identifier.CODEC.fieldOf("id").forGetter(RarityCard::identifier),
             Codecs.simpleEnumCodec(CardRarity.class, text -> text.toUpperCase(Locale.ROOT)).fieldOf("rarity").forGetter(t -> t.rarity),
-            ItemStack.SIMPLE_ITEM_CODEC.fieldOf("item").forGetter(RarityCard::asItem),
-            ResourceLocation.CODEC.fieldOf("category").forGetter(RarityCard::category),
+            BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(t -> t.item),
+            Identifier.CODEC.fieldOf("category").forGetter(RarityCard::category),
             ExtraCodecs.POSITIVE_INT.fieldOf("number").forGetter(RarityCard::cardNumber),
-            ResourceLocation.CODEC.optionalFieldOf("cardTexture").forGetter(t -> Optional.ofNullable(t.template.cardTexture()))
+            Identifier.CODEC.optionalFieldOf("cardTexture").forGetter(t -> Optional.ofNullable(t.template.cardTexture()))
     ).apply(instance, RarityCard::new));
 
     private final boolean enabled;
-    private final ResourceLocation cardIdentifier;
+    private final Identifier cardIdentifier;
     private final CardRarity rarity;
-    private final ItemStack itemStack;
-    private final ResourceLocation categoryIdentifier;
+    private final Item item;
+    private final Identifier categoryIdentifier;
     private final int cardNumber;
     private final CardUiTemplate template;
 
     private AlbumCategory cachedCategory;
 
-    public RarityCard(boolean enabled, ResourceLocation cardIdentifier, CardRarity rarity, ItemStack itemStack, ResourceLocation categoryIdentifier, int cardNumber, Optional<ResourceLocation> cardTexture) {
+    public RarityCard(boolean enabled, Identifier cardIdentifier, CardRarity rarity, Item item, Identifier categoryIdentifier, int cardNumber, Optional<Identifier> cardTexture) {
         this.enabled = enabled;
         this.cardIdentifier = cardIdentifier;
         this.rarity = rarity;
-        this.itemStack = itemStack;
+        this.item = item;
         this.categoryIdentifier = categoryIdentifier;
         this.cardNumber = cardNumber;
         this.template = new CardUiTemplate(rarity.getColors(), rarity.getDurations(), rarity.getFlipSoundRef(), cardTexture.orElse(null));
@@ -55,7 +56,7 @@ public class RarityCard implements RarityHolder {
     }
 
     @Override
-    public ResourceLocation identifier() {
+    public Identifier identifier() {
         return this.cardIdentifier;
     }
 
@@ -70,12 +71,12 @@ public class RarityCard implements RarityHolder {
     }
 
     @Override
-    public ItemStack asItem() {
-        return this.itemStack;
+    public Item asItem() {
+        return this.item;
     }
 
     @Override
-    public ResourceLocation category() {
+    public Identifier category() {
         return this.categoryIdentifier;
     }
 

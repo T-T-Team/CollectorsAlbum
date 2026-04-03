@@ -1,7 +1,7 @@
 package team.tnt.collectorsalbum.common.card;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -15,13 +15,13 @@ import java.util.function.Predicate;
 
 public interface AlbumCard extends Comparable<AlbumCard>, Predicate<CardFilter> {
 
-    ResourceLocation identifier();
+    Identifier identifier();
 
-    ResourceLocation category();
+    Identifier category();
 
     CardUiTemplate template();
 
-    ItemStack asItem();
+    Item asItem();
 
     int getPoints();
 

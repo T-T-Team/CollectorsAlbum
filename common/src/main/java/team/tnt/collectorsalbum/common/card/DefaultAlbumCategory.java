@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.AlbumCategoryType;
 import team.tnt.collectorsalbum.common.AlbumCategoryUiTemplate;
@@ -21,20 +21,20 @@ import java.util.Set;
 public class DefaultAlbumCategory implements AlbumCategory {
 
     public static final MapCodec<DefaultAlbumCategory> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("id").forGetter(DefaultAlbumCategory::identifier),
+            Identifier.CODEC.fieldOf("id").forGetter(DefaultAlbumCategory::identifier),
             Codecs.setCodec(AlbumCardManager.BY_NAME_CODEC).fieldOf("cards").forGetter(t -> t.cards),
             DisplayAttributes.CODEC.fieldOf("display").forGetter(t -> t.attributes),
             AlbumCategoryUiTemplate.CODEC.optionalFieldOf("template", AlbumCategoryUiTemplate.DEFAULT_TEMPLATE).forGetter(t -> t.template)
     ).apply(instance, DefaultAlbumCategory::new));
 
-    private final ResourceLocation identifier;
+    private final Identifier identifier;
     private final Set<AlbumCard> cards;
     private final DisplayAttributes attributes;
     private final Component displayText;
     private final AlbumCategoryUiTemplate template;
     private final int[] uniqueCardNumbers;
 
-    private DefaultAlbumCategory(ResourceLocation identifier, Set<AlbumCard> cards, DisplayAttributes attributes, AlbumCategoryUiTemplate template) {
+    private DefaultAlbumCategory(Identifier identifier, Set<AlbumCard> cards, DisplayAttributes attributes, AlbumCategoryUiTemplate template) {
         this.identifier = identifier;
         this.cards = cards;
         this.attributes = attributes;
@@ -47,7 +47,7 @@ public class DefaultAlbumCategory implements AlbumCategory {
     }
 
     @Override
-    public ResourceLocation identifier() {
+    public Identifier identifier() {
         return this.identifier;
     }
 

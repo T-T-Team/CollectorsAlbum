@@ -6,12 +6,8 @@
     " P "
   ],
   "key": {
-    "C": {
-      "tag": "collectorsalbum:cards/rare"
-    },
-    "P": {
-      "item": "collectorsalbum:uncommon_card_pack"
-    }
+    "C": "#collectorsalbum:cards/rare",
+    "P": "collectorsalbum:uncommon_card_pack"
   },
   "result": {
     "id": "collectorsalbum:rare_card_pack"

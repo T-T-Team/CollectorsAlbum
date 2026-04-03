@@ -1,8 +1,8 @@
 package team.tnt.collectorsalbum.common.resource.drops;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public interface ItemDropResourceManager {
 
-    ItemDropProvider getProvider(ResourceLocation path);
+    ItemDropProvider getProvider(Identifier path);
 }

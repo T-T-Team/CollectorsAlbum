@@ -1,6 +1,6 @@
 package team.tnt.collectorsalbum.common.tracking;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,12 +20,12 @@ public final class PlayerAlbumTracker {
     private static final Marker MARKER = MarkerManager.getMarker("AlbumTracker");
     private static final PlayerAlbumTracker INSTANCE = new PlayerAlbumTracker();
     public static final AlbumFinder VANILLA = new AlbumFinder(
-            ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "vanilla"),
+            Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "vanilla"),
             INSTANCE::findAlbum,
             INSTANCE::getItem
     );
 
-    private final Map<ResourceLocation, AlbumFinder> finders = new LinkedHashMap<>();
+    private final Map<Identifier, AlbumFinder> finders = new LinkedHashMap<>();
     private final Map<UUID, CachedAlbum> playerAlbums = new HashMap<>();
 
     private PlayerAlbumTracker() {

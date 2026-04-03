@@ -7,8 +7,7 @@
   },
   "value": {
     "type": "collectorsalbum:config_toggle",
-    "config": "collectorsalbum",
-    "path": "bonusConfig.healthBonusEnabled",
+    "location": "collectorsalbum:bonusConfig/healthBonusEnabled",
     "enabled": {
       "type": "collectorsalbum:first_applicable",
       "items": [
@@ -19,13 +18,12 @@
           },
           "item": {
             "type": "collectorsalbum:attribute",
-            "attribute": "minecraft:generic.max_health",
+            "attribute": "minecraft:max_health",
             "modifier": {
               "id": "collectorsalbum:health_from_points",
               "amount": {
                 "type": "collectorsalbum:config",
-                "config": "collectorsalbum",
-                "path": "bonusConfig.healthBonusLevelSteps.5"
+                "location": "collectorsalbum:bonusConfig/healthBonusLevelSteps/5"
               },
               "operation": "add_value"
             },
@@ -42,13 +40,12 @@
           },
           "item": {
             "type": "collectorsalbum:attribute",
-            "attribute": "minecraft:generic.max_health",
+            "attribute": "minecraft:max_health",
             "modifier": {
               "id": "collectorsalbum:health_from_points",
               "amount": {
                 "type": "collectorsalbum:config",
-                "config": "collectorsalbum",
-                "path": "bonusConfig.healthBonusLevelSteps.4"
+                "location": "collectorsalbum:bonusConfig/healthBonusLevelSteps/4"
               },
               "operation": "add_value"
             },
@@ -65,13 +62,12 @@
           },
           "item": {
             "type": "collectorsalbum:attribute",
-            "attribute": "minecraft:generic.max_health",
+            "attribute": "minecraft:max_health",
             "modifier": {
               "id": "collectorsalbum:health_from_points",
               "amount": {
                 "type": "collectorsalbum:config",
-                "config": "collectorsalbum",
-                "path": "bonusConfig.healthBonusLevelSteps.3"
+                "location": "collectorsalbum:bonusConfig/healthBonusLevelSteps/3"
               },
               "operation": "add_value"
             },
@@ -88,13 +84,12 @@
           },
           "item": {
             "type": "collectorsalbum:attribute",
-            "attribute": "minecraft:generic.max_health",
+            "attribute": "minecraft:max_health",
             "modifier": {
               "id": "collectorsalbum:health_from_points",
               "amount": {
                 "type": "collectorsalbum:config",
-                "config": "collectorsalbum",
-                "path": "bonusConfig.healthBonusLevelSteps.2"
+                "location": "collectorsalbum:bonusConfig/healthBonusLevelSteps/2"
               },
               "operation": "add_value"
             },
@@ -111,13 +106,12 @@
           },
           "item": {
             "type": "collectorsalbum:attribute",
-            "attribute": "minecraft:generic.max_health",
+            "attribute": "minecraft:max_health",
             "modifier": {
               "id": "collectorsalbum:health_from_points",
               "amount": {
                 "type": "collectorsalbum:config",
-                "config": "collectorsalbum",
-                "path": "bonusConfig.healthBonusLevelSteps.1"
+                "location": "collectorsalbum:bonusConfig/healthBonusLevelSteps/1"
               },
               "operation": "add_value"
             },
@@ -134,13 +128,12 @@
           },
           "item": {
             "type": "collectorsalbum:attribute",
-            "attribute": "minecraft:generic.max_health",
+            "attribute": "minecraft:max_health",
             "modifier": {
               "id": "collectorsalbum:health_from_points",
               "amount": {
                 "type": "collectorsalbum:config",
-                "config": "collectorsalbum",
-                "path": "bonusConfig.healthBonusLevelSteps.0"
+                "location": "collectorsalbum:bonusConfig/healthBonusLevelSteps/0"
               },
               "operation": "add_value"
             },

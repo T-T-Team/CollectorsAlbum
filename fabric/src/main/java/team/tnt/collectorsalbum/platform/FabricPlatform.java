@@ -1,9 +1,8 @@
 package team.tnt.collectorsalbum.platform;
 
 import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -14,9 +13,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
-import team.tnt.collectorsalbum.client.screen.AlbumNavigationHelper;
+import org.jspecify.annotations.Nullable;
 
 public class FabricPlatform implements Platform {
 
@@ -39,7 +36,7 @@ public class FabricPlatform implements Platform {
 
     @Override
     public <T> void openMenu(ServerPlayer player, StreamCodec<? super FriendlyByteBuf, T> codec, PlatformMenuProvider<T> provider) {
-        player.openMenu(new ExtendedScreenHandlerFactory<>() {
+        player.openMenu(new ExtendedMenuProvider<>() {
             @Override
             public Object getScreenOpeningData(ServerPlayer player) {
                 return provider.getMenuData(player);
@@ -50,23 +47,15 @@ public class FabricPlatform implements Platform {
                 return provider.getTitle();
             }
 
-            @Nullable
             @Override
-            public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
-                return provider.createMenu(i, inventory, player);
+            public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
+                return provider.createMenu(containerId, inventory, player);
             }
         });
     }
 
     @Override
     public <M extends AbstractContainerMenu, D> MenuType<M> createMenu(MenuFactory<M, D> factory, StreamCodec<? super FriendlyByteBuf, D> dataCodec) {
-        return new ExtendedScreenHandlerType<>(factory::createMenu, dataCodec);
-    }
-
-    @Override
-    @Environment(EnvType.CLIENT)
-    public void openAlbumUi(ItemStack itemStack) {
-        AlbumNavigationHelper.storeItemStack(itemStack);
-        AlbumNavigationHelper.navigateHomepage();
+        return new ExtendedMenuType<>(factory::createMenu, dataCodec);
     }
 }

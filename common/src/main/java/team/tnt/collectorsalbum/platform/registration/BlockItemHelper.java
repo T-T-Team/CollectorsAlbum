@@ -1,7 +1,7 @@
 package team.tnt.collectorsalbum.platform.registration;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -23,7 +23,7 @@ public final class BlockItemHelper {
 
     public <T extends BlockItem> Supplier<T> registerItemBlock(Supplier<? extends Block> blockHolder, Function<Block, T> factory) {
         Block block = blockHolder.get();
-        ResourceLocation identifier = BuiltInRegistries.BLOCK.getKey(block);
+        Identifier identifier = BuiltInRegistries.BLOCK.getKey(block);
         return this.itemRegistry.register(identifier.getPath(), () -> factory.apply(block));
     }
 }

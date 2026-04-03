@@ -1,7 +1,7 @@
 package team.tnt.collectorsalbum.common.resource;
 
 import com.google.gson.JsonElement;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import team.tnt.collectorsalbum.CollectorsAlbum;
@@ -13,9 +13,9 @@ import java.util.*;
 
 public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<AlbumCategory> implements SynchronizedResource<AlbumCategory> {
 
-    private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_category_manager");
+    public static final Identifier IDENTIFIER = Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_category_manager");
     private static final AlbumCategoryManager INSTANCE = new AlbumCategoryManager();
-    private final Map<ResourceLocation, AlbumCategory> registeredCategories = new HashMap<>();
+    private final Map<Identifier, AlbumCategory> registeredCategories = new HashMap<>();
     private final List<AlbumCategory> pagedCategories = new ArrayList<>();
 
     private AlbumCategoryManager() {
@@ -35,7 +35,7 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
     }
 
     public List<AlbumCategory> listBookmarkableCategories() {
-        return pagedCategories.stream().filter(cat -> !cat.visualTemplate().bookmarkIcon.isEmpty()).toList();
+        return pagedCategories.stream().filter(cat -> cat.visualTemplate().bookmarkIcon.isPresent()).toList();
     }
 
     /**
@@ -50,22 +50,22 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
     }
 
     @Override
-    public ResourceLocation identifier() {
+    public Identifier identifier() {
         return IDENTIFIER;
     }
 
-    public Optional<AlbumCategory> findById(ResourceLocation id) {
+    public Optional<AlbumCategory> findById(Identifier id) {
         return Optional.ofNullable(registeredCategories.get(id));
     }
 
     @Override
-    protected void preApply(Map<ResourceLocation, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler) {
+    protected void preApply(Map<Identifier, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler) {
         this.registeredCategories.clear();
         this.pagedCategories.clear();
     }
 
     @Override
-    protected void resolve(ResourceLocation path, AlbumCategory element) {
+    protected void resolve(Identifier path, AlbumCategory element) {
         if (element.getCardNumbers().length == 0) {
             return;
         }

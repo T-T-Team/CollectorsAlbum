@@ -5,8 +5,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.component.TooltipDisplay;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,17 +28,17 @@ public abstract class ItemStackMixin implements DataComponentHolder {
             at = @At(
                     value = "INVOKE",
                     shift = At.Shift.AFTER,
-                    target = "Lnet/minecraft/world/item/Item;appendHoverText(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/Item$TooltipContext;Ljava/util/List;Lnet/minecraft/world/item/TooltipFlag;)V"
+                    target = "Lnet/minecraft/world/item/ItemStack;addDetailsToTooltip(Lnet/minecraft/world/item/Item$TooltipContext;Lnet/minecraft/world/item/component/TooltipDisplay;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/TooltipFlag;Ljava/util/function/Consumer;)V"
             ),
-            locals = LocalCapture.CAPTURE_FAILSOFT
+            locals = LocalCapture.CAPTURE_FAILHARD
     )
-    private void collectorsAlbum$getTooltipLines(Item.TooltipContext ctx, Player player, TooltipFlag flag, CallbackInfoReturnable<List<Component>> cir, List<Component> components) {
+    private void collectorsAlbum$getTooltipLines(Item.TooltipContext context, @Nullable Player player, TooltipFlag tooltipFlag, CallbackInfoReturnable<List<Component>> cir, TooltipDisplay display, List<Component> lines) {
         ItemStack itemStack = (ItemStack) (Object) this;
         Item item = itemStack.getItem();
         AlbumCardManager manager = AlbumCardManager.getInstance();
-        manager.getCardInfo(item).ifPresent(info -> info.appendItemStackHoverTooltip(itemStack, ctx, components, flag));
+        manager.getCardInfo(item).ifPresent(info -> info.appendItemStackHoverTooltip(itemStack, context, lines, tooltipFlag));
         if (itemStack.has(ItemDataComponentRegistry.PACK_DROPS_TABLE.get())) {
-            CollectorsAlbum.addCardPackTooltip(itemStack, ctx, components, flag);
+            CollectorsAlbum.addCardPackTooltip(itemStack, context, lines, tooltipFlag);
         }
     }
 
@@ -47,10 +49,10 @@ public abstract class ItemStackMixin implements DataComponentHolder {
             ),
             cancellable = true
     )
-    private void collectorsAlbum$getUseAnimationForPack(CallbackInfoReturnable<UseAnim> cir) {
+    private void collectorsAlbum$getUseAnimationForPack(CallbackInfoReturnable<ItemUseAnimation> cir) {
         ItemStack itemStack = (ItemStack) (Object) this;
         if (itemStack.has(ItemDataComponentRegistry.PACK_DROPS_TABLE.get())) {
-            cir.setReturnValue(UseAnim.BOW);
+            cir.setReturnValue(ItemUseAnimation.BOW);
         }
     }
 }

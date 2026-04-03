@@ -6,9 +6,7 @@
     "CCC"
   ],
   "key": {
-    "C": {
-      "tag": "collectorsalbum:cards/mythical"
-    }
+    "C": "#collectorsalbum:cards/mythical"
   },
   "result": {
     "id": "collectorsalbum:mythical_repacked_card_pack"

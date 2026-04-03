@@ -2,7 +2,7 @@ package team.tnt.collectorsalbum.platform.registration;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,11 +10,11 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
+class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
 
     private final Supplier<Registry<T>> registryRef;
     private final String namespace;
-    private Map<ResourceLocation, RegistryElement<T, ?>> registeredRefs = new HashMap<>();
+    private Map<Identifier, RegistryElement<T, ?>> registeredRefs = new HashMap<>();
 
     PlatformRegistryImpl(Supplier<Registry<T>> registryRef, String namespace) {
         this.registryRef = registryRef;
@@ -23,7 +23,7 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
 
     @Override
     public <R extends T> Reference<R> register(String elementId, Supplier<R> ref) {
-        ResourceLocation key = ResourceLocation.fromNamespaceAndPath(this.namespace, elementId);
+        Identifier key = Identifier.fromNamespaceAndPath(this.namespace, elementId);
         RegistryElement<T, R> value = new RegistryElement<>(ref);
         if (this.registeredRefs.put(key, value) != null) {
             throw new IllegalArgumentException("Duplicate key: " + key);
@@ -32,8 +32,8 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
     }
 
     @Override
-    public <R extends T> Reference<R> register(String elementId, Function<ResourceLocation, R> ref) {
-        ResourceLocation key = ResourceLocation.fromNamespaceAndPath(this.namespace, elementId);
+    public <R extends T> Reference<R> register(String elementId, Function<Identifier, R> ref) {
+        Identifier key = Identifier.fromNamespaceAndPath(this.namespace, elementId);
         Supplier<R> supplier = () -> ref.apply(key);
         RegistryElement<T, R> value = new RegistryElement<>(supplier);
         if (this.registeredRefs.put(key, value) != null) {
@@ -44,8 +44,8 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <R extends T> void bindRef(BiConsumer<ResourceLocation, Reference<R>> refConsumer) {
-        for (Map.Entry<ResourceLocation, RegistryElement<T, ?>> entry : this.registeredRefs.entrySet()) {
+    public <R extends T> void bindRef(BiConsumer<Identifier, Reference<R>> refConsumer) {
+        for (Map.Entry<Identifier, RegistryElement<T, ?>> entry : this.registeredRefs.entrySet()) {
             refConsumer.accept(entry.getKey(), (Reference<R>) entry.getValue());
         }
         this.registeredRefs = null;
@@ -53,7 +53,7 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
 
     @Override
     public void bind() {
-        for (Map.Entry<ResourceLocation, RegistryElement<T, ?>> entry : this.registeredRefs.entrySet()) {
+        for (Map.Entry<Identifier, RegistryElement<T, ?>> entry : this.registeredRefs.entrySet()) {
             this.bindInternal(entry.getKey(), entry.getValue());
         }
         this.registeredRefs = null;
@@ -69,7 +69,7 @@ final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
         return this.registryRef.get().key();
     }
 
-    private <R extends T> void bindInternal(ResourceLocation identifier, RegistryElement<T, R> element) {
+    private <R extends T> void bindInternal(Identifier identifier, RegistryElement<T, R> element) {
         Registry.register(this.registryRef.get(), identifier, element.get());
     }
 }

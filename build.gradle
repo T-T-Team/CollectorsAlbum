@@ -1,5 +1,5 @@
 plugins {
-    id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.4.1"
 }
 
 subprojects {
@@ -70,11 +70,6 @@ subprojects {
                 "neoforge_loader_range": "${neoforge_loader_range}",
                 "neoforge_version_range": "${neoforge_version_range}",
                 "neogradle_userdev": "${neogradle_userdev}",
-
-                // Forge
-                "forge_version": "${forge_version}",
-                "forge_version_range": "${forge_version_range}",
-                "forge_gradle_version": "${forge_gradle_version}",
 
                 // Fabric
                 "fabric_version": "${fabric_version}",

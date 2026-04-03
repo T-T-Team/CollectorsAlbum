@@ -6,15 +6,9 @@
     "PCP"
   ],
   "key": {
-    "P": {
-      "item": "minecraft:paper"
-    },
-    "C": {
-      "item": "minecraft:purple_carpet"
-    },
-    "B": {
-      "item": "minecraft:book"
-    }
+    "P": "minecraft:paper",
+    "C": "minecraft:purple_carpet",
+    "B": "minecraft:book"
   },
   "result": {
     "id": "collectorsalbum:album"

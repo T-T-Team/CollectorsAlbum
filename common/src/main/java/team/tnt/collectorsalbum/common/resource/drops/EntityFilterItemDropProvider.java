@@ -8,6 +8,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
@@ -43,10 +44,9 @@ public class EntityFilterItemDropProvider implements ItemDropProvider {
             CollectorsAlbum.LOGGER.warn("Failed to generate item drop, 'entity' key is not found in drop context!");
             return;
         }
-        EntityType<?> entityType = entity.getType();
         ItemDropProvider pass = this.blacklist ? this.fail : this.pass;
         ItemDropProvider fail = this.blacklist ? this.pass : this.fail;
-        if (entityType.is(this.filter)) {
+        if (entity.is(this.filter)) {
             pass.generateDrops(context, output);
         } else {
             fail.generateDrops(context, output);
@@ -59,7 +59,7 @@ public class EntityFilterItemDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public Stream<ItemStack> view() {
+    public Stream<ItemStackTemplate> view() {
         return Stream.empty();
     }
 }

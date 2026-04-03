@@ -2,9 +2,10 @@ package team.tnt.collectorsalbum.common.resource.drops;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
 import team.tnt.collectorsalbum.common.resource.MobAdditionalDropManager;
@@ -16,12 +17,12 @@ import java.util.stream.Stream;
 public class DropReferenceProvider implements ItemDropProvider {
 
     public static final MapCodec<DropReferenceProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("reference").forGetter(t -> t.reference)
+            Identifier.CODEC.fieldOf("reference").forGetter(t -> t.reference)
     ).apply(instance, DropReferenceProvider::new));
 
-    private final ResourceLocation reference;
+    private final Identifier reference;
 
-    public DropReferenceProvider(ResourceLocation reference) {
+    public DropReferenceProvider(Identifier reference) {
         this.reference = reference;
     }
 
@@ -39,7 +40,7 @@ public class DropReferenceProvider implements ItemDropProvider {
     }
 
     @Override
-    public Stream<ItemStack> view() {
+    public Stream<ItemStackTemplate> view() {
         return CardPackDropManager.getInstance().getProvider(this.reference).view();
     }
 }

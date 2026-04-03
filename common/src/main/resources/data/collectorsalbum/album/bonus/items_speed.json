@@ -7,8 +7,7 @@
   },
   "value": {
     "type": "collectorsalbum:config_toggle",
-    "config": "collectorsalbum",
-    "path": "bonusConfig.speedBonusEnabled",
+    "location": "collectorsalbum:bonusConfig/speedBonusEnabled",
     "enabled": {
       "type": "collectorsalbum:first_applicable",
       "items": [
@@ -23,7 +22,7 @@
           },
           "item": {
             "type": "collectorsalbum:attribute",
-            "attribute": "minecraft:generic.movement_speed",
+            "attribute": "minecraft:movement_speed",
             "modifier": {
               "id": "collectorsalbum:items_speed",
               "amount": 0.4,
@@ -44,7 +43,7 @@
           },
           "item": {
             "type": "collectorsalbum:attribute",
-            "attribute": "minecraft:generic.movement_speed",
+            "attribute": "minecraft:movement_speed",
             "modifier": {
               "id": "collectorsalbum:items_speed",
               "amount": 0.2,

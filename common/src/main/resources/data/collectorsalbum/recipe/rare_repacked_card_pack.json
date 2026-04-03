@@ -6,9 +6,7 @@
     "CCC"
   ],
   "key": {
-    "C": {
-      "tag": "collectorsalbum:cards/rare"
-    }
+    "C": "#collectorsalbum:cards/rare"
   },
   "result": {
     "id": "collectorsalbum:rare_repacked_card_pack"

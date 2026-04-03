@@ -1,3 +1,4 @@
+/*
 package team.tnt.collectorsalbum.integrations.trinkets;
 
 import dev.emi.trinkets.api.TrinketInventory;
@@ -71,3 +72,4 @@ public class TrinketPlugin implements StartupPlugin {
         });
     }
 }
+*/

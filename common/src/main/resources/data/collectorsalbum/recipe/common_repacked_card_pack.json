@@ -6,9 +6,7 @@
     "CCC"
   ],
   "key": {
-    "C": {
-      "tag": "collectorsalbum:cards/common"
-    }
+    "C": "#collectorsalbum:cards/common"
   },
   "result": {
     "id": "collectorsalbum:common_repacked_card_pack"

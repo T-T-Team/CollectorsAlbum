@@ -12,7 +12,7 @@ public final class FabricRegistration {
             ResourceKey<Registry<T>> key = attributes.key();
             FabricRegistryBuilder<T, ?> builder = attributes.defaultKey() != null
                     ? FabricRegistryBuilder.createDefaulted(key, attributes.defaultKey())
-                    : FabricRegistryBuilder.createSimple(key);
+                    : FabricRegistryBuilder.create(key);
             if (attributes.sync()) {
                 builder.attribute(RegistryAttribute.SYNCED);
             }

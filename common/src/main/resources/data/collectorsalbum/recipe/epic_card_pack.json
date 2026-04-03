@@ -6,12 +6,8 @@
     " P "
   ],
   "key": {
-    "C": {
-      "tag": "collectorsalbum:cards/epic"
-    },
-    "P": {
-      "item": "collectorsalbum:rare_card_pack"
-    }
+    "C": "#collectorsalbum:cards/epic",
+    "P": "collectorsalbum:rare_card_pack"
   },
   "result": {
     "id": "collectorsalbum:epic_card_pack"

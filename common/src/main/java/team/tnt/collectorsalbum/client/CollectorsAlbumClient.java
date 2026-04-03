@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.client.screen.AlbumCategoryScreen;
+import team.tnt.collectorsalbum.client.screen.AlbumNavigationHelper;
 import team.tnt.collectorsalbum.client.screen.CardPackOpeningScreen;
 import team.tnt.collectorsalbum.common.init.MenuRegistry;
 import team.tnt.collectorsalbum.common.menu.AlbumCategoryMenu;
@@ -37,5 +38,10 @@ public final class CollectorsAlbumClient {
             // send finish opening request immediately to server
             PlatformNetworkManager.NETWORK.sendServerMessage(new C2S_CompleteOpeningCardPack());
         }
+    }
+
+    public static void openAlbum(ItemStack itemStack) {
+        AlbumNavigationHelper.storeItemStack(itemStack);
+        AlbumNavigationHelper.navigateHomepage();
     }
 }

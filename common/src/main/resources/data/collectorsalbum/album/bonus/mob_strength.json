@@ -7,8 +7,7 @@
   },
   "value": {
     "type": "collectorsalbum:config_toggle",
-    "config": "collectorsalbum",
-    "path": "bonusConfig.strengthBonusEnabled",
+    "location": "collectorsalbum:bonusConfig/strengthBonusEnabled",
     "enabled": {
       "type": "collectorsalbum:first_applicable",
       "items": [
@@ -23,7 +22,7 @@
           },
           "item": {
             "type": "collectorsalbum:attribute",
-            "attribute": "minecraft:generic.attack_damage",
+            "attribute": "minecraft:attack_damage",
             "modifier": {
               "id": "collectorsalbum:mob_strength",
               "amount": 6.0,
@@ -45,7 +44,7 @@
           },
           "item": {
             "type": "collectorsalbum:attribute",
-            "attribute": "minecraft:generic.attack_damage",
+            "attribute": "minecraft:attack_damage",
             "modifier": {
               "id": "collectorsalbum:mob_strength",
               "amount": 3.0,

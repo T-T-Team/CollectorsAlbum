@@ -30,7 +30,7 @@ public final class AlbumNavigationHelper {
         Minecraft minecraft = Minecraft.getInstance();
         MouseHandlerAccessor accessor = (MouseHandlerAccessor) minecraft.mouseHandler;
         if (savedMouseX != null && savedMouseY != null) {
-            long windowPtr = minecraft.getWindow().getWindow();
+            long windowPtr = minecraft.getWindow().handle();
             accessor.setXpos(savedMouseX);
             accessor.setYpos(savedMouseY);
             GLFW.glfwSetCursorPos(windowPtr, savedMouseX, savedMouseY);

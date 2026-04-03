@@ -3,10 +3,11 @@ package team.tnt.collectorsalbum.platform.network;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -27,7 +28,7 @@ public class NeoforgeNetwork implements Network {
     }
 
     @Override
-    public void initialize(ResourceLocation identifier, List<PacketHolder<?, ?>> c2s, List<PacketHolder<?, ?>> s2c) {
+    public void initialize(Identifier identifier, List<PacketHolder<?, ?>> c2s, List<PacketHolder<?, ?>> s2c) {
         throw new UnsupportedOperationException("Cannot automatically bind network packets on NeoForge platform. Use specific events to register your packets instead!");
     }
 
@@ -38,7 +39,7 @@ public class NeoforgeNetwork implements Network {
 
     @Override
     public void sendServerMessage(CustomPacketPayload payload) {
-        PacketDistributor.sendToServer(payload);
+        ClientPacketDistributor.sendToServer(payload);
     }
 
     @SuppressWarnings("unchecked")

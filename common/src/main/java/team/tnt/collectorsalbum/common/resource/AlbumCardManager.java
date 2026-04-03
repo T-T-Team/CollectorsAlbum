@@ -3,7 +3,7 @@ package team.tnt.collectorsalbum.common.resource;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
@@ -18,15 +18,15 @@ import java.util.stream.Collectors;
 
 public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard> implements SynchronizedResource<AlbumCard> {
 
-    private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_card_manager");
+    public static final Identifier IDENTIFIER = Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_card_manager");
     private static final AlbumCardManager INSTANCE = new AlbumCardManager();
-    public static final Codec<AlbumCard> BY_NAME_CODEC = ResourceLocation.CODEC.comapFlatMap(
+    public static final Codec<AlbumCard> BY_NAME_CODEC = Identifier.CODEC.comapFlatMap(
             identifier -> {
                 AlbumCard card = INSTANCE.registeredCards.get(identifier);
                 return card != null ? DataResult.success(card) : DataResult.error(() -> "Unknown card: " + identifier);
             }, AlbumCard::identifier
     );
-    private final Map<ResourceLocation, AlbumCard> registeredCards = new HashMap<>();
+    private final Map<Identifier, AlbumCard> registeredCards = new HashMap<>();
     private final Map<Item, AlbumCard> byItemMap = new HashMap<>();
 
     private AlbumCardManager() {
@@ -41,7 +41,7 @@ public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard>
         return Optional.ofNullable(this.byItemMap.get(item));
     }
 
-    public AlbumCard getCardById(ResourceLocation location) {
+    public AlbumCard getCardById(Identifier location) {
         return this.registeredCards.get(location);
     }
 
@@ -54,7 +54,7 @@ public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard>
     }
 
     @Override
-    public ResourceLocation identifier() {
+    public Identifier identifier() {
         return IDENTIFIER;
     }
 
@@ -69,21 +69,20 @@ public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard>
     }
 
     @Override
-    protected void preApply(Map<ResourceLocation, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler) {
+    protected void preApply(Map<Identifier, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler) {
         this.registeredCards.clear();
         this.byItemMap.clear();
     }
 
     @Override
-    protected void resolve(ResourceLocation path, AlbumCard element) {
+    protected void resolve(Identifier path, AlbumCard element) {
         if (!element.enabled()) {
             return;
         }
         if (this.registeredCards.putIfAbsent(element.identifier(), element) != null) {
             throw new IllegalArgumentException("Duplicate card with ID: " + element.identifier());
         }
-        ItemStack itemStack = element.asItem();
-        Item item = itemStack.getItem();
+        Item item = element.asItem();
         if (this.byItemMap.putIfAbsent(item, element) != null) {
             throw new IllegalArgumentException(String.format("Duplicate item registered as a card in %s and %s cards", path.toString(), byItemMap.get(item).identifier()));
         }
@@ -100,7 +99,7 @@ public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard>
         byItemMap.clear();
         collection.forEach(card -> {
             registeredCards.put(card.identifier(), card);
-            byItemMap.put(card.asItem().getItem(), card);
+            byItemMap.put(card.asItem(), card);
         });
     }
 }

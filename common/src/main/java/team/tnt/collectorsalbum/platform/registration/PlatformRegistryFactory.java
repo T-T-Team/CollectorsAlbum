@@ -1,8 +1,8 @@
 package team.tnt.collectorsalbum.platform.registration;
 
 import net.minecraft.core.Registry;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +23,14 @@ public final class PlatformRegistryFactory {
         return createSimple(key, true);
     }
 
-    public static <T> PlatformRegistry.RegistryReference<T> createDefaulted(ResourceKey<Registry<T>> key, boolean sync, ResourceLocation defaultKey) {
+    public static <T> PlatformRegistry.RegistryReference<T> createDefaulted(ResourceKey<Registry<T>> key, boolean sync, Identifier defaultKey) {
         RegistryAttributes<T> attributes = new RegistryAttributes<>(key, defaultKey, sync);
         BindableRegistryReference<T> reference = new BindableRegistryReference<>(attributes);
         PREPARED_REGISTRIES.add(reference);
         return reference;
     }
 
-    public static <T> PlatformRegistry.RegistryReference<T> createDefaulted(ResourceKey<Registry<T>> key, ResourceLocation defaultKey) {
+    public static <T> PlatformRegistry.RegistryReference<T> createDefaulted(ResourceKey<Registry<T>> key, Identifier defaultKey) {
         return createDefaulted(key, true, defaultKey);
     }
 
@@ -53,7 +53,7 @@ public final class PlatformRegistryFactory {
         void bind(Registry<T> registry);
     }
 
-    public record RegistryAttributes<T>(ResourceKey<Registry<T>> key, ResourceLocation defaultKey, boolean sync) { }
+    public record RegistryAttributes<T>(ResourceKey<Registry<T>> key, Identifier defaultKey, boolean sync) { }
 
     private static final class BindableRegistryReference<T> implements PlatformRegistry.RegistryReference<T> {
 

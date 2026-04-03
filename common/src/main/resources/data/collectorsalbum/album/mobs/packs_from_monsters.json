@@ -4,8 +4,7 @@
     "type": "collectorsalbum:random_chance",
     "chance": {
       "type": "collectorsalbum:config",
-      "config": "collectorsalbum",
-      "path": "mobDrops.mobPackDropChance"
+      "location": "collectorsalbum:mobDrops/mobPackDropChance"
     },
     "item": {
       "type": "collectorsalbum:weighted_select",
@@ -14,8 +13,7 @@
           {
             "weight": {
               "type": "collectorsalbum:config",
-              "config": "collectorsalbum",
-              "path": "mobDrops.commonPackDrop"
+              "location": "collectorsalbum:mobDrops/commonPackDrop"
             },
             "item": {
               "type": "collectorsalbum:item",
@@ -27,8 +25,7 @@
           {
             "weight": {
               "type": "collectorsalbum:config",
-              "config": "collectorsalbum",
-              "path": "mobDrops.uncommonPackDrop"
+              "location": "collectorsalbum:mobDrops/uncommonPackDrop"
             },
             "item": {
               "type": "collectorsalbum:item",
@@ -40,8 +37,7 @@
           {
             "weight": {
               "type": "collectorsalbum:config",
-              "config": "collectorsalbum",
-              "path": "mobDrops.rarePackDrop"
+              "location": "collectorsalbum:mobDrops/rarePackDrop"
             },
             "item": {
               "type": "collectorsalbum:item",
@@ -53,8 +49,7 @@
           {
             "weight": {
               "type": "collectorsalbum:config",
-              "config": "collectorsalbum",
-              "path": "mobDrops.epicPackDrop"
+              "location": "collectorsalbum:mobDrops/epicPackDrop"
             },
             "item": {
               "type": "collectorsalbum:item",
@@ -66,8 +61,7 @@
           {
             "weight": {
               "type": "collectorsalbum:config",
-              "config": "collectorsalbum",
-              "path": "mobDrops.legendaryPackDrop"
+              "location": "collectorsalbum:mobDrops/legendaryPackDrop"
             },
             "item": {
               "type": "collectorsalbum:item",
@@ -79,8 +73,7 @@
           {
             "weight": {
               "type": "collectorsalbum:config",
-              "config": "collectorsalbum",
-              "path": "mobDrops.mythicalPackDrop"
+              "location": "collectorsalbum:mobDrops/mythicalPackDrop"
             },
             "item": {
               "type": "collectorsalbum:item",

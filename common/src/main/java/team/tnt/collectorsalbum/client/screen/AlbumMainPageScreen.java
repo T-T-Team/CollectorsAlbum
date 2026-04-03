@@ -2,14 +2,15 @@ package team.tnt.collectorsalbum.client.screen;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.Album;
@@ -29,8 +30,8 @@ import java.util.Map;
 public class AlbumMainPageScreen extends Screen {
 
     public static final Component TITLE = Component.translatable("screen.collectorsalbum.album.main").withStyle(ChatFormatting.BOLD);
-    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/album.png");
-    public static final int TEXT_COLOR = 0x7B5C4C;
+    public static final Identifier BACKGROUND = Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/album.png");
+    public static final int TEXT_COLOR = 0xFF7B5C4C;
     private static final Component LABEL_RARITIES = Component.translatable("collectorsalbum.text.statistics.rarities_label").withStyle(ChatFormatting.UNDERLINE);
     private static final Component LABEL_CATEGORIES = Component.translatable("collectorsalbum.text.statistics.categories_label").withStyle(ChatFormatting.UNDERLINE);
     private static final String LANG_KEY_COLLECTED = "collectorsalbum.text.statistics.collected";
@@ -71,7 +72,9 @@ public class AlbumMainPageScreen extends Screen {
         List<AlbumCategory> categories = AlbumNavigationHelper.listCategoriesForBookmarks(bookImageHeight - 20);
         int index = 0;
         for (AlbumCategory category : categories) {
-            BookmarkWidget categoryBookmark = new BookmarkWidget(right, top + (index++) * 20, 32, 18, false, category.visualTemplate().bookmarkIcon, () -> Minecraft.getInstance().screen instanceof AlbumCategoryScreen catScreen && catScreen.getCategory().identifier().equals(category.identifier()));
+            ItemStack displayItem = category.visualTemplate().bookmarkIcon.map(ItemStackTemplate::create)
+                    .orElse(ItemStack.EMPTY);
+            BookmarkWidget categoryBookmark = new BookmarkWidget(right, top + (index++) * 20, 32, 18, false, displayItem, () -> Minecraft.getInstance().screen instanceof AlbumCategoryScreen catScreen && catScreen.getCategory().identifier().equals(category.identifier()));
             categoryBookmark.setTooltip(Tooltip.create(category.getDisplayText()));
             categoryBookmark.setTooltipDelay(tooltipDelay);
             categoryBookmark.setAction(() -> AlbumNavigationHelper.navigateCategory(category));
@@ -100,8 +103,8 @@ public class AlbumMainPageScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-        this.renderTransparentBackground(graphics);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+        this.extractTransparentBackground(graphics);
     }
 
     public static MutableComponent getPointLabel(int points) {
@@ -151,7 +154,7 @@ public class AlbumMainPageScreen extends Screen {
         // Points info
         Component points = Component.literal(String.valueOf(album.getPoints())).withColor(0xFFEFAE00).withStyle(ChatFormatting.BOLD);
         Component pointsLabel = Component.translatable(LANG_KEY_POINTS, points).withColor(TEXT_COLOR);
-        this.addRenderableOnly(new LabelRenderable(pointsLabel, left + 145, top + 14, false, 0xFFFFFF));
+        this.addRenderableOnly(new LabelRenderable(pointsLabel, left + 145, top + 14, false, 0xFFFFFFFF));
 
         // Category information
         this.addRenderableOnly(new LabelRenderable(LABEL_CATEGORIES, left + 145, top + 30, false, TEXT_COLOR));

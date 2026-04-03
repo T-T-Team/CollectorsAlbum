@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
@@ -39,7 +40,7 @@ public class RandomListItemDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public Stream<ItemStack> view() {
+    public Stream<ItemStackTemplate> view() {
         return this.items.stream().flatMap(ItemDropProvider::view);
     }
 }

@@ -6,12 +6,8 @@
     " P "
   ],
   "key": {
-    "C": {
-      "tag": "collectorsalbum:cards/mythical"
-    },
-    "P": {
-      "item": "collectorsalbum:legendary_card_pack"
-    }
+    "C": "#collectorsalbum:cards/mythical",
+    "P": "collectorsalbum:legendary_card_pack"
   },
   "result": {
     "id": "collectorsalbum:mythical_card_pack"

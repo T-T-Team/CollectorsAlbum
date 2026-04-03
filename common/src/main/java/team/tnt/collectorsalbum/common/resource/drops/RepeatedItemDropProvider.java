@@ -6,6 +6,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.function.ConstantNumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
@@ -45,7 +46,7 @@ public class RepeatedItemDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public Stream<ItemStack> view() {
+    public Stream<ItemStackTemplate> view() {
         return this.item.view();
     }
 }

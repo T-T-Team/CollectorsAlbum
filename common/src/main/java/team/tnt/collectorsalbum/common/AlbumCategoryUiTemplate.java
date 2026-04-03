@@ -3,17 +3,20 @@ package team.tnt.collectorsalbum.common;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.platform.Codecs;
 
+import java.util.Optional;
+
 public final class AlbumCategoryUiTemplate {
 
-    public static final ResourceLocation DEFAULT_BACKGROUND = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/album_category.png");
-    public static final ResourceLocation DEFAULT_SLOT = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/album_slot.png");
+    public static final Identifier DEFAULT_BACKGROUND = Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/album_category.png");
+    public static final Identifier DEFAULT_SLOT = Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/album_slot.png");
     public static final Codec<AlbumCategoryUiTemplate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             TextureTemplate.CODEC.optionalFieldOf("backgroundTexture", TextureTemplate.ALBUM_BG).forGetter(t -> t.backgroundTexture),
             TextureTemplate.CODEC.optionalFieldOf("slotTexture", TextureTemplate.SLOT_BG).forGetter(t -> t.slotTexture),
@@ -23,11 +26,13 @@ public final class AlbumCategoryUiTemplate {
             Codec.STRING.optionalFieldOf("cardNumberPrefix", "#").forGetter(t -> t.cardNumberPrefix),
             Codecs.COLOR_CODEC.optionalFieldOf("slotCardNumberTextColor", 0x7B5C4C).forGetter(t -> t.slotCardNumberTextColor),
             SlotPositionTemplate.CODEC.optionalFieldOf("slotPositions", SlotPositionTemplate.TEMPLATE).forGetter(t -> t.slotTemplate),
-            BuiltInRegistries.ITEM.byNameCodec().optionalFieldOf("bookmarkItem", Items.AIR).xmap(Item::getDefaultInstance, ItemStack::getItem).forGetter(t -> t.bookmarkIcon)
+            BuiltInRegistries.ITEM.byNameCodec().optionalFieldOf("bookmarkItem")
+                    .xmap(item -> item.map(ItemStackTemplate::new), opt -> opt.map(tpl -> tpl.item().value()))
+                    .forGetter(t -> t.bookmarkIcon)
     ).apply(instance, AlbumCategoryUiTemplate::new));
     public static final AlbumCategoryUiTemplate DEFAULT_TEMPLATE = new AlbumCategoryUiTemplate(
             TextureTemplate.ALBUM_BG, TextureTemplate.SLOT_BG, 180, true, true, "#",
-            0x7A3499, SlotPositionTemplate.TEMPLATE, ItemStack.EMPTY
+            0x7A3499, SlotPositionTemplate.TEMPLATE, null
     );
 
     public final TextureTemplate backgroundTexture;
@@ -38,9 +43,9 @@ public final class AlbumCategoryUiTemplate {
     public final String cardNumberPrefix;
     public final int slotCardNumberTextColor;
     public final SlotPositionTemplate slotTemplate;
-    public final ItemStack bookmarkIcon;
+    public final Optional<ItemStackTemplate> bookmarkIcon;
 
-    public AlbumCategoryUiTemplate(TextureTemplate backgroundTexture, TextureTemplate slotTexture, int bookImageHeight, boolean renderSlots, boolean renderSlotCardNumbers, String cardNumberPrefix, int slotCardNumbersTextColor, SlotPositionTemplate template, ItemStack bookmarkIcon) {
+    public AlbumCategoryUiTemplate(TextureTemplate backgroundTexture, TextureTemplate slotTexture, int bookImageHeight, boolean renderSlots, boolean renderSlotCardNumbers, String cardNumberPrefix, int slotCardNumbersTextColor, SlotPositionTemplate template, Optional<ItemStackTemplate> bookmarkIcon) {
         this.backgroundTexture = backgroundTexture;
         this.slotTexture = slotTexture;
         this.bookImageHeight = bookImageHeight;
@@ -52,11 +57,11 @@ public final class AlbumCategoryUiTemplate {
         this.bookmarkIcon = bookmarkIcon;
     }
 
-    public record TextureTemplate(ResourceLocation resource, int width, int height, int texU, int texV, int textureWidth, int textureHeight) {
+    public record TextureTemplate(Identifier resource, int width, int height, int texU, int texV, int textureWidth, int textureHeight) {
         public static final TextureTemplate ALBUM_BG = new TextureTemplate(DEFAULT_BACKGROUND, 256, 256, 0, 0, 256, 256);
         public static final TextureTemplate SLOT_BG = new TextureTemplate(DEFAULT_SLOT, 18, 18, 0, 0, 18, 18);
         public static final Codec<TextureTemplate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                ResourceLocation.CODEC.fieldOf("resource").forGetter(TextureTemplate::resource),
+                Identifier.CODEC.fieldOf("resource").forGetter(TextureTemplate::resource),
                 Codec.INT.optionalFieldOf("imageWidth", 256).forGetter(TextureTemplate::width),
                 Codec.INT.optionalFieldOf("imageHeight", 256).forGetter(TextureTemplate::height),
                 Codec.INT.optionalFieldOf("u", 0).forGetter(TextureTemplate::texU),

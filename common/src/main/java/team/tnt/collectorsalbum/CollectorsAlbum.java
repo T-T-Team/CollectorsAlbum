@@ -4,7 +4,7 @@ import dev.toma.configuration.Configuration;
 import dev.toma.configuration.config.format.ConfigFormats;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -96,7 +96,7 @@ public class CollectorsAlbum {
         }
         ListBasedOutputBuilder<ItemStack> outputBuilder = ListBasedOutputBuilder.createArrayListBased();
         CardPackDropManager dropManager = CardPackDropManager.getInstance();
-        ResourceLocation lootTablePath = itemStack.get(ItemDataComponentRegistry.PACK_DROPS_TABLE.get());
+        Identifier lootTablePath = itemStack.get(ItemDataComponentRegistry.PACK_DROPS_TABLE.get());
         ItemDropProvider provider = dropManager.getProvider(lootTablePath);
         ActionContext context = ActionContext.of(ActionContext.PLAYER, player, ActionContext.ITEMSTACK, itemStack, ActionContext.RANDOM, player.getRandom());
         provider.generateDrops(context, outputBuilder);
@@ -107,9 +107,9 @@ public class CollectorsAlbum {
             LOGGER.warn("Some invalid drops have been generated for player {} on item {}, filtering invalid drops...", player, itemStack);
             LOGGER.debug("Generated drops: {}, Filtered drops: {}", generatedDrops, drops);
         }
-        player.getCooldowns().addCooldown(itemStack.getItem(), 20);
+        player.getCooldowns().addCooldown(itemStack, 20);
         if (drops.isEmpty()) {
-            player.displayClientMessage(WARN_NO_DROPS, true);
+            player.sendOverlayMessage(WARN_NO_DROPS);
             return;
         }
         Collections.shuffle(drops);
@@ -121,7 +121,7 @@ public class CollectorsAlbum {
     public static void addCardPackTooltip(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(USAGE);
         if (flag.isAdvanced()) {
-            ResourceLocation dropsPath = itemStack.get(ItemDataComponentRegistry.PACK_DROPS_TABLE.get());
+            Identifier dropsPath = itemStack.get(ItemDataComponentRegistry.PACK_DROPS_TABLE.get());
             Component description = dropsPath != null ? Component.literal(dropsPath.toString()) : LABEL_UNSET;
             tooltip.add(Component.translatable("collectorsalbum.label.custom_drop_table", description));
         }

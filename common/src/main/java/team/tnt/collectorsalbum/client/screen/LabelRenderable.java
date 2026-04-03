@@ -2,7 +2,7 @@ package team.tnt.collectorsalbum.client.screen;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.network.chat.Component;
 
@@ -23,7 +23,7 @@ public class LabelRenderable implements Renderable {
     }
 
     public LabelRenderable(Component label, int x, int y, boolean shadow) {
-        this(label, x, y, shadow, 0xFFFFFF);
+        this(label, x, y, shadow, 0xFFFFFFFF);
     }
 
     public LabelRenderable(Component label, int x, int y, boolean shadow, int textColor) {
@@ -35,8 +35,8 @@ public class LabelRenderable implements Renderable {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta) {
         Font font = Minecraft.getInstance().font;
-        guiGraphics.drawString(font, this.label, this.x, this.y, this.textColor, this.shadow);
+        guiGraphics.text(font, this.label, this.x, this.y, this.textColor, this.shadow);
     }
 }

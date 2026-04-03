@@ -1,6 +1,7 @@
 package team.tnt.collectorsalbum.common.resource.drops;
 
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
@@ -12,5 +13,5 @@ public interface ItemDropProvider {
 
     ItemDropProviderType<?> getType();
 
-    Stream<ItemStack> view();
+    Stream<ItemStackTemplate> view();
 }

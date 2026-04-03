@@ -8,7 +8,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.AlbumCategory;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategory> categories, List<BonusHolder> bonuses, List<CardPackDropManager.DropEntry> drops) implements CustomPacketPayload {
 
-    private static final ResourceLocation IDENTIFIER = PlatformNetworkManager.generatePacketIdentifier(CollectorsAlbum.MOD_ID, S2C_SendDatapackResources.class);
+    private static final Identifier IDENTIFIER = PlatformNetworkManager.generatePacketIdentifier(CollectorsAlbum.MOD_ID, S2C_SendDatapackResources.class);
     public static final Type<S2C_SendDatapackResources> TYPE = new Type<>(IDENTIFIER);
     public static final StreamCodec<FriendlyByteBuf, S2C_SendDatapackResources> CODEC = StreamCodec.of(
             (buf, payload) -> payload.encode(buf),

@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
 import team.tnt.collectorsalbum.common.card.CardCategoryFilter;
@@ -19,12 +19,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public record AlbumCategoryCardBonusFilter(ResourceLocation category, CardCategoryFilter filter, AlbumBonus item) implements IntermediateAlbumBonus {
+public record AlbumCategoryCardBonusFilter(Identifier category, CardCategoryFilter filter, AlbumBonus item) implements IntermediateAlbumBonus {
 
     public static final Component UNKNOWN_CATEGORY_LABEL = Component.translatable("collectorsalbum.label.unknown").withStyle(ChatFormatting.RED);
 
     public static final MapCodec<AlbumCategoryCardBonusFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("category").forGetter(t -> t.category),
+            Identifier.CODEC.fieldOf("category").forGetter(t -> t.category),
             CardCategoryFilter.CODEC.optionalFieldOf("filter", CardCategoryFilter.NO_FILTER).forGetter(t -> t.filter),
             AlbumBonusType.INSTANCE_CODEC.fieldOf("item").forGetter(t -> t.item)
     ).apply(instance, AlbumCategoryCardBonusFilter::new));

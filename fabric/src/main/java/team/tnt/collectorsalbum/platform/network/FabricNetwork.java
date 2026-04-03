@@ -9,7 +9,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import team.tnt.collectorsalbum.platform.Platform;
 import team.tnt.collectorsalbum.platform.Side;
@@ -19,9 +19,9 @@ import java.util.List;
 public class FabricNetwork implements Network {
 
     @Override
-    public void initialize(ResourceLocation identifier, List<PacketHolder<?, ?>> c2s, List<PacketHolder<?, ?>> s2c) {
-        PayloadTypeRegistry<RegistryFriendlyByteBuf> c2sRegistrar = PayloadTypeRegistry.playC2S();
-        PayloadTypeRegistry<RegistryFriendlyByteBuf> s2cRegistrar = PayloadTypeRegistry.playS2C();
+    public void initialize(Identifier identifier, List<PacketHolder<?, ?>> c2s, List<PacketHolder<?, ?>> s2c) {
+        PayloadTypeRegistry<RegistryFriendlyByteBuf> c2sRegistrar = PayloadTypeRegistry.serverboundPlay();
+        PayloadTypeRegistry<RegistryFriendlyByteBuf> s2cRegistrar = PayloadTypeRegistry.clientboundPlay();
 
         c2s.forEach(holder -> registerInternal(c2sRegistrar, holder, PacketDirection.CLIENT_TO_SERVER));
         s2c.forEach(holder -> registerInternal(s2cRegistrar, holder, PacketDirection.SERVER_TO_CLIENT));

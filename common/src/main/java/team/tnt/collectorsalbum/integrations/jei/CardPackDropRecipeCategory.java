@@ -11,13 +11,13 @@ import mezz.jei.api.gui.widgets.IScrollGridWidget;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import org.jetbrains.annotations.Nullable;
 import team.tnt.collectorsalbum.common.init.ItemRegistry;
 import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
@@ -39,7 +39,7 @@ public class CardPackDropRecipeCategory implements IRecipeCategory<CardPackDropM
     }
 
     @Override
-    public RecipeType<CardPackDropManager.DropEntry> getRecipeType() {
+    public IRecipeType<CardPackDropManager.DropEntry> getRecipeType() {
         return JeiIntegrationPlugin.PACK_DROP;
     }
 
@@ -76,11 +76,11 @@ public class CardPackDropRecipeCategory implements IRecipeCategory<CardPackDropM
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CardPackDropManager.DropEntry recipe, IFocusGroup focuses) {
         Set<Item> uniqueItemSet = new HashSet<>();
-        List<ItemStack> items = recipe.provider().view().toList();
-        for (ItemStack item : items) {
-            Item itemType = item.getItem();
+        List<ItemStackTemplate> items = recipe.provider().view().toList();
+        for (ItemStackTemplate item : items) {
+            Item itemType = item.item().value();
             if (uniqueItemSet.add(itemType)) {
-                builder.addOutputSlot().addItemStack(item);
+                builder.addOutputSlot().add(item.create());
             }
         }
     }

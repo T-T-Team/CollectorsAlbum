@@ -7,8 +7,7 @@
   },
   "value": {
     "type": "collectorsalbum:config_toggle",
-    "config": "collectorsalbum",
-    "path": "bonusConfig.hasteBonusEnabled",
+    "location": "collectorsalbum:bonusConfig/hasteBonusEnabled",
     "enabled": {
       "type": "collectorsalbum:first_applicable",
       "items": [
@@ -23,7 +22,7 @@
           },
           "item": {
             "type": "collectorsalbum:attribute",
-            "attribute": "minecraft:generic.attack_speed",
+            "attribute": "minecraft:attack_speed",
             "modifier": {
               "id": "collectorsalbum:tools_haste",
               "amount": 0.2,
@@ -44,7 +43,7 @@
           },
           "item": {
             "type": "collectorsalbum:attribute",
-            "attribute": "minecraft:generic.attack_speed",
+            "attribute": "minecraft:attack_speed",
             "modifier": {
               "id": "collectorsalbum:tools_haste",
               "amount": 0.1,

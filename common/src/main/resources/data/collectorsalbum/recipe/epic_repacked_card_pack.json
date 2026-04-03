@@ -6,9 +6,7 @@
     "CCC"
   ],
   "key": {
-    "C": {
-      "tag": "collectorsalbum:cards/epic"
-    }
+    "C": "#collectorsalbum:cards/epic"
   },
   "result": {
     "id": "collectorsalbum:epic_repacked_card_pack"

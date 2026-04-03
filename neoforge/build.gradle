@@ -23,7 +23,9 @@ plugins {
 
 version = project.version
 group = project.mod_group
-archivesBaseName = "${project.mod_id}-neoforge-${project.minecraft_version}"
+base {
+    archivesName = "${project.mod_id}-neoforge-${project.minecraft_version}"
+}
 
 def at = project(":common").file("src/main/resources/META-INF/accesstransformer.cfg")
 if (at.exists()) {
@@ -109,7 +111,7 @@ tasks.register('publishToCurseForge', TaskPublishCurseForge) {
     uploadFile.displayName = "${mod_id}-neoforge-${minecraft_version}-${version}"
     uploadFile.addModLoader('NeoForge')
     uploadFile.addEnvironment('Client', 'Server')
-    uploadFile.addJavaVersion("Java 21")
+    uploadFile.addJavaVersion("Java 25")
     uploadFile.addRequirement("configuration")
     compatible_mc_versions.split(",").each { gameVersion ->
         uploadFile.addGameVersion(gameVersion)

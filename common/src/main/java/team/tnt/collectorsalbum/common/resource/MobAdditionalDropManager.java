@@ -1,7 +1,7 @@
 package team.tnt.collectorsalbum.common.resource;
 
 import com.google.gson.JsonElement;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.jetbrains.annotations.NotNull;
@@ -20,8 +20,8 @@ import java.util.Map;
 public class MobAdditionalDropManager extends PlatformGsonCodecReloadListener<ItemDropProvider> implements Iterable<ItemDropProvider>, ItemDropResourceManager {
 
     private static final MobAdditionalDropManager INSTANCE = new MobAdditionalDropManager();
-    private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "mob_additional_drops");
-    private final Map<ResourceLocation, ItemDropProvider> drops = new LinkedHashMap<>();
+    public static final Identifier IDENTIFIER = Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "mob_additional_drops");
+    private final Map<Identifier, ItemDropProvider> drops = new LinkedHashMap<>();
 
     private MobAdditionalDropManager() {
         super("album/mobs", ItemDropProviderType.INSTANCE_CODEC);
@@ -32,7 +32,7 @@ public class MobAdditionalDropManager extends PlatformGsonCodecReloadListener<It
     }
 
     @Override
-    public ResourceLocation identifier() {
+    public Identifier identifier() {
         return IDENTIFIER;
     }
 
@@ -44,17 +44,17 @@ public class MobAdditionalDropManager extends PlatformGsonCodecReloadListener<It
     }
 
     @Override
-    public ItemDropProvider getProvider(ResourceLocation path) {
+    public ItemDropProvider getProvider(Identifier path) {
         return this.drops.getOrDefault(path, NoItemDropProvider.INSTANCE);
     }
 
     @Override
-    protected void preApply(Map<ResourceLocation, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler) {
+    protected void preApply(Map<Identifier, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler) {
         this.drops.clear();
     }
 
     @Override
-    protected void resolve(ResourceLocation path, ItemDropProvider element) {
+    protected void resolve(Identifier path, ItemDropProvider element) {
         this.drops.put(path, element);
     }
 }

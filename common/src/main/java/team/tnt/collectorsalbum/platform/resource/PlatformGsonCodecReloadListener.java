@@ -5,12 +5,11 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.apache.logging.log4j.message.FormattedMessage;
 
-import java.util.List;
 import java.util.Map;
 
 public abstract class PlatformGsonCodecReloadListener<T> extends PlatformGsonReloadListener {
@@ -28,19 +27,19 @@ public abstract class PlatformGsonCodecReloadListener<T> extends PlatformGsonRel
         return codec;
     }
 
-    protected abstract void preApply(Map<ResourceLocation, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler);
+    protected abstract void preApply(Map<Identifier, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler);
 
-    protected abstract void resolve(ResourceLocation path, T element);
+    protected abstract void resolve(Identifier path, T element);
 
-    protected boolean filterEntry(ResourceLocation identifier) {
+    protected boolean filterEntry(Identifier identifier) {
         return true;
     }
 
     @Override
-    public final void apply(Map<ResourceLocation, JsonElement> resource, ResourceManager manager, ProfilerFiller profiler) {
+    public final void apply(Map<Identifier, JsonElement> resource, ResourceManager manager, ProfilerFiller profiler) {
         this.preApply(resource, manager, profiler);
-        for (Map.Entry<ResourceLocation, JsonElement> entry : resource.entrySet()) {
-            ResourceLocation identifier = entry.getKey();
+        for (Map.Entry<Identifier, JsonElement> entry : resource.entrySet()) {
+            Identifier identifier = entry.getKey();
             if (!this.filterEntry(identifier))
                 continue;
             JsonElement element = entry.getValue();
@@ -58,11 +57,11 @@ public abstract class PlatformGsonCodecReloadListener<T> extends PlatformGsonRel
     protected void onReloadComplete(ResourceManager manager, ProfilerFiller profiler) {
     }
 
-    protected void handleParsingError(Exception e, ResourceLocation currentPath) {
+    protected void handleParsingError(Exception e, Identifier currentPath) {
         LOGGER.error(new FormattedMessage("Failed to parse {} element due to error", currentPath), e);
     }
 
-    protected T readData(ResourceLocation path, DataResult<T> dataResult) {
+    protected T readData(Identifier path, DataResult<T> dataResult) {
         return dataResult.getOrThrow();
     }
 }

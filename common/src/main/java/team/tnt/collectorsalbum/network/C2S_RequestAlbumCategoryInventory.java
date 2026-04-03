@@ -4,7 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -20,12 +20,12 @@ import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.platform.Platform;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 
-public record C2S_RequestAlbumCategoryInventory(ResourceLocation category) implements CustomPacketPayload {
+public record C2S_RequestAlbumCategoryInventory(Identifier category) implements CustomPacketPayload {
 
-    private static final ResourceLocation IDENTIFIER = PlatformNetworkManager.generatePacketIdentifier(CollectorsAlbum.MOD_ID, C2S_RequestAlbumCategoryInventory.class);
+    private static final Identifier IDENTIFIER = PlatformNetworkManager.generatePacketIdentifier(CollectorsAlbum.MOD_ID, C2S_RequestAlbumCategoryInventory.class);
     public static final Type<C2S_RequestAlbumCategoryInventory> TYPE = new Type<>(IDENTIFIER);
     public static final StreamCodec<FriendlyByteBuf, C2S_RequestAlbumCategoryInventory> CODEC = StreamCodec.composite(
-            ResourceLocation.STREAM_CODEC, C2S_RequestAlbumCategoryInventory::category,
+            Identifier.STREAM_CODEC, C2S_RequestAlbumCategoryInventory::category,
             C2S_RequestAlbumCategoryInventory::new
     );
 
@@ -45,9 +45,9 @@ public record C2S_RequestAlbumCategoryInventory(ResourceLocation category) imple
         AlbumCategory albumCategory = manager.findById(category).orElse(null);
         if (albumCategory == null)
             return;
-        Platform.INSTANCE.openMenu((ServerPlayer) player, ResourceLocation.STREAM_CODEC, new Platform.PlatformMenuProvider<>() {
+        Platform.INSTANCE.openMenu((ServerPlayer) player, Identifier.STREAM_CODEC, new Platform.PlatformMenuProvider<>() {
             @Override
-            public ResourceLocation getMenuData(ServerPlayer player) {
+            public Identifier getMenuData(ServerPlayer player) {
                 return category;
             }
 

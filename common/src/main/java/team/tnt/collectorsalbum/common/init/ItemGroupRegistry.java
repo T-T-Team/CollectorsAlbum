@@ -2,7 +2,7 @@ package team.tnt.collectorsalbum.common.init;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import team.tnt.collectorsalbum.CollectorsAlbum;
@@ -20,7 +20,7 @@ public final class ItemGroupRegistry {
                 builder.accept(ItemRegistry.ALBUM.get());
                 BuiltInRegistries.ITEM.stream()
                         .filter(item -> {
-                            ResourceLocation identifier = BuiltInRegistries.ITEM.getKey(item);
+                            Identifier identifier = BuiltInRegistries.ITEM.getKey(item);
                             return identifier.getNamespace().equals(CollectorsAlbum.MOD_ID) && item.getClass().equals(Item.class);
                         })
                         .forEach(builder::accept);

@@ -1,23 +1,23 @@
 package team.tnt.collectorsalbum.client.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonInfo;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
@@ -37,7 +37,7 @@ import java.util.function.Consumer;
 public class CardPackOpeningScreen extends Screen {
 
     private static final Component TITLE = Component.translatable("screen.collectorsalbum.card_pack_opening_screen");
-    private static final ResourceLocation CARD_BG = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/card_back.png");
+    private static final Identifier CARD_BG = Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "textures/ui/card_back.png");
     private static final int CARD_SIZE = 32;
     private static final int CARD_MARGIN = 8;
 
@@ -75,8 +75,8 @@ public class CardPackOpeningScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-        this.renderTransparentBackground(graphics);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+        this.extractTransparentBackground(graphics);
         this.emitter.draw(graphics, delta);
     }
 
@@ -118,28 +118,6 @@ public class CardPackOpeningScreen extends Screen {
         return this.addRenderableWidget(widget);
     }
 
-    static void renderFullTexture(ResourceLocation path, Matrix4f pose, float x, float y, float z, float width, float height) {
-        RenderSystem.setShaderTexture(0, path);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        BufferBuilder builder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        builder.addVertex(pose, x, y, z).setUv(0.0F, 0.0F);
-        builder.addVertex(pose, x, y + height, z).setUv(0.0F, 1.0F);
-        builder.addVertex(pose, x + width, y + height, z).setUv(1.0F, 1.0F);
-        builder.addVertex(pose, x + width, y, z).setUv(1.0F, 0.0F);
-        BufferUploader.drawWithShader(builder.buildOrThrow());
-    }
-
-    static void renderFullColoredTexture(ResourceLocation path, Matrix4f pose, float x, float y, float z, float width, float height, int color) {
-        RenderSystem.setShaderTexture(0, path);
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-        BufferBuilder builder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        builder.addVertex(pose, x, y, z).setUv(0.0F, 0.0F).setColor(color);
-        builder.addVertex(pose, x, y + height, z).setUv(0.0F, 1.0F).setColor(color);
-        builder.addVertex(pose, x + width, y + height, z).setUv(1.0F, 1.0F).setColor(color);
-        builder.addVertex(pose, x + width, y, z).setUv(1.0F, 0.0F).setColor(color);
-        BufferUploader.drawWithShader(builder.buildOrThrow());
-    }
-
     private static final class CardWidget extends AbstractWidget {
 
         private static final int TOTAL_MOVE_TIME = 10;
@@ -148,7 +126,7 @@ public class CardPackOpeningScreen extends Screen {
         private final int originalX, originalY;
         private final int targetX, targetY;
         private final AlbumCard card;
-        private final ResourceLocation itemTexture;
+        private final Identifier itemTexture;
         private Consumer<CardWidget> onIconFlipped;
         private Consumer<CardWidget> onFlipFinish;
 
@@ -199,14 +177,14 @@ public class CardPackOpeningScreen extends Screen {
         }
 
         @Override
-        public void onClick(double $$0, double $$1) {
+        public void onClick(MouseButtonEvent event, boolean doubleClick) {
             if (this.flipping || this.flipped)
                 return;
             this.flipping = true;
         }
 
         @Override
-        protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float deltaTicks) {
+        protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTicks) {
             this.updatePosition(deltaTicks);
             this.renderCardWithFlipAnimation(graphics, deltaTicks);
         }
@@ -225,7 +203,7 @@ public class CardPackOpeningScreen extends Screen {
             this.setY((int) (this.originalY + yDelta * positionAnimEased));
         }
 
-        private void renderCardWithFlipAnimation(GuiGraphics graphics, float delta) {
+        private void renderCardWithFlipAnimation(GuiGraphicsExtractor graphics, float delta) {
             float px = this.getX();
             int py = this.getY();
             float pWidth = this.getWidth();
@@ -249,9 +227,15 @@ public class CardPackOpeningScreen extends Screen {
                 }
             }
 
-            ResourceLocation texture = this.flipped ? itemTexture : CARD_BG;
-            Matrix4f poseMat = graphics.pose().last().pose();
-            renderFullTexture(texture, poseMat, px, py, 400, pWidth, pHeight);
+            Identifier texture = this.flipped ? itemTexture : CARD_BG;
+            graphics.nextStratum();
+            graphics.innerBlit(
+                    RenderPipelines.GUI_TEXTURED, texture,
+                    Mth.floor(px), Mth.floor(px + pWidth),
+                    Mth.floor(py), Mth.floor(py + pHeight),
+                    0.0F, 1.0F, 0.0F, 1.0F,
+                    0xFFFFFFFF
+            );
         }
 
         @Override
@@ -259,8 +243,8 @@ public class CardPackOpeningScreen extends Screen {
         }
 
         @Override
-        protected boolean clicked(double mouseX, double mouseY) {
-            return !this.flipped && !this.flipping && super.clicked(mouseX, mouseY);
+        protected boolean isValidClickButton(MouseButtonInfo buttonInfo) {
+            return super.isValidClickButton(buttonInfo) && !this.flipped && !this.flipping;
         }
 
         private void tickPosition() {
@@ -291,7 +275,7 @@ public class CardPackOpeningScreen extends Screen {
             ++this.flipCurrent;
         }
 
-        private static ResourceLocation getCardTexture(AlbumCard card, ItemStack itemStack) {
+        private static Identifier getCardTexture(AlbumCard card, ItemStack itemStack) {
             if (card == null) {
                 return getDefaultItemTexture(itemStack);
             }
@@ -299,9 +283,9 @@ public class CardPackOpeningScreen extends Screen {
             return template.cardTexture() != null ? template.cardTexture() : getDefaultItemTexture(itemStack);
         }
 
-        private static ResourceLocation getDefaultItemTexture(ItemStack itemStack) {
-            ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
-            return ResourceLocation.fromNamespaceAndPath(itemId.getNamespace(), "textures/item/" + itemId.getPath() + ".png");
+        private static Identifier getDefaultItemTexture(ItemStack itemStack) {
+            Identifier itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
+            return Identifier.fromNamespaceAndPath(itemId.getNamespace(), "textures/item/" + itemId.getPath() + ".png");
         }
     }
 
@@ -330,14 +314,14 @@ public class CardPackOpeningScreen extends Screen {
             }
         }
 
-        void draw(GuiGraphics graphics, float delta) {
+        void draw(GuiGraphicsExtractor graphics, float delta) {
             this.liveElements.forEach(fx -> fx.draw(graphics, delta));
         }
     }
 
     private static class FxElement {
 
-        private static final ResourceLocation[] PATHS = {
+        private static final Identifier[] PATHS = {
                 spark(0), spark(1), spark(2), spark(3),
                 spark(4), spark(5), spark(6), spark(7)
         };
@@ -360,14 +344,20 @@ public class CardPackOpeningScreen extends Screen {
             this.stage = PATHS.length - 1;
         }
 
-        void draw(GuiGraphics graphics, float delta) {
-            ResourceLocation path = PATHS[this.stage];
-            Matrix4f pose = graphics.pose().last().pose();
+        void draw(GuiGraphicsExtractor graphics, float delta) {
+            Identifier path = PATHS[this.stage];
             float scale = 8.0F;
             float halfScale = scale / 2.0F;
             float xPos = Mth.lerp(delta, xOld, x);
             float yPos = Mth.lerp(delta, yOld, y);
-            renderFullColoredTexture(path, pose, xPos - halfScale, yPos - halfScale, 0, scale, scale, 0xFF << 24 | this.color);
+            // todo custom render element with float position for smoother movement
+            graphics.innerBlit(
+                    RenderPipelines.GUI_TEXTURED, path,
+                    Mth.floor(xPos - halfScale), Mth.floor(xPos + halfScale),
+                    Mth.floor(yPos - halfScale), Mth.floor(yPos + halfScale),
+                    0.0F, 1.0F, 0.0F, 1.0F,
+                    ARGB.opaque(this.color)
+            );
         }
 
         void update() {
@@ -392,8 +382,8 @@ public class CardPackOpeningScreen extends Screen {
             return this.stage == 0 && this.stageLifeLeft <= 0;
         }
 
-        private static ResourceLocation spark(int index) {
-            return ResourceLocation.withDefaultNamespace(String.format("textures/particle/spark_%d.png", index));
+        private static Identifier spark(int index) {
+            return Identifier.withDefaultNamespace(String.format("textures/particle/spark_%d.png", index));
         }
     }
 }

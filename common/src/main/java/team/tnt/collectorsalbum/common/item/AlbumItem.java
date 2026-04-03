@@ -3,15 +3,16 @@ package team.tnt.collectorsalbum.common.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
-import team.tnt.collectorsalbum.platform.Platform;
+import team.tnt.collectorsalbum.client.CollectorsAlbumClient;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public class AlbumItem extends Item {
 
@@ -22,16 +23,16 @@ public class AlbumItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (level.isClientSide()) {
-            Platform.INSTANCE.openAlbumUi(itemStack);
+            CollectorsAlbumClient.openAlbum(itemStack);
         }
-        return InteractionResultHolder.consume(itemStack);
+        return InteractionResult.CONSUME;
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, TooltipContext context, List<Component> components, TooltipFlag flag) {
-        components.add(USAGE);
+    public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+        builder.accept(USAGE);
     }
 }

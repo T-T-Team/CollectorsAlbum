@@ -12,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.function.ConstantNumberProvider;
@@ -58,7 +59,7 @@ public class TagDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public Stream<ItemStack> view() {
-        return TagHelper.getTagValues(this.tagKey, BuiltInRegistries.ITEM).stream().map(Item::getDefaultInstance);
+    public Stream<ItemStackTemplate> view() {
+        return TagHelper.getTagValues(this.tagKey, BuiltInRegistries.ITEM).stream().map(ItemStackTemplate::new);
     }
 }

@@ -6,9 +6,7 @@
     "CCC"
   ],
   "key": {
-    "C": {
-      "tag": "collectorsalbum:cards/legendary"
-    }
+    "C": "#collectorsalbum:cards/legendary"
   },
   "result": {
     "id": "collectorsalbum:legendary_repacked_card_pack"

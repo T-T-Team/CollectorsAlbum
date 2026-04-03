@@ -9,7 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -25,7 +25,7 @@ import java.util.function.Function;
 public record AttributeAlbumBonus(Holder<Attribute> attribute, AttributeModifier attributeModifier, Optional<Component> label, boolean contextual) implements AlbumBonus {
 
     public static final Codec<AttributeModifier> CONFIGURABLE_MODIFIER_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("id").forGetter(AttributeModifier::id),
+            Identifier.CODEC.fieldOf("id").forGetter(AttributeModifier::id),
             Codec.either(Codec.DOUBLE, NumberProviderType.INSTANCE_CODEC).fieldOf("amount").forGetter(t -> Either.left(t.amount())),
             AttributeModifier.Operation.CODEC.fieldOf("operation").forGetter(AttributeModifier::operation)
     ).apply(instance, (id, either, op) -> new AttributeModifier(id, either.map(Function.identity(), NumberProvider::doubleValue), op)));

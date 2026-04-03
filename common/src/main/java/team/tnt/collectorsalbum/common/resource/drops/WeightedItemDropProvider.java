@@ -3,6 +3,7 @@ package team.tnt.collectorsalbum.common.resource.drops;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
@@ -36,7 +37,7 @@ public class WeightedItemDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public Stream<ItemStack> view() {
+    public Stream<ItemStackTemplate> view() {
         return this.items.getEntries().stream()
                 .filter(item -> item.getWeight() > 0)
                 .map(WeightedRandom.WeightedItem::item)

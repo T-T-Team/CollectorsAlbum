@@ -2,6 +2,7 @@ package team.tnt.collectorsalbum.platform.resource;
 
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,10 +16,11 @@ public abstract class PlatformBaseReloadListener<T> implements PreparableReloadL
     public static final Logger LOGGER = LogManager.getLogger("PlatformBaseReloadListener");
 
     @Override
-    public final CompletableFuture<Void> reload(PreparationBarrier barrier, ResourceManager manager, ProfilerFiller preparationProfiler, ProfilerFiller applyProfiler, Executor preparationExec, Executor applyExec) {
-        return CompletableFuture.supplyAsync(() -> prepare(manager, preparationProfiler), preparationExec)
-                .thenCompose(barrier::wait)
-                .thenAcceptAsync(resource -> apply(resource, manager, applyProfiler), applyExec);
+    public final CompletableFuture<Void> reload(SharedState currentReload, Executor taskExecutor, PreparationBarrier preparationBarrier, Executor reloadExecutor) {
+        ResourceManager manager = currentReload.resourceManager();
+        return CompletableFuture.supplyAsync(() -> prepare(manager, Profiler.get()), taskExecutor)
+                .thenCompose(preparationBarrier::wait)
+                .thenAcceptAsync(resource -> apply(resource, manager, Profiler.get()), reloadExecutor);
     }
 
     @Override

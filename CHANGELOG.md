@@ -1,15 +1,2 @@
-# Release 1.21.1-2.6.0
-- Bonus format changes
-  - compatible with old format, no datapacks should be broken - but in new GUI will be displayed as `Unnamed bonus`
-  - added `title`, `description` and `value` fields to base bonus format
-    - title is new display name for new bonus screen
-    - description can be used for additional bonus details
-    - value holds the bonus itself
-    - See [Wiki](<https://github.com/T-T-Team/CollectorsAlbum/wiki/Custom-addon-%E2%80%90-Step-by-step#defining-new-bonus>) for new format
-- Reworked bonuses screen
-  - now has completely separate GUI from album due to space constraints
-  - reworked bonus details to be more readable from user view
-- Reworked how album is tracked in player inventory, should resolve issues with bonuses being removed on dimension change
-- Card packs can now be upgraded to higher tier packs
-  - place higher tier card in the middle and previous tier packs around the card (4) to upgrade it
-  - so for example for upgrade to epic card pack, you need 1 epic card and 4 rare card packs
+# Release 26.1.1-2.6.0
+- 26.1 port

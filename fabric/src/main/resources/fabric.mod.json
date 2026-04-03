@@ -15,6 +15,7 @@
   "license": "${mod_licence}",
   "icon": "assets/icon.png",
   "environment": "*",
+  "accessWidener": "collectorsalbum.accesswidener",
   "entrypoints": {
     "main": [
       "team.tnt.collectorsalbum.CollectorsAlbumFabric"
@@ -35,7 +36,7 @@
     "fabric-api": "*",
     "minecraft": "${fabric_minecraft_version_range}",
     "java": ">=${java_version}",
-    "configuration": "^3.0.0"
+    "configuration": "^4.0.0"
   },
   "custom": {
     "modmenu": {

@@ -1,12 +1,13 @@
 package team.tnt.collectorsalbum.client.screen;
 
-import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 
 import java.util.Objects;
 
@@ -28,17 +29,17 @@ public class LabelWidget extends AbstractWidget {
     }
 
     @Override
-    protected boolean clicked(double mouseX, double mouseY) {
+    protected boolean isValidClickButton(MouseButtonInfo buttonInfo) {
         return false;
     }
 
     @Override
-    protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+    protected void extractWidgetRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta) {
         guiGraphics.enableScissor(this.getX(), this.getY(), this.getRight(), this.getBottom());
         if (scrolling) {
             renderScrollingStringInternal(guiGraphics, font, this.getMessage(), this.getX(), this.getX(), this.getY(), this.getRight(), this.getBottom(), textColor);
         } else {
-            guiGraphics.drawString(font, this.getMessage(), this.getX(), this.getY(), textColor, false);
+            guiGraphics.text(font, this.getMessage(), this.getX(), this.getY(), textColor, false);
         }
         guiGraphics.disableScissor();
     }
@@ -47,7 +48,7 @@ public class LabelWidget extends AbstractWidget {
     protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
     }
 
-    private static void renderScrollingStringInternal(GuiGraphics graphics, Font font, Component label, int textX, int x, int y, int width, int height, int color) {
+    private static void renderScrollingStringInternal(GuiGraphicsExtractor graphics, Font font, Component label, int textX, int x, int y, int width, int height, int color) {
         int textWidth = font.width(label);
         int containerHeight = y + height;
         Objects.requireNonNull(font);
@@ -61,10 +62,10 @@ public class LabelWidget extends AbstractWidget {
             double $$15 = Math.sin(1.5707963267948966 * Math.cos(6.283185307179586 * $$13 / $$14)) / 2.0 + 0.5;
             double $$16 = Mth.lerp($$15, 0.0, $$12);
             graphics.enableScissor(x, y, width, height);
-            graphics.drawString(font, label, x - (int)$$16, posY, color, false);
+            graphics.text(font, label, x - (int)$$16, posY, color, false);
             graphics.disableScissor();
         } else {
-            graphics.drawString(font, label, textX, posY, color, false);
+            graphics.text(font, label, textX, posY, color, false);
         }
 
     }

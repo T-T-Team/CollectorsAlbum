@@ -1,7 +1,7 @@
 package team.tnt.collectorsalbum.common.tracking;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
-public record AlbumFinder(ResourceLocation id, AlbumLoader loader,
+public record AlbumFinder(Identifier id, AlbumLoader loader,
                           ItemStackGetter itemGetter) {
 }

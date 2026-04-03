@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
@@ -16,7 +16,7 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class PlatformGsonReloadListener extends PlatformBaseReloadListener<Map<ResourceLocation, JsonElement>> {
+public abstract class PlatformGsonReloadListener extends PlatformBaseReloadListener<Map<Identifier, JsonElement>> {
 
     protected final Gson gson;
     protected final String directory;
@@ -27,12 +27,12 @@ public abstract class PlatformGsonReloadListener extends PlatformBaseReloadListe
     }
 
     @Override
-    public final Map<ResourceLocation, JsonElement> prepare(ResourceManager manager, ProfilerFiller profiler) {
-        Map<ResourceLocation, JsonElement> resources = new HashMap<>();
+    public final Map<Identifier, JsonElement> prepare(ResourceManager manager, ProfilerFiller profiler) {
+        Map<Identifier, JsonElement> resources = new HashMap<>();
         FileToIdConverter idConverter = FileToIdConverter.json(this.directory);
-        for (Map.Entry<ResourceLocation, Resource> entry : idConverter.listMatchingResources(manager).entrySet()) {
-            ResourceLocation fileResourcePath = entry.getKey();
-            ResourceLocation identifier = idConverter.fileToId(fileResourcePath);
+        for (Map.Entry<Identifier, Resource> entry : idConverter.listMatchingResources(manager).entrySet()) {
+            Identifier fileResourcePath = entry.getKey();
+            Identifier identifier = idConverter.fileToId(fileResourcePath);
             try (Reader reader = entry.getValue().openAsReader()) {
                 JsonElement json = GsonHelper.fromJson(this.gson, reader, JsonElement.class);
                 if (resources.put(identifier, json) != null) {

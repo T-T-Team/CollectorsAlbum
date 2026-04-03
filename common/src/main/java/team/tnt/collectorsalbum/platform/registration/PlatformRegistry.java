@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import team.tnt.collectorsalbum.platform.Platform;
@@ -24,6 +24,10 @@ public interface PlatformRegistry<T> {
         return new PlatformRegistryImpl<>(reference, namespace);
     }
 
+    static PlatformItemRegistry createItemRegistry(String namespace) {
+        return new PlatformItemRegistry(namespace);
+    }
+
     static MenuHelper createMenuHelper(PlatformRegistry<MenuType<?>> menuTypeRegistry) {
         return new MenuHelper() {
             @Override
@@ -35,9 +39,9 @@ public interface PlatformRegistry<T> {
 
     <R extends T> Reference<R> register(String elementId, Supplier<R> ref);
 
-    <R extends T> Reference<R> register(String elementId, Function<ResourceLocation, R> ref);
+    <R extends T> Reference<R> register(String elementId, Function<Identifier, R> ref);
 
-    <R extends T> void bindRef(BiConsumer<ResourceLocation, Reference<R>> refConsumer);
+    <R extends T> void bindRef(BiConsumer<Identifier, Reference<R>> refConsumer);
 
     void bind();
 

@@ -3,8 +3,9 @@ package team.tnt.collectorsalbum.common.card;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,24 +21,24 @@ public class SimpleCard implements AlbumCard {
 
     public static final MapCodec<SimpleCard> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("enabled", true).forGetter(SimpleCard::enabled),
-            ResourceLocation.CODEC.fieldOf("id").forGetter(SimpleCard::identifier),
-            ItemStack.SIMPLE_ITEM_CODEC.fieldOf("item").forGetter(SimpleCard::asItem),
-            ResourceLocation.CODEC.fieldOf("category").forGetter(SimpleCard::category),
+            Identifier.CODEC.fieldOf("id").forGetter(SimpleCard::identifier),
+            BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(t -> t.item),
+            Identifier.CODEC.fieldOf("category").forGetter(SimpleCard::category),
             CardUiTemplate.CODEC.optionalFieldOf("template", CardUiTemplate.TEMPLATE).forGetter(SimpleCard::template),
             Codec.INT.optionalFieldOf("points", 0).forGetter(SimpleCard::getPoints),
             ExtraCodecs.POSITIVE_INT.fieldOf("number").forGetter(SimpleCard::cardNumber)
     ).apply(instance, SimpleCard::new));
 
     private final boolean enabled;
-    private final ResourceLocation cardId;
-    private final ItemStack item;
-    private final ResourceLocation category;
+    private final Identifier cardId;
+    private final Item item;
+    private final Identifier category;
     private final CardUiTemplate template;
     private final int points;
     private final int number;
     private AlbumCategory cachedCategory;
 
-    public SimpleCard(boolean enabled, ResourceLocation cardId, ItemStack item, ResourceLocation category, CardUiTemplate template, int points, int number) {
+    public SimpleCard(boolean enabled, Identifier cardId, Item item, Identifier category, CardUiTemplate template, int points, int number) {
         this.enabled = enabled;
         this.cardId = cardId;
         this.item = item;
@@ -63,7 +64,7 @@ public class SimpleCard implements AlbumCard {
     }
 
     @Override
-    public ResourceLocation category() {
+    public Identifier category() {
         return this.category;
     }
 
@@ -73,12 +74,12 @@ public class SimpleCard implements AlbumCard {
     }
 
     @Override
-    public ItemStack asItem() {
+    public Item asItem() {
         return this.item;
     }
 
     @Override
-    public ResourceLocation identifier() {
+    public Identifier identifier() {
         return this.cardId;
     }
 

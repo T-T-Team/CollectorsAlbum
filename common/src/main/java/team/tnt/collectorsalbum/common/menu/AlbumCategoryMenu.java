@@ -2,7 +2,7 @@ package team.tnt.collectorsalbum.common.menu;
 
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -24,14 +24,14 @@ import java.util.List;
 
 public class AlbumCategoryMenu extends AbstractContainerMenu {
 
-    private ResourceLocation category;
+    private Identifier category;
     private final Int2IntMap cardNumberToSlotCache = new Int2IntOpenHashMap();
 
     public AlbumCategoryMenu(int menuId, Inventory inventory) {
         super(MenuRegistry.ALBUM_CATEGORY.get(), menuId);
     }
 
-    public AlbumCategoryMenu(int menuId, Inventory playerInventory, ResourceLocation category) {
+    public AlbumCategoryMenu(int menuId, Inventory playerInventory, Identifier category) {
         this(menuId, playerInventory);
         this.category = category;
 
@@ -195,10 +195,10 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
 
     private static final class CardSlot extends Slot {
 
-        private final ResourceLocation category;
+        private final Identifier category;
         private final int cardNumber;
 
-        public CardSlot(Container container, int index, int slotX, int slotY, ResourceLocation category, int number) {
+        public CardSlot(Container container, int index, int slotX, int slotY, Identifier category, int number) {
             super(container, index, slotX, slotY);
             this.category = category;
             this.cardNumber = number;
@@ -208,7 +208,7 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
         public boolean mayPlace(ItemStack itemStack) {
             AlbumCardManager manager = AlbumCardManager.getInstance();
             return manager.getCardInfo(itemStack.getItem()).map(info -> {
-                ResourceLocation cardCategory = info.category();
+                Identifier cardCategory = info.category();
                 int cardNumber = info.cardNumber();
                 return cardNumber == this.cardNumber && cardCategory.equals(category);
             }).orElse(false);
@@ -228,9 +228,9 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
     private static final class AlbumInventoryWrapper extends SimpleContainer {
 
         private final ItemStack itemStack;
-        private final ResourceLocation category;
+        private final Identifier category;
 
-        AlbumInventoryWrapper(int size, ItemStack itemStack, ResourceLocation category, Album album) {
+        AlbumInventoryWrapper(int size, ItemStack itemStack, Identifier category, Album album) {
             super(size);
             this.itemStack = itemStack;
             this.category = category;

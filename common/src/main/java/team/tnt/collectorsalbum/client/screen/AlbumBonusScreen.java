@@ -2,10 +2,11 @@ package team.tnt.collectorsalbum.client.screen;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -15,12 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
-import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonus;
-import team.tnt.collectorsalbum.common.resource.bonus.BonusHolder;
-import team.tnt.collectorsalbum.common.resource.bonus.IntermediateAlbumBonus;
-import team.tnt.collectorsalbum.common.resource.bonus.NoBonus;
-import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonusDetail;
-import team.tnt.collectorsalbum.common.resource.bonus.SectionOutput;
+import team.tnt.collectorsalbum.common.resource.bonus.*;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.util.Hierarchy;
 
@@ -67,18 +63,18 @@ public class AlbumBonusScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float deltaTick) {
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTick) {
         graphics.fill(0, 0, this.width, this.height, 0x99 << 24);
         graphics.fill(0, 0, this.sidebarWidth, this.height, 0x44 << 24);
-        graphics.drawString(this.font, this.sidebarTitle, 5, 5, 0xFFFFFFFF);
+        graphics.text(this.font, this.sidebarTitle, 5, 5, 0xFFFFFFFF);
 
         if (this.isMainPageView()) {
             // render main page info
-            graphics.drawString(this.font, this.title, this.sidebarWidth + 5, 5, 0xFFFFFFFF);
+            graphics.text(this.font, this.title, this.sidebarWidth + 5, 5, 0xFFFFFFFF);
 
             for (int i = 0; i < this.mainPageText.size(); i++) {
                 FormattedCharSequence text = this.mainPageText.get(i);
-                graphics.drawString(this.font, text, this.sidebarWidth + 5, 40 + i * 9, 0xFFCCCCCC);
+                graphics.text(this.font, text, this.sidebarWidth + 5, 40 + i * 9, 0xFFCCCCCC);
             }
         }
     }
@@ -158,7 +154,7 @@ public class AlbumBonusScreen extends Screen {
 
     private void selectPage(int page) {
         this.selectedBonus = page != this.selectedBonus ? page : -1;
-        this.init(this.minecraft, this.width, this.height);
+        this.init(this.width, this.height);
     }
 
     private static final class BonusButton extends AbstractWidget {
@@ -184,15 +180,15 @@ public class AlbumBonusScreen extends Screen {
         }
 
         @Override
-        protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+        protected void extractWidgetRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta) {
             if (this.selected || this.isHovered) {
                 guiGraphics.fill(this.getX(), this.getY(), this.getRight(), this.getBottom(), 0x44FFFFFF);
             }
-            renderScrollingString(guiGraphics, this.font, this.getMessage(), 0, this.getX() + 5, this.getY(), this.getRight() - 10, this.getBottom(), 0xFFFFFFFF);
+            this.extractScrollingStringOverContents(guiGraphics.textRenderer(), this.getMessage(), 0);
         }
 
         @Override
-        public void onClick(double mouseX, double mouseY) {
+        public void onClick(MouseButtonEvent event, boolean doubleClick) {
             if (this.onSelection != null)
                 this.onSelection.accept(this.index);
         }
@@ -222,11 +218,11 @@ public class AlbumBonusScreen extends Screen {
         }
 
         @Override
-        protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
             for (int line = this.scrollOffset; line < Math.min(this.scrollOffset + this.maxLines, this.compiledText.size()); line++) {
                 FormattedCharSequence text = this.compiledText.get(line);
                 int lineIndex = line - this.scrollOffset;
-                graphics.drawString(this.font, text, this.getX() + 5, this.getY() + 5 + lineIndex * 12, 0xFFFFFFFF);
+                graphics.text(this.font, text, this.getX() + 5, this.getY() + 5 + lineIndex * 12, 0xFFFFFFFF);
             }
         }
 

@@ -3,7 +3,7 @@ package team.tnt.collectorsalbum.network;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +15,7 @@ import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 
 public record C2S_CompleteOpeningCardPack() implements CustomPacketPayload {
 
-    public static final ResourceLocation IDENTIFIER = PlatformNetworkManager.generatePacketIdentifier(CollectorsAlbum.MOD_ID, C2S_CompleteOpeningCardPack.class);
+    public static final Identifier IDENTIFIER = PlatformNetworkManager.generatePacketIdentifier(CollectorsAlbum.MOD_ID, C2S_CompleteOpeningCardPack.class);
     public static final Type<C2S_CompleteOpeningCardPack> TYPE = new Type<>(IDENTIFIER);
     public static final StreamCodec<FriendlyByteBuf, C2S_CompleteOpeningCardPack> CODEC = StreamCodec.of(
             (buffer, payload) -> {},

@@ -1,17 +1,19 @@
 package team.tnt.collectorsalbum.client.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Matrix3x2fStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumCategory;
@@ -30,11 +32,9 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
     private final ItemStack itemStack;
 
     public AlbumCategoryScreen(AlbumCategoryMenu menu, Inventory inventory, Component title, AlbumCategory category) {
-        super(menu, inventory, title);
-        this.category = category;
         AlbumCategoryUiTemplate template = category.visualTemplate();
-        this.imageWidth = template.backgroundTexture.textureWidth();
-        this.imageHeight = template.backgroundTexture.textureHeight();
+        super(menu, inventory, title, template.backgroundTexture.textureWidth(), template.backgroundTexture.textureHeight());
+        this.category = category;
         this.cardSlots = menu.slots.stream().filter(slot -> !(slot.container instanceof Inventory)).toList();
         this.itemStack = AlbumNavigationHelper.getStoredAlbum();
     }
@@ -74,56 +74,62 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
     }
 
     @Override
-    protected void renderLabels(GuiGraphics graphics, int $$1, int $$2) {
+    protected void extractLabels(GuiGraphicsExtractor graphics, int $$1, int $$2) {
         Component categoryLabel = category.getDisplayText();
         Style displayTextStyle = categoryLabel.getStyle().withItalic(true);
         MutableComponent displayLabel = categoryLabel.copy().withStyle(ChatFormatting.BOLD);
         int width = font.width(displayLabel);
-        graphics.drawString(font, displayLabel, (imageWidth - width) / 2, -25, 0xFFFFFF, false);
+        graphics.text(font, displayLabel, (imageWidth - width) / 2, -25, 0xFFFFFFFF, false);
 
         Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
         if (album != null) {
             int points = album.getCardsForCategory(this.category.identifier()).stream().mapToInt(AlbumCard::getPoints).sum();
             Component pointLabel = AlbumMainPageScreen.getPointLabel(points).withStyle(displayTextStyle);
-            graphics.drawString(font, pointLabel, (imageWidth - font.width(pointLabel)) / 2, -15, 0xFFFFFF, false);
+            graphics.text(font, pointLabel, (imageWidth - font.width(pointLabel)) / 2, -15, 0xFFFFFFFF, false);
         }
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         AlbumCategoryUiTemplate template = category.visualTemplate();
-        blitTextureTemplate(guiGraphics, leftPos, topPos, template.backgroundTexture);
+        blitTextureTemplate(graphics, leftPos, topPos, template.backgroundTexture);
         int[] cardNumbers = category.getCardNumbers();
         if (template.renderSlots) {
             for (int slot = 0; slot < cardSlots.size(); slot++) {
                 Slot cardSlot = cardSlots.get(slot);
-                blitTextureTemplate(guiGraphics, leftPos + cardSlot.x - 1, topPos + cardSlot.y - 1, template.slotTexture);
+                blitTextureTemplate(graphics, leftPos + cardSlot.x - 1, topPos + cardSlot.y - 1, template.slotTexture);
                 if (template.renderSlotCardNumbers && !cardSlot.hasItem()) {
                     Component num = Component.literal(template.cardNumberPrefix + cardNumbers[slot]);
-                    PoseStack pose = guiGraphics.pose();
-                    guiGraphics.enableScissor(leftPos + cardSlot.x, topPos + cardSlot.y, leftPos + cardSlot.x + template.slotTexture.width() - 2, topPos + cardSlot.y + template.slotTexture.height() - 2);
-                    pose.pushPose();
-                    pose.translate(leftPos + cardSlot.x + 1, topPos + cardSlot.y + 1, 0);
-                    pose.scale(0.75F, 0.75F, 0.75F);
-                    guiGraphics.drawString(font, num, 0, 0, template.slotCardNumberTextColor, false);
-                    pose.popPose();
-                    guiGraphics.disableScissor();
+                    Matrix3x2fStack pose = graphics.pose();
+                    graphics.enableScissor(leftPos + cardSlot.x, topPos + cardSlot.y, leftPos + cardSlot.x + template.slotTexture.width() - 2, topPos + cardSlot.y + template.slotTexture.height() - 2);
+                    pose.pushMatrix();
+                    pose.translate(leftPos + cardSlot.x + 1, topPos + cardSlot.y + 1);
+                    pose.scale(0.75F, 0.75F);
+                    graphics.text(font, num, 0, 0, ARGB.opaque(template.slotCardNumberTextColor), false);
+                    pose.popMatrix();
+                    graphics.disableScissor();
                 }
             }
         }
     }
 
-    public static void blitTextureTemplate(GuiGraphics graphics, int x, int y, AlbumCategoryUiTemplate.TextureTemplate template) {
+    public static void blitTextureTemplate(GuiGraphicsExtractor graphics, int x, int y, AlbumCategoryUiTemplate.TextureTemplate template) {
         int texWidth = template.textureWidth();
         int texHeight = template.textureHeight();
         float u = template.texU() / (float) texWidth;
         float v = template.texV() / (float) texHeight;
-        graphics.blit(template.resource(), x, y, 0, u, v, template.width(), template.height(), texWidth, texHeight);
+        graphics.blit(
+                RenderPipelines.GUI_TEXTURED, template.resource(),
+                x, y,
+                u, v,
+                template.width(), template.height(),
+                texWidth, texHeight
+        );
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-        super.render(graphics, mouseX, mouseY, delta);
-        renderTooltip(graphics, mouseX, mouseY);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+        super.extractRenderState(graphics, mouseX, mouseY, delta);
+        this.extractTooltip(graphics, mouseX, mouseY);
     }
 }

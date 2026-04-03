@@ -1,8 +1,8 @@
 package team.tnt.collectorsalbum.platform;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public interface Identifiable {
 
-    ResourceLocation identifier();
+    Identifier identifier();
 }

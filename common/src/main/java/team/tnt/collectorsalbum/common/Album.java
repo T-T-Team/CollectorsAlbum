@@ -6,7 +6,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public final class Album implements Predicate<Album> {
 
     public static final Codec<ItemStack> NULLABLE_ITEMSTACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            BuiltInRegistries.ITEM.holderByNameCodec().fieldOf("id").forGetter(ItemStack::getItemHolder),
+            BuiltInRegistries.ITEM.holderByNameCodec().fieldOf("id").forGetter(ItemStack::typeHolder),
             Codec.INT.optionalFieldOf("count", 1).forGetter(ItemStack::getCount),
             DataComponentPatch.CODEC.optionalFieldOf("components", DataComponentPatch.EMPTY).forGetter(ItemStack::getComponentsPatch)
     ).apply(instance, ItemStack::new));
@@ -34,18 +34,18 @@ public final class Album implements Predicate<Album> {
     public static final Codec<Album> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             UUIDUtil.CODEC.fieldOf("albumId").forGetter(t -> t.albumId),
             Codec.unboundedMap(
-                    ResourceLocation.CODEC,
+                    Identifier.CODEC,
                     Codecs.setCodec(AlbumCardManager.BY_NAME_CODEC)
-            ).xmap(HashMap::new, map -> map).fieldOf("cardsByCategory").forGetter(t -> (HashMap<ResourceLocation, Set<AlbumCard>>) t.cardsByCategory),
+            ).xmap(HashMap::new, map -> map).fieldOf("cardsByCategory").forGetter(t -> (HashMap<Identifier, Set<AlbumCard>>) t.cardsByCategory),
             Codec.unboundedMap(
-                    ResourceLocation.CODEC,
+                    Identifier.CODEC,
                     Codecs.nonNullListCodec(NULLABLE_ITEMSTACK_CODEC, ItemStack.EMPTY)
             ).fieldOf("categoryInventories").forGetter(t -> t.categoryInventories)
     ).apply(instance, Album::new));
 
     private final UUID albumId;
-    private final Map<ResourceLocation, Set<AlbumCard>> cardsByCategory;
-    private final Map<ResourceLocation, NonNullList<ItemStack>> categoryInventories;
+    private final Map<Identifier, Set<AlbumCard>> cardsByCategory;
+    private final Map<Identifier, NonNullList<ItemStack>> categoryInventories;
     private final int points;
 
     private Album(Mutable mutable) {
@@ -54,8 +54,8 @@ public final class Album implements Predicate<Album> {
         this.categoryInventories = new HashMap<>();
         int pointCounter = 0;
         AlbumCardManager manager = AlbumCardManager.getInstance();
-        for (Map.Entry<ResourceLocation, NonNullList<ItemStack>> entry : mutable.inventories.entrySet()) {
-            ResourceLocation key = entry.getKey();
+        for (Map.Entry<Identifier, NonNullList<ItemStack>> entry : mutable.inventories.entrySet()) {
+            Identifier key = entry.getKey();
             NonNullList<ItemStack> inventory = entry.getValue();
             for (int i = 0; i < inventory.size(); i++) {
                 ItemStack itemStack = inventory.get(i);
@@ -78,7 +78,7 @@ public final class Album implements Predicate<Album> {
         this(albumId, new HashMap<>(), new HashMap<>());
     }
 
-    public Album(UUID albumId, Map<ResourceLocation, Set<AlbumCard>> cardsByCategory, Map<ResourceLocation, NonNullList<ItemStack>> categoryInventories) {
+    public Album(UUID albumId, Map<Identifier, Set<AlbumCard>> cardsByCategory, Map<Identifier, NonNullList<ItemStack>> categoryInventories) {
         this.albumId = albumId;
         this.cardsByCategory = cardsByCategory;
         this.categoryInventories = categoryInventories;
@@ -99,11 +99,11 @@ public final class Album implements Predicate<Album> {
         return points;
     }
 
-    public NonNullList<ItemStack> getInventory(ResourceLocation category) {
+    public NonNullList<ItemStack> getInventory(Identifier category) {
         return categoryInventories.getOrDefault(category, NonNullList.withSize(1, ItemStack.EMPTY));
     }
 
-    public Collection<AlbumCard> getCardsForCategory(ResourceLocation category) {
+    public Collection<AlbumCard> getCardsForCategory(Identifier category) {
         Set<AlbumCard> cards = cardsByCategory.get(category);
         return cards == null ? Collections.emptyList() : cards;
     }
@@ -187,12 +187,12 @@ public final class Album implements Predicate<Album> {
 
     public static final class Mutable {
 
-        private final Map<ResourceLocation, NonNullList<ItemStack>> inventories;
+        private final Map<Identifier, NonNullList<ItemStack>> inventories;
 
         public Mutable(Album album) {
-            Map<ResourceLocation, NonNullList<ItemStack>> inventories = new HashMap<>();
-            for (Map.Entry<ResourceLocation, NonNullList<ItemStack>> entry : album.categoryInventories.entrySet()) {
-                ResourceLocation key = entry.getKey();
+            Map<Identifier, NonNullList<ItemStack>> inventories = new HashMap<>();
+            for (Map.Entry<Identifier, NonNullList<ItemStack>> entry : album.categoryInventories.entrySet()) {
+                Identifier key = entry.getKey();
                 NonNullList<ItemStack> categoryInventory = entry.getValue();
                 AlbumCategoryManager.getInstance().findById(key).ifPresent(category -> {
                     NonNullList<ItemStack> inventory = NonNullList.withSize(category.getCardNumbers().length, ItemStack.EMPTY);
@@ -208,7 +208,7 @@ public final class Album implements Predicate<Album> {
             this.inventories = inventories;
         }
 
-        public void set(ResourceLocation category, int index, ItemStack itemStack) {
+        public void set(Identifier category, int index, ItemStack itemStack) {
             NonNullList<ItemStack> inventory = inventories.get(category);
             if (inventory == null) {
                 AlbumCategoryManager manager = AlbumCategoryManager.getInstance();

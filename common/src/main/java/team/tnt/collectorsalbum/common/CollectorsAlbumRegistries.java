@@ -1,8 +1,8 @@
 package team.tnt.collectorsalbum.common;
 
 import net.minecraft.core.Registry;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.card.AlbumCardType;
 import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonusType;
@@ -21,10 +21,10 @@ public final class CollectorsAlbumRegistries {
 
     public static final class Keys {
 
-        public static final ResourceKey<Registry<AlbumCardType<?>>> CARD_TYPE_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "card_type"));
-        public static final ResourceKey<Registry<AlbumCategoryType<?>>> CARD_CATEGORY_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "category"));
-        public static final ResourceKey<Registry<NumberProviderType<?>>> NUMBER_PROVIDER = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "number_provider"));
-        public static final ResourceKey<Registry<ItemDropProviderType<?>>> ITEM_DROP_PROVIDER = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "item_drop_provider"));
-        public static final ResourceKey<Registry<AlbumBonusType<?>>> ALBUM_BONUS = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_bonus"));
+        public static final ResourceKey<Registry<AlbumCardType<?>>> CARD_TYPE_KEY = ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "card_type"));
+        public static final ResourceKey<Registry<AlbumCategoryType<?>>> CARD_CATEGORY_KEY = ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "category"));
+        public static final ResourceKey<Registry<NumberProviderType<?>>> NUMBER_PROVIDER = ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "number_provider"));
+        public static final ResourceKey<Registry<ItemDropProviderType<?>>> ITEM_DROP_PROVIDER = ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "item_drop_provider"));
+        public static final ResourceKey<Registry<AlbumBonusType<?>>> ALBUM_BONUS = ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_bonus"));
     }
 }

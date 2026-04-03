@@ -10,7 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +31,7 @@ public final class CollectorsAlbumCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
                 Commands.literal("album")
-                        .requires(source -> source.hasPermission(2))
+                        .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(
                                 Commands.literal("giveCompleted")
                                         .executes(CollectorsAlbumCommand::givePlayerCompletedAlbum)
@@ -51,12 +51,12 @@ public final class CollectorsAlbumCommand {
         AlbumCardManager cardManager = AlbumCardManager.getInstance();
         Collection<AlbumCategory> registeredCategories = categoryManager.listCategories();
 
-        Map<ResourceLocation, Set<AlbumCard>> byCategory = new HashMap<>();
-        Map<ResourceLocation, NonNullList<ItemStack>> items = new HashMap<>();
+        Map<Identifier, Set<AlbumCard>> byCategory = new HashMap<>();
+        Map<Identifier, NonNullList<ItemStack>> items = new HashMap<>();
 
-        Multimap<ResourceLocation, CardItem> cardItemMap = ArrayListMultimap.create();
+        Multimap<Identifier, CardItem> cardItemMap = ArrayListMultimap.create();
         for (Map.Entry<Item, AlbumCard> entry : cardManager.getByItemMap().entrySet()) {
-            ResourceLocation key = entry.getValue().category();
+            Identifier key = entry.getValue().category();
             cardItemMap.put(key, new CardItem(entry.getValue(), entry.getKey()));
         }
 

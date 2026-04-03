@@ -10,7 +10,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
@@ -85,12 +85,13 @@ public class CollectorsAlbumNeoforge {
         CollectorsAlbum.serverStopped();
     }
 
-    private void addReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(AlbumCardManager.getInstance());
-        event.addListener(AlbumCategoryManager.getInstance());
-        event.addListener(AlbumBonusManager.getInstance());
-        event.addListener(CardPackDropManager.getInstance());
-        event.addListener(MobAdditionalDropManager.getInstance());
+    private void addReloadListeners(AddServerReloadListenersEvent event) {
+        event.addListener(AlbumCardManager.IDENTIFIER, AlbumCardManager.getInstance());
+        event.addListener(AlbumCategoryManager.IDENTIFIER, AlbumCategoryManager.getInstance());
+        event.addListener(AlbumBonusManager.IDENTIFIER, AlbumBonusManager.getInstance());
+        event.addListener(CardPackDropManager.IDENTIFIER, CardPackDropManager.getInstance());
+        event.addListener(MobAdditionalDropManager.IDENTIFIER, MobAdditionalDropManager.getInstance());
+        event.addDependency(AlbumCardManager.IDENTIFIER, AlbumCategoryManager.IDENTIFIER);
     }
 
     private void addRegistries(NewRegistryEvent event) {

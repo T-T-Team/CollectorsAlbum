@@ -7,8 +7,7 @@
   },
   "value": {
     "type": "collectorsalbum:config_toggle",
-    "config": "collectorsalbum",
-    "path": "bonusConfig.resistanceBonusEnabled",
+    "location": "collectorsalbum:bonusConfig/resistanceBonusEnabled",
     "enabled": {
       "type": "collectorsalbum:first_applicable",
       "items": [
@@ -26,8 +25,7 @@
             "effect": "minecraft:resistance",
             "amplifier": {
               "type": "collectorsalbum:config",
-              "config": "collectorsalbum",
-              "path": "bonusConfig.fullMobEffectAmplifier"
+              "location": "collectorsalbum:bonusConfig/fullMobEffectAmplifier"
             }
           }
         },
@@ -44,8 +42,7 @@
             "effect": "minecraft:resistance",
             "amplifier": {
               "type": "collectorsalbum:config",
-              "config": "collectorsalbum",
-              "path": "bonusConfig.baseMobEffectAmplifier"
+              "location": "collectorsalbum:bonusConfig/baseMobEffectAmplifier"
             }
           }
         }

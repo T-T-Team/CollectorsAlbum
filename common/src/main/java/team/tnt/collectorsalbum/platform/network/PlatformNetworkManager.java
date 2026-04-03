@@ -3,7 +3,7 @@ package team.tnt.collectorsalbum.platform.network;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import team.tnt.collectorsalbum.platform.Identifiable;
 import team.tnt.collectorsalbum.platform.JavaServiceLoader;
 
@@ -16,36 +16,36 @@ import java.util.function.Consumer;
 public final class PlatformNetworkManager implements Identifiable {
 
     public static final Network NETWORK = JavaServiceLoader.loadService(Network.class);
-    private final ResourceLocation identifier;
+    private final Identifier identifier;
     private Registry registry = new Registry();
 
-    private PlatformNetworkManager(ResourceLocation identifier) {
+    private PlatformNetworkManager(Identifier identifier) {
         this.identifier = identifier;
     }
 
     @Override
-    public ResourceLocation identifier() {
+    public Identifier identifier() {
         return this.identifier;
     }
 
-    public static ResourceLocation generatePacketIdentifier(Identifiable identifiable, Class<? extends CustomPacketPayload> type) {
+    public static Identifier generatePacketIdentifier(Identifiable identifiable, Class<? extends CustomPacketPayload> type) {
         return generatePacketIdentifier(identifiable.identifier().getNamespace(), type);
     }
 
-    public static ResourceLocation generatePacketIdentifier(ResourceLocation identifier, Class<? extends CustomPacketPayload> type) {
+    public static Identifier generatePacketIdentifier(Identifier identifier, Class<? extends CustomPacketPayload> type) {
         return generatePacketIdentifier(identifier.getNamespace(), type);
     }
 
-    public static ResourceLocation generatePacketIdentifier(String namespace, Class<? extends CustomPacketPayload> type) {
-        return ResourceLocation.fromNamespaceAndPath(namespace, type.getSimpleName().replaceAll("([A-Z])", "_$1").toLowerCase(Locale.ROOT));
+    public static Identifier generatePacketIdentifier(String namespace, Class<? extends CustomPacketPayload> type) {
+        return Identifier.fromNamespaceAndPath(namespace, type.getSimpleName().replaceAll("([A-Z])", "_$1").toLowerCase(Locale.ROOT));
     }
 
-    public static PlatformNetworkManager create(ResourceLocation identifier) {
+    public static PlatformNetworkManager create(Identifier identifier) {
         return new PlatformNetworkManager(identifier);
     }
 
     public static PlatformNetworkManager create(String namespace) {
-        return create(ResourceLocation.fromNamespaceAndPath(namespace, "network"));
+        return create(Identifier.fromNamespaceAndPath(namespace, "network"));
     }
 
     public <P extends CustomPacketPayload, BUF extends FriendlyByteBuf> void registerPacket(PacketDirection direction, Class<P> payloadType, CustomPacketPayload.Type<P> type, StreamCodec<BUF, P> codec) {

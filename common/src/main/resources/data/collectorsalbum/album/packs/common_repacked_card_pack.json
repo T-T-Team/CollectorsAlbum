@@ -2,8 +2,7 @@
   "type": "collectorsalbum:repeated",
   "times": {
     "type": "collectorsalbum:config",
-    "config": "collectorsalbum",
-    "path": "packDrops.repackedDropsCount"
+    "location": "collectorsalbum:packDrops/repackedDropsCount"
   },
   "item": {
     "type": "collectorsalbum:weighted_select",
@@ -12,8 +11,7 @@
         {
           "weight": {
             "type": "collectorsalbum:config",
-            "config": "collectorsalbum",
-            "path": "packDrops.commonDrops.commonCardDropChance"
+            "location": "collectorsalbum:packDrops/commonDrops/commonCardDropChance"
           },
           "item": {
             "type": "collectorsalbum:tag",
@@ -23,8 +21,7 @@
         {
           "weight": {
             "type": "collectorsalbum:config",
-            "config": "collectorsalbum",
-            "path": "packDrops.commonDrops.uncommonCardDropChance"
+            "location": "collectorsalbum:packDrops/commonDrops/uncommonCardDropChance"
           },
           "item": {
             "type": "collectorsalbum:tag",
@@ -34,8 +31,7 @@
         {
           "weight": {
             "type": "collectorsalbum:config",
-            "config": "collectorsalbum",
-            "path": "packDrops.commonDrops.rareCardDropChance"
+            "location": "collectorsalbum:packDrops/commonDrops/rareCardDropChance"
           },
           "item": {
             "type": "collectorsalbum:tag",
@@ -45,8 +41,7 @@
         {
           "weight": {
             "type": "collectorsalbum:config",
-            "config": "collectorsalbum",
-            "path": "packDrops.commonDrops.epicCardDropChance"
+            "location": "collectorsalbum:packDrops/commonDrops/epicCardDropChance"
           },
           "item": {
             "type": "collectorsalbum:tag",
@@ -56,8 +51,7 @@
         {
           "weight": {
             "type": "collectorsalbum:config",
-            "config": "collectorsalbum",
-            "path": "packDrops.commonDrops.legendaryCardDropChance"
+            "location": "collectorsalbum:packDrops/commonDrops/legendaryCardDropChance"
           },
           "item": {
             "type": "collectorsalbum:tag",
@@ -67,8 +61,7 @@
         {
           "weight": {
             "type": "collectorsalbum:config",
-            "config": "collectorsalbum",
-            "path": "packDrops.commonDrops.mythicalCardDropChance"
+            "location": "collectorsalbum:packDrops/commonDrops/mythicalCardDropChance"
           },
           "item": {
             "type": "collectorsalbum:tag",

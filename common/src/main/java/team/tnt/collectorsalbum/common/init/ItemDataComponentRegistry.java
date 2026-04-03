@@ -2,7 +2,7 @@ package team.tnt.collectorsalbum.common.init;
 
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.item.PackContents;
@@ -24,10 +24,10 @@ public final class ItemDataComponentRegistry {
                     .build()
     );
 
-    public static final PlatformRegistry.Reference<DataComponentType<ResourceLocation>> PACK_DROPS_TABLE = REGISTRY.register("pack_drops_table",
-            () -> DataComponentType.<ResourceLocation>builder()
-                    .persistent(ResourceLocation.CODEC)
-                    .networkSynchronized(ResourceLocation.STREAM_CODEC)
+    public static final PlatformRegistry.Reference<DataComponentType<Identifier>> PACK_DROPS_TABLE = REGISTRY.register("pack_drops_table",
+            () -> DataComponentType.<Identifier>builder()
+                    .persistent(Identifier.CODEC)
+                    .networkSynchronized(Identifier.STREAM_CODEC)
                     .build()
     );
 }

@@ -2,22 +2,22 @@ package team.tnt.collectorsalbum.integrations.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
 
 @JeiPlugin
 public class JeiIntegrationPlugin implements IModPlugin {
 
-    public static final ResourceLocation PLUGIN_ID = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "jei");
+    public static final Identifier PLUGIN_ID = Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "jei");
 
-    public static final RecipeType<CardPackDropManager.DropEntry> PACK_DROP = RecipeType.create(CollectorsAlbum.MOD_ID, "pack_drop", CardPackDropManager.DropEntry.class);
+    public static final IRecipeType<CardPackDropManager.DropEntry> PACK_DROP = IRecipeType.create(CollectorsAlbum.MOD_ID, "pack_drop", CardPackDropManager.DropEntry.class);
 
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return PLUGIN_ID;
     }
 

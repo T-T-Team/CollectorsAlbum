@@ -2,7 +2,7 @@ package team.tnt.collectorsalbum.common.resource;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import team.tnt.collectorsalbum.CollectorsAlbum;
@@ -24,9 +24,9 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Bon
             BonusHolder::unnamed
     );
 
-    private static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_bonus_manager");
+    public static final Identifier IDENTIFIER = Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "album_bonus_manager");
     private static final AlbumBonusManager INSTANCE = new AlbumBonusManager();
-    private final Map<ResourceLocation, BonusHolder> registeredBonuses = new HashMap<>();
+    private final Map<Identifier, BonusHolder> registeredBonuses = new HashMap<>();
     private final List<BonusHolder> bonusList = new ArrayList<>();
 
     private AlbumBonusManager() {
@@ -54,7 +54,7 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Bon
     }
 
     @Override
-    public ResourceLocation identifier() {
+    public Identifier identifier() {
         return IDENTIFIER;
     }
 
@@ -70,13 +70,13 @@ public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<Bon
     }
 
     @Override
-    protected void preApply(Map<ResourceLocation, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler) {
+    protected void preApply(Map<Identifier, JsonElement> resources, ResourceManager manager, ProfilerFiller profiler) {
         this.registeredBonuses.clear();
         this.bonusList.clear();
     }
 
     @Override
-    protected void resolve(ResourceLocation path, BonusHolder element) {
+    protected void resolve(Identifier path, BonusHolder element) {
         this.registeredBonuses.put(path, element);
         this.bonusList.add(element);
     }

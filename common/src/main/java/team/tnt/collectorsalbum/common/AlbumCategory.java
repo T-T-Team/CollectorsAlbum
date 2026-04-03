@@ -1,11 +1,11 @@
 package team.tnt.collectorsalbum.common;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public interface AlbumCategory {
 
-    ResourceLocation identifier();
+    Identifier identifier();
 
     Component getDisplayText();
 

@@ -1,14 +1,14 @@
 package team.tnt.collectorsalbum.integrations.curios;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
+import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.tracking.AlbumFinder;
 import team.tnt.collectorsalbum.common.tracking.CachedAlbum;
 import team.tnt.collectorsalbum.common.tracking.InventoryKey;
 import team.tnt.collectorsalbum.common.tracking.PlayerAlbumTracker;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.integrations.StartupPlugin;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -20,7 +20,7 @@ import java.util.function.IntFunction;
 public class CuriosPlugin implements StartupPlugin {
 
     private static final CuriosPlugin INSTANCE = new CuriosPlugin();
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "curios");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "curios");
     private static final String ALBUM_INVENTORY = "album";
     private static final AlbumFinder FINDER = new AlbumFinder(
             ID, CuriosPlugin::loadAlbum, CuriosPlugin::getItem

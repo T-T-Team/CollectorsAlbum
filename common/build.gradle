@@ -5,7 +5,9 @@ plugins {
 
 version = "${project.minecraft_version}-${project.version}"
 group = project.mod_group
-archivesBaseName = "${project.mod_id}" + "-common"
+base {
+    archivesName = "${project.mod_id}" + "-common"
+}
 
 minecraft {
     version("${minecraft_version}")
@@ -21,7 +23,7 @@ minecraft {
 
 dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: "${mixin_version}"
-    compileOnly "dev.toma.configuration:configuration-${minecraft_version}:${configuration_version}-common"
-    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
-    runtimeOnly "mezz.jei:jei-${minecraft_version}-common:${jei_version}"
+    compileOnly("dev.toma.configuration:configuration-${minecraft_version}:${configuration_version}-common")
+    compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    runtimeOnly("mezz.jei:jei-${minecraft_version}-common:${jei_version}")
 }
