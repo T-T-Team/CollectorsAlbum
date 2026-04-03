@@ -92,10 +92,10 @@ subprojects {
         it.options.getRelease().set(project.java_version.toInteger())
     }
 
-    task publishCurseForge(dependsOn: [':fabric:publishToCurseForge', ':forge:publishToCurseForge', ':neoforge:publishToCurseForge']) {
+    task publishCurseForge(dependsOn: [':fabric:publishToCurseForge', ':neoforge:publishToCurseForge']) {
     }
 
-    task publishModrinth(dependsOn: [':fabric:modrinth', ':forge:modrinth', ':neoforge:modrinth']) {
+    task publishModrinth(dependsOn: [':fabric:modrinth', ':neoforge:modrinth']) {
     }
 
     task publishMod(dependsOn: ['publishCurseForge', 'publishModrinth']) {
