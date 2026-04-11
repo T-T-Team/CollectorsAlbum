@@ -3,11 +3,8 @@ plugins {
     id 'org.spongepowered.gradle.vanilla' version "${vanilla_gradle_version}"
 }
 
-version = "${project.minecraft_version}-${project.version}"
+version = "${project.mod_version}"
 group = project.mod_group
-base {
-    archivesName = "${project.mod_id}" + "-common"
-}
 
 minecraft {
     version("${minecraft_version}")
@@ -23,7 +20,7 @@ minecraft {
 
 dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: "${mixin_version}"
-    compileOnly("dev.toma.configuration:configuration-${minecraft_version}:${configuration_version}-common")
+    compileOnly("dev.toma.configuration:configuration-common:${configuration_version}")
     compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     runtimeOnly("mezz.jei:jei-${minecraft_version}-common:${jei_version}")
 }

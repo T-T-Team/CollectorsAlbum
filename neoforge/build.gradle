@@ -21,11 +21,8 @@ plugins {
     id 'com.modrinth.minotaur' version "${modrinth_plugin_version}"
 }
 
-version = project.version
+version = "${project.mod_version}+${project.minecraft_version}"
 group = project.mod_group
-base {
-    archivesName = "${project.mod_id}-neoforge-${project.minecraft_version}"
-}
 
 def at = project(":common").file("src/main/resources/META-INF/accesstransformer.cfg")
 if (at.exists()) {
@@ -66,7 +63,7 @@ dependencies {
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     // Configuration
-    implementation "dev.toma.configuration:configuration-${minecraft_version}:${configuration_version}-neoforge"
+    implementation "dev.toma.configuration:configuration-neoforge:${configuration_version}"
 
     // JEI
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"

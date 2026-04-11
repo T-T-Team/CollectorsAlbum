@@ -46,7 +46,7 @@ subprojects {
     processResources {
         def props = [
                 // Mod
-                "version": project.version,
+                "version": "${mod_version}",
                 "mod_id": "${mod_id}",
                 "mod_name": "${mod_name}",
                 "mod_authors": "${mod_authors}",
@@ -90,6 +90,14 @@ subprojects {
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = "UTF-8"
         it.options.getRelease().set(project.java_version.toInteger())
+    }
+
+    tasks.withType(Jar).configureEach {
+        archiveBaseName = "${mod_id}-${project.platform}"
+    }
+
+    tasks.named('test') {
+        enabled = false
     }
 
     task publishCurseForge(dependsOn: [':fabric:publishToCurseForge', ':neoforge:publishToCurseForge']) {
