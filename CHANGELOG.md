@@ -1,2 +1,2 @@
-# Release 26.1.1-2.6.0
-- 26.1 port
+# Release 26.1.2-2.6.1
+- Added Spanish localization (credits to SundGGs)
