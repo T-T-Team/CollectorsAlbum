@@ -53,7 +53,7 @@ public class AlbumMainPageScreen extends Screen {
         int right = left + albumWidth;
         Duration tooltipDelay = Duration.ofSeconds(1);
         List<BookmarkWidget> bookmarks = new ArrayList<>();
-        BookmarkWidget home = new BookmarkWidget(left - 32, top, 32, 18, true, ItemRegistry.ALBUM.get().getDefaultInstance(), () -> Minecraft.getInstance().screen instanceof AlbumMainPageScreen);
+        BookmarkWidget home = new BookmarkWidget(left - 32, top, 32, 18, true, ItemRegistry.ALBUM.get().getDefaultInstance(), () -> Minecraft.getInstance().gui.screen() instanceof AlbumMainPageScreen);
         home.setTooltip(Tooltip.create(TITLE));
         home.setTooltipDelay(tooltipDelay);
         home.setAction(AlbumNavigationHelper::navigateHomepage);
@@ -62,7 +62,7 @@ public class AlbumMainPageScreen extends Screen {
 
         AlbumBonusManager bonusManager = AlbumBonusManager.getInstance();
         if (bonusManager.hasBonuses()) {
-            BookmarkWidget bonuses = new BookmarkWidget(left - 32, top + 20, 32, 18, true, Items.EMERALD.getDefaultInstance(), () -> Minecraft.getInstance().screen instanceof AlbumBonusScreen);
+            BookmarkWidget bonuses = new BookmarkWidget(left - 32, top + 20, 32, 18, true, Items.EMERALD.getDefaultInstance(), () -> Minecraft.getInstance().gui.screen() instanceof AlbumBonusScreen);
             bonuses.setTooltip(Tooltip.create(AlbumBonusScreen.TITLE));
             bonuses.setTooltipDelay(tooltipDelay);
             bonuses.setAction(AlbumNavigationHelper::navigateBonusesPage);
@@ -74,7 +74,7 @@ public class AlbumMainPageScreen extends Screen {
         for (AlbumCategory category : categories) {
             ItemStack displayItem = category.visualTemplate().bookmarkIcon.map(ItemStackTemplate::create)
                     .orElse(ItemStack.EMPTY);
-            BookmarkWidget categoryBookmark = new BookmarkWidget(right, top + (index++) * 20, 32, 18, false, displayItem, () -> Minecraft.getInstance().screen instanceof AlbumCategoryScreen catScreen && catScreen.getCategory().identifier().equals(category.identifier()));
+            BookmarkWidget categoryBookmark = new BookmarkWidget(right, top + (index++) * 20, 32, 18, false, displayItem, () -> Minecraft.getInstance().gui.screen() instanceof AlbumCategoryScreen catScreen && catScreen.getCategory().identifier().equals(category.identifier()));
             categoryBookmark.setTooltip(Tooltip.create(category.getDisplayText()));
             categoryBookmark.setTooltipDelay(tooltipDelay);
             categoryBookmark.setAction(() -> AlbumNavigationHelper.navigateCategory(category));

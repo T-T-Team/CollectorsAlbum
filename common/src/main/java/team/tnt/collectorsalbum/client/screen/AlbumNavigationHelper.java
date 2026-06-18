@@ -46,12 +46,12 @@ public final class AlbumNavigationHelper {
 
     public static void navigateHomepage() {
         resetCategoryPage();
-        Minecraft.getInstance().setScreen(new AlbumMainPageScreen(lastItemStack));
+        Minecraft.getInstance().gui.setScreen(new AlbumMainPageScreen(lastItemStack));
     }
 
     public static void navigateBonusesPage() {
         resetCategoryPage();
-        Minecraft.getInstance().setScreen(new AlbumBonusScreen(lastItemStack));
+        Minecraft.getInstance().gui.setScreen(new AlbumBonusScreen(lastItemStack));
     }
 
     public static ItemStack getStoredAlbum() {

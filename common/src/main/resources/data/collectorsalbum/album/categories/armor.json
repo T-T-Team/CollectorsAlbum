@@ -4,7 +4,7 @@
   "display": {
     "name": "album.category.collectorsalbum.armor",
     "translate": true,
-    "styles": ["blue"],
+    "color": "blue",
     "pageOrder": 200
   },
   "template": {

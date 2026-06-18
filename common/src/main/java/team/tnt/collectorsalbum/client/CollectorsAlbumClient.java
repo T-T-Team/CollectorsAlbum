@@ -33,7 +33,7 @@ public final class CollectorsAlbumClient {
         if (config.packOpenAnimation) {
             // open card pack opening animation screen
             Minecraft minecraft = Minecraft.getInstance();
-            minecraft.setScreen(new CardPackOpeningScreen(items));
+            minecraft.gui.setScreen(new CardPackOpeningScreen(items));
         } else {
             // send finish opening request immediately to server
             PlatformNetworkManager.NETWORK.sendServerMessage(new C2S_CompleteOpeningCardPack());

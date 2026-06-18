@@ -4,7 +4,7 @@
   "display": {
     "name": "album.category.collectorsalbum.items",
     "translate": true,
-    "styles": ["white"],
+    "color": "white",
     "pageOrder": 500
   },
   "template": {

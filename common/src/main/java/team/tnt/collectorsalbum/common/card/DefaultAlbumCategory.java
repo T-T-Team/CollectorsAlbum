@@ -3,8 +3,8 @@ package team.tnt.collectorsalbum.common.card;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.AlbumCategoryType;
@@ -13,8 +13,6 @@ import team.tnt.collectorsalbum.common.init.CategoryRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.platform.Codecs;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -38,10 +36,9 @@ public class DefaultAlbumCategory implements AlbumCategory {
         this.identifier = identifier;
         this.cards = cards;
         this.attributes = attributes;
-        ChatFormatting[] styles = attributes.styleList.toArray(new ChatFormatting[0]);
         this.displayText = attributes.translated()
-                ? Component.translatable(attributes.displayString()).withStyle(styles)
-                : Component.literal(attributes.displayString()).withStyle(styles);
+                ? Component.translatable(attributes.displayString()).withColor(attributes.color)
+                : Component.literal(attributes.displayString()).withColor(attributes.color);
         this.template = template;
         this.uniqueCardNumbers = this.cards.stream().mapToInt(AlbumCard::cardNumber).distinct().sorted().toArray();
     }
@@ -89,12 +86,12 @@ public class DefaultAlbumCategory implements AlbumCategory {
         return Objects.hashCode(identifier);
     }
 
-    public record DisplayAttributes(String displayString, boolean translated, List<ChatFormatting> styleList, int pageOrder) {
+    public record DisplayAttributes(String displayString, boolean translated, TextColor color, int pageOrder) {
 
         public static final Codec<DisplayAttributes> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.STRING.fieldOf("name").forGetter(DisplayAttributes::displayString),
                 Codec.BOOL.optionalFieldOf("translate", false).forGetter(DisplayAttributes::translated),
-                ChatFormatting.CODEC.listOf().optionalFieldOf("styles", Collections.emptyList()).forGetter(DisplayAttributes::styleList),
+                TextColor.CODEC.optionalFieldOf("color", TextColor.WHITE).forGetter(DisplayAttributes::color),
                 Codec.INT.optionalFieldOf("pageOrder", Integer.MAX_VALUE).forGetter(DisplayAttributes::pageOrder)
         ).apply(instance, DisplayAttributes::new));
     }

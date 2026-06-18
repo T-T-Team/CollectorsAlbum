@@ -4,7 +4,7 @@
   "display": {
     "name": "album.category.collectorsalbum.mobs",
     "translate": true,
-    "styles": ["red"],
+    "color": "red",
     "pageOrder": 300
   },
   "template": {

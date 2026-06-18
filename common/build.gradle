@@ -21,6 +21,8 @@ minecraft {
 dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: "${mixin_version}"
     compileOnly("dev.toma.configuration:configuration-common:${configuration_version}")
-    compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-    runtimeOnly("mezz.jei:jei-${minecraft_version}-common:${jei_version}")
+
+    // TODO enable and fix version once JEI is released
+    compileOnly("mezz.jei:jei-26.1.2-common-api:${jei_version}")
+    //runtimeOnly("mezz.jei:jei-${minecraft_version}-common:${jei_version}")
 }

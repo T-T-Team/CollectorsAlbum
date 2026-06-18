@@ -66,8 +66,9 @@ dependencies {
     implementation "dev.toma.configuration:configuration-neoforge:${configuration_version}"
 
     // JEI
-    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
-    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    // TODO enable and fix mc version once JEI is updated
+    compileOnly "mezz.jei:jei-26.1.2-neoforge-api:${jei_version}"
+    //runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
     compileOnly project(":common")
 }

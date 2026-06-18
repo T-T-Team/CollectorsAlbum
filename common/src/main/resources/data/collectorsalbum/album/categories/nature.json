@@ -4,7 +4,7 @@
   "display": {
     "name": "album.category.collectorsalbum.nature",
     "translate": true,
-    "styles": ["green"],
+    "color": "green",
     "pageOrder": 400
   },
   "template": {
