@@ -36,7 +36,7 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
         this.category = category;
 
         ItemStack itemStack = playerInventory.player.getMainHandItem();
-        Album album = itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+        Album album = Album.fromItem(itemStack);
         if (album == null) {
             return;
         }
@@ -245,19 +245,19 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
 
         @Override
         public void setItem(int index, ItemStack itemStack) {
-            Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+            Album album = Album.fromItem(this.itemStack);
             if (album != null) {
                 Album.Mutable mutable = new Album.Mutable(album);
                 mutable.set(this.category, index, itemStack.copy());
                 Album updated = mutable.toImmutable();
-                this.itemStack.set(ItemDataComponentRegistry.ALBUM.get(), updated);
+                updated.bind(this.itemStack);
             }
             super.setItem(index, itemStack);
         }
 
         @Override
         public void setChanged() {
-            Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+            Album album = Album.fromItem(this.itemStack);
             if (album != null) {
                 List<ItemStack> itemStacks = this.getItems();
                 Album.Mutable mutableAlbum = new Album.Mutable(album);
@@ -265,7 +265,7 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
                     ItemStack stack = itemStacks.get(i);
                     mutableAlbum.set(this.category, i, stack.copy());
                 }
-                this.itemStack.set(ItemDataComponentRegistry.ALBUM.get(), mutableAlbum.toImmutable());
+                mutableAlbum.buildAndBind(this.itemStack);
             }
             super.setChanged();
         }

@@ -48,7 +48,7 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
         super.init();
         AlbumNavigationHelper.restoreMousePositionFromSnapshot();
 
-        Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+        Album album = Album.fromItem(this.itemStack);
         if (album == null) {
             CollectorsAlbum.LOGGER.error("Failed to open album category {} due to invalid album item: {}", category.identifier(), itemStack);
             AlbumNavigationHelper.navigateHomepage();
@@ -81,7 +81,7 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
         int width = font.width(displayLabel);
         graphics.drawString(font, displayLabel, (imageWidth - width) / 2, -25, 0xFFFFFF, false);
 
-        Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+        Album album = Album.fromItem(this.itemStack);
         if (album != null) {
             int points = album.getCardsForCategory(this.category.identifier()).stream().mapToInt(AlbumCard::getPoints).sum();
             Component pointLabel = AlbumMainPageScreen.getPointLabel(points).withStyle(displayTextStyle);

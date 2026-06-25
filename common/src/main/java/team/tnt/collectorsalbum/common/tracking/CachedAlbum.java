@@ -11,7 +11,7 @@ public record CachedAlbum(InventoryKey key, Album value) {
 
     public boolean is(ItemStack stack) {
         UUID key = this.value.getAlbumId();
-        Album album = stack.get(ItemDataComponentRegistry.ALBUM.get());
+        Album album = Album.fromItem(stack);
         if (album == null)
             return false;
         return album.getAlbumId().equals(key);

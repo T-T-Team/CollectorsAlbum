@@ -38,7 +38,7 @@ public record C2S_RequestAlbumCategoryInventory(ResourceLocation category) imple
         ItemStack itemStack = player.getMainHandItem();
         if (!itemStack.is(RegistryTags.Items.ALBUM))
             return;
-        Album album = itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+        Album album = Album.fromItem(itemStack);
         if (album == null)
             return;
         AlbumCategoryManager manager = AlbumCategoryManager.getInstance();

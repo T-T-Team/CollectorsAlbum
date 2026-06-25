@@ -4,11 +4,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
+import team.tnt.collectorsalbum.common.Album;
+import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.tracking.AlbumFinder;
 import team.tnt.collectorsalbum.common.tracking.CachedAlbum;
 import team.tnt.collectorsalbum.common.tracking.InventoryKey;
 import team.tnt.collectorsalbum.common.tracking.PlayerAlbumTracker;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.integrations.StartupPlugin;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -43,8 +44,10 @@ public class CuriosPlugin implements StartupPlugin {
         return getStackHandler(player).map(handler -> {
             for (int i = 0; i < handler.getSlots(); i++) {
                 ItemStack itemStack = handler.getStackInSlot(i);
-                if (!itemStack.isEmpty() && itemStack.has(ItemDataComponentRegistry.ALBUM.get())) {
-                    return new CachedAlbum(keyFactory.apply(i), itemStack.get(ItemDataComponentRegistry.ALBUM.get()));
+                if (!itemStack.isEmpty() && Album.isBoundOn(itemStack)) {
+                    InventoryKey inventoryKey = keyFactory.apply(i);
+                    Album album = Album.fromItem(itemStack);
+                    return new CachedAlbum(inventoryKey, album);
                 }
             }
             return null;

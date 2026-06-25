@@ -120,7 +120,7 @@ public class AlbumMainPageScreen extends Screen {
         int titleWidth = font.width(TITLE);
         this.addRenderableOnly(new LabelRenderable(TITLE, left + (128 - titleWidth) / 2, top + 14, TEXT_COLOR));
 
-        Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+        Album album = Album.fromItem(this.itemStack);
         if (album == null)
             return;
         AlbumCategoryManager categoryManager = AlbumCategoryManager.getInstance();

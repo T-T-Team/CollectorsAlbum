@@ -54,7 +54,7 @@ public class AlbumBonusScreen extends Screen {
     protected void init() {
         this.initSidebar();
 
-        Album album = this.itemStack.get(ItemDataComponentRegistry.ALBUM.get());
+        Album album = Album.fromItem(this.itemStack);
         if (album == null && this.selectedBonus != -1) {
             this.selectPage(-1);
             return;
