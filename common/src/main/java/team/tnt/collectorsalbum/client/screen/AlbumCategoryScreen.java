@@ -19,7 +19,6 @@ import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.AlbumCategoryUiTemplate;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.menu.AlbumCategoryMenu;
 
 import java.time.Duration;
@@ -91,6 +90,7 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
 
     @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        this.extractTransparentBackground(graphics);
         AlbumCategoryUiTemplate template = category.visualTemplate();
         blitTextureTemplate(graphics, leftPos, topPos, template.backgroundTexture);
         int[] cardNumbers = category.getCardNumbers();
