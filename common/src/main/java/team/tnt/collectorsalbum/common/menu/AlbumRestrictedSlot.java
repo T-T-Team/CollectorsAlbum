@@ -15,6 +15,6 @@ public class AlbumRestrictedSlot extends Slot {
     @Override
     public boolean mayPickup(Player player) {
         ItemStack itemStack = this.getItem();
-        return Album.isBoundOn(itemStack);
+        return !Album.isBoundOn(itemStack);
     }
 }
