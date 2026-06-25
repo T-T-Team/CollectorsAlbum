@@ -4,7 +4,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import team.tnt.collectorsalbum.common.init.RegistryTags;
+import team.tnt.collectorsalbum.common.Album;
 
 public class AlbumRestrictedSlot extends Slot {
 
@@ -15,6 +15,6 @@ public class AlbumRestrictedSlot extends Slot {
     @Override
     public boolean mayPickup(Player player) {
         ItemStack itemStack = this.getItem();
-        return !itemStack.is(RegistryTags.Items.ALBUM);
+        return Album.isBoundOn(itemStack);
     }
 }
