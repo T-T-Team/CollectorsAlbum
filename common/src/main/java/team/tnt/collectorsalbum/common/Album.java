@@ -8,11 +8,13 @@ import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
 import team.tnt.collectorsalbum.common.card.CardRarity;
 import team.tnt.collectorsalbum.common.card.RarityHolder;
+import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
@@ -88,6 +90,18 @@ public final class Album implements Predicate<Album> {
 
     public static Album emptyAlbum() {
         return new Album(UUID.randomUUID());
+    }
+
+    public static Album fromItem(ItemInstance instance) {
+        return instance.get(ItemDataComponentRegistry.ALBUM.get());
+    }
+
+    public static boolean isBoundOn(ItemStack itemStack) {
+        return itemStack.has(ItemDataComponentRegistry.ALBUM.get());
+    }
+
+    public void bind(ItemStack itemStack) {
+        itemStack.set(ItemDataComponentRegistry.ALBUM.get(), this);
     }
 
     @Override
@@ -222,6 +236,11 @@ public final class Album implements Predicate<Album> {
 
         public Album toImmutable() {
             return new Album(this);
+        }
+
+        public void buildAndBind(ItemStack itemStack) {
+            Album album = toImmutable();
+            album.bind(itemStack);
         }
 
         @Override

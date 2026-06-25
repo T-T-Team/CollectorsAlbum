@@ -81,7 +81,7 @@ public final class CollectorsAlbumCommand {
         }
         Album album = new Album(albumUUID, byCategory, items);
         ItemStack albumItemStack = new ItemStack(ItemRegistry.ALBUM.get());
-        albumItemStack.set(ItemDataComponentRegistry.ALBUM.get(), album);
+        album.bind(albumItemStack);
 
         player.addItem(albumItemStack);
         player.sendSystemMessage(Component.literal("Album generated"));
