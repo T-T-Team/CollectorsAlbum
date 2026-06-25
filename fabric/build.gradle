@@ -37,9 +37,8 @@ dependencies {
     // Configuration
     implementation("dev.toma.configuration:configuration-fabric:${configuration_version}")
     // JEI
-    // TODO enable and fix mc version once JEI is updated
-    compileOnlyApi("mezz.jei:jei-26.1.2-fabric-api:${jei_version}")
-    //runtimeOnly("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}")
+    compileOnlyApi("mezz.jei:jei-${minecraft_version}-fabric-api:${jei_version}")
+    runtimeOnly("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}")
 
     compileOnly project(":common")
 }
