@@ -74,6 +74,19 @@ public final class PlayerAlbumTracker {
         this.cacheAlbum(player, foundAlbum);
     }
 
+    public void updateCache(Player player) {
+        this.playerAlbums.clear();
+        CachedAlbum found = this.findAlbumInInventory(player);
+        if (found != null) {
+            this.playerAlbums.put(player.getUUID(), found);
+        }
+    }
+
+    public boolean matches(UUID playerId, Album album) {
+        CachedAlbum cachedAlbum = this.playerAlbums.get(playerId);
+        return cachedAlbum != null && cachedAlbum.matches(album.getAlbumId());
+    }
+
     public @Nullable CachedAlbum findAlbumInInventory(Player player) {
         return this.callFinderFunction(
                 finder -> finder.loader().find(player, slotIndex -> new InventoryKey(finder, slotIndex)),

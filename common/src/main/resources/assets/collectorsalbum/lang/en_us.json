@@ -969,6 +969,8 @@
   "collectorsalbum.label.jei.pack_drop.title": "Card Pack Drops",
   "collectorsalbum.label.unnamed_bonus": "Unnamed bonus",
   "collectorsalbum.label.missing_description": "No description available...",
+  "collectorsalbum.label.album_active": "Active",
+  "collectorsalbum.label.album_inactive": "Inactive",
   "card.rarity.common": "Common",
   "card.rarity.uncommon": "Uncommon",
   "card.rarity.rare": "Rare",

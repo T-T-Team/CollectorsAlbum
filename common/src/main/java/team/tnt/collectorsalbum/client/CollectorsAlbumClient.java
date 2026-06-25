@@ -5,16 +5,20 @@ import dev.toma.configuration.config.format.ConfigFormats;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import team.tnt.collectorsalbum.client.screen.AlbumCategoryScreen;
 import team.tnt.collectorsalbum.client.screen.CardPackOpeningScreen;
 import team.tnt.collectorsalbum.common.init.MenuRegistry;
 import team.tnt.collectorsalbum.common.menu.AlbumCategoryMenu;
+import team.tnt.collectorsalbum.common.tracking.PlayerAlbumTracker;
 import team.tnt.collectorsalbum.network.C2S_CompleteOpeningCardPack;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 import team.tnt.collectorsalbum.platform.resource.MenuScreenRegistration;
 
 import java.util.List;
+import java.util.UUID;
 
 public final class CollectorsAlbumClient {
 
@@ -37,5 +41,27 @@ public final class CollectorsAlbumClient {
             // send finish opening request immediately to server
             PlatformNetworkManager.NETWORK.sendServerMessage(new C2S_CompleteOpeningCardPack());
         }
+    }
+
+    public static void clientTick() {
+        Minecraft client = Minecraft.getInstance();
+        Player player = client.player;
+        if (player == null)
+            return;
+        Level level = player.level();
+        if (level.getGameTime() % 100L == 0L) {
+            // Simple cache refresh - no album tick
+            PlayerAlbumTracker tracker = PlayerAlbumTracker.get();
+            tracker.updateCache(player);
+        }
+    }
+
+    public static UUID getClientUUID() {
+        Minecraft minecraft = Minecraft.getInstance();
+        Player player = minecraft.player;
+        if (player != null) {
+            return player.getUUID();
+        }
+        return null;
     }
 }

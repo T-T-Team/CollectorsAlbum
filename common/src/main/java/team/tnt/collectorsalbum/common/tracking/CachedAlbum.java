@@ -21,4 +21,9 @@ public record CachedAlbum(InventoryKey key, Album value) {
     public @NotNull String toString() {
         return this.value.getAlbumId().toString();
     }
+
+    public boolean matches(UUID identifier) {
+        Album album = this.value();
+        return album.getAlbumId().equals(identifier);
+    }
 }
