@@ -6,7 +6,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
+import org.jspecify.annotations.Nullable;
 import team.tnt.collectorsalbum.CollectorsAlbum;
+import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.init.RegistryTags;
 
@@ -54,11 +56,7 @@ public final class PlayerAlbumTracker {
                 invalidated = true;
             }
         }
-        CachedAlbum foundAlbum = this.callFinderFunction(
-                finder -> finder.loader().find(player, slot -> new InventoryKey(finder, slot)),
-                Objects::nonNull,
-                null
-        );
+        CachedAlbum foundAlbum = this.findAlbumInInventory(player);
         if (foundAlbum == null) {
             this.deleteCachedAlbum(player);
             if (invalidated) {
@@ -76,6 +74,14 @@ public final class PlayerAlbumTracker {
         }
         foundAlbum.value().tick(player);
         this.cacheAlbum(player, foundAlbum);
+    }
+
+    public @Nullable CachedAlbum findAlbumInInventory(Player player) {
+        return this.callFinderFunction(
+                finder -> finder.loader().find(player, slotIndex -> new InventoryKey(finder, slotIndex)),
+                Objects::nonNull,
+                null
+        );
     }
 
     private void cacheAlbum(Player player, CachedAlbum album) {
@@ -110,8 +116,10 @@ public final class PlayerAlbumTracker {
         Inventory inventory = player.getInventory();
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack itemStack = inventory.getItem(i);
-            if (!itemStack.isEmpty() && itemStack.is(RegistryTags.Items.ALBUM) && itemStack.has(ItemDataComponentRegistry.ALBUM.get())) {
-                return new CachedAlbum(keyFactory.apply(i), itemStack.get(ItemDataComponentRegistry.ALBUM.get()));
+            if (!itemStack.isEmpty() && itemStack.is(RegistryTags.Items.ALBUM) && Album.isBoundOn(itemStack)) {
+                Album album = Album.fromItem(itemStack);
+                InventoryKey key = keyFactory.apply(i);
+                return new CachedAlbum(key, album);
             }
         }
         return null;
