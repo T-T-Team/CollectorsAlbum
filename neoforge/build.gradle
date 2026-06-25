@@ -60,7 +60,7 @@ dependencies {
 
     // Curios
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
-    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    //runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     // Configuration
     implementation "dev.toma.configuration:configuration-neoforge:${configuration_version}"
