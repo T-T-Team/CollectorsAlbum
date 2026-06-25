@@ -9,7 +9,6 @@ import org.apache.logging.log4j.MarkerManager;
 import org.jetbrains.annotations.Nullable;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.Album;
-import team.tnt.collectorsalbum.common.init.RegistryTags;
 
 import java.util.*;
 import java.util.function.Function;
@@ -115,7 +114,7 @@ public final class PlayerAlbumTracker {
         Inventory inventory = player.getInventory();
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack itemStack = inventory.getItem(i);
-            if (!itemStack.isEmpty() && itemStack.is(RegistryTags.Items.ALBUM) && Album.isBoundOn(itemStack)) {
+            if (!itemStack.isEmpty() && Album.isBoundOn(itemStack)) {
                 Album album = Album.fromItem(itemStack);
                 InventoryKey key = keyFactory.apply(i);
                 return new CachedAlbum(key, album);

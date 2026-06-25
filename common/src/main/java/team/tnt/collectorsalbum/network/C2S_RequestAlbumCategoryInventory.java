@@ -13,8 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumCategory;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
-import team.tnt.collectorsalbum.common.init.RegistryTags;
 import team.tnt.collectorsalbum.common.menu.AlbumCategoryMenu;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.platform.Platform;
@@ -36,8 +34,6 @@ public record C2S_RequestAlbumCategoryInventory(ResourceLocation category) imple
 
     public void onPacket(Player player) {
         ItemStack itemStack = player.getMainHandItem();
-        if (!itemStack.is(RegistryTags.Items.ALBUM))
-            return;
         Album album = Album.fromItem(itemStack);
         if (album == null)
             return;
