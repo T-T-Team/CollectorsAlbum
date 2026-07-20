@@ -2,6 +2,7 @@ package team.tnt.collectorsalbum.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -77,7 +78,9 @@ public class CardPackOpeningScreen extends Screen {
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
         this.renderTransparentBackground(graphics);
-        this.emitter.draw(graphics, delta);
+        DeltaTracker deltaTracker = this.minecraft.getTimer();
+        float partialTick = deltaTracker.getGameTimeDeltaPartialTick(true);
+        this.emitter.draw(graphics, partialTick);
     }
 
     @Override
@@ -113,7 +116,7 @@ public class CardPackOpeningScreen extends Screen {
     private CardWidget addCardWidget(int x, int y, ItemStack itemStack) {
         int left = (this.width - CARD_SIZE) / 2;
         int top = this.height - CARD_SIZE / 2;
-        CardWidget widget = new CardWidget(left, top, CARD_SIZE, CARD_SIZE, x, y, itemStack);
+        CardWidget widget = new CardWidget(left, top, CARD_SIZE, CARD_SIZE, x, y, itemStack, this.minecraft.getTimer());
         this.cardWidgets.add(widget);
         return this.addRenderableWidget(widget);
     }
@@ -147,6 +150,7 @@ public class CardPackOpeningScreen extends Screen {
 
         private final int originalX, originalY;
         private final int targetX, targetY;
+        private final DeltaTracker deltaTracker;
         private final AlbumCard card;
         private final ResourceLocation itemTexture;
         private Consumer<CardWidget> onIconFlipped;
@@ -158,7 +162,7 @@ public class CardPackOpeningScreen extends Screen {
         private int positionCurrent, positionOld;
         private int positionAnimationDelay;
 
-        public CardWidget(int x, int y, int width, int height, int targetX, int targetY, ItemStack itemStack) {
+        public CardWidget(int x, int y, int width, int height, int targetX, int targetY, ItemStack itemStack, DeltaTracker deltaTracker) {
             super(x, y, width, height, CommonComponents.EMPTY);
             this.originalX = x;
             this.originalY = y;
@@ -167,6 +171,7 @@ public class CardPackOpeningScreen extends Screen {
             this.card = AlbumCardManager.getInstance().getCardInfo(itemStack.getItem())
                     .orElse(null);
             this.itemTexture = getCardTexture(this.card, itemStack);
+            this.deltaTracker = deltaTracker;
         }
 
         public void setOnIconFlipped(Consumer<CardWidget> onIconFlipped) {
@@ -207,8 +212,9 @@ public class CardPackOpeningScreen extends Screen {
 
         @Override
         protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float deltaTicks) {
-            this.updatePosition(deltaTicks);
-            this.renderCardWithFlipAnimation(graphics, deltaTicks);
+            float partialTick = this.deltaTracker.getGameTimeDeltaPartialTick(true);
+            this.updatePosition(partialTick);
+            this.renderCardWithFlipAnimation(graphics, partialTick);
         }
 
         private void updatePosition(float delta) {
