@@ -14,7 +14,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import team.tnt.collectorsalbum.common.tracking.PlayerAlbumTracker;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.item.PackContents;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
@@ -22,8 +21,10 @@ import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProvider;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.ListBasedOutputBuilder;
+import team.tnt.collectorsalbum.common.tracking.PlayerAlbumTracker;
 import team.tnt.collectorsalbum.config.CollectorsAlbumConfig;
 import team.tnt.collectorsalbum.integrations.PlatformIntegrations;
+import team.tnt.collectorsalbum.integrations.trinkets_updated.TrinketsUpdatedPlugin;
 import team.tnt.collectorsalbum.network.NetworkManager;
 import team.tnt.collectorsalbum.network.S2C_OpenCardPackScreen;
 import team.tnt.collectorsalbum.network.S2C_SendDatapackResources;
@@ -46,6 +47,7 @@ public class CollectorsAlbum {
     public static void init() {
         config = Configuration.registerConfig(CollectorsAlbumConfig.class, ConfigFormats.YAML).getConfigInstance();
         registerPackets();
+        PlatformIntegrations.registerStartupPlugin("trinkets_updated", TrinketsUpdatedPlugin::instance);
         PlatformIntegrations.onStartup();
     }
 

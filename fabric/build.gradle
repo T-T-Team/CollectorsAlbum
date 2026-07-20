@@ -36,6 +36,8 @@ dependencies {
     implementation("com.terraformersmc:modmenu:${modmenu_version}")
     // Configuration
     implementation("dev.toma.configuration:configuration-fabric:${configuration_version}")
+    // Trinkets updated
+    implementation "eu.pb4:trinkets:${trinkets_version}"
     // JEI
     compileOnlyApi("mezz.jei:jei-${minecraft_version}-fabric-api:${jei_version}")
     runtimeOnly("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}")

@@ -1,38 +1,36 @@
-/*
-package team.tnt.collectorsalbum.integrations.trinkets;
+package team.tnt.collectorsalbum.integrations.trinkets_updated;
 
-import dev.emi.trinkets.api.TrinketInventory;
-import dev.emi.trinkets.api.TrinketsApi;
-import net.minecraft.resources.ResourceLocation;
+import eu.pb4.trinkets.api.TrinketAttachment;
+import eu.pb4.trinkets.api.TrinketInventory;
+import eu.pb4.trinkets.api.TrinketsApi;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
+import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.tracking.AlbumFinder;
 import team.tnt.collectorsalbum.common.tracking.CachedAlbum;
 import team.tnt.collectorsalbum.common.tracking.InventoryKey;
 import team.tnt.collectorsalbum.common.tracking.PlayerAlbumTracker;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.integrations.StartupPlugin;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.IntFunction;
 
-public class TrinketPlugin implements StartupPlugin {
+public class TrinketsUpdatedPlugin implements StartupPlugin {
 
-    private static final TrinketPlugin INSTANCE = new TrinketPlugin();
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "trinkets");
+    private static final TrinketsUpdatedPlugin INSTANCE = new TrinketsUpdatedPlugin();
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "trinkets");
     private static final AlbumFinder FINDER = new AlbumFinder(
-            ID, TrinketPlugin::loadAlbum, TrinketPlugin::getItem
+            ID, TrinketsUpdatedPlugin::loadAlbum, TrinketsUpdatedPlugin::getItem
     );
-    private static final String COMPONENT = "hand";
-    private static final String INVENTORY = "album";
+    private static final String COMPONENT = "hand/album";
 
 
-    private TrinketPlugin() {
+    private TrinketsUpdatedPlugin() {
     }
 
-    public static TrinketPlugin instance() {
+    public static TrinketsUpdatedPlugin instance() {
         return INSTANCE;
     }
 
@@ -64,12 +62,8 @@ public class TrinketPlugin implements StartupPlugin {
     }
 
     private static Optional<TrinketInventory> getInventory(Player player) {
-        return TrinketsApi.getTrinketComponent(player).map(component -> {
-            Map<String, TrinketInventory> inventory = component.getInventory().get(COMPONENT);
-            if (inventory == null)
-                return null;
-            return inventory.get(INVENTORY);
-        });
+        TrinketAttachment attachment = TrinketsApi.getAttachment(player);
+        TrinketInventory inventory = attachment.getInventory(COMPONENT);
+        return Optional.ofNullable(inventory);
     }
 }
-*/
