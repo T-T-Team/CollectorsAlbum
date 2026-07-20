@@ -65,6 +65,9 @@ dependencies {
     // Configuration
     implementation "dev.toma.configuration:configuration-neoforge:${configuration_version}"
 
+    // Trinkets updated
+    compileOnly "eu.pb4:trinkets:${trinkets_version}"
+
     // JEI
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"

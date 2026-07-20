@@ -23,5 +23,6 @@ dependencies {
     compileOnly("dev.toma.configuration:configuration-common:${configuration_version}")
 
     compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    compileOnly "eu.pb4:trinkets:${trinkets_version}"
     runtimeOnly("mezz.jei:jei-${minecraft_version}-common:${jei_version}")
 }

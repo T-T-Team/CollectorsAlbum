@@ -22,7 +22,6 @@ import team.tnt.collectorsalbum.platform.registration.FabricRegistration;
 public class CollectorsAlbumFabric implements ModInitializer {
 
     public CollectorsAlbumFabric() {
-        //PlatformIntegrations.registerStartupPlugin("trinkets", TrinketPlugin::instance);
         CollectorsAlbum.init();
     }
 

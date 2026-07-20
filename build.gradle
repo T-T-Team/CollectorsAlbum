@@ -41,6 +41,10 @@ subprojects {
             name = "ModMaven"
             url = "https://modmaven.dev"
         }
+        maven {
+            name = "Nucleoid" // Trinkets updated
+            url = 'https://maven.nucleoid.xyz/releases'
+        }
     }
 
     processResources {
