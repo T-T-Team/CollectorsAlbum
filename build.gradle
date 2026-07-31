@@ -103,13 +103,4 @@ subprojects {
     tasks.named('test') {
         enabled = false
     }
-
-    task publishCurseForge(dependsOn: [':fabric:publishToCurseForge', ':neoforge:publishToCurseForge']) {
-    }
-
-    task publishModrinth(dependsOn: [':fabric:modrinth', ':neoforge:modrinth']) {
-    }
-
-    task publishMod(dependsOn: ['publishCurseForge', 'publishModrinth']) {
-    }
 }

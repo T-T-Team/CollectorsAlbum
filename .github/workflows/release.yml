@@ -1,47 +1,129 @@
-name: Publish
+name: Release
 on:
   push:
     tags:
       - 'version/*'
 
+env:
+  JAVA_VENDOR: 'microsoft'
+  JAVA_VERSION: '25'
+  GAME_ENV: 'Client,Server'
+  GAME_VERSION: '26.2'
+  GAME_DEPENDENCIES: 'configuration'
+  CURSEFORGE_PROJECT: '659390'
+  MODRINTH_PROJECT: '4pdmGHx9'
+  DEBUG: 'false'
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        loader: ${{ fromJSON(vars.LOADERS) }}
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-java@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
         with:
-          distribution: 'microsoft'
-          java-version: '25'
+          distribution: ${{ env.JAVA_VENDOR }}
+          java-version: ${{ env.JAVA_VERSION }}
+      - uses: gradle/actions/setup-gradle@v6
+      - run: chmod +x ./gradlew
+      - run: ./gradlew :${{ matrix.loader.id }}:assemble --no-configuration-cache
+      - uses: actions/upload-artifact@v7
+        with:
+          name: artifact-${{ matrix.loader.id }}
+          path: ${{ matrix.loader.id }}/build/libs/*-${{ matrix.loader.id }}-*.jar
+          retention-days: 1
+          if-no-files-found: error
 
-      - name: Prepare Gradle Wrapper
-        run: chmod +x ./gradlew
-
-      - uses: gradle/actions/setup-gradle@v4
-
-      - name: Release
-        run: ./gradlew publishMod -PCURSEFORGE_TOKEN=${{ secrets.CF_TOKEN }} -PMODRINTH_TOKEN=${{ secrets.MODRINTH_TOKEN }} --no-configuration-cache
-
+  prepare-changelog:
+    runs-on: ubuntu-latest
+    needs: build
+    outputs:
+      changelog: ${{ steps.changelog.outputs.content }}
+    steps:
+      - uses: actions/checkout@v7
       - uses: Toma1O6/file-read-action@v1
         id: changelog
         with:
           file: 'CHANGELOG.md'
           max-chars: '4096'
 
-      - uses: T-T-Team/discord-release-announcement-action@v1.0.1
+  publish-curseforge:
+    runs-on: ubuntu-latest
+    needs:
+      - prepare-changelog
+    strategy:
+      fail-fast: false
+      matrix:
+        loader: ${{ fromJSON(vars.LOADERS) }}
+    steps:
+      - uses: actions/download-artifact@v8
         with:
-          webhookUrl: ${{ secrets.WEBHOOK_URL }}
+          name: artifact-${{ matrix.loader.id }}
+          path: 'artifacts'
+      - uses: T-T-Team/curseforge-publish-action@v1
+        with:
+          artifact-directory: 'artifacts'
+          token: ${{ secrets.CF_TOKEN }}
+          project-id: ${{ env.CURSEFORGE_PROJECT }}
+          game-version: ${{ env.GAME_VERSION }}
+          mod-loader: ${{ matrix.loader.name }}
+          game-environment: ${{ env.GAME_ENV }}
+          java-version: Java ${{ env.JAVA_VERSION }}
+          changelog-content: ${{ needs.prepare-changelog.outputs.changelog }}
+          required-dependencies: ${{ env.GAME_DEPENDENCIES }}
+          debug-mode: ${{ env.DEBUG }}
+
+  publish-modrinth:
+    runs-on: ubuntu-latest
+    needs:
+      - prepare-changelog
+    strategy:
+      fail-fast: false
+      matrix:
+        loader: ${{ fromJSON(vars.LOADERS) }}
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: artifact-${{ matrix.loader.id }}
+          path: 'artifacts'
+      - uses: T-T-Team/modrinth-publish-action@v1
+        with:
+          artifact-directory: 'artifacts'
+          token: ${{ secrets.MODRINTH_TOKEN }}
+          project-id: ${{ env.MODRINTH_PROJECT }}
+          game-version: ${{ env.GAME_VERSION }}
+          mod-loader: ${{ matrix.loader.name }}
+          changelog-content: ${{ needs.prepare-changelog.outputs.changelog }}
+          required-dependencies: ${{ env.GAME_DEPENDENCIES }}
+          debug-mode: ${{ env.DEBUG }}
+
+  announce-release-discord:
+    runs-on: ubuntu-latest
+    needs:
+      - prepare-changelog
+      - publish-curseforge
+      - publish-modrinth
+    steps:
+      - uses: T-T-Team/discord-release-announcement-action@v2
+        with:
+          webhook-url: ${{ secrets.WEBHOOK_URL }}
           message: '<@&1050082657511411763>'
           title: 'Collectors Album'
           homepage: 'https://github.com/T-T-Team/CollectorsAlbum'
-          changelog: ${{ steps.changelog.outputs.content }}
+          changelog: ${{ needs.prepare-changelog.outputs.changelog }}
           color: '9576191'
-          iconUrl: 'https://media.forgecdn.net/avatars/589/367/637960226211119035.png'
+          icon-url: 'https://media.forgecdn.net/avatars/589/367/637960226211119035.png'
           note: 'CurseForge file may take up to 1 hour to be published'
-          curseForgeUrl: 'https://www.curseforge.com/minecraft/mc-mods/collectors-album'
-          modrinthUrl: 'https://modrinth.com/mod/collectors-album'
-          sourcesUrl: 'https://github.com/T-T-Team/CollectorsAlbum'
-          issueTrackerUrl: 'https://github.com/T-T-Team/CollectorsAlbum/issues'
-          wikiUrl: 'https://github.com/T-T-Team/CollectorsAlbum/wiki'
-          donationUrl: 'https://ko-fi.com/toma1o6'
+          curseforge-url: 'https://www.curseforge.com/minecraft/mc-mods/collectors-album'
+          modrinth-url: 'https://modrinth.com/mod/collectors-album'
+          sources-url: 'https://github.com/T-T-Team/CollectorsAlbum'
+          issue-tracker-url: 'https://github.com/T-T-Team/CollectorsAlbum/issues'
+          wiki-url: 'https://github.com/T-T-Team/CollectorsAlbum/wiki'
+          donation-url: 'https://ko-fi.com/toma1o6'

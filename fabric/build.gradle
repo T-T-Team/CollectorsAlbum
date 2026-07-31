@@ -1,6 +1,3 @@
-import net.darkhax.curseforgegradle.Constants
-import net.darkhax.curseforgegradle.TaskPublishCurseForge
-
 buildscript {
     repositories {
         mavenCentral()
@@ -13,8 +10,6 @@ buildscript {
 plugins {
     id 'net.fabricmc.fabric-loom' version "${fabric_loom}"
     id 'idea'
-    id 'net.darkhax.curseforgegradle' version "${cursegradle_plugin_version}"
-    id 'com.modrinth.minotaur' version "${modrinth_plugin_version}"
 }
 
 version = "${project.mod_version}+${project.minecraft_version}"
@@ -88,40 +83,3 @@ processResources {
 tasks.withType(JavaCompile) {
     source(project(":common").sourceSets.main.allSource)
 }
-
-tasks.register('publishToCurseForge', TaskPublishCurseForge) {
-    dependsOn(tasks.jar)
-    apiToken = CURSEFORGE_TOKEN
-    debugMode = debug.toBoolean()
-
-    def uploadFile = upload(curseforge_project_id, tasks.jar.archiveFile)
-    uploadFile.changelogType = Constants.CHANGELOG_MARKDOWN
-    uploadFile.changelog = file("../CHANGELOG.md").exists() ? file('../CHANGELOG.md').text : "-- No changelog provided --"
-    uploadFile.releaseType = Constants.RELEASE_TYPE_RELEASE
-    uploadFile.displayName = "${mod_id}-${platform}-${version}"
-    uploadFile.addModLoader('Fabric')
-    uploadFile.addEnvironment('Client', 'Server')
-    uploadFile.addJavaVersion("Java 25")
-    uploadFile.addRequirement("configuration")
-    compatible_mc_versions.split(",").each { gameVersion ->
-        uploadFile.addGameVersion(gameVersion)
-    }
-}
-
-List compatibleVersions = compatible_mc_versions.split(",")
-modrinth {
-    token = MODRINTH_TOKEN
-    projectId = modrinth_project_id
-    versionNumber = "${version}"
-    versionName = "${mod_id}-${platform}-${version}"
-    versionType = "release"
-    uploadFile = jar
-    gameVersions = compatibleVersions
-    debugMode = debug.toBoolean()
-    changelog = file("../CHANGELOG.md").exists() ? file("../CHANGELOG.md").text : "-- No changelog provided --"
-    loaders = ["fabric"]
-    dependencies {
-        required.project "configuration"
-    }
-}
-tasks.modrinth.dependsOn(tasks.jar)
