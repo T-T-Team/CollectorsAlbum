@@ -8,7 +8,7 @@ env:
   JAVA_VENDOR: 'microsoft'
   JAVA_VERSION: '25'
   GAME_ENV: 'Client,Server'
-  GAME_VERSION: '26.2'
+  GAME_VERSION: '26.1,26.1.1,26.1.2'
   GAME_DEPENDENCIES: 'configuration'
   CURSEFORGE_PROJECT: '659390'
   MODRINTH_PROJECT: '4pdmGHx9'
