@@ -46,7 +46,7 @@ subprojects {
     processResources {
         def props = [
                 // Mod
-                "version": project.version,
+                "version": "${mod_version}",
                 "mod_id": "${mod_id}",
                 "mod_name": "${mod_name}",
                 "mod_authors": "${mod_authors}",
@@ -97,12 +97,11 @@ subprojects {
         it.options.getRelease().set(project.java_version.toInteger())
     }
 
-    task publishCurseForge(dependsOn: [':fabric:publishToCurseForge', ':forge:publishToCurseForge', ':neoforge:publishToCurseForge']) {
+    tasks.withType(Jar).configureEach {
+        archiveBaseName = "${mod_id}-${project.platform}"
     }
 
-    task publishModrinth(dependsOn: [':fabric:modrinth', ':forge:modrinth', ':neoforge:modrinth']) {
-    }
-
-    task publishMod(dependsOn: ['publishCurseForge', 'publishModrinth']) {
+    tasks.named('test') {
+        enabled = false
     }
 }

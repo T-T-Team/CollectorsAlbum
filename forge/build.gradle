@@ -1,5 +1,3 @@
-import net.darkhax.curseforgegradle.*
-
 buildscript {
     repositories {
         mavenCentral()
@@ -23,13 +21,10 @@ plugins {
     id 'java'
     id 'net.minecraftforge.gradle' version "${forge_gradle_version}"
     id 'org.spongepowered.mixin' version "${mixin_loader}"
-    id 'net.darkhax.curseforgegradle' version "${cursegradle_plugin_version}"
-    id 'com.modrinth.minotaur' version "${modrinth_plugin_version}"
 }
 
-version = project.version
+version = "${project.mod_version}+${project.minecraft_version}"
 group = project.mod_group
-archivesBaseName = "${project.mod_id}-forge-${project.minecraft_version}"
 
 minecraft.reobf = false
 
@@ -104,9 +99,9 @@ jar {
         attributes([
                 "Specification-Title"     : "${mod_name}",
                 "Specification-Vendor"    : "${mod_authors}",
-                "Specification-Version"   : project.jar.archiveVersion,
+                "Specification-Version"   : "${mod_version}",
                 "Implementation-Title"    : "${mod_name}",
-                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Version"  : "${mod_version}",
                 "Implementation-Vendor"   : "${mod_authors}",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "MixinConfigs"            : "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
@@ -126,40 +121,3 @@ sourceSets.each {
     it.output.resourcesDir = dir
     it.java.destinationDirectory = dir
 }
-
-tasks.register('publishToCurseForge', TaskPublishCurseForge) {
-    dependsOn(tasks.jar)
-    apiToken = CURSEFORGE_TOKEN
-    debugMode = debug.toBoolean()
-
-    def uploadFile = upload(curseforge_project_id, tasks.jar.archiveFile)
-    uploadFile.changelogType = Constants.CHANGELOG_MARKDOWN
-    uploadFile.changelog = file("../CHANGELOG.md").exists() ? file('../CHANGELOG.md').text : "-- No changelog provided --"
-    uploadFile.releaseType = Constants.RELEASE_TYPE_RELEASE
-    uploadFile.displayName = "${mod_id}-forge-${minecraft_version}-${version}"
-    uploadFile.addModLoader('Forge')
-    uploadFile.addEnvironment('Client', 'Server')
-    uploadFile.addJavaVersion("Java 21")
-    uploadFile.addRequirement("configuration")
-    compatible_mc_versions.split(",").each { gameVersion ->
-        uploadFile.addGameVersion(gameVersion)
-    }
-}
-
-List compatibleVersions = compatible_mc_versions.split(",")
-modrinth {
-    token = MODRINTH_TOKEN
-    projectId = modrinth_project_id
-    versionNumber = "${version}"
-    versionName = "${mod_id}-forge-${minecraft_version}-${version}"
-    versionType = "release"
-    uploadFile = jar
-    gameVersions = compatibleVersions
-    debugMode = debug.toBoolean()
-    changelog = file("../CHANGELOG.md").exists() ? file("../CHANGELOG.md").text : "-- No changelog provided --"
-    loaders = ["forge"]
-    dependencies {
-        required.project "configuration"
-    }
-}
-tasks.modrinth.dependsOn(tasks.jar)
