@@ -12,7 +12,6 @@ env:
   GAME_DEPENDENCIES: 'configuration'
   CURSEFORGE_PROJECT: '659390'
   MODRINTH_PROJECT: '4pdmGHx9'
-  DEBUG: 'false'
 
 concurrency:
   group: release-${{ github.ref }}
@@ -78,7 +77,7 @@ jobs:
           java-version: Java ${{ env.JAVA_VERSION }}
           changelog-content: ${{ needs.prepare-changelog.outputs.changelog }}
           required-dependencies: ${{ env.GAME_DEPENDENCIES }}
-          debug-mode: ${{ env.DEBUG }}
+          debug-mode: ${{ vars.DEBUG }}
 
   publish-modrinth:
     runs-on: ubuntu-latest
@@ -102,7 +101,7 @@ jobs:
           mod-loader: ${{ matrix.loader.name }}
           changelog-content: ${{ needs.prepare-changelog.outputs.changelog }}
           required-dependencies: ${{ env.GAME_DEPENDENCIES }}
-          debug-mode: ${{ env.DEBUG }}
+          debug-mode: ${{ vars.DEBUG }}
 
   announce-release-discord:
     runs-on: ubuntu-latest
@@ -114,16 +113,17 @@ jobs:
       - uses: T-T-Team/discord-release-announcement-action@v2
         with:
           webhook-url: ${{ secrets.WEBHOOK_URL }}
-          message: '<@&1050082657511411763>'
+          message: <@&${{ vars.PUBLISH_ROLE_TAG }}>
           title: 'Collectors Album'
-          homepage: 'https://github.com/T-T-Team/CollectorsAlbum'
+          homepage: ${{ vars.PUBLISH_SOURCES_URL }}
           changelog: ${{ needs.prepare-changelog.outputs.changelog }}
           color: '9576191'
-          icon-url: 'https://media.forgecdn.net/avatars/589/367/637960226211119035.png'
+          icon-url: ${{ vars.PUBLISH_ICON }}
           note: 'CurseForge file may take up to 1 hour to be published'
-          curseforge-url: 'https://www.curseforge.com/minecraft/mc-mods/collectors-album'
-          modrinth-url: 'https://modrinth.com/mod/collectors-album'
-          sources-url: 'https://github.com/T-T-Team/CollectorsAlbum'
-          issue-tracker-url: 'https://github.com/T-T-Team/CollectorsAlbum/issues'
-          wiki-url: 'https://github.com/T-T-Team/CollectorsAlbum/wiki'
-          donation-url: 'https://ko-fi.com/toma1o6'
+          curseforge-url: ${{ vars.PUBLISH_CF_LINK }}
+          modrinth-url: ${{ vars.PUBLISH_MODRINTH_LINK }}
+          sources-url: ${{ vars.PUBLISH_SOURCES_URL }}
+          issue-tracker-url: ${{ vars.PUBLISH_SOURCES_URL }}/issues
+          wiki-url: ${{ vars.PUBLISH_SOURCES_URL }}/wiki
+          donation-url: ${{ vars.PUBLISH_DONATE_LINK }}
+          debug-mode: ${{ vars.DEBUG }}
