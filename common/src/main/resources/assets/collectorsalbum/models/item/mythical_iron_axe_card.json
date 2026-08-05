@@ -1,6 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "collectorsalbum:item/mythical_iron_axe_card"
+    "layer0": "collectorsalbum:item/background/card_mythical",
+    "layer1": "collectorsalbum:item/icon/icon_iron_axe"
   }
 }
