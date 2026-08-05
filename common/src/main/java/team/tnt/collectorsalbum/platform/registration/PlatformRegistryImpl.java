@@ -1,10 +1,10 @@
 package team.tnt.collectorsalbum.platform.registration;
 
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -14,7 +14,7 @@ class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
 
     private final Supplier<Registry<T>> registryRef;
     private final String namespace;
-    private Map<Identifier, RegistryElement<T, ?>> registeredRefs = new HashMap<>();
+    private Map<Identifier, RegistryElement<T, ?>> registeredRefs = new LinkedHashMap<>();
 
     PlatformRegistryImpl(Supplier<Registry<T>> registryRef, String namespace) {
         this.registryRef = registryRef;
