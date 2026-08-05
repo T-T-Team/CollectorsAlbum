@@ -11,13 +11,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import team.tnt.collectorsalbum.CollectorsAlbum;
@@ -152,7 +152,8 @@ public class CardPackOpeningScreen extends Screen {
         private final int targetX, targetY;
         private final DeltaTracker deltaTracker;
         private final AlbumCard card;
-        private final ResourceLocation itemTexture;
+        private final ItemStack itemStack;
+        private final @Nullable ResourceLocation customTexture;
         private Consumer<CardWidget> onIconFlipped;
         private Consumer<CardWidget> onFlipFinish;
 
@@ -170,7 +171,8 @@ public class CardPackOpeningScreen extends Screen {
             this.targetY = targetY;
             this.card = AlbumCardManager.getInstance().getCardInfo(itemStack.getItem())
                     .orElse(null);
-            this.itemTexture = getCardTexture(this.card, itemStack);
+            this.itemStack = itemStack;
+            this.customTexture = getCardTexture(this.card);
             this.deltaTracker = deltaTracker;
         }
 
@@ -255,9 +257,24 @@ public class CardPackOpeningScreen extends Screen {
                 }
             }
 
-            ResourceLocation texture = this.flipped ? itemTexture : CARD_BG;
-            Matrix4f poseMat = graphics.pose().last().pose();
-            renderFullTexture(texture, poseMat, px, py, 400, pWidth, pHeight);
+            PoseStack poseStack = graphics.pose();
+            Matrix4f poseMat = poseStack.last().pose();
+            if (!this.flipped || this.customTexture != null) {
+                ResourceLocation texture = !this.flipped ? CARD_BG : this.customTexture;
+                renderFullTexture(texture, poseMat, px, py, 400, pWidth, pHeight);
+            } else {
+                int x0 = Mth.floor(px);
+                int y0 = Mth.floor(py);
+                int x1 = Mth.ceil(px + pWidth);
+                int y1 = Mth.ceil(py + pHeight);
+                poseStack.pushPose();
+                poseStack.translate(this.getX(), this.getY(), 400);
+                poseStack.scale(2.0F, 2.0F, 2.0F);
+                graphics.enableScissor(x0, y0, x1, y1);
+                graphics.renderItem(this.itemStack, 0, 0);
+                graphics.disableScissor();
+                poseStack.popPose();
+            }
         }
 
         @Override
@@ -297,17 +314,12 @@ public class CardPackOpeningScreen extends Screen {
             ++this.flipCurrent;
         }
 
-        private static ResourceLocation getCardTexture(AlbumCard card, ItemStack itemStack) {
+        private static ResourceLocation getCardTexture(AlbumCard card) {
             if (card == null) {
-                return getDefaultItemTexture(itemStack);
+                return null;
             }
             CardUiTemplate template = card.template();
-            return template.cardTexture() != null ? template.cardTexture() : getDefaultItemTexture(itemStack);
-        }
-
-        private static ResourceLocation getDefaultItemTexture(ItemStack itemStack) {
-            ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
-            return ResourceLocation.fromNamespaceAndPath(itemId.getNamespace(), "textures/item/" + itemId.getPath() + ".png");
+            return template.cardTexture() != null ? template.cardTexture() : null;
         }
     }
 
