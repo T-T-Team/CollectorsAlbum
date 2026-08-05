@@ -1,6 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "collectorsalbum:item/rare_diamond_helmet_card"
+    "layer0": "collectorsalbum:item/background/card_rare",
+    "layer1": "collectorsalbum:item/icon/icon_diamond_helmet"
   }
 }

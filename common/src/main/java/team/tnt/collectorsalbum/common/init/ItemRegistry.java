@@ -183,6 +183,7 @@ public final class ItemRegistry {
     public static final PlatformRegistry.Reference<Item> COMMON_WOODEN_SHOVEL_CARD = REGISTRY.registerItem("common_wooden_shovel_card", Item::new);
     public static final PlatformRegistry.Reference<Item> COMMON_WOODEN_SWORD_CARD = REGISTRY.registerItem("common_wooden_sword_card", Item::new);
     public static final PlatformRegistry.Reference<Item> COMMON_ZOMBIE_CARD = REGISTRY.registerItem("common_zombie_card", Item::new);
+
     public static final PlatformRegistry.Reference<Item> EPIC_ACACIA_SAPLING_CARD = REGISTRY.registerItem("epic_acacia_sapling_card", Item::new);
     public static final PlatformRegistry.Reference<Item> EPIC_ALLIUM_CARD = REGISTRY.registerItem("epic_allium_card", Item::new);
     public static final PlatformRegistry.Reference<Item> EPIC_AMETHYST_SHARD_CARD = REGISTRY.registerItem("epic_amethyst_shard_card", Item::new);
@@ -333,6 +334,7 @@ public final class ItemRegistry {
     public static final PlatformRegistry.Reference<Item> EPIC_WOODEN_SHOVEL_CARD = REGISTRY.registerItem("epic_wooden_shovel_card", Item::new);
     public static final PlatformRegistry.Reference<Item> EPIC_WOODEN_SWORD_CARD = REGISTRY.registerItem("epic_wooden_sword_card", Item::new);
     public static final PlatformRegistry.Reference<Item> EPIC_ZOMBIE_CARD = REGISTRY.registerItem("epic_zombie_card", Item::new);
+
     public static final PlatformRegistry.Reference<Item> LEGENDARY_ACACIA_SAPLING_CARD = REGISTRY.registerItem("legendary_acacia_sapling_card", Item::new);
     public static final PlatformRegistry.Reference<Item> LEGENDARY_ALLIUM_CARD = REGISTRY.registerItem("legendary_allium_card", Item::new);
     public static final PlatformRegistry.Reference<Item> LEGENDARY_AMETHYST_SHARD_CARD = REGISTRY.registerItem("legendary_amethyst_shard_card", Item::new);

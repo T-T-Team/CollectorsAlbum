@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "collectorsalbum:item/common_card"
+    "layer0": "collectorsalbum:item/background/card_common"
   }
 }

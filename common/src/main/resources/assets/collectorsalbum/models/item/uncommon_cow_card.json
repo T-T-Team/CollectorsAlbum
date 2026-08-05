@@ -1,6 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "collectorsalbum:item/uncommon_cow_card"
+    "layer0": "collectorsalbum:item/background/card_uncommon",
+    "layer1": "collectorsalbum:item/icon/icon_cow"
   }
 }

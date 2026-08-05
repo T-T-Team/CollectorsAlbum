@@ -1,6 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "collectorsalbum:item/legendary_stone_sword_card"
+    "layer0": "collectorsalbum:item/background/card_legendary",
+    "layer1": "collectorsalbum:item/icon/icon_stone_sword"
   }
 }
