@@ -1,6 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "collectorsalbum:item/rare_cookie_card"
+    "layer0": "collectorsalbum:item/background/card_rare",
+    "layer1": "collectorsalbum:item/icon/icon_cookie"
   }
 }
