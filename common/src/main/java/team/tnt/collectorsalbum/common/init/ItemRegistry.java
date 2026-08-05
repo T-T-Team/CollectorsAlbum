@@ -935,4 +935,11 @@ public final class ItemRegistry {
     public static final PlatformRegistry.Reference<Item> UNCOMMON_ZOMBIE_CARD = REGISTRY.registerItem("uncommon_zombie_card", Item::new);
 
     //public static final PlatformRegistry.Reference<BlockItem> TRADING_STATION = REGISTRY.registerItem("trading_station", props -> new BlockItem(BlockRegistry.TRADING_STATION.get(), props));
+
+    static {
+        // blank cards for datapack makers
+        for (int i = 0; i < 90; i++) {
+            REGISTRY.registerItem("blank_card_" + (i + 1), Item::new);
+        }
+    }
 }
