@@ -5,13 +5,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -20,7 +22,10 @@ import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector2d;
+import org.jspecify.annotations.Nullable;
 import team.tnt.collectorsalbum.CollectorsAlbum;
+import team.tnt.collectorsalbum.client.CollectorsAlbumClient;
+import team.tnt.collectorsalbum.client.screen.pip.ScalableItemRenderState;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
 import team.tnt.collectorsalbum.common.card.CardRarity;
 import team.tnt.collectorsalbum.common.card.CardUiTemplate;
@@ -33,6 +38,7 @@ import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class CardPackOpeningScreen extends Screen {
@@ -130,9 +136,11 @@ public class CardPackOpeningScreen extends Screen {
         private final int targetX, targetY;
         private final DeltaTracker deltaTracker;
         private final AlbumCard card;
-        private final Identifier itemTexture;
+        private final ItemStack itemStack;
+        private final @Nullable Identifier customTexture;
         private Consumer<CardWidget> onIconFlipped;
         private Consumer<CardWidget> onFlipFinish;
+        private final ItemStackRenderState itemStackRenderState = new ItemStackRenderState();
 
         private boolean flipped;
         private boolean flipping;
@@ -148,7 +156,8 @@ public class CardPackOpeningScreen extends Screen {
             this.targetY = targetY;
             this.card = AlbumCardManager.getInstance().getCardInfo(itemStack.getItem())
                     .orElse(null);
-            this.itemTexture = getCardTexture(this.card, itemStack);
+            this.itemStack = itemStack;
+            this.customTexture = getCardTexture(this.card);
             this.deltaTracker = deltaTracker;
         }
 
@@ -233,15 +242,29 @@ public class CardPackOpeningScreen extends Screen {
                 }
             }
 
-            Identifier texture = this.flipped ? itemTexture : CARD_BG;
             graphics.nextStratum();
-            graphics.innerBlit(
-                    RenderPipelines.GUI_TEXTURED, texture,
-                    Mth.floor(px), Mth.floor(px + pWidth),
-                    Mth.floor(py), Mth.floor(py + pHeight),
-                    0.0F, 1.0F, 0.0F, 1.0F,
-                    0xFFFFFFFF
-            );
+            int x0 = Mth.floor(px);
+            int y0 = Mth.floor(py);
+            int x1 = Mth.ceil(px + pWidth);
+            int y1 = Mth.ceil(py + pHeight);
+            if (!this.flipped || this.customTexture != null) {
+                Identifier texture = !this.flipped ? CARD_BG : this.customTexture;
+                graphics.innerBlit(
+                        RenderPipelines.GUI_TEXTURED, texture,
+                        x0, x1, y0, y1,
+                        0.0F, 1.0F, 0.0F, 1.0F,
+                        0xFFFFFFFF
+                );
+            } else {
+                ScreenRectangle rect = this.getRectangle();
+                int identityCode = Objects.hash(x0, y0, x1, y1);
+                ScalableItemRenderState itemRenderState = new ScalableItemRenderState(
+                        this.itemStackRenderState, this.itemStack,
+                        x0, y0, x1, y1,
+                        32.0F, rect, PictureInPictureRenderState.getBounds(x0, y0, x1, y1, rect), identityCode
+                );
+                CollectorsAlbumClient.PLATFORM.submitPictureInPictureRenderState(graphics, itemRenderState);
+            }
         }
 
         @Override
@@ -281,17 +304,12 @@ public class CardPackOpeningScreen extends Screen {
             ++this.flipCurrent;
         }
 
-        private static Identifier getCardTexture(AlbumCard card, ItemStack itemStack) {
+        private static Identifier getCardTexture(AlbumCard card) {
             if (card == null) {
-                return getDefaultItemTexture(itemStack);
+                return null;
             }
             CardUiTemplate template = card.template();
-            return template.cardTexture() != null ? template.cardTexture() : getDefaultItemTexture(itemStack);
-        }
-
-        private static Identifier getDefaultItemTexture(ItemStack itemStack) {
-            Identifier itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
-            return Identifier.fromNamespaceAndPath(itemId.getNamespace(), "textures/item/" + itemId.getPath() + ".png");
+            return template.cardTexture() != null ? template.cardTexture() : null;
         }
     }
 
