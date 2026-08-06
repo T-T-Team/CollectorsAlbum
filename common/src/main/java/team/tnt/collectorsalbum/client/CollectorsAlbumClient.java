@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import team.tnt.collectorsalbum.client.platform.ClientPlatform;
 import team.tnt.collectorsalbum.client.screen.AlbumCategoryScreen;
 import team.tnt.collectorsalbum.client.screen.AlbumNavigationHelper;
 import team.tnt.collectorsalbum.client.screen.CardPackOpeningScreen;
@@ -15,6 +16,7 @@ import team.tnt.collectorsalbum.common.init.MenuRegistry;
 import team.tnt.collectorsalbum.common.menu.AlbumCategoryMenu;
 import team.tnt.collectorsalbum.common.tracking.PlayerAlbumTracker;
 import team.tnt.collectorsalbum.network.C2S_CompleteOpeningCardPack;
+import team.tnt.collectorsalbum.platform.JavaServiceLoader;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
 import team.tnt.collectorsalbum.platform.resource.MenuScreenRegistration;
 
@@ -23,6 +25,7 @@ import java.util.UUID;
 
 public final class CollectorsAlbumClient {
 
+    public static final ClientPlatform PLATFORM = JavaServiceLoader.loadService(ClientPlatform.class);
     public static CollectorsAlbumClientConfig config;
 
     public static void construct() {
