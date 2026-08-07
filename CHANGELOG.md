@@ -1,7 +1,9 @@
-# Release 2.7.2+26.1.2
-- Content backport to 26.1
-- Added `Active`/`Inactive` label to Album to be able to quickly identify which album is active in inventory
-- Fixed the missing dark background in the album category UI
-- Removed `#collectorsalbum:album` tag as it was not used
-- Improved animations in the card pack opening UI should be smooth now
-- Integration with Trinkets Updated mod
+# Release 2.8.0+26.1.x
+- Added 90 blank cards which can be used by datapack creators without the need to add new items
+- Improved collectors album tab item order
+- Updated card texture templates to use an item multi-layering system
+  - Each card texture is now composed of card background texture + icon overlay
+  - this will allow datapack/resource pack creators to easily update all card icons without the need to manually update all 900 cards
+- Fixed card rendering in the pack opening UI
+  - Now renders the actual item instead of trying to find texture based on the item ID
+  - Should resolve all issues with multilayer item rendering / items with custom texture paths
