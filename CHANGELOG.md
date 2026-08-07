@@ -1,2 +1,12 @@
-# Release 1.21.1-2.6.1
-- Added Spanish localization (credits to SundGGs)
+# Release 2.8.0+1.21.1
+- Added 90 blank cards which can be used by datapack creators without the need to add new items
+- Improved collectors album tab item order
+- Added `Active`/`Inactive` label to Album to be able to quickly identify which album is active in inventory
+- Updated card texture templates to use an item multi-layering system
+  - Each card texture is now composed of card background texture + icon overlay
+  - this will allow datapack/resource pack creators to easily update all card icons without the need to manually update all 900 cards
+- Improved animations in the card pack opening UI - should be smooth now on all modloaders
+- Fixed card rendering in the pack opening UI
+  - Now renders the actual item instead of trying to find texture based on the item ID
+  - Should resolve all issues with multilayer item rendering / items with custom texture paths
+- Removed `#collectorsalbum:album` tag as it was not used
