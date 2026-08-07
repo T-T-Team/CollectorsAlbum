@@ -24,6 +24,10 @@ public interface PlatformRegistry<T> {
         return new PlatformRegistryImpl<>(reference, namespace);
     }
 
+    static PlatformItemRegistry createItemRegistry(String namespace) {
+        return new PlatformItemRegistry(namespace);
+    }
+
     static MenuHelper createMenuHelper(PlatformRegistry<MenuType<?>> menuTypeRegistry) {
         return new MenuHelper() {
             @Override

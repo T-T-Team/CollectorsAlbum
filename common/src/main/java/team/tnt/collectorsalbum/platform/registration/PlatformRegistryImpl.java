@@ -10,7 +10,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-final class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
+class PlatformRegistryImpl<T> implements PlatformRegistry<T> {
 
     private final Supplier<Registry<T>> registryRef;
     private final String namespace;
