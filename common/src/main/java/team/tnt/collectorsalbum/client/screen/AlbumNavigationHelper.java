@@ -3,7 +3,7 @@ package team.tnt.collectorsalbum.client.screen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import org.lwjgl.glfw.GLFW;
+import org.lwjgl.sdl.SDLMouse;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.mixin.MouseHandlerAccessor;
@@ -33,8 +33,7 @@ public final class AlbumNavigationHelper {
             long windowPtr = minecraft.getWindow().handle();
             accessor.setXpos(savedMouseX);
             accessor.setYpos(savedMouseY);
-            GLFW.glfwSetCursorPos(windowPtr, savedMouseX, savedMouseY);
-            GLFW.glfwSetInputMode(windowPtr, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+            SDLMouse.SDL_WarpMouseInWindow(windowPtr, savedMouseX.intValue(), savedMouseY.intValue());
             savedMouseX = null;
             savedMouseY = null;
         }

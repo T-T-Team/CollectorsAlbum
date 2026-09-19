@@ -27,8 +27,8 @@ public final class ScalableItemPip extends PictureInPictureRenderer<ScalableItem
         GameRenderer gameRenderer = Minecraft.getInstance().gameRenderer;
         gameRenderer.lighting().setupFor(Lighting.Entry.ITEMS_FLAT);
         ItemStackRenderState itemStackRenderState = renderState.itemStackRenderState();
-        poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+        poseStack.rotateDegrees(Axis.ZP, 180.0F);
+        poseStack.rotateDegrees(Axis.YP, 180.0F);
         this.itemModelResolver.updateForTopItem(itemStackRenderState, renderState.itemStack(), ItemDisplayContext.GUI, null, null, 0);
         itemStackRenderState.submit(poseStack, submitNodeCollector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
         this.code = renderState.code();

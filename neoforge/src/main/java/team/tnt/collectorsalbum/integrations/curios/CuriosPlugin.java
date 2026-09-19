@@ -41,7 +41,9 @@ public class CuriosPlugin implements StartupPlugin {
     }
 
     private static CachedAlbum loadAlbum(Player player, IntFunction<InventoryKey> keyFactory) {
-        return getStackHandler(player).map(handler -> {
+        // FIXME uncomment once Curios is available for 26.3
+        return null;
+        /*return getStackHandler(player).map(handler -> {
             for (int i = 0; i < handler.getSlots(); i++) {
                 ItemStack itemStack = handler.getStackInSlot(i);
                 if (!itemStack.isEmpty() && Album.isBoundOn(itemStack)) {
@@ -51,12 +53,14 @@ public class CuriosPlugin implements StartupPlugin {
                 }
             }
             return null;
-        }).orElse(null);
+        }).orElse(null);*/
     }
 
     private static ItemStack getItem(Player player, int slot) {
-        return getStackHandler(player).map(handler -> handler.getStackInSlot(slot))
-                .orElse(ItemStack.EMPTY);
+        // FIXME uncomment once Curios is available for 26.3
+        return ItemStack.EMPTY;
+       /* return getStackHandler(player).map(handler -> handler.getStackInSlot(slot))
+                .orElse(ItemStack.EMPTY);*/
     }
 
     private static Optional<IDynamicStackHandler> getStackHandler(Player player) {

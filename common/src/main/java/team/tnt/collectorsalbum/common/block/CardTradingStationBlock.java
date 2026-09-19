@@ -1,6 +1,5 @@
 package team.tnt.collectorsalbum.common.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
@@ -11,16 +10,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class CardTradingStationBlock extends HorizontalDirectionalBlock {
 
-    private static final MapCodec<CardTradingStationBlock> CODEC = simpleCodec(CardTradingStationBlock::new);
-
     public CardTradingStationBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
-    }
-
-    @Override
-    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 
     @Nullable
