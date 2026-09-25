@@ -1,3 +1,3 @@
-# Release 2.8.1+26.3
-- Enabled Curios integration - only beta version available, some features may not work as expected
-- Sound fix
+# Release 2.8.2+26.3
+- Fixed broken sound files
+  - pack opening, flip common and legendary
