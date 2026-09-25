@@ -5,7 +5,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.Album;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.tracking.AlbumFinder;
 import team.tnt.collectorsalbum.common.tracking.CachedAlbum;
 import team.tnt.collectorsalbum.common.tracking.InventoryKey;
@@ -41,9 +40,7 @@ public class CuriosPlugin implements StartupPlugin {
     }
 
     private static CachedAlbum loadAlbum(Player player, IntFunction<InventoryKey> keyFactory) {
-        // FIXME uncomment once Curios is available for 26.3
-        return null;
-        /*return getStackHandler(player).map(handler -> {
+        return getStackHandler(player).map(handler -> {
             for (int i = 0; i < handler.getSlots(); i++) {
                 ItemStack itemStack = handler.getStackInSlot(i);
                 if (!itemStack.isEmpty() && Album.isBoundOn(itemStack)) {
@@ -53,14 +50,12 @@ public class CuriosPlugin implements StartupPlugin {
                 }
             }
             return null;
-        }).orElse(null);*/
+        }).orElse(null);
     }
 
     private static ItemStack getItem(Player player, int slot) {
-        // FIXME uncomment once Curios is available for 26.3
-        return ItemStack.EMPTY;
-       /* return getStackHandler(player).map(handler -> handler.getStackInSlot(slot))
-                .orElse(ItemStack.EMPTY);*/
+        return getStackHandler(player).map(handler -> handler.getStackInSlot(slot))
+                .orElse(ItemStack.EMPTY);
     }
 
     private static Optional<IDynamicStackHandler> getStackHandler(Player player) {
