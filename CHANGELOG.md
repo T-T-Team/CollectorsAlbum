@@ -1,4 +1,3 @@
-# Release 2.8.0+26.3
-- Update to Minecraft 26.3
-
-_Note: Curios integration is currently disabled due to no 26.3 version being available_
+# Release 2.8.1+26.3
+- Enabled Curios integration - only beta version available, some features may not work as expected
+- Sound fix
