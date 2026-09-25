@@ -10,6 +10,7 @@ env:
   GAME_DEPENDENCIES: 'configuration'
   CURSEFORGE_PROJECT: '659390'
   MODRINTH_PROJECT: '4pdmGHx9'
+  NOTIFY_DISCORD: 'true'
 
 concurrency:
   group: release-${{ github.ref }}
@@ -96,6 +97,7 @@ jobs:
 
   announce-release-discord:
     runs-on: ubuntu-latest
+    if: ${{ env.NOTIFY_DISCORD == 'true' }}
     needs:
       - prepare-changelog
       - publish-curseforge
