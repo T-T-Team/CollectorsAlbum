@@ -32,7 +32,7 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
 
     public AlbumCategoryScreen(AlbumCategoryMenu menu, Inventory inventory, Component title, AlbumCategory category) {
         AlbumCategoryUiTemplate template = category.visualTemplate();
-        super(menu, inventory, title, template.backgroundTexture.textureWidth(), template.backgroundTexture.textureHeight());
+        super(menu, inventory, title, template.backgroundTexture().textureWidth(), template.backgroundTexture().textureHeight());
         this.category = category;
         this.cardSlots = menu.slots.stream().filter(slot -> !(slot.container instanceof Inventory)).toList();
         this.itemStack = AlbumNavigationHelper.getStoredAlbum();
@@ -63,7 +63,7 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
             nextPage.setTooltipDelay(Duration.ofSeconds(1));
         }
         AlbumCategoryUiTemplate template = category.visualTemplate();
-        AlbumMainPageScreen.getBookmarks(width, height, imageWidth, imageHeight, template.bookImageHeight).forEach(this::addRenderableWidget);
+        AlbumMainPageScreen.getBookmarks(width, height, imageWidth, imageHeight, template.bookImageHeight()).forEach(this::addRenderableWidget);
     }
 
     @Override
@@ -101,23 +101,23 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         this.extractTransparentBackground(graphics);
         AlbumCategoryUiTemplate template = this.category.visualTemplate();
-        blitTextureTemplate(graphics, this.leftPos, this.topPos, template.backgroundTexture);
+        blitTextureTemplate(graphics, this.leftPos, this.topPos, template.backgroundTexture());
         int[] cardNumbers = this.category.getCardNumbers();
         var pageInfo = this.menu.getPageInfo();
         int pageSize = this.category.getPageSize();
         int elementIndex = pageInfo.getElementIndex(pageSize);
-        if (template.renderSlots) {
+        if (template.renderSlots()) {
             for (int slot = 0; slot < this.cardSlots.size(); slot++) {
                 Slot cardSlot = this.cardSlots.get(slot);
-                blitTextureTemplate(graphics, this.leftPos + cardSlot.x - 1, this.topPos + cardSlot.y - 1, template.slotTexture);
-                if (template.renderSlotCardNumbers && !cardSlot.hasItem()) {
-                    Component num = Component.literal(template.cardNumberPrefix + cardNumbers[slot + elementIndex]);
+                blitTextureTemplate(graphics, this.leftPos + cardSlot.x - 1, this.topPos + cardSlot.y - 1, template.slotTexture());
+                if (template.renderSlotCardNumbers() && !cardSlot.hasItem()) {
+                    Component num = Component.literal(template.cardNumberPrefix() + cardNumbers[slot + elementIndex]);
                     Matrix3x2fStack pose = graphics.pose();
-                    graphics.enableScissor(this.leftPos + cardSlot.x, this.topPos + cardSlot.y, this.leftPos + cardSlot.x + template.slotTexture.width() - 2, this.topPos + cardSlot.y + template.slotTexture.height() - 2);
+                    graphics.enableScissor(this.leftPos + cardSlot.x, this.topPos + cardSlot.y, this.leftPos + cardSlot.x + template.slotTexture().width() - 2, this.topPos + cardSlot.y + template.slotTexture().height() - 2);
                     pose.pushMatrix();
                     pose.translate(this.leftPos + cardSlot.x + 1, this.topPos + cardSlot.y + 1);
                     pose.scale(0.75F, 0.75F);
-                    graphics.text(this.font, num, 0, 0, ARGB.opaque(template.slotCardNumberTextColor), false);
+                    graphics.text(this.font, num, 0, 0, ARGB.opaque(template.slotCardNumberTextColor()), false);
                     pose.popMatrix();
                     graphics.disableScissor();
                 }

@@ -49,7 +49,7 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
             AlbumCategory albumCategory = page.element();
             Identifier categoryIdentifier = albumCategory.identifier();
             AlbumCategoryUiTemplate template = albumCategory.visualTemplate();
-            AlbumCategoryUiTemplate.SlotPositionTemplate slotTemplate = template.slotTemplate;
+            AlbumCategoryUiTemplate.SlotPositionTemplate slotTemplate = template.slotTemplate();
             int xStart = slotTemplate.xAlbumSlotPositionStart();
             int yStart = slotTemplate.yAlbumSlotPositionStart();
             int xSpacing = slotTemplate.xSlotSpacing();

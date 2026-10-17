@@ -23,8 +23,8 @@ public interface AlbumCategory {
     }
 
     default int getPageSize() {
-        int rows = visualTemplate().slotTemplate.rows();
-        int columns = visualTemplate().slotTemplate.columns();
+        int rows = visualTemplate().slotTemplate().rows();
+        int columns = visualTemplate().slotTemplate().columns();
         return 2 * rows * columns;
     }
 

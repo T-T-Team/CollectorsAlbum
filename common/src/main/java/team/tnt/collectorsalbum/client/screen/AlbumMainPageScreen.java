@@ -72,7 +72,7 @@ public class AlbumMainPageScreen extends Screen {
         List<AlbumCategory> categories = AlbumNavigationHelper.listCategoriesForBookmarks(bookImageHeight - 20);
         int index = 0;
         for (AlbumCategory category : categories) {
-            ItemStack displayItem = category.visualTemplate().bookmarkIcon.map(ItemStackTemplate::create)
+            ItemStack displayItem = category.visualTemplate().bookmarkIcon().map(ItemStackTemplate::create)
                     .orElse(ItemStack.EMPTY);
             BookmarkWidget categoryBookmark = new BookmarkWidget(right, top + (index++) * 20, 32, 18, false, displayItem, () -> Minecraft.getInstance().gui.screen() instanceof AlbumCategoryScreen catScreen && catScreen.getCategory().identifier().equals(category.identifier()));
             categoryBookmark.setTooltip(Tooltip.create(category.getDisplayText()));

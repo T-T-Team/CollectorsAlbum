@@ -51,7 +51,7 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
 
     public List<AlbumCategory> listBookmarkableCategories() {
         return this.listCategories().stream()
-                .filter(category -> category.visualTemplate().bookmarkIcon.isPresent())
+                .filter(category -> category.visualTemplate().hasBookmark())
                 .toList();
     }
 

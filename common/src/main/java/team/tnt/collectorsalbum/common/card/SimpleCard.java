@@ -94,7 +94,7 @@ public class SimpleCard implements AlbumCard {
     @Override
     public void appendItemStackHoverTooltip(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltips, TooltipFlag flag) {
         tooltips.add(CardUiTemplate.DEFAULT_CARD_INFO_HEADER);
-        String prefix = this.cachedCategory != null ? this.cachedCategory.visualTemplate().cardNumberPrefix : AlbumCategoryUiTemplate.DEFAULT_TEMPLATE.cardNumberPrefix;
+        String prefix = this.cachedCategory != null ? this.cachedCategory.visualTemplate().cardNumberPrefix() : AlbumCategoryUiTemplate.DEFAULT_TEMPLATE.cardNumberPrefix();
         tooltips.add(CardUiTemplate.getCardNumberTooltip(prefix, this.number));
         tooltips.add(CardUiTemplate.getCardCategoryTooltip(this));
         int points = this.getPoints();

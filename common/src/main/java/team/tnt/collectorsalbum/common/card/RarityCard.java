@@ -110,7 +110,7 @@ public class RarityCard implements RarityHolder {
     @Override
     public void appendItemStackHoverTooltip(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltips, TooltipFlag flag) {
         tooltips.add(CardUiTemplate.DEFAULT_CARD_INFO_HEADER);
-        String prefix = this.cachedCategory != null ? this.cachedCategory.visualTemplate().cardNumberPrefix : AlbumCategoryUiTemplate.DEFAULT_TEMPLATE.cardNumberPrefix;
+        String prefix = this.cachedCategory != null ? this.cachedCategory.visualTemplate().cardNumberPrefix() : AlbumCategoryUiTemplate.DEFAULT_TEMPLATE.cardNumberPrefix();
         tooltips.add(CardUiTemplate.getCardNumberTooltip(prefix, this.cardNumber));
         tooltips.add(CardUiTemplate.getCardCategoryTooltip(this));
         tooltips.add(CardUiTemplate.getCardRarityTooltip(this.rarity));
