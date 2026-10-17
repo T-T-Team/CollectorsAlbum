@@ -17,13 +17,14 @@ import team.tnt.collectorsalbum.common.menu.AlbumCategoryMenu;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.platform.Platform;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
+import team.tnt.collectorsalbum.util.PageInfo;
 
-public record C2S_RequestAlbumCategoryInventory(Identifier category) implements CustomPacketPayload {
+public record C2S_RequestAlbumCategoryInventory(PageInfo<Identifier> pageInfo) implements CustomPacketPayload {
 
     private static final Identifier IDENTIFIER = PlatformNetworkManager.generatePacketIdentifier(CollectorsAlbum.MOD_ID, C2S_RequestAlbumCategoryInventory.class);
     public static final Type<C2S_RequestAlbumCategoryInventory> TYPE = new Type<>(IDENTIFIER);
     public static final StreamCodec<FriendlyByteBuf, C2S_RequestAlbumCategoryInventory> CODEC = StreamCodec.composite(
-            Identifier.STREAM_CODEC, C2S_RequestAlbumCategoryInventory::category,
+            CollectorsAlbum.ALBUM_PAGE_STREAM_CODEC, C2S_RequestAlbumCategoryInventory::pageInfo,
             C2S_RequestAlbumCategoryInventory::new
     );
 
@@ -38,24 +39,27 @@ public record C2S_RequestAlbumCategoryInventory(Identifier category) implements 
         if (album == null)
             return;
         AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
-        AlbumCategory albumCategory = manager.findById(category).orElse(null);
+        AlbumCategory albumCategory = manager.find(this.pageInfo).orElse(null);
         if (albumCategory == null)
             return;
-        Platform.INSTANCE.openMenu((ServerPlayer) player, Identifier.STREAM_CODEC, new Platform.PlatformMenuProvider<>() {
-            @Override
-            public Identifier getMenuData(ServerPlayer player) {
-                return category;
-            }
+        Platform.INSTANCE.openMenu((ServerPlayer) player, CollectorsAlbum.ALBUM_PAGE_STREAM_CODEC, new PagedAlbumCategoryMenuProvider(this.pageInfo, albumCategory));
+    }
 
-            @Override
-            public Component getTitle() {
-                return albumCategory.getDisplayText();
-            }
+    private record PagedAlbumCategoryMenuProvider(PageInfo<Identifier> pageInfo, AlbumCategory category) implements Platform.PlatformMenuProvider<PageInfo<Identifier>> {
 
-            @Override
-            public AbstractContainerMenu createMenu(int menuId, Inventory inventory, Player player) {
-                return new AlbumCategoryMenu(menuId, inventory, category);
-            }
-        });
+        @Override
+        public PageInfo<Identifier> getMenuData(ServerPlayer player) {
+            return this.pageInfo;
+        }
+
+        @Override
+        public Component getTitle() {
+            return this.category.getDisplayText();
+        }
+
+        @Override
+        public AbstractContainerMenu createMenu(int menuId, Inventory inventory, Player player) {
+            return new AlbumCategoryMenu(menuId, inventory, this.pageInfo);
+        }
     }
 }

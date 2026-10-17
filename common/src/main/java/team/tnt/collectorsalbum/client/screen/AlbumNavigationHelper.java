@@ -2,6 +2,7 @@ package team.tnt.collectorsalbum.client.screen;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
 import team.tnt.collectorsalbum.common.AlbumCategory;
@@ -9,6 +10,7 @@ import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.mixin.MouseHandlerAccessor;
 import team.tnt.collectorsalbum.network.C2S_RequestAlbumCategoryInventory;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
+import team.tnt.collectorsalbum.util.PageInfo;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,12 +47,12 @@ public final class AlbumNavigationHelper {
     }
 
     public static void navigateHomepage() {
-        resetCategoryPage();
+        resetPage();
         Minecraft.getInstance().setScreen(new AlbumMainPageScreen(lastItemStack));
     }
 
     public static void navigateBonusesPage() {
-        resetCategoryPage();
+        resetPage();
         Minecraft.getInstance().setScreen(new AlbumBonusScreen(lastItemStack));
     }
 
@@ -58,49 +60,33 @@ public final class AlbumNavigationHelper {
         return lastItemStack;
     }
 
-    public static void navigateNextCategory() {
-        AlbumCategory category = peekCategory(currentCategoryPage + 1);
-        if (category != null) {
-            PlatformNetworkManager.NETWORK.sendServerMessage(new C2S_RequestAlbumCategoryInventory(category.identifier()));
-            ++currentCategoryPage;
-        } else {
-            navigateHomepage();
-        }
+    public static void navigateToNextPage() {
+        navigateToPage(1);
     }
 
-    public static void navigatePreviousCategory() {
-        AlbumCategory category = peekCategory(currentCategoryPage - 1);
-        if (category != null) {
-            PlatformNetworkManager.NETWORK.sendServerMessage(new C2S_RequestAlbumCategoryInventory(category.identifier()));
-            --currentCategoryPage;
-        } else {
-            navigateHomepage();
-        }
+    public static void navigateToPreviousPage() {
+        navigateToPage(-1);
     }
 
-    public static void navigateCategory(AlbumCategory category) {
+    public static void navigateToBookmark(AlbumCategory category) {
         AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
         currentCategoryPage = manager.getPageForCategory(category);
-        PlatformNetworkManager.NETWORK.sendServerMessage(new C2S_RequestAlbumCategoryInventory(category.identifier()));
+        PageInfo<Identifier> pageInfo = PageInfo.firstPage(category.identifier());
+        PlatformNetworkManager.NETWORK.sendServerMessage(new C2S_RequestAlbumCategoryInventory(pageInfo));
     }
 
-    public static Component getNextCategoryTitle() {
-        AlbumCategory category = peekCategory(currentCategoryPage + 1);
-        return category != null ? category.getDisplayText() : AlbumMainPageScreen.TITLE;
+    public static Component getNextPageTitle() {
+        PageInfo<AlbumCategory> category = peekPage(currentCategoryPage + 1);
+        return !category.isEmpty() ? category.mapElement(AlbumCategory::getDisplayText) : AlbumMainPageScreen.TITLE;
     }
 
-    public static Component getPreviousCategoryTitle() {
-        AlbumCategory category = peekCategory(currentCategoryPage - 1);
-        return category != null ? category.getDisplayText() : AlbumMainPageScreen.TITLE;
+    public static Component getPreviousPageTitle() {
+        PageInfo<AlbumCategory> category = peekPage(currentCategoryPage - 1);
+        return !category.isEmpty() ? category.mapElement(AlbumCategory::getDisplayText) : AlbumMainPageScreen.TITLE;
     }
 
-    public static boolean hasNextCategory() {
-        return getNextCategoryTitle() != AlbumMainPageScreen.TITLE;
-    }
-
-    private static AlbumCategory peekCategory(int page) {
-        AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
-        return manager.getCategoryForPage(page);
+    public static boolean hasNextPage() {
+        return getNextPageTitle() != AlbumMainPageScreen.TITLE;
     }
 
     public static List<AlbumCategory> listCategoriesForBookmarks(int height) {
@@ -129,7 +115,22 @@ public final class AlbumNavigationHelper {
         return list.subList(from, to);
     }
 
-    public static void resetCategoryPage() {
+    public static void resetPage() {
         currentCategoryPage = -1;
+    }
+
+    private static void navigateToPage(int direction) {
+        PageInfo<AlbumCategory> page = peekPage(currentCategoryPage + direction);
+        if (page.isEmpty()) {
+            navigateHomepage();
+        } else {
+            PlatformNetworkManager.NETWORK.sendServerMessage(new C2S_RequestAlbumCategoryInventory(page.map(AlbumCategory::identifier)));
+            currentCategoryPage += direction;
+        }
+    }
+
+    private static PageInfo<AlbumCategory> peekPage(int page) {
+        AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
+        return manager.getCategoryForPage(page);
     }
 }
