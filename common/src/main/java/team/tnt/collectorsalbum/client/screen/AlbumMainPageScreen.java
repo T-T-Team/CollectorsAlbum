@@ -16,10 +16,10 @@ import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.card.CardRarity;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.init.ItemRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumBonusManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
+import team.tnt.collectorsalbum.util.PageInfo;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -77,7 +77,7 @@ public class AlbumMainPageScreen extends Screen {
             BookmarkWidget categoryBookmark = new BookmarkWidget(right, top + (index++) * 20, 32, 18, false, displayItem, () -> Minecraft.getInstance().gui.screen() instanceof AlbumCategoryScreen catScreen && catScreen.getCategory().identifier().equals(category.identifier()));
             categoryBookmark.setTooltip(Tooltip.create(category.getDisplayText()));
             categoryBookmark.setTooltipDelay(tooltipDelay);
-            categoryBookmark.setAction(() -> AlbumNavigationHelper.navigateCategory(category));
+            categoryBookmark.setAction(() -> AlbumNavigationHelper.navigateToBookmark(category));
             bookmarks.add(categoryBookmark);
         }
 
@@ -170,10 +170,10 @@ public class AlbumMainPageScreen extends Screen {
 
         // Page button
         AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
-        AlbumCategory category = manager.getCategoryForPage(0);
-        if (category != null) {
-            PageButton button = this.addRenderableWidget(new PageButton(left + 210, top + 156, true, btn -> AlbumNavigationHelper.navigateNextCategory(), true));
-            button.setTooltip(Tooltip.create(AlbumNavigationHelper.getNextCategoryTitle()));
+        PageInfo<AlbumCategory> firstPage = manager.getCategoryForPage(0);
+        if (firstPage != null) {
+            PageButton button = this.addRenderableWidget(new PageButton(left + 210, top + 156, true, _ -> AlbumNavigationHelper.navigateToNextPage(), true));
+            button.setTooltip(Tooltip.create(AlbumNavigationHelper.getNextPageTitle()));
             button.setTooltipDelay(Duration.ofSeconds(1));
         }
     }

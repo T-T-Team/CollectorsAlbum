@@ -17,7 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.init.ItemRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
@@ -62,7 +61,7 @@ public final class CollectorsAlbumCommand {
 
         for (AlbumCategory category : registeredCategories) {
             Set<AlbumCard> cardSet = new HashSet<>();
-            NonNullList<ItemStack> inventory = NonNullList.withSize(category.getCardNumbers().length, ItemStack.EMPTY);
+            NonNullList<ItemStack> inventory = NonNullList.withSize(category.getCardCount(), ItemStack.EMPTY);
             Collection<CardItem> validCards = cardItemMap.get(category.identifier());
             int slotIndex = 0;
             for (int number : category.getCardNumbers()) {

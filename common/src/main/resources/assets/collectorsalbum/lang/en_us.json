@@ -1062,6 +1062,7 @@
   "collectorsalbum.label.missing_description": "No description available...",
   "collectorsalbum.label.album_active": "Active",
   "collectorsalbum.label.album_inactive": "Inactive",
+  "collectorsalbum.label.page": "Page %s/%s",
   "card.rarity.common": "Common",
   "card.rarity.uncommon": "Uncommon",
   "card.rarity.rare": "Rare",
