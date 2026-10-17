@@ -2,8 +2,10 @@ package team.tnt.collectorsalbum;
 
 import dev.toma.configuration.Configuration;
 import dev.toma.configuration.config.format.ConfigFormats;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -14,7 +16,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import team.tnt.collectorsalbum.common.tracking.PlayerAlbumTracker;
 import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.item.PackContents;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
@@ -22,12 +23,14 @@ import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProvider;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.ListBasedOutputBuilder;
+import team.tnt.collectorsalbum.common.tracking.PlayerAlbumTracker;
 import team.tnt.collectorsalbum.config.CollectorsAlbumConfig;
 import team.tnt.collectorsalbum.integrations.PlatformIntegrations;
 import team.tnt.collectorsalbum.network.NetworkManager;
 import team.tnt.collectorsalbum.network.S2C_OpenCardPackScreen;
 import team.tnt.collectorsalbum.network.S2C_SendDatapackResources;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
+import team.tnt.collectorsalbum.util.PageInfo;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +40,7 @@ public class CollectorsAlbum {
     public static final String MOD_ID = "collectorsalbum";
     public static final Logger LOGGER = LogManager.getLogger("CollectorsAlbum");
     public static final PlatformNetworkManager NETWORK_MANAGER = PlatformNetworkManager.create(CollectorsAlbum.MOD_ID);
+    public static final StreamCodec<ByteBuf, PageInfo<ResourceLocation>> ALBUM_PAGE_STREAM_CODEC = PageInfo.streamCodec(ResourceLocation.STREAM_CODEC);
     private static CollectorsAlbumConfig config;
 
     public static final Component WARN_NO_DROPS = Component.translatable("collectorsalbum.label.pack_empty").withStyle(ChatFormatting.GOLD);

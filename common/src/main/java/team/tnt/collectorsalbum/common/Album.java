@@ -146,7 +146,7 @@ public final class Album implements Predicate<Album> {
         return categories.stream()
                 .map(cat -> {
                     Set<AlbumCard> cardsInCategory = this.cardsByCategory.getOrDefault(cat.identifier(), Collections.emptySet());
-                    int categoryTotal = cat.getCardNumbers().length;
+                    int categoryTotal = cat.getCardCount();
                     int categoryCollected = cardsInCategory.size();
                     return new AlbumCategoryStatistics(cat, categoryCollected, categoryTotal);
                 })
@@ -208,7 +208,7 @@ public final class Album implements Predicate<Album> {
                 ResourceLocation key = entry.getKey();
                 NonNullList<ItemStack> categoryInventory = entry.getValue();
                 AlbumCategoryManager.getInstance().findById(key).ifPresent(category -> {
-                    NonNullList<ItemStack> inventory = NonNullList.withSize(category.getCardNumbers().length, ItemStack.EMPTY);
+                    NonNullList<ItemStack> inventory = NonNullList.withSize(category.getCardCount(), ItemStack.EMPTY);
                     for (int i = 0; i < categoryInventory.size(); i++) {
                         ItemStack itemStack = categoryInventory.get(i);
                         if (!itemStack.isEmpty()) {
@@ -227,7 +227,7 @@ public final class Album implements Predicate<Album> {
                 AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
                 AlbumCategory albumCategory = manager.findById(category)
                         .orElseThrow(() -> new IllegalArgumentException(String.format("Attempting to insert item %s into unknown category %s", itemStack, category)));
-                inventory = NonNullList.withSize(albumCategory.getCardNumbers().length, ItemStack.EMPTY);
+                inventory = NonNullList.withSize(albumCategory.getCardCount(), ItemStack.EMPTY);
                 inventories.put(category, inventory);
             }
             inventory.set(index, itemStack.copy());

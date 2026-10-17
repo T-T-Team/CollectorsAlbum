@@ -55,12 +55,12 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
             return;
         }
 
-        PageButton prevPage = addRenderableWidget(new PageButton(leftPos + 22, topPos + 156, false, btn -> AlbumNavigationHelper.navigatePreviousCategory(), true));
-        prevPage.setTooltip(Tooltip.create(AlbumNavigationHelper.getPreviousCategoryTitle()));
+        PageButton prevPage = addRenderableWidget(new PageButton(leftPos + 22, topPos + 156, false, btn -> AlbumNavigationHelper.navigateToPreviousPage(), true));
+        prevPage.setTooltip(Tooltip.create(AlbumNavigationHelper.getPreviousPageTitle()));
         prevPage.setTooltipDelay(Duration.ofSeconds(1));
-        if (AlbumNavigationHelper.hasNextCategory()) {
-            PageButton nextPage = addRenderableWidget(new PageButton(leftPos + 210, topPos + 156, true, btn -> AlbumNavigationHelper.navigateNextCategory(), true));
-            nextPage.setTooltip(Tooltip.create(AlbumNavigationHelper.getNextCategoryTitle()));
+        if (AlbumNavigationHelper.hasNextPage()) {
+            PageButton nextPage = addRenderableWidget(new PageButton(leftPos + 210, topPos + 156, true, btn -> AlbumNavigationHelper.navigateToNextPage(), true));
+            nextPage.setTooltip(Tooltip.create(AlbumNavigationHelper.getNextPageTitle()));
             nextPage.setTooltipDelay(Duration.ofSeconds(1));
         }
         AlbumCategoryUiTemplate template = category.visualTemplate();
@@ -74,7 +74,7 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
     }
 
     @Override
-    protected void renderLabels(GuiGraphics graphics, int $$1, int $$2) {
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         Component categoryLabel = category.getDisplayText();
         Style displayTextStyle = categoryLabel.getStyle().withItalic(true);
         MutableComponent displayLabel = categoryLabel.copy().withStyle(ChatFormatting.BOLD);
@@ -84,28 +84,40 @@ public class AlbumCategoryScreen extends AbstractContainerScreen<AlbumCategoryMe
         Album album = Album.fromItem(this.itemStack);
         if (album != null) {
             int points = album.getCardsForCategory(this.category.identifier()).stream().mapToInt(AlbumCard::getPoints).sum();
-            Component pointLabel = AlbumMainPageScreen.getPointLabel(points).withStyle(displayTextStyle);
+            MutableComponent pointLabel = AlbumMainPageScreen.getPointLabel(points).withStyle(displayTextStyle);
+
+            int pageCount = this.menu.getPageCount();
+            int pageIndex = this.menu.getPageIndex() + 1;
+            if (pageCount > 1) {
+                pointLabel.append(" (")
+                        .append(Component.translatable("collectorsalbum.label.page", pageIndex, pageCount))
+                        .append(")");
+            }
+
             graphics.drawString(font, pointLabel, (imageWidth - font.width(pointLabel)) / 2, -15, 0xFFFFFF, false);
         }
     }
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
-        AlbumCategoryUiTemplate template = category.visualTemplate();
-        blitTextureTemplate(guiGraphics, leftPos, topPos, template.backgroundTexture);
-        int[] cardNumbers = category.getCardNumbers();
+        AlbumCategoryUiTemplate template = this.category.visualTemplate();
+        blitTextureTemplate(guiGraphics, this.leftPos, this.topPos, template.backgroundTexture);
+        int[] cardNumbers = this.category.getCardNumbers();
+        var pageInfo = this.menu.getPageInfo();
+        int pageSize = this.category.getPageSize();
+        int elementIndex = pageInfo.getElementIndex(pageSize);
         if (template.renderSlots) {
-            for (int slot = 0; slot < cardSlots.size(); slot++) {
-                Slot cardSlot = cardSlots.get(slot);
-                blitTextureTemplate(guiGraphics, leftPos + cardSlot.x - 1, topPos + cardSlot.y - 1, template.slotTexture);
+            for (int slot = 0; slot < this.cardSlots.size(); slot++) {
+                Slot cardSlot = this.cardSlots.get(slot);
+                blitTextureTemplate(guiGraphics, this.leftPos + cardSlot.x - 1, this.topPos + cardSlot.y - 1, template.slotTexture);
                 if (template.renderSlotCardNumbers && !cardSlot.hasItem()) {
-                    Component num = Component.literal(template.cardNumberPrefix + cardNumbers[slot]);
+                    Component num = Component.literal(template.cardNumberPrefix + cardNumbers[slot + elementIndex]);
                     PoseStack pose = guiGraphics.pose();
-                    guiGraphics.enableScissor(leftPos + cardSlot.x, topPos + cardSlot.y, leftPos + cardSlot.x + template.slotTexture.width() - 2, topPos + cardSlot.y + template.slotTexture.height() - 2);
+                    guiGraphics.enableScissor(this.leftPos + cardSlot.x, this.topPos + cardSlot.y, this.leftPos + cardSlot.x + template.slotTexture.width() - 2, this.topPos + cardSlot.y + template.slotTexture.height() - 2);
                     pose.pushPose();
-                    pose.translate(leftPos + cardSlot.x + 1, topPos + cardSlot.y + 1, 0);
+                    pose.translate(this.leftPos + cardSlot.x + 1, this.topPos + cardSlot.y + 1, 0);
                     pose.scale(0.75F, 0.75F, 0.75F);
-                    guiGraphics.drawString(font, num, 0, 0, template.slotCardNumberTextColor, false);
+                    guiGraphics.drawString(this.font, num, 0, 0, template.slotCardNumberTextColor, false);
                     pose.popPose();
                     guiGraphics.disableScissor();
                 }

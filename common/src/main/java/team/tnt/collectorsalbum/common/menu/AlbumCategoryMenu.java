@@ -15,25 +15,27 @@ import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.AlbumCategoryUiTemplate;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
 import team.tnt.collectorsalbum.common.init.MenuRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
+import team.tnt.collectorsalbum.util.PageInfo;
 
 import java.util.List;
 
 public class AlbumCategoryMenu extends AbstractContainerMenu {
 
-    private ResourceLocation category;
+    private PageInfo<ResourceLocation> pageInfo;
     private final Int2IntMap cardNumberToSlotCache = new Int2IntOpenHashMap();
+    private int cardSlotCount;
 
-    public AlbumCategoryMenu(int menuId, Inventory inventory) {
+    public AlbumCategoryMenu(int menuId) {
         super(MenuRegistry.ALBUM_CATEGORY.get(), menuId);
     }
 
-    public AlbumCategoryMenu(int menuId, Inventory playerInventory, ResourceLocation category) {
-        this(menuId, playerInventory);
-        this.category = category;
+    public AlbumCategoryMenu(int menuId, Inventory playerInventory, PageInfo<ResourceLocation> pageInfo) {
+        this(menuId);
+        this.pageInfo = pageInfo;
+        this.cardSlotCount = 0;
 
         ItemStack itemStack = playerInventory.player.getMainHandItem();
         Album album = Album.fromItem(itemStack);
@@ -42,8 +44,10 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
         }
 
         AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
-        AlbumCategory albumCategory = manager.findById(category).orElse(null);
-        if (albumCategory != null) {
+        PageInfo<AlbumCategory> page = manager.getPage(this.pageInfo);
+        if (!page.isEmpty()) {
+            AlbumCategory albumCategory = page.element();
+            ResourceLocation categoryIdentifier = albumCategory.identifier();
             AlbumCategoryUiTemplate template = albumCategory.visualTemplate();
             AlbumCategoryUiTemplate.SlotPositionTemplate slotTemplate = template.slotTemplate;
             int xStart = slotTemplate.xAlbumSlotPositionStart();
@@ -52,33 +56,38 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
             int ySpacing = slotTemplate.ySlotSpacing();
             int pageWidth = slotTemplate.pageWidth();
             int[] cardNumbers = albumCategory.getCardNumbers();
+            int cardCount = albumCategory.getCardCount();
             int slotsPerPage = slotTemplate.columns() * slotTemplate.rows();
-            Container wrapper = new AlbumInventoryWrapper(cardNumbers.length, itemStack, category, album);
+            int pageSize = albumCategory.getPageSize();
+            int offset = this.pageInfo.getElementIndex(pageSize);
+            Container wrapper = new AlbumInventoryWrapper(cardCount, itemStack, this.pageInfo, album);
             // left page cards
             for (int y = 0; y < slotTemplate.rows(); y++) {
                 for (int x = 0; x < slotTemplate.columns(); x++) {
                     int cardX = xStart + x * xSpacing;
                     int cardY = yStart + y * ySpacing;
-                    int cardIndex = x + (y * slotTemplate.columns());
-                    if (cardIndex >= cardNumbers.length)
+                    int cardIndex = offset + x + (y * slotTemplate.columns());
+                    if (cardIndex >= cardCount)
                         break;
-                    addSlot(new CardSlot(wrapper, cardIndex, cardX, cardY, category, cardNumbers[cardIndex]));
-                    this.cardNumberToSlotCache.put(cardNumbers[cardIndex], cardIndex);
+                    addSlot(new CardSlot(wrapper, cardIndex, cardX, cardY, categoryIdentifier, cardNumbers[cardIndex]));
+                    this.cardNumberToSlotCache.put(cardNumbers[cardIndex], cardIndex % pageSize);
+                    ++this.cardSlotCount;
                 }
             }
             // right page cards
-            if (cardNumbers.length >= slotsPerPage) {
+            if (cardCount >= slotsPerPage) {
                 int cardsLength = slotTemplate.columns() * xSpacing - xSpacing;
                 int rightStartX = pageWidth * 2 - 18 - cardsLength - xStart + 2;
                 for (int y = 0; y < slotTemplate.rows(); y++) {
                     for (int x = 0; x < slotTemplate.columns(); x++) {
                         int cardX = rightStartX + x * xSpacing;
                         int cardY = yStart + y * ySpacing;
-                        int cardIndex = slotsPerPage + x + (y * slotTemplate.columns());
-                        if (cardIndex >= cardNumbers.length)
+                        int cardIndex = offset + slotsPerPage + x + (y * slotTemplate.columns());
+                        if (cardIndex >= cardCount)
                             break;
-                        addSlot(new CardSlot(wrapper, cardIndex, cardX, cardY, category, cardNumbers[cardIndex]));
-                        this.cardNumberToSlotCache.put(cardNumbers[cardIndex], cardIndex);
+                        addSlot(new CardSlot(wrapper, cardIndex, cardX, cardY, categoryIdentifier, cardNumbers[cardIndex]));
+                        this.cardNumberToSlotCache.put(cardNumbers[cardIndex], cardIndex % pageSize);
+                        ++this.cardSlotCount;
                     }
                 }
             }
@@ -109,35 +118,32 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        ItemStack itemStack = ItemStack.EMPTY;
+        ItemStack itemStack;
         Slot slot = this.slots.get(index);
 
         if (slot.hasItem()) {
             ItemStack slotItem = slot.getItem();
-            itemStack = slotItem.copy();
-
+            ResourceLocation categoryId = this.pageInfo.element();
             AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
-            int slotsCount = manager.findById(category).map(cat -> cat.getCardNumbers().length).orElse(0);
-            if (slotsCount == 0) {
-                return this.transferInInventory(slotItem, index, 0);
-            }
-
-            if (index >= 0 && index < slotsCount) {
+            AlbumCategory category = manager.find(this.pageInfo).orElse(null);
+            if (category == null)
+                return ItemStack.EMPTY;
+            if (index >= 0 && index < this.cardSlotCount) {
                 // Extraction
-                if (!moveItemStackTo(slotItem, slotsCount, slotsCount + 36, true)) {
+                if (!moveItemStackTo(slotItem, this.cardSlotCount, this.cardSlotCount + 36, true)) {
                     return ItemStack.EMPTY;
                 }
                 slot.setChanged();
-            } else if (index >= slotsCount && index < slotsCount + 36) {
+            } else if (index >= this.cardSlotCount && index < this.cardSlotCount + 36) {
                 // Insert to album
                 AlbumCard albumCard = this.getCardInfo(slotItem);
-                if (albumCard == null || !albumCard.category().equals(this.category)) {
-                    return this.transferInInventory(slotItem, index, slotsCount);
+                if (albumCard == null || !albumCard.category().equals(categoryId)) {
+                    return this.transferInInventory(slotItem, index, this.cardSlotCount);
                 }
 
                 int cardNumber = albumCard.cardNumber();
                 if (!this.cardNumberToSlotCache.containsKey(cardNumber)) {
-                    return this.transferInInventory(slotItem, index, slotsCount);
+                    return this.transferInInventory(slotItem, index, this.cardSlotCount);
                 }
                 int cardSlot = this.cardNumberToSlotCache.get(cardNumber);
                 Slot targetSlot = this.slots.get(cardSlot);
@@ -168,12 +174,24 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
         return ItemStack.EMPTY;
     }
 
+    public PageInfo<ResourceLocation> getPageInfo() {
+        return this.pageInfo;
+    }
+
     public AlbumCategory getCategory() {
-        if (category == null) {
+        if (this.pageInfo.isEmpty()) {
             throw new IllegalStateException("Category is not defined");
         }
         AlbumCategoryManager manager = AlbumCategoryManager.getInstance();
-        return manager.findById(category).orElseThrow();
+        return manager.findById(this.pageInfo.element()).orElseThrow();
+    }
+
+    public int getPageIndex() {
+        return this.pageInfo.pageIndex();
+    }
+
+    public int getPageCount() {
+        return this.getCategory().getPageCount();
     }
 
     private ItemStack transferInInventory(ItemStack itemStack, int index, int cards) {
@@ -228,14 +246,14 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
     private static final class AlbumInventoryWrapper extends SimpleContainer {
 
         private final ItemStack itemStack;
-        private final ResourceLocation category;
+        private final PageInfo<ResourceLocation> pageInfo;
 
-        AlbumInventoryWrapper(int size, ItemStack itemStack, ResourceLocation category, Album album) {
+        AlbumInventoryWrapper(int size, ItemStack itemStack, PageInfo<ResourceLocation> pageInfo, Album album) {
             super(size);
             this.itemStack = itemStack;
-            this.category = category;
+            this.pageInfo = pageInfo;
 
-            List<ItemStack> itemStacks = album.getInventory(category);
+            List<ItemStack> itemStacks = album.getInventory(this.pageInfo.element());
             for (int i = 0; i < itemStacks.size(); i++) {
                 ItemStack stack = itemStacks.get(i);
                 if (!stack.isEmpty())
@@ -248,7 +266,7 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
             Album album = Album.fromItem(this.itemStack);
             if (album != null) {
                 Album.Mutable mutable = new Album.Mutable(album);
-                mutable.set(this.category, index, itemStack.copy());
+                mutable.set(this.pageInfo.element(), index, itemStack.copy());
                 Album updated = mutable.toImmutable();
                 updated.bind(this.itemStack);
             }
@@ -263,7 +281,7 @@ public class AlbumCategoryMenu extends AbstractContainerMenu {
                 Album.Mutable mutableAlbum = new Album.Mutable(album);
                 for (int i = 0; i < itemStacks.size(); i++) {
                     ItemStack stack = itemStacks.get(i);
-                    mutableAlbum.set(this.category, i, stack.copy());
+                    mutableAlbum.set(this.pageInfo.element(), i, stack.copy());
                 }
                 mutableAlbum.buildAndBind(this.itemStack);
             }
