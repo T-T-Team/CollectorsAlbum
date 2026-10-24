@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
-import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
@@ -28,8 +27,8 @@ public class ItemStackDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public ItemDropProviderType<?> getType() {
-        return ItemDropProviderRegistry.ITEMSTACK_DROP_PROVIDER.get();
+    public MapCodec<? extends ItemDropProvider> codec() {
+        return CODEC;
     }
 
     @Override

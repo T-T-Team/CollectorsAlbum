@@ -12,9 +12,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.AlbumCategory;
-import team.tnt.collectorsalbum.common.AlbumCategoryType;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
-import team.tnt.collectorsalbum.common.card.AlbumCardType;
 import team.tnt.collectorsalbum.common.resource.*;
 import team.tnt.collectorsalbum.common.resource.bonus.BonusHolder;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
@@ -49,8 +47,8 @@ public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategor
     }
 
     private void encode(FriendlyByteBuf buffer) {
-        this.encodeWithCodec(buffer, AlbumCardType.INSTANCE_CODEC, this.cards());
-        this.encodeWithCodec(buffer, AlbumCategoryType.INSTANCE_CODEC, this.categories());
+        this.encodeWithCodec(buffer, AlbumCard.CODEC, this.cards());
+        this.encodeWithCodec(buffer, AlbumCategory.CODEC, this.categories());
         this.encodeWithCodec(buffer, AlbumBonusManager.CODEC, this.bonuses());
         this.encodeWithCodec(buffer, CardPackDropManager.DropEntry.CODEC, this.drops());
     }
@@ -65,8 +63,8 @@ public record S2C_SendDatapackResources(List<AlbumCard> cards, List<AlbumCategor
 
     private static S2C_SendDatapackResources decode(FriendlyByteBuf buffer) {
         return new S2C_SendDatapackResources(
-                decodeWithCodec(buffer, AlbumCardType.INSTANCE_CODEC, AlbumCardManager.getInstance()),
-                decodeWithCodec(buffer, AlbumCategoryType.INSTANCE_CODEC, AlbumCategoryManager.getInstance()),
+                decodeWithCodec(buffer, AlbumCard.CODEC, AlbumCardManager.getInstance()),
+                decodeWithCodec(buffer, AlbumCategory.CODEC, AlbumCategoryManager.getInstance()),
                 decodeWithCodec(buffer, AlbumBonusManager.CODEC, AlbumBonusManager.getInstance()),
                 decodeWithCodec(buffer, CardPackDropManager.DropEntry.CODEC, CardPackDropManager.getInstance())
         );

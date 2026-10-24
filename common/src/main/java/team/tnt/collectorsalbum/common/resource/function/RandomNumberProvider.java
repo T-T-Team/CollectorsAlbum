@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import team.tnt.collectorsalbum.common.init.NumberProviderRegistry;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -33,7 +32,7 @@ public class RandomNumberProvider implements NumberProvider {
     }
 
     @Override
-    public NumberProviderType<?> getType() {
-        return NumberProviderRegistry.RANDOM.get();
+    public MapCodec<? extends NumberProvider> codec() {
+        return CODEC;
     }
 }

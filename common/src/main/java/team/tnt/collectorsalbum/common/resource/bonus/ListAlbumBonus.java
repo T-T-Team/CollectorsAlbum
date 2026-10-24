@@ -3,7 +3,6 @@ package team.tnt.collectorsalbum.common.resource.bonus;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
-import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 
 import java.util.List;
@@ -12,7 +11,7 @@ public record ListAlbumBonus(List<AlbumBonus> items) implements IntermediateAlbu
 
     public static final Component LABEL = Component.translatable("collectorsalbum.label.bonus.list");
     public static final MapCodec<ListAlbumBonus> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            AlbumBonusType.INSTANCE_CODEC.listOf().fieldOf("items").forGetter(t -> t.items)
+            AlbumBonus.CODEC.listOf().fieldOf("items").forGetter(t -> t.items)
     ).apply(instance, ListAlbumBonus::new));
 
     @Override
@@ -47,7 +46,7 @@ public record ListAlbumBonus(List<AlbumBonus> items) implements IntermediateAlbu
     }
 
     @Override
-    public AlbumBonusType<?> getType() {
-        return AlbumBonusRegistry.LIST.get();
+    public MapCodec<? extends AlbumBonus> codec() {
+        return CODEC;
     }
 }

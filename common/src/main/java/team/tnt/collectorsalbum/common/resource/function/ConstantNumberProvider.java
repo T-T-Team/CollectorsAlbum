@@ -3,7 +3,6 @@ package team.tnt.collectorsalbum.common.resource.function;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import team.tnt.collectorsalbum.common.init.NumberProviderRegistry;
 
 import java.util.function.Function;
 
@@ -28,7 +27,7 @@ public class ConstantNumberProvider implements NumberProvider {
     }
 
     @Override
-    public NumberProviderType<?> getType() {
-        return NumberProviderRegistry.CONSTANT.get();
+    public MapCodec<? extends NumberProvider> codec() {
+        return CODEC;
     }
 }

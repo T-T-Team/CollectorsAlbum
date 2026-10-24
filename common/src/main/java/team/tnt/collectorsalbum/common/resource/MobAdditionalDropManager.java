@@ -7,7 +7,6 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import org.jetbrains.annotations.NotNull;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProvider;
-import team.tnt.collectorsalbum.common.resource.drops.ItemDropProviderType;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropResourceManager;
 import team.tnt.collectorsalbum.common.resource.drops.NoItemDropProvider;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
@@ -24,7 +23,7 @@ public class MobAdditionalDropManager extends PlatformGsonCodecReloadListener<It
     private final Map<Identifier, ItemDropProvider> drops = new LinkedHashMap<>();
 
     private MobAdditionalDropManager() {
-        super("album/mobs", ItemDropProviderType.INSTANCE_CODEC);
+        super("album/mobs", ItemDropProvider.CODEC);
     }
 
     public static MobAdditionalDropManager getInstance() {

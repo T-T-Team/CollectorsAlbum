@@ -6,7 +6,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.AlbumCategory;
-import team.tnt.collectorsalbum.common.AlbumCategoryType;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 import team.tnt.collectorsalbum.util.PageInfo;
 
@@ -21,7 +20,7 @@ public final class AlbumCategoryManager extends PlatformGsonCodecReloadListener<
     private List<PageInfo<AlbumCategory>> pagedCategories = Collections.emptyList();
 
     private AlbumCategoryManager() {
-        super("album/categories", AlbumCategoryType.INSTANCE_CODEC);
+        super("album/categories", AlbumCategory.CODEC);
     }
 
     public static AlbumCategoryManager getInstance() {

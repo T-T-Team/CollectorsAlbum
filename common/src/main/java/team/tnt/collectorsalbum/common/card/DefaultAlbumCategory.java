@@ -7,9 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
 import team.tnt.collectorsalbum.common.AlbumCategory;
-import team.tnt.collectorsalbum.common.AlbumCategoryType;
 import team.tnt.collectorsalbum.common.AlbumCategoryUiTemplate;
-import team.tnt.collectorsalbum.common.init.CategoryRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.platform.Codecs;
 
@@ -69,8 +67,8 @@ public class DefaultAlbumCategory implements AlbumCategory {
     }
 
     @Override
-    public AlbumCategoryType<?> getType() {
-        return CategoryRegistry.CATEGORY.get();
+    public MapCodec<? extends AlbumCategory> codec() {
+        return CODEC;
     }
 
     @Override

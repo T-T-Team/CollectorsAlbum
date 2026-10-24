@@ -10,7 +10,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import team.tnt.collectorsalbum.CollectorsAlbum;
-import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
@@ -20,8 +19,8 @@ public class EntityFilterItemDropProvider implements ItemDropProvider {
 
     public static final MapCodec<EntityFilterItemDropProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             TagKey.codec(Registries.ENTITY_TYPE).fieldOf("filter").forGetter(t -> t.filter),
-            ItemDropProviderType.INSTANCE_CODEC.fieldOf("pass").forGetter(t -> t.pass),
-            ItemDropProviderType.INSTANCE_CODEC.optionalFieldOf("fail", NoItemDropProvider.INSTANCE).forGetter(t -> t.fail),
+            ItemDropProvider.CODEC.fieldOf("pass").forGetter(t -> t.pass),
+            ItemDropProvider.CODEC.optionalFieldOf("fail", NoItemDropProvider.INSTANCE).forGetter(t -> t.fail),
             Codec.BOOL.optionalFieldOf("blacklist", false).forGetter(t -> t.blacklist)
     ).apply(instance, EntityFilterItemDropProvider::new));
 
@@ -54,8 +53,8 @@ public class EntityFilterItemDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public ItemDropProviderType<?> getType() {
-        return ItemDropProviderRegistry.ENTITY_FILTER.get();
+    public MapCodec<? extends ItemDropProvider> codec() {
+        return CODEC;
     }
 
     @Override

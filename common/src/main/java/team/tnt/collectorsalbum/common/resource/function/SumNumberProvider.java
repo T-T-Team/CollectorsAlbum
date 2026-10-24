@@ -4,15 +4,14 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import team.tnt.collectorsalbum.common.init.NumberProviderRegistry;
 
 import java.util.function.Function;
 
 public class SumNumberProvider implements NumberProvider {
 
     public static final MapCodec<SumNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.either(Codec.DOUBLE, NumberProviderType.INSTANCE_CODEC).fieldOf("left").forGetter(t -> Either.right(t.left)),
-            Codec.either(Codec.DOUBLE, NumberProviderType.INSTANCE_CODEC).fieldOf("right").forGetter(t -> Either.right(t.right))
+            Codec.either(Codec.DOUBLE, NumberProvider.CODEC).fieldOf("left").forGetter(t -> Either.right(t.left)),
+            Codec.either(Codec.DOUBLE, NumberProvider.CODEC).fieldOf("right").forGetter(t -> Either.right(t.right))
     ).apply(instance, SumNumberProvider::new));
 
     private final NumberProvider left;
@@ -31,7 +30,7 @@ public class SumNumberProvider implements NumberProvider {
     }
 
     @Override
-    public NumberProviderType<?> getType() {
-        return NumberProviderRegistry.SUM.get();
+    public MapCodec<? extends NumberProvider> codec() {
+        return CODEC;
     }
 }

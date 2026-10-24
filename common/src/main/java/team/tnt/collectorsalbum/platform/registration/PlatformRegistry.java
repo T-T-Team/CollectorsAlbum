@@ -41,6 +41,10 @@ public interface PlatformRegistry<T> {
 
     <R extends T> Reference<R> register(String elementId, Function<Identifier, R> ref);
 
+    default <R extends T> Reference<R> registerInstance(String elementId, R instance) {
+        return register(elementId, () -> instance);
+    }
+
     <R extends T> void bindRef(BiConsumer<Identifier, Reference<R>> refConsumer);
 
     void bind();

@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
-import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 import team.tnt.collectorsalbum.util.WeightedRandom;
@@ -14,7 +13,7 @@ import java.util.stream.Stream;
 public class WeightedItemDropProvider implements ItemDropProvider {
 
     public static final MapCodec<WeightedItemDropProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            WeightedRandom.codec(ItemDropProviderType.INSTANCE_CODEC).fieldOf("value").forGetter(t -> t.items)
+            WeightedRandom.codec(ItemDropProvider.CODEC).fieldOf("value").forGetter(t -> t.items)
     ).apply(instance, WeightedItemDropProvider::new));
 
     private final WeightedRandom<ItemDropProvider> items;
@@ -32,8 +31,8 @@ public class WeightedItemDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public ItemDropProviderType<?> getType() {
-        return ItemDropProviderRegistry.WEIGHTED_DROP_PROVIDER.get();
+    public MapCodec<? extends ItemDropProvider> codec() {
+        return CODEC;
     }
 
     @Override

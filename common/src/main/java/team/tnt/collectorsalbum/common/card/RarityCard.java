@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.AlbumCategoryUiTemplate;
-import team.tnt.collectorsalbum.common.init.CardTypeRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.platform.Codecs;
 
@@ -91,8 +90,8 @@ public class RarityCard implements RarityHolder {
     }
 
     @Override
-    public AlbumCardType<?> getType() {
-        return CardTypeRegistry.RARITY_CARD.get();
+    public MapCodec<? extends AlbumCard> codec() {
+        return CODEC;
     }
 
     @Override

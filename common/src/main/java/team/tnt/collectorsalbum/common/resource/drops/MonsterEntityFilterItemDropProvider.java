@@ -6,7 +6,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
-import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
@@ -15,8 +14,8 @@ import java.util.stream.Stream;
 public class MonsterEntityFilterItemDropProvider implements ItemDropProvider {
 
     public static final MapCodec<MonsterEntityFilterItemDropProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ItemDropProviderType.INSTANCE_CODEC.fieldOf("pass").forGetter(t -> t.pass),
-            ItemDropProviderType.INSTANCE_CODEC.optionalFieldOf("fail", NoItemDropProvider.INSTANCE).forGetter(t -> t.fail)
+            ItemDropProvider.CODEC.fieldOf("pass").forGetter(t -> t.pass),
+            ItemDropProvider.CODEC.optionalFieldOf("fail", NoItemDropProvider.INSTANCE).forGetter(t -> t.fail)
     ).apply(instance, MonsterEntityFilterItemDropProvider::new));
 
     private final ItemDropProvider pass;
@@ -38,8 +37,8 @@ public class MonsterEntityFilterItemDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public ItemDropProviderType<?> getType() {
-        return ItemDropProviderRegistry.MONSTER_ENTITY_FILTER.get();
+    public MapCodec<? extends ItemDropProvider> codec() {
+        return CODEC;
     }
 
     @Override

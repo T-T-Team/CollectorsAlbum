@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.card.IntFilter;
-import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 
 import java.util.Collections;
@@ -15,7 +14,7 @@ public record AlbumPointBonusFilter(IntFilter range, AlbumBonus item) implements
 
     public static final MapCodec<AlbumPointBonusFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             IntFilter.CODEC.fieldOf("filter").forGetter(t -> t.range),
-            AlbumBonusType.INSTANCE_CODEC.fieldOf("item").forGetter(t -> t.item)
+            AlbumBonus.CODEC.fieldOf("item").forGetter(t -> t.item)
     ).apply(instance, AlbumPointBonusFilter::new));
 
     @Override
@@ -46,8 +45,8 @@ public record AlbumPointBonusFilter(IntFilter range, AlbumBonus item) implements
     }
 
     @Override
-    public AlbumBonusType<?> getType() {
-        return AlbumBonusRegistry.ALBUM_POINT_FILTER.get();
+    public MapCodec<? extends AlbumBonus> codec() {
+        return CODEC;
     }
 
     @Override

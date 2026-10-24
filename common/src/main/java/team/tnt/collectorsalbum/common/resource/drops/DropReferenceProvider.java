@@ -6,7 +6,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
-import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
 import team.tnt.collectorsalbum.common.resource.MobAdditionalDropManager;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
@@ -35,8 +34,8 @@ public class DropReferenceProvider implements ItemDropProvider {
     }
 
     @Override
-    public ItemDropProviderType<?> getType() {
-        return ItemDropProviderRegistry.REFERENCE.get();
+    public MapCodec<? extends ItemDropProvider> codec() {
+        return CODEC;
     }
 
     @Override

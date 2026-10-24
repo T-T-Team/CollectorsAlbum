@@ -6,7 +6,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import team.tnt.collectorsalbum.CollectorsAlbum;
-import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonusType;
+import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonus;
 import team.tnt.collectorsalbum.common.resource.bonus.BonusHolder;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
@@ -18,9 +18,10 @@ import java.util.Map;
 
 public final class AlbumBonusManager extends PlatformGsonCodecReloadListener<BonusHolder> implements SynchronizedResource<BonusHolder> {
 
+    // Codec used for backward compatibility with old bonus format
     public static final Codec<BonusHolder> CODEC = Codec.withAlternative(
             BonusHolder.CODEC,
-            AlbumBonusType.INSTANCE_CODEC,
+            AlbumBonus.CODEC,
             BonusHolder::unnamed
     );
 

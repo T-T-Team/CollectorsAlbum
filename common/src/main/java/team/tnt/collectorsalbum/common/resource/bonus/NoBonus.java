@@ -1,7 +1,6 @@
 package team.tnt.collectorsalbum.common.resource.bonus;
 
 import com.mojang.serialization.MapCodec;
-import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 
 public final class NoBonus implements AlbumBonus {
@@ -20,7 +19,7 @@ public final class NoBonus implements AlbumBonus {
     }
 
     @Override
-    public AlbumBonusType<?> getType() {
-        return AlbumBonusRegistry.NONE.get();
+    public MapCodec<? extends AlbumBonus> codec() {
+        return CODEC;
     }
 }

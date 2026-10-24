@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
-import team.tnt.collectorsalbum.common.init.ItemDropProviderRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.OutputBuilder;
 
@@ -15,7 +14,7 @@ import java.util.stream.Stream;
 public class RandomListItemDropProvider implements ItemDropProvider {
 
     public static final MapCodec<RandomListItemDropProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ItemDropProviderType.INSTANCE_CODEC.listOf().fieldOf("items").forGetter(t -> t.items)
+            ItemDropProvider.CODEC.listOf().fieldOf("items").forGetter(t -> t.items)
     ).apply(instance, RandomListItemDropProvider::new));
 
     private final List<ItemDropProvider> items;
@@ -35,8 +34,8 @@ public class RandomListItemDropProvider implements ItemDropProvider {
     }
 
     @Override
-    public ItemDropProviderType<?> getType() {
-        return ItemDropProviderRegistry.RANDOM_ITEM_DROP_PROVIDER.get();
+    public MapCodec<? extends ItemDropProvider> codec() {
+        return CODEC;
     }
 
     @Override

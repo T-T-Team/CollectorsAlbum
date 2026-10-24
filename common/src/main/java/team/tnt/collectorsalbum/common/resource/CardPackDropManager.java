@@ -8,7 +8,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProvider;
-import team.tnt.collectorsalbum.common.resource.drops.ItemDropProviderType;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropResourceManager;
 import team.tnt.collectorsalbum.common.resource.drops.NoItemDropProvider;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
@@ -25,7 +24,7 @@ public class CardPackDropManager extends PlatformGsonCodecReloadListener<ItemDro
     private final Map<Identifier, ItemDropProvider> providerMap = new HashMap<>();
 
     private CardPackDropManager() {
-        super("album/packs", ItemDropProviderType.INSTANCE_CODEC);
+        super("album/packs", ItemDropProvider.CODEC);
     }
 
     public static CardPackDropManager getInstance() {
@@ -73,7 +72,7 @@ public class CardPackDropManager extends PlatformGsonCodecReloadListener<ItemDro
 
         public static final Codec<DropEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Identifier.CODEC.fieldOf("id").forGetter(DropEntry::id),
-                ItemDropProviderType.INSTANCE_CODEC.fieldOf("provider").forGetter(DropEntry::provider)
+                ItemDropProvider.CODEC.fieldOf("provider").forGetter(DropEntry::provider)
         ).apply(instance, DropEntry::new));
     }
 }

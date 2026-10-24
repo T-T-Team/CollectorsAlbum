@@ -1,6 +1,5 @@
 package team.tnt.collectorsalbum.common.resource.bonus;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -14,21 +13,19 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
-import team.tnt.collectorsalbum.common.resource.function.NumberProviderType;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 public record AttributeAlbumBonus(Holder<Attribute> attribute, AttributeModifier attributeModifier, Optional<Component> label, boolean contextual) implements AlbumBonus {
 
     public static final Codec<AttributeModifier> CONFIGURABLE_MODIFIER_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Identifier.CODEC.fieldOf("id").forGetter(AttributeModifier::id),
-            Codec.either(Codec.DOUBLE, NumberProviderType.INSTANCE_CODEC).fieldOf("amount").forGetter(t -> Either.left(t.amount())),
+            NumberProvider.DOUBLE_CODEC.fieldOf("amount").forGetter(AttributeModifier::amount),
             AttributeModifier.Operation.CODEC.fieldOf("operation").forGetter(AttributeModifier::operation)
-    ).apply(instance, (id, either, op) -> new AttributeModifier(id, either.map(Function.identity(), NumberProvider::doubleValue), op)));
+    ).apply(instance, AttributeModifier::new));
+
     public static final MapCodec<AttributeAlbumBonus> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BuiltInRegistries.ATTRIBUTE.holderByNameCodec().fieldOf("attribute").forGetter(t -> t.attribute),
             CONFIGURABLE_MODIFIER_CODEC.fieldOf("modifier").forGetter(t -> t.attributeModifier),
@@ -71,8 +68,8 @@ public record AttributeAlbumBonus(Holder<Attribute> attribute, AttributeModifier
     }
 
     @Override
-    public AlbumBonusType<?> getType() {
-        return AlbumBonusRegistry.ATTRIBUTE.get();
+    public MapCodec<? extends AlbumBonus> codec() {
+        return CODEC;
     }
 
     private Component getLabel() {

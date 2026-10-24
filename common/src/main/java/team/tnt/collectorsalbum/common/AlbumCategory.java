@@ -1,10 +1,16 @@
 package team.tnt.collectorsalbum.common;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
+import java.util.function.Function;
+
 public interface AlbumCategory {
+
+    Codec<AlbumCategory> CODEC = CollectorsAlbumRegistries.CATEGORY.byNameCodec().dispatch(AlbumCategory::codec, Function.identity());
 
     Identifier identifier();
 
@@ -16,7 +22,7 @@ public interface AlbumCategory {
 
     int getPageOrder();
 
-    AlbumCategoryType<?> getType();
+    MapCodec<? extends AlbumCategory> codec();
 
     default int getCardCount() {
         return this.getCardNumbers().length;

@@ -1,16 +1,12 @@
 package team.tnt.collectorsalbum.util;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import team.tnt.collectorsalbum.common.resource.function.ConstantNumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
-import team.tnt.collectorsalbum.common.resource.function.NumberProviderType;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class WeightedRandom<T> implements Supplier<T> {
@@ -65,22 +61,19 @@ public class WeightedRandom<T> implements Supplier<T> {
         return this.items.stream().mapToInt(WeightedItem::getWeight).sum();
     }
 
-    public record WeightedItem<T>(NumberProvider weight, T item) {
+    public record WeightedItem<T>(int weight, T item) {
 
-        public static <T> WeightedItem<T> decode(Either<Integer, NumberProvider> weight, T item) {
-            return new WeightedItem<>(weight.map(num -> ConstantNumberProvider.ONE, Function.identity()), item);
+        public static <T> WeightedItem<T> decode(int weight, T item) {
+            return new WeightedItem<>(weight, item);
         }
 
         public int getWeight() {
-            return this.weight.intValue();
+            return this.weight;
         }
 
         public static <T> Codec<WeightedItem<T>> codec(Codec<T> elementCodec) {
             return RecordCodecBuilder.create(instance -> instance.group(
-                    Codec.either(
-                            Codec.INT,
-                            NumberProviderType.INSTANCE_CODEC
-                    ).fieldOf("weight").forGetter(item -> Either.right(item.weight)),
+                    NumberProvider.POSITIVE_INT_CODEC.fieldOf("weight").forGetter(item -> item.weight),
                     elementCodec.fieldOf("item").forGetter(t -> t.item)
             ).apply(instance, WeightedItem::decode));
         }

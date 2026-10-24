@@ -10,7 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.card.AlbumCard;
-import team.tnt.collectorsalbum.common.card.AlbumCardType;
 import team.tnt.collectorsalbum.platform.resource.PlatformGsonCodecReloadListener;
 
 import java.util.*;
@@ -30,7 +29,7 @@ public class AlbumCardManager extends PlatformGsonCodecReloadListener<AlbumCard>
     private final Map<Item, AlbumCard> byItemMap = new HashMap<>();
 
     private AlbumCardManager() {
-        super("album/cards", AlbumCardType.INSTANCE_CODEC);
+        super("album/cards", AlbumCard.CODEC);
     }
 
     public static AlbumCardManager getInstance() {

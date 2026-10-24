@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import team.tnt.collectorsalbum.common.AlbumCategory;
 import team.tnt.collectorsalbum.common.AlbumCategoryUiTemplate;
-import team.tnt.collectorsalbum.common.init.CardTypeRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 
 import java.util.List;
@@ -104,8 +103,8 @@ public class SimpleCard implements AlbumCard {
     }
 
     @Override
-    public AlbumCardType<?> getType() {
-        return CardTypeRegistry.CARD.get();
+    public MapCodec<? extends AlbumCard> codec() {
+        return CODEC;
     }
 
     @Override

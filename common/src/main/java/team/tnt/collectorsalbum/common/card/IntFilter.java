@@ -1,44 +1,33 @@
 package team.tnt.collectorsalbum.common.card;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
-import team.tnt.collectorsalbum.common.resource.function.ConstantNumberProvider;
 import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
-import team.tnt.collectorsalbum.common.resource.function.NumberProviderType;
 
-import java.util.function.Function;
-
-public record IntFilter(NumberProvider min, NumberProvider max) {
+public record IntFilter(int min, int max) {
 
     public static final MapCodec<IntFilter> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.either(Codec.INT, NumberProviderType.INSTANCE_CODEC).optionalFieldOf("min", Either.left(Integer.MIN_VALUE)).forGetter(v -> Either.right(v.min)),
-            Codec.either(Codec.INT, NumberProviderType.INSTANCE_CODEC).optionalFieldOf("max", Either.left(Integer.MAX_VALUE)).forGetter(v -> Either.right(v.max))
+            NumberProvider.INT_CODEC.optionalFieldOf("min", Integer.MIN_VALUE).forGetter(IntFilter::min),
+            NumberProvider.INT_CODEC.optionalFieldOf("max", Integer.MAX_VALUE).forGetter(IntFilter::max)
     ).apply(instance, IntFilter::new));
     public static final Codec<IntFilter> CODEC = MAP_CODEC.codec();
-    public static final IntFilter NO_FILTER = new IntFilter(new ConstantNumberProvider(Integer.MIN_VALUE), new ConstantNumberProvider(Integer.MAX_VALUE));
-
-    private IntFilter(Either<Integer, NumberProvider> min, Either<Integer, NumberProvider> max) {
-        this(min.map(ConstantNumberProvider::new, Function.identity()), max.map(ConstantNumberProvider::new, Function.identity()));
-    }
+    public static final IntFilter NO_FILTER = new IntFilter(Integer.MIN_VALUE, Integer.MAX_VALUE);
 
     public boolean test(int value) {
-        return value >= min.intValue() && value <= max.intValue();
+        return value >= this.min && value <= this.max;
     }
 
     public Component getDisplayComponent() {
-        int from = min.intValue();
-        int to = max.intValue();
-        if (from > Integer.MIN_VALUE && to < Integer.MAX_VALUE) {
-            return Component.literal("[" + from + "," + to + "]");
-        } else if (from == to) {
-            return Component.literal("{" + from + "}");
-        } else if (from > Integer.MIN_VALUE) {
-            return Component.literal("[" + from + ",...)");
-        } else if (to < Integer.MAX_VALUE) {
-            return Component.literal("(...," + to + "]");
+        if (this.min > Integer.MIN_VALUE && this.max < Integer.MAX_VALUE) {
+            return Component.literal("[" + this.min + "," + this.max + "]");
+        } else if (this.min == this.max) {
+            return Component.literal("{" + this.min + "}");
+        } else if (this.min > Integer.MIN_VALUE) {
+            return Component.literal("[" + this.min + ",...)");
+        } else if (this.max < Integer.MAX_VALUE) {
+            return Component.literal("(...," + this.max + "]");
         }
         return null;
     }

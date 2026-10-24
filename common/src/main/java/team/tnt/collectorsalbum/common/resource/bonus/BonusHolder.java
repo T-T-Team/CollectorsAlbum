@@ -13,7 +13,7 @@ public record BonusHolder(Component title, Component description, AlbumBonus val
     public static final Codec<BonusHolder> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ComponentSerialization.CODEC.fieldOf("title").forGetter(BonusHolder::title),
             ComponentSerialization.CODEC.optionalFieldOf("description", NO_DESCRIPTION).forGetter(BonusHolder::description),
-            AlbumBonusType.INSTANCE_CODEC.fieldOf("value").forGetter(BonusHolder::value)
+            AlbumBonus.CODEC.fieldOf("value").forGetter(BonusHolder::value)
     ).apply(instance, BonusHolder::new));
 
     public static BonusHolder unnamed(AlbumBonus value) {

@@ -10,7 +10,6 @@ import team.tnt.collectorsalbum.common.card.AlbumCard;
 import team.tnt.collectorsalbum.common.card.CardCategoryFilter;
 import team.tnt.collectorsalbum.common.card.CardRarity;
 import team.tnt.collectorsalbum.common.card.IntFilter;
-import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 
@@ -26,7 +25,7 @@ public record AlbumCategoryCardBonusFilter(Identifier category, CardCategoryFilt
     public static final MapCodec<AlbumCategoryCardBonusFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Identifier.CODEC.fieldOf("category").forGetter(t -> t.category),
             CardCategoryFilter.CODEC.optionalFieldOf("filter", CardCategoryFilter.NO_FILTER).forGetter(t -> t.filter),
-            AlbumBonusType.INSTANCE_CODEC.fieldOf("item").forGetter(t -> t.item)
+            AlbumBonus.CODEC.fieldOf("item").forGetter(t -> t.item)
     ).apply(instance, AlbumCategoryCardBonusFilter::new));
 
     @Override
@@ -106,8 +105,8 @@ public record AlbumCategoryCardBonusFilter(Identifier category, CardCategoryFilt
     }
 
     @Override
-    public AlbumBonusType<?> getType() {
-        return AlbumBonusRegistry.CATEGORY_FILTER.get();
+    public MapCodec<? extends AlbumBonus> codec() {
+        return CODEC;
     }
 
     @Override

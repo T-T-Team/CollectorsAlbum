@@ -8,7 +8,6 @@ import dev.toma.configuration.config.value.IConfigValue;
 import dev.toma.configuration.config.value.IConfigValueReadable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import team.tnt.collectorsalbum.common.init.AlbumBonusRegistry;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 
 import java.util.Arrays;
@@ -21,8 +20,8 @@ public record ConfigToggleBonusFilter(ConfigValueLocation location, AlbumBonus e
     private static final Component UNKNOWN_CONFIG_OPTION = Component.translatable("collectorsalbum.label.bonus.config_toggle.unknown_field").withStyle(ChatFormatting.RED);
     public static final MapCodec<ConfigToggleBonusFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ConfigValueLocation.CODEC.fieldOf("location").forGetter(t -> t.location),
-            AlbumBonusType.INSTANCE_CODEC.fieldOf("enabled").forGetter(t -> t.enabled),
-            AlbumBonusType.INSTANCE_CODEC.optionalFieldOf("disabled", NoBonus.INSTANCE).forGetter(t -> t.disabled)
+            AlbumBonus.CODEC.fieldOf("enabled").forGetter(t -> t.enabled),
+            AlbumBonus.CODEC.optionalFieldOf("disabled", NoBonus.INSTANCE).forGetter(t -> t.disabled)
     ).apply(instance, ConfigToggleBonusFilter::new));
 
     @Override
@@ -59,8 +58,8 @@ public record ConfigToggleBonusFilter(ConfigValueLocation location, AlbumBonus e
     }
 
     @Override
-    public AlbumBonusType<?> getType() {
-        return AlbumBonusRegistry.CONFIG_TOGGLE.get();
+    public MapCodec<? extends AlbumBonus> codec() {
+        return CODEC;
     }
 
     @Override
