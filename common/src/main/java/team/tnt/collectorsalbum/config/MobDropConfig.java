@@ -8,36 +8,36 @@ public final class MobDropConfig {
     @Configurable.DecimalRange(min = 0.0, max = 1.0)
     @Configurable.Gui.NumberFormat("0.00")
     @Configurable.Gui.Slider
-    @Configurable.Comment(value = "Chance that any card pack drop will be dropped", localize = true)
+    @Configurable.Comment("Chance that any card pack drop will be dropped")
     public float mobPackDropChance = 0.1F;
 
     @Configurable
     @Configurable.Range(min = 0)
-    @Configurable.Comment(value = "Common card pack drop weight", localize = true)
+    @Configurable.Comment("Common card pack drop weight")
     public int commonPackDrop = 30;
 
     @Configurable
     @Configurable.Range(min = 0)
-    @Configurable.Comment(value = "Uncommon card pack drop weight", localize = true)
+    @Configurable.Comment("Uncommon card pack drop weight")
     public int uncommonPackDrop = 25;
 
     @Configurable
     @Configurable.Range(min = 0)
-    @Configurable.Comment(value = "Rare card pack drop weight", localize = true)
+    @Configurable.Comment("Rare card pack drop weight")
     public int rarePackDrop = 18;
 
     @Configurable
     @Configurable.Range(min = 0)
-    @Configurable.Comment(value = "Epic card pack drop weight", localize = true)
+    @Configurable.Comment("Epic card pack drop weight")
     public int epicPackDrop = 13;
 
     @Configurable
     @Configurable.Range(min = 0)
-    @Configurable.Comment(value = "Legendary card pack drop weight", localize = true)
+    @Configurable.Comment("Legendary card pack drop weight")
     public int legendaryPackDrop = 10;
 
     @Configurable
     @Configurable.Range(min = 0)
-    @Configurable.Comment(value = "Mythical card pack drop weight", localize = true)
+    @Configurable.Comment("Mythical card pack drop weight")
     public int mythicalPackDrop = 4;
 }
