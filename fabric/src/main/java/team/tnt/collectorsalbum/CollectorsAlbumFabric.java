@@ -11,13 +11,11 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import team.tnt.collectorsalbum.common.CollectorsAlbumRegistries;
 import team.tnt.collectorsalbum.common.command.CollectorsAlbumCommand;
-import team.tnt.collectorsalbum.common.init.*;
+import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
+import team.tnt.collectorsalbum.common.init.SoundRegistry;
 import team.tnt.collectorsalbum.common.resource.*;
 import team.tnt.collectorsalbum.platform.FabricPlatform;
-import team.tnt.collectorsalbum.platform.registration.CustomPlatformRegistryBindCallback;
-import team.tnt.collectorsalbum.platform.registration.FabricRegistration;
 
 public class CollectorsAlbumFabric implements ModInitializer {
 
@@ -27,28 +25,15 @@ public class CollectorsAlbumFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        FabricPlatform.bootstrap();
+
         ServerLifecycleEvents.SERVER_STARTING.register(server -> FabricPlatform.server = server);
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> CollectorsAlbum.serverStopped());
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> FabricPlatform.server = null);
+        ServerLifecycleEvents.SERVER_STOPPING.register(_ -> CollectorsAlbum.serverStopped());
+        ServerLifecycleEvents.SERVER_STOPPED.register(_ -> FabricPlatform.server = null);
         UseItemCallback.EVENT.register(this::startPackOpening);
         CommandRegistrationCallback.EVENT.register(
-                (commandDispatcher, commandBuildContext, commandSelection) -> CollectorsAlbumCommand.register(commandDispatcher)
+                (commandDispatcher, _, _) -> CollectorsAlbumCommand.register(commandDispatcher)
         );
-        CustomPlatformRegistryBindCallback.EVENT.register(registry -> {
-            if (registry.key().equals(CollectorsAlbumRegistries.Keys.CARD_TYPE_KEY)) {
-                CardTypeRegistry.REGISTRY.bind();
-            } else if (registry.key().equals(CollectorsAlbumRegistries.Keys.CARD_CATEGORY_KEY)) {
-                CategoryRegistry.REGISTRY.bind();
-            } else if (registry.key().equals(CollectorsAlbumRegistries.Keys.NUMBER_PROVIDER)) {
-                NumberProviderRegistry.REGISTRY.bind();
-            } else if (registry.key().equals(CollectorsAlbumRegistries.Keys.ITEM_DROP_PROVIDER)) {
-                ItemDropProviderRegistry.REGISTRY.bind();
-            } else if (registry.key().equals(CollectorsAlbumRegistries.Keys.ALBUM_BONUS)) {
-                AlbumBonusRegistry.REGISTRY.bind();
-            }
-        });
-
-        this.registerData();
 
         ResourceLoader resourceLoader = ResourceLoader.get(PackType.SERVER_DATA);
 
@@ -61,20 +46,6 @@ public class CollectorsAlbumFabric implements ModInitializer {
         resourceLoader.registerReloadListener(MobAdditionalDropManager.IDENTIFIER, MobAdditionalDropManager.getInstance());
 
         CollectorsAlbum.NETWORK_MANAGER.bind();
-    }
-
-    private void registerData() {
-        FabricRegistration.registerCustomRegistry(CollectorsAlbumRegistries.CARD_TYPE);
-        FabricRegistration.registerCustomRegistry(CollectorsAlbumRegistries.CATEGORY);
-        FabricRegistration.registerCustomRegistry(CollectorsAlbumRegistries.NUMBER_PROVIDER);
-        FabricRegistration.registerCustomRegistry(CollectorsAlbumRegistries.ITEM_DROP_PROVIDER);
-        FabricRegistration.registerCustomRegistry(CollectorsAlbumRegistries.ALBUM_BONUS);
-        BlockRegistry.REGISTRY.bind();
-        ItemDataComponentRegistry.REGISTRY.bind();
-        ItemRegistry.REGISTRY.bind();
-        ItemGroupRegistry.REGISTRY.bind();
-        SoundRegistry.REGISTRY.bind();
-        MenuRegistry.REGISTRY.bind();
     }
 
     private InteractionResult startPackOpening(Player player, Level level, InteractionHand hand) {

@@ -1,5 +1,6 @@
 package team.tnt.collectorsalbum.platform;
 
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -9,10 +10,15 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import team.tnt.collectorsalbum.platform.registration.RegistrationManager;
 
 public interface Platform {
 
     Platform INSTANCE = JavaServiceLoader.loadService(Platform.class);
+
+    <T> RegistrationManager<T> createRegistryManager(Registry<T> registry);
+
+    <T> Registry<T> createRegistry(String namespace, String name);
 
     Side getSide();
 

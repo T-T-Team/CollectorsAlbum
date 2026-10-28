@@ -14,12 +14,14 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import org.jetbrains.annotations.Nullable;
-import team.tnt.collectorsalbum.common.init.ItemRegistry;
+import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
 
 import java.util.HashSet;
@@ -35,7 +37,9 @@ public class CardPackDropRecipeCategory implements IRecipeCategory<CardPackDropM
 
     public CardPackDropRecipeCategory(IJeiHelpers helpers) {
         this.helpers = helpers;
-        this.icon = helpers.getGuiHelper().createDrawableItemLike(ItemRegistry.MYTHICAL_CARD_PACK.get());
+
+        Item item = BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "mythical_card_pack"));
+        this.icon = helpers.getGuiHelper().createDrawableItemLike(item);
     }
 
     @Override

@@ -1,33 +1,31 @@
 package team.tnt.collectorsalbum.common.init;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
-import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.item.PackContents;
-import team.tnt.collectorsalbum.platform.registration.PlatformRegistry;
+import team.tnt.collectorsalbum.platform.registration.Reference;
+import team.tnt.collectorsalbum.platform.registration.RegistrationManager;
 
 public final class ItemDataComponentRegistry {
 
-    public static final PlatformRegistry<DataComponentType<?>> REGISTRY = PlatformRegistry.create(BuiltInRegistries.DATA_COMPONENT_TYPE, CollectorsAlbum.MOD_ID);
+    public static Reference<DataComponentType<PackContents>> PACK_CONTENTS;
+    public static Reference<DataComponentType<Identifier>> PACK_DROPS_TABLE;
+    public static Reference<DataComponentType<Album>> ALBUM;
 
-    public static final PlatformRegistry.Reference<DataComponentType<PackContents>> PACK_CONTENTS = REGISTRY.register("pack_contents",
-            () -> DataComponentType.<PackContents>builder()
-                    .persistent(PackContents.CODEC)
-                    .build()
-    );
+    public static void init(RegistrationManager<DataComponentType<?>> registry) {
+        PACK_CONTENTS = register(registry, "pack_contents", PackContents.CODEC, null);
+        PACK_DROPS_TABLE = register(registry, "pack_drops_table", Identifier.CODEC, Identifier.STREAM_CODEC);
+        ALBUM = register(registry, "album", Album.CODEC, null);
+    }
 
-    public static final PlatformRegistry.Reference<DataComponentType<Album>> ALBUM = REGISTRY.register("album",
-            () -> DataComponentType.<Album>builder()
-                    .persistent(Album.CODEC)
-                    .build()
-    );
-
-    public static final PlatformRegistry.Reference<DataComponentType<Identifier>> PACK_DROPS_TABLE = REGISTRY.register("pack_drops_table",
-            () -> DataComponentType.<Identifier>builder()
-                    .persistent(Identifier.CODEC)
-                    .networkSynchronized(Identifier.STREAM_CODEC)
-                    .build()
-    );
+    private static <T> Reference<DataComponentType<T>> register(RegistrationManager<DataComponentType<?>> registry, String name, Codec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {
+        return registry.register(name, _ -> DataComponentType.<T>builder()
+                .persistent(codec)
+                .networkSynchronized(streamCodec)
+                .build());
+    }
 }

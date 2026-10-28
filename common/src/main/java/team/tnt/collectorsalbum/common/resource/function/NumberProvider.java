@@ -4,14 +4,14 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
-import team.tnt.collectorsalbum.common.CollectorsAlbumRegistries;
+import team.tnt.collectorsalbum.CollectorsAlbum;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public interface NumberProvider {
 
-    Codec<NumberProvider> CODEC = CollectorsAlbumRegistries.NUMBER_PROVIDER.byNameCodec().dispatch(NumberProvider::codec, Function.identity());
+    Codec<NumberProvider> CODEC = CollectorsAlbum.NUMBER_PROVIDER.byNameCodec().dispatch(NumberProvider::codec, Function.identity());
     Codec<Integer> INT_CODEC = createCodec(Codec.INT, NumberProvider::intValue);
     Codec<Integer> POSITIVE_INT_CODEC = validatedCodec(INT_CODEC, n -> n > 0, n -> "Number must be positive! Got: " + n);
     Codec<Float> FLOAT_CODEC = createCodec(Codec.FLOAT, NumberProvider::floatValue);

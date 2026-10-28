@@ -1,950 +1,240 @@
 package team.tnt.collectorsalbum.common.init;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
-import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.Album;
 import team.tnt.collectorsalbum.common.item.AlbumItem;
-import team.tnt.collectorsalbum.platform.registration.PlatformItemRegistry;
-import team.tnt.collectorsalbum.platform.registration.PlatformRegistry;
+import team.tnt.collectorsalbum.platform.registration.Reference;
+import team.tnt.collectorsalbum.platform.registration.RegistrationManager;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
 
 public final class ItemRegistry {
 
-    public static final PlatformItemRegistry REGISTRY = PlatformRegistry.createItemRegistry(CollectorsAlbum.MOD_ID);
+    public static Reference<AlbumItem> ALBUM;
 
-    public static final PlatformRegistry.Reference<AlbumItem> ALBUM = REGISTRY.registerItem("album", props -> new AlbumItem(props.stacksTo(1).rarity(Rarity.RARE).component(ItemDataComponentRegistry.ALBUM.get(), Album.emptyAlbum())));
-    public static final PlatformRegistry.Reference<Item> COMMON_CARD_PACK = REGISTRY.registerItem("common_card_pack", props -> new Item(props.component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "common_card_pack"))));
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_CARD_PACK = REGISTRY.registerItem("uncommon_card_pack", props -> new Item(props.component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "uncommon_card_pack"))));
-    public static final PlatformRegistry.Reference<Item> RARE_CARD_PACK = REGISTRY.registerItem("rare_card_pack", props -> new Item(props.component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "rare_card_pack"))));
-    public static final PlatformRegistry.Reference<Item> EPIC_CARD_PACK = REGISTRY.registerItem("epic_card_pack", props -> new Item(props.component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "epic_card_pack"))));
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_CARD_PACK = REGISTRY.registerItem("legendary_card_pack", props -> new Item(props.component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "legendary_card_pack"))));
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_CARD_PACK = REGISTRY.registerItem("mythical_card_pack", props -> new Item(props.component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "mythical_card_pack"))));
-    public static final PlatformRegistry.Reference<Item> COMMON_REPACKED_CARD_PACK = REGISTRY.registerItem("common_repacked_card_pack", props -> new Item(props.component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "common_repacked_card_pack"))));
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_REPACKED_CARD_PACK = REGISTRY.registerItem("uncommon_repacked_card_pack", props -> new Item(props.component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "uncommon_repacked_card_pack"))));
-    public static final PlatformRegistry.Reference<Item> RARE_REPACKED_CARD_PACK = REGISTRY.registerItem("rare_repacked_card_pack", props -> new Item(props.component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "rare_repacked_card_pack"))));
-    public static final PlatformRegistry.Reference<Item> EPIC_REPACKED_CARD_PACK = REGISTRY.registerItem("epic_repacked_card_pack", props -> new Item(props.component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "epic_repacked_card_pack"))));
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_REPACKED_CARD_PACK = REGISTRY.registerItem("legendary_repacked_card_pack", props -> new Item(props.component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "legendary_repacked_card_pack"))));
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_REPACKED_CARD_PACK = REGISTRY.registerItem("mythical_repacked_card_pack", props -> new Item(props.component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), Identifier.fromNamespaceAndPath(CollectorsAlbum.MOD_ID, "mythical_repacked_card_pack"))));
-    public static final PlatformRegistry.Reference<Item> COMMON_CUSTOM_CARD_PACK = REGISTRY.registerItem("common_custom_card_pack", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_CUSTOM_CARD_PACK = REGISTRY.registerItem("uncommon_custom_card_pack", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_CUSTOM_CARD_PACK = REGISTRY.registerItem("rare_custom_card_pack", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_CUSTOM_CARD_PACK = REGISTRY.registerItem("epic_custom_card_pack", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_CUSTOM_CARD_PACK = REGISTRY.registerItem("legendary_custom_card_pack", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_CUSTOM_CARD_PACK = REGISTRY.registerItem("mythical_custom_card_pack", Item::new);
+    public static void init(RegistrationManager<Item> registry) {
+        ItemRegistryHelper helper = new ItemRegistryHelper(registry);
+        List<String> cards = getDefaultCards();
 
-    public static final PlatformRegistry.Reference<Item> COMMON_ACACIA_SAPLING_CARD = REGISTRY.registerItem("common_acacia_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_ALLIUM_CARD = REGISTRY.registerItem("common_allium_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_AMETHYST_SHARD_CARD = REGISTRY.registerItem("common_amethyst_shard_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_APPLE_CARD = REGISTRY.registerItem("common_apple_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_AZURE_BLUET_CARD = REGISTRY.registerItem("common_azure_bluet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_BAMBOO_CARD = REGISTRY.registerItem("common_bamboo_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_BAT_CARD = REGISTRY.registerItem("common_bat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_BEACON_CARD = REGISTRY.registerItem("common_beacon_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_BEETROOT_CARD = REGISTRY.registerItem("common_beetroot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_BEE_CARD = REGISTRY.registerItem("common_bee_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_BELL_CARD = REGISTRY.registerItem("common_bell_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_BIRCH_SAPLING_CARD = REGISTRY.registerItem("common_birch_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_BLAZE_CARD = REGISTRY.registerItem("common_blaze_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_BLAZE_POWDER_CARD = REGISTRY.registerItem("common_blaze_powder_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_BLUE_ORCHID_CARD = REGISTRY.registerItem("common_blue_orchid_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_BREWING_STAND_CARD = REGISTRY.registerItem("common_brewing_stand_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_BROWN_MUSHROOM_CARD = REGISTRY.registerItem("common_brown_mushroom_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_CAMPFIRE_CARD = REGISTRY.registerItem("common_campfire_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_CARROT_CARD = REGISTRY.registerItem("common_carrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_CAT_CARD = REGISTRY.registerItem("common_cat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_CHAINMAIL_BOOTS_CARD = REGISTRY.registerItem("common_chainmail_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_CHAINMAIL_CHESTPLATE_CARD = REGISTRY.registerItem("common_chainmail_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_CHAINMAIL_HELMET_CARD = REGISTRY.registerItem("common_chainmail_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_CHAINMAIL_LEGGINGS_CARD = REGISTRY.registerItem("common_chainmail_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_CHICKEN_CARD = REGISTRY.registerItem("common_chicken_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_CLOCK_CARD = REGISTRY.registerItem("common_clock_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_COAL_CARD = REGISTRY.registerItem("common_coal_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_COMPASS_CARD = REGISTRY.registerItem("common_compass_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_COOKIE_CARD = REGISTRY.registerItem("common_cookie_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_COW_CARD = REGISTRY.registerItem("common_cow_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_CREEPER_CARD = REGISTRY.registerItem("common_creeper_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DANDELION_CARD = REGISTRY.registerItem("common_dandelion_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DARK_OAK_SAPLING_CARD = REGISTRY.registerItem("common_dark_oak_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DEAD_BUSH_CARD = REGISTRY.registerItem("common_dead_bush_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DIAMOND_AXE_CARD = REGISTRY.registerItem("common_diamond_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DIAMOND_BOOTS_CARD = REGISTRY.registerItem("common_diamond_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DIAMOND_CARD = REGISTRY.registerItem("common_diamond_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DIAMOND_CHESTPLATE_CARD = REGISTRY.registerItem("common_diamond_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DIAMOND_HELMET_CARD = REGISTRY.registerItem("common_diamond_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DIAMOND_HOE_CARD = REGISTRY.registerItem("common_diamond_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DIAMOND_HORSE_ARMOR_CARD = REGISTRY.registerItem("common_diamond_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DIAMOND_LEGGINGS_CARD = REGISTRY.registerItem("common_diamond_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DIAMOND_PICKAXE_CARD = REGISTRY.registerItem("common_diamond_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DIAMOND_SHOVEL_CARD = REGISTRY.registerItem("common_diamond_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_DIAMOND_SWORD_CARD = REGISTRY.registerItem("common_diamond_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_EMERALD_CARD = REGISTRY.registerItem("common_emerald_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_ENCHANTMENT_TABLE_CARD = REGISTRY.registerItem("common_enchantment_table_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_ENDERMAN_CARD = REGISTRY.registerItem("common_enderman_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_ENDER_DRAGON_CARD = REGISTRY.registerItem("common_ender_dragon_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_ENDER_EYE_CARD = REGISTRY.registerItem("common_ender_eye_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_ENDER_PEARL_CARD = REGISTRY.registerItem("common_ender_pearl_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_FEATHER_CARD = REGISTRY.registerItem("common_feather_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_FIREWORK_ROCKET_CARD = REGISTRY.registerItem("common_firework_rocket_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_FOX_CARD = REGISTRY.registerItem("common_fox_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GHAST_CARD = REGISTRY.registerItem("common_ghast_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GLOWSTONE_DUST_CARD = REGISTRY.registerItem("common_glowstone_dust_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GLOW_BERRIES_CARD = REGISTRY.registerItem("common_glow_berries_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GOLDEN_APPLE_CARD = REGISTRY.registerItem("common_golden_apple_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GOLDEN_AXE_CARD = REGISTRY.registerItem("common_golden_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GOLDEN_BOOTS_CARD = REGISTRY.registerItem("common_golden_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GOLDEN_CARROT_CARD = REGISTRY.registerItem("common_golden_carrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GOLDEN_CHESTPLATE_CARD = REGISTRY.registerItem("common_golden_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GOLDEN_HELMET_CARD = REGISTRY.registerItem("common_golden_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GOLDEN_HOE_CARD = REGISTRY.registerItem("common_golden_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GOLDEN_HORSE_ARMOR_CARD = REGISTRY.registerItem("common_golden_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GOLDEN_LEGGINGS_CARD = REGISTRY.registerItem("common_golden_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GOLDEN_PICKAXE_CARD = REGISTRY.registerItem("common_golden_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GOLDEN_SHOVEL_CARD = REGISTRY.registerItem("common_golden_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GOLDEN_SWORD_CARD = REGISTRY.registerItem("common_golden_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_GOLD_INGOT_CARD = REGISTRY.registerItem("common_gold_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_HEART_OF_THE_SEA_CARD = REGISTRY.registerItem("common_heart_of_the_sea_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_HONEYCOMB_CARD = REGISTRY.registerItem("common_honeycomb_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_HORSE_CARD = REGISTRY.registerItem("common_horse_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_IRON_AXE_CARD = REGISTRY.registerItem("common_iron_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_IRON_BOOTS_CARD = REGISTRY.registerItem("common_iron_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_IRON_CHESTPLATE_CARD = REGISTRY.registerItem("common_iron_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_IRON_HELMET_CARD = REGISTRY.registerItem("common_iron_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_IRON_HOE_CARD = REGISTRY.registerItem("common_iron_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_IRON_HORSE_ARMOR_CARD = REGISTRY.registerItem("common_iron_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_IRON_INGOT_CARD = REGISTRY.registerItem("common_iron_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_IRON_LEGGINGS_CARD = REGISTRY.registerItem("common_iron_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_IRON_PICKAXE_CARD = REGISTRY.registerItem("common_iron_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_IRON_SHOVEL_CARD = REGISTRY.registerItem("common_iron_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_IRON_SWORD_CARD = REGISTRY.registerItem("common_iron_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_JUNGLE_SAPLING_CARD = REGISTRY.registerItem("common_jungle_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_KELP_CARD = REGISTRY.registerItem("common_kelp_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_LANTERN_CARD = REGISTRY.registerItem("common_lantern_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_LAPIS_LAZULI_CARD = REGISTRY.registerItem("common_lapis_lazuli_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_LEATHER_BOOTS_CARD = REGISTRY.registerItem("common_leather_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_LEATHER_CHESTPLATE_CARD = REGISTRY.registerItem("common_leather_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_LEATHER_HELMET_CARD = REGISTRY.registerItem("common_leather_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_LEATHER_HORSE_ARMOR_CARD = REGISTRY.registerItem("common_leather_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_LEATHER_LEGGINGS_CARD = REGISTRY.registerItem("common_leather_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_MAGMA_CUBE_CARD = REGISTRY.registerItem("common_magma_cube_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_MELON_SLICE_CARD = REGISTRY.registerItem("common_melon_slice_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_MUSIC_DISC_CARD = REGISTRY.registerItem("common_music_disc_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_NAUTILUS_SHELL_CARD = REGISTRY.registerItem("common_nautilus_shell_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_NETHERITE_AXE_CARD = REGISTRY.registerItem("common_netherite_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_NETHERITE_BOOTS_CARD = REGISTRY.registerItem("common_netherite_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_NETHERITE_CHESTPLATE_CARD = REGISTRY.registerItem("common_netherite_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_NETHERITE_HELMET_CARD = REGISTRY.registerItem("common_netherite_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_NETHERITE_HOE_CARD = REGISTRY.registerItem("common_netherite_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_NETHERITE_INGOT_CARD = REGISTRY.registerItem("common_netherite_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_NETHERITE_LEGGINGS_CARD = REGISTRY.registerItem("common_netherite_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_NETHERITE_PICKAXE_CARD = REGISTRY.registerItem("common_netherite_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_NETHERITE_SHOVEL_CARD = REGISTRY.registerItem("common_netherite_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_NETHERITE_SWORD_CARD = REGISTRY.registerItem("common_netherite_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_NETHER_STAR_CARD = REGISTRY.registerItem("common_nether_star_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_NETHER_WART_CARD = REGISTRY.registerItem("common_nether_wart_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_OAK_SAPLING_CARD = REGISTRY.registerItem("common_oak_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_OXEYE_DAISY_CARD = REGISTRY.registerItem("common_oxeye_daisy_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_PANDA_CARD = REGISTRY.registerItem("common_panda_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_PARROT_CARD = REGISTRY.registerItem("common_parrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_PIGLIN_BRUTE_CARD = REGISTRY.registerItem("common_piglin_brute_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_PIG_CARD = REGISTRY.registerItem("common_pig_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_PILLAGER_CARD = REGISTRY.registerItem("common_pillager_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_POLAR_BEAR_CARD = REGISTRY.registerItem("common_polar_bear_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_POPPY_CARD = REGISTRY.registerItem("common_poppy_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_POTATO_CARD = REGISTRY.registerItem("common_potato_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_REDSTONE_CARD = REGISTRY.registerItem("common_redstone_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_RED_MUSHROOM_CARD = REGISTRY.registerItem("common_red_mushroom_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_RED_TULIP_CARD = REGISTRY.registerItem("common_red_tulip_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_SHEEP_CARD = REGISTRY.registerItem("common_sheep_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_SHIELD_CARD = REGISTRY.registerItem("common_shield_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_SKELETON_CARD = REGISTRY.registerItem("common_skeleton_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_SLIME_CARD = REGISTRY.registerItem("common_slime_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_SPIDER_CARD = REGISTRY.registerItem("common_spider_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_SPRUCE_SAPLING_CARD = REGISTRY.registerItem("common_spruce_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_SPYGLASS_CARD = REGISTRY.registerItem("common_spyglass_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_SQUID_CARD = REGISTRY.registerItem("common_squid_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_STONE_AXE_CARD = REGISTRY.registerItem("common_stone_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_STONE_HOE_CARD = REGISTRY.registerItem("common_stone_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_STONE_PICKAXE_CARD = REGISTRY.registerItem("common_stone_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_STONE_SHOVEL_CARD = REGISTRY.registerItem("common_stone_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_STONE_SWORD_CARD = REGISTRY.registerItem("common_stone_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_SUGAR_CANE_CARD = REGISTRY.registerItem("common_sugar_cane_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_SWEET_BERRIES_CARD = REGISTRY.registerItem("common_sweet_berries_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_TURTLE_HELMET_CARD = REGISTRY.registerItem("common_turtle_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_VILLAGER_CARD = REGISTRY.registerItem("common_villager_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_WHEAT_CARD = REGISTRY.registerItem("common_wheat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_WITCH_CARD = REGISTRY.registerItem("common_witch_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_WITHER_CARD = REGISTRY.registerItem("common_wither_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_WITHER_SKELETON_CARD = REGISTRY.registerItem("common_wither_skeleton_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_WOLF_CARD = REGISTRY.registerItem("common_wolf_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_WOODEN_AXE_CARD = REGISTRY.registerItem("common_wooden_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_WOODEN_HOE_CARD = REGISTRY.registerItem("common_wooden_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_WOODEN_PICKAXE_CARD = REGISTRY.registerItem("common_wooden_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_WOODEN_SHOVEL_CARD = REGISTRY.registerItem("common_wooden_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_WOODEN_SWORD_CARD = REGISTRY.registerItem("common_wooden_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> COMMON_ZOMBIE_CARD = REGISTRY.registerItem("common_zombie_card", Item::new);
+        ALBUM = helper.registerItem("album", props -> new AlbumItem(props.stacksTo(1).rarity(Rarity.RARE).component(ItemDataComponentRegistry.ALBUM.get(), Album.emptyAlbum())));
 
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_ACACIA_SAPLING_CARD = REGISTRY.registerItem("uncommon_acacia_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_ALLIUM_CARD = REGISTRY.registerItem("uncommon_allium_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_AMETHYST_SHARD_CARD = REGISTRY.registerItem("uncommon_amethyst_shard_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_APPLE_CARD = REGISTRY.registerItem("uncommon_apple_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_AZURE_BLUET_CARD = REGISTRY.registerItem("uncommon_azure_bluet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_BAMBOO_CARD = REGISTRY.registerItem("uncommon_bamboo_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_BAT_CARD = REGISTRY.registerItem("uncommon_bat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_BEACON_CARD = REGISTRY.registerItem("uncommon_beacon_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_BEETROOT_CARD = REGISTRY.registerItem("uncommon_beetroot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_BEE_CARD = REGISTRY.registerItem("uncommon_bee_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_BELL_CARD = REGISTRY.registerItem("uncommon_bell_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_BIRCH_SAPLING_CARD = REGISTRY.registerItem("uncommon_birch_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_BLAZE_CARD = REGISTRY.registerItem("uncommon_blaze_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_BLAZE_POWDER_CARD = REGISTRY.registerItem("uncommon_blaze_powder_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_BLUE_ORCHID_CARD = REGISTRY.registerItem("uncommon_blue_orchid_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_BREWING_STAND_CARD = REGISTRY.registerItem("uncommon_brewing_stand_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_BROWN_MUSHROOM_CARD = REGISTRY.registerItem("uncommon_brown_mushroom_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_CAMPFIRE_CARD = REGISTRY.registerItem("uncommon_campfire_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_CARROT_CARD = REGISTRY.registerItem("uncommon_carrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_CAT_CARD = REGISTRY.registerItem("uncommon_cat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_CHAINMAIL_BOOTS_CARD = REGISTRY.registerItem("uncommon_chainmail_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_CHAINMAIL_CHESTPLATE_CARD = REGISTRY.registerItem("uncommon_chainmail_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_CHAINMAIL_HELMET_CARD = REGISTRY.registerItem("uncommon_chainmail_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_CHAINMAIL_LEGGINGS_CARD = REGISTRY.registerItem("uncommon_chainmail_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_CHICKEN_CARD = REGISTRY.registerItem("uncommon_chicken_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_CLOCK_CARD = REGISTRY.registerItem("uncommon_clock_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_COAL_CARD = REGISTRY.registerItem("uncommon_coal_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_COMPASS_CARD = REGISTRY.registerItem("uncommon_compass_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_COOKIE_CARD = REGISTRY.registerItem("uncommon_cookie_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_COW_CARD = REGISTRY.registerItem("uncommon_cow_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_CREEPER_CARD = REGISTRY.registerItem("uncommon_creeper_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DANDELION_CARD = REGISTRY.registerItem("uncommon_dandelion_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DARK_OAK_SAPLING_CARD = REGISTRY.registerItem("uncommon_dark_oak_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DEAD_BUSH_CARD = REGISTRY.registerItem("uncommon_dead_bush_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DIAMOND_AXE_CARD = REGISTRY.registerItem("uncommon_diamond_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DIAMOND_BOOTS_CARD = REGISTRY.registerItem("uncommon_diamond_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DIAMOND_CARD = REGISTRY.registerItem("uncommon_diamond_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DIAMOND_CHESTPLATE_CARD = REGISTRY.registerItem("uncommon_diamond_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DIAMOND_HELMET_CARD = REGISTRY.registerItem("uncommon_diamond_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DIAMOND_HOE_CARD = REGISTRY.registerItem("uncommon_diamond_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DIAMOND_HORSE_ARMOR_CARD = REGISTRY.registerItem("uncommon_diamond_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DIAMOND_LEGGINGS_CARD = REGISTRY.registerItem("uncommon_diamond_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DIAMOND_PICKAXE_CARD = REGISTRY.registerItem("uncommon_diamond_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DIAMOND_SHOVEL_CARD = REGISTRY.registerItem("uncommon_diamond_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_DIAMOND_SWORD_CARD = REGISTRY.registerItem("uncommon_diamond_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_EMERALD_CARD = REGISTRY.registerItem("uncommon_emerald_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_ENCHANTMENT_TABLE_CARD = REGISTRY.registerItem("uncommon_enchantment_table_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_ENDERMAN_CARD = REGISTRY.registerItem("uncommon_enderman_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_ENDER_DRAGON_CARD = REGISTRY.registerItem("uncommon_ender_dragon_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_ENDER_EYE_CARD = REGISTRY.registerItem("uncommon_ender_eye_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_ENDER_PEARL_CARD = REGISTRY.registerItem("uncommon_ender_pearl_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_FEATHER_CARD = REGISTRY.registerItem("uncommon_feather_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_FIREWORK_ROCKET_CARD = REGISTRY.registerItem("uncommon_firework_rocket_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_FOX_CARD = REGISTRY.registerItem("uncommon_fox_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GHAST_CARD = REGISTRY.registerItem("uncommon_ghast_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GLOWSTONE_DUST_CARD = REGISTRY.registerItem("uncommon_glowstone_dust_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GLOW_BERRIES_CARD = REGISTRY.registerItem("uncommon_glow_berries_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GOLDEN_APPLE_CARD = REGISTRY.registerItem("uncommon_golden_apple_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GOLDEN_AXE_CARD = REGISTRY.registerItem("uncommon_golden_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GOLDEN_BOOTS_CARD = REGISTRY.registerItem("uncommon_golden_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GOLDEN_CARROT_CARD = REGISTRY.registerItem("uncommon_golden_carrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GOLDEN_CHESTPLATE_CARD = REGISTRY.registerItem("uncommon_golden_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GOLDEN_HELMET_CARD = REGISTRY.registerItem("uncommon_golden_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GOLDEN_HOE_CARD = REGISTRY.registerItem("uncommon_golden_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GOLDEN_HORSE_ARMOR_CARD = REGISTRY.registerItem("uncommon_golden_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GOLDEN_LEGGINGS_CARD = REGISTRY.registerItem("uncommon_golden_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GOLDEN_PICKAXE_CARD = REGISTRY.registerItem("uncommon_golden_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GOLDEN_SHOVEL_CARD = REGISTRY.registerItem("uncommon_golden_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GOLDEN_SWORD_CARD = REGISTRY.registerItem("uncommon_golden_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_GOLD_INGOT_CARD = REGISTRY.registerItem("uncommon_gold_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_HEART_OF_THE_SEA_CARD = REGISTRY.registerItem("uncommon_heart_of_the_sea_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_HONEYCOMB_CARD = REGISTRY.registerItem("uncommon_honeycomb_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_HORSE_CARD = REGISTRY.registerItem("uncommon_horse_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_IRON_AXE_CARD = REGISTRY.registerItem("uncommon_iron_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_IRON_BOOTS_CARD = REGISTRY.registerItem("uncommon_iron_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_IRON_CHESTPLATE_CARD = REGISTRY.registerItem("uncommon_iron_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_IRON_HELMET_CARD = REGISTRY.registerItem("uncommon_iron_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_IRON_HOE_CARD = REGISTRY.registerItem("uncommon_iron_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_IRON_HORSE_ARMOR_CARD = REGISTRY.registerItem("uncommon_iron_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_IRON_INGOT_CARD = REGISTRY.registerItem("uncommon_iron_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_IRON_LEGGINGS_CARD = REGISTRY.registerItem("uncommon_iron_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_IRON_PICKAXE_CARD = REGISTRY.registerItem("uncommon_iron_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_IRON_SHOVEL_CARD = REGISTRY.registerItem("uncommon_iron_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_IRON_SWORD_CARD = REGISTRY.registerItem("uncommon_iron_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_JUNGLE_SAPLING_CARD = REGISTRY.registerItem("uncommon_jungle_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_KELP_CARD = REGISTRY.registerItem("uncommon_kelp_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_LANTERN_CARD = REGISTRY.registerItem("uncommon_lantern_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_LAPIS_LAZULI_CARD = REGISTRY.registerItem("uncommon_lapis_lazuli_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_LEATHER_BOOTS_CARD = REGISTRY.registerItem("uncommon_leather_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_LEATHER_CHESTPLATE_CARD = REGISTRY.registerItem("uncommon_leather_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_LEATHER_HELMET_CARD = REGISTRY.registerItem("uncommon_leather_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_LEATHER_HORSE_ARMOR_CARD = REGISTRY.registerItem("uncommon_leather_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_LEATHER_LEGGINGS_CARD = REGISTRY.registerItem("uncommon_leather_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_MAGMA_CUBE_CARD = REGISTRY.registerItem("uncommon_magma_cube_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_MELON_SLICE_CARD = REGISTRY.registerItem("uncommon_melon_slice_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_MUSIC_DISC_CARD = REGISTRY.registerItem("uncommon_music_disc_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_NAUTILUS_SHELL_CARD = REGISTRY.registerItem("uncommon_nautilus_shell_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_NETHERITE_AXE_CARD = REGISTRY.registerItem("uncommon_netherite_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_NETHERITE_BOOTS_CARD = REGISTRY.registerItem("uncommon_netherite_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_NETHERITE_CHESTPLATE_CARD = REGISTRY.registerItem("uncommon_netherite_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_NETHERITE_HELMET_CARD = REGISTRY.registerItem("uncommon_netherite_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_NETHERITE_HOE_CARD = REGISTRY.registerItem("uncommon_netherite_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_NETHERITE_INGOT_CARD = REGISTRY.registerItem("uncommon_netherite_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_NETHERITE_LEGGINGS_CARD = REGISTRY.registerItem("uncommon_netherite_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_NETHERITE_PICKAXE_CARD = REGISTRY.registerItem("uncommon_netherite_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_NETHERITE_SHOVEL_CARD = REGISTRY.registerItem("uncommon_netherite_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_NETHERITE_SWORD_CARD = REGISTRY.registerItem("uncommon_netherite_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_NETHER_STAR_CARD = REGISTRY.registerItem("uncommon_nether_star_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_NETHER_WART_CARD = REGISTRY.registerItem("uncommon_nether_wart_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_OAK_SAPLING_CARD = REGISTRY.registerItem("uncommon_oak_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_OXEYE_DAISY_CARD = REGISTRY.registerItem("uncommon_oxeye_daisy_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_PANDA_CARD = REGISTRY.registerItem("uncommon_panda_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_PARROT_CARD = REGISTRY.registerItem("uncommon_parrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_PIGLIN_BRUTE_CARD = REGISTRY.registerItem("uncommon_piglin_brute_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_PIG_CARD = REGISTRY.registerItem("uncommon_pig_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_PILLAGER_CARD = REGISTRY.registerItem("uncommon_pillager_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_POLAR_BEAR_CARD = REGISTRY.registerItem("uncommon_polar_bear_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_POPPY_CARD = REGISTRY.registerItem("uncommon_poppy_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_POTATO_CARD = REGISTRY.registerItem("uncommon_potato_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_REDSTONE_CARD = REGISTRY.registerItem("uncommon_redstone_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_RED_MUSHROOM_CARD = REGISTRY.registerItem("uncommon_red_mushroom_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_RED_TULIP_CARD = REGISTRY.registerItem("uncommon_red_tulip_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_SHEEP_CARD = REGISTRY.registerItem("uncommon_sheep_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_SHIELD_CARD = REGISTRY.registerItem("uncommon_shield_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_SKELETON_CARD = REGISTRY.registerItem("uncommon_skeleton_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_SLIME_CARD = REGISTRY.registerItem("uncommon_slime_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_SPIDER_CARD = REGISTRY.registerItem("uncommon_spider_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_SPRUCE_SAPLING_CARD = REGISTRY.registerItem("uncommon_spruce_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_SPYGLASS_CARD = REGISTRY.registerItem("uncommon_spyglass_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_SQUID_CARD = REGISTRY.registerItem("uncommon_squid_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_STONE_AXE_CARD = REGISTRY.registerItem("uncommon_stone_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_STONE_HOE_CARD = REGISTRY.registerItem("uncommon_stone_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_STONE_PICKAXE_CARD = REGISTRY.registerItem("uncommon_stone_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_STONE_SHOVEL_CARD = REGISTRY.registerItem("uncommon_stone_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_STONE_SWORD_CARD = REGISTRY.registerItem("uncommon_stone_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_SUGAR_CANE_CARD = REGISTRY.registerItem("uncommon_sugar_cane_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_SWEET_BERRIES_CARD = REGISTRY.registerItem("uncommon_sweet_berries_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_TURTLE_HELMET_CARD = REGISTRY.registerItem("uncommon_turtle_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_VILLAGER_CARD = REGISTRY.registerItem("uncommon_villager_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_WHEAT_CARD = REGISTRY.registerItem("uncommon_wheat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_WITCH_CARD = REGISTRY.registerItem("uncommon_witch_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_WITHER_CARD = REGISTRY.registerItem("uncommon_wither_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_WITHER_SKELETON_CARD = REGISTRY.registerItem("uncommon_wither_skeleton_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_WOLF_CARD = REGISTRY.registerItem("uncommon_wolf_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_WOODEN_AXE_CARD = REGISTRY.registerItem("uncommon_wooden_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_WOODEN_HOE_CARD = REGISTRY.registerItem("uncommon_wooden_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_WOODEN_PICKAXE_CARD = REGISTRY.registerItem("uncommon_wooden_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_WOODEN_SHOVEL_CARD = REGISTRY.registerItem("uncommon_wooden_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_WOODEN_SWORD_CARD = REGISTRY.registerItem("uncommon_wooden_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> UNCOMMON_ZOMBIE_CARD = REGISTRY.registerItem("uncommon_zombie_card", Item::new);
+        List<String> sets = List.of("common", "uncommon", "rare", "epic", "legendary", "mythical");
+        registerCardPacks(helper, sets);
+        registerCardSets(cards, helper, sets);
+        registerBlankCards(helper, 90);
+    }
 
-    public static final PlatformRegistry.Reference<Item> RARE_ACACIA_SAPLING_CARD = REGISTRY.registerItem("rare_acacia_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_ALLIUM_CARD = REGISTRY.registerItem("rare_allium_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_AMETHYST_SHARD_CARD = REGISTRY.registerItem("rare_amethyst_shard_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_APPLE_CARD = REGISTRY.registerItem("rare_apple_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_AZURE_BLUET_CARD = REGISTRY.registerItem("rare_azure_bluet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_BAMBOO_CARD = REGISTRY.registerItem("rare_bamboo_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_BAT_CARD = REGISTRY.registerItem("rare_bat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_BEACON_CARD = REGISTRY.registerItem("rare_beacon_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_BEETROOT_CARD = REGISTRY.registerItem("rare_beetroot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_BEE_CARD = REGISTRY.registerItem("rare_bee_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_BELL_CARD = REGISTRY.registerItem("rare_bell_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_BIRCH_SAPLING_CARD = REGISTRY.registerItem("rare_birch_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_BLAZE_CARD = REGISTRY.registerItem("rare_blaze_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_BLAZE_POWDER_CARD = REGISTRY.registerItem("rare_blaze_powder_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_BLUE_ORCHID_CARD = REGISTRY.registerItem("rare_blue_orchid_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_BREWING_STAND_CARD = REGISTRY.registerItem("rare_brewing_stand_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_BROWN_MUSHROOM_CARD = REGISTRY.registerItem("rare_brown_mushroom_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_CAMPFIRE_CARD = REGISTRY.registerItem("rare_campfire_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_CARROT_CARD = REGISTRY.registerItem("rare_carrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_CAT_CARD = REGISTRY.registerItem("rare_cat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_CHAINMAIL_BOOTS_CARD = REGISTRY.registerItem("rare_chainmail_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_CHAINMAIL_CHESTPLATE_CARD = REGISTRY.registerItem("rare_chainmail_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_CHAINMAIL_HELMET_CARD = REGISTRY.registerItem("rare_chainmail_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_CHAINMAIL_LEGGINGS_CARD = REGISTRY.registerItem("rare_chainmail_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_CHICKEN_CARD = REGISTRY.registerItem("rare_chicken_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_CLOCK_CARD = REGISTRY.registerItem("rare_clock_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_COAL_CARD = REGISTRY.registerItem("rare_coal_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_COMPASS_CARD = REGISTRY.registerItem("rare_compass_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_COOKIE_CARD = REGISTRY.registerItem("rare_cookie_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_COW_CARD = REGISTRY.registerItem("rare_cow_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_CREEPER_CARD = REGISTRY.registerItem("rare_creeper_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DANDELION_CARD = REGISTRY.registerItem("rare_dandelion_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DARK_OAK_SAPLING_CARD = REGISTRY.registerItem("rare_dark_oak_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DEAD_BUSH_CARD = REGISTRY.registerItem("rare_dead_bush_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DIAMOND_AXE_CARD = REGISTRY.registerItem("rare_diamond_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DIAMOND_BOOTS_CARD = REGISTRY.registerItem("rare_diamond_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DIAMOND_CARD = REGISTRY.registerItem("rare_diamond_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DIAMOND_CHESTPLATE_CARD = REGISTRY.registerItem("rare_diamond_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DIAMOND_HELMET_CARD = REGISTRY.registerItem("rare_diamond_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DIAMOND_HOE_CARD = REGISTRY.registerItem("rare_diamond_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DIAMOND_HORSE_ARMOR_CARD = REGISTRY.registerItem("rare_diamond_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DIAMOND_LEGGINGS_CARD = REGISTRY.registerItem("rare_diamond_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DIAMOND_PICKAXE_CARD = REGISTRY.registerItem("rare_diamond_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DIAMOND_SHOVEL_CARD = REGISTRY.registerItem("rare_diamond_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_DIAMOND_SWORD_CARD = REGISTRY.registerItem("rare_diamond_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_EMERALD_CARD = REGISTRY.registerItem("rare_emerald_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_ENCHANTMENT_TABLE_CARD = REGISTRY.registerItem("rare_enchantment_table_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_ENDERMAN_CARD = REGISTRY.registerItem("rare_enderman_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_ENDER_DRAGON_CARD = REGISTRY.registerItem("rare_ender_dragon_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_ENDER_EYE_CARD = REGISTRY.registerItem("rare_ender_eye_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_ENDER_PEARL_CARD = REGISTRY.registerItem("rare_ender_pearl_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_FEATHER_CARD = REGISTRY.registerItem("rare_feather_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_FIREWORK_ROCKET_CARD = REGISTRY.registerItem("rare_firework_rocket_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_FOX_CARD = REGISTRY.registerItem("rare_fox_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GHAST_CARD = REGISTRY.registerItem("rare_ghast_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GLOWSTONE_DUST_CARD = REGISTRY.registerItem("rare_glowstone_dust_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GLOW_BERRIES_CARD = REGISTRY.registerItem("rare_glow_berries_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GOLDEN_APPLE_CARD = REGISTRY.registerItem("rare_golden_apple_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GOLDEN_AXE_CARD = REGISTRY.registerItem("rare_golden_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GOLDEN_BOOTS_CARD = REGISTRY.registerItem("rare_golden_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GOLDEN_CARROT_CARD = REGISTRY.registerItem("rare_golden_carrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GOLDEN_CHESTPLATE_CARD = REGISTRY.registerItem("rare_golden_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GOLDEN_HELMET_CARD = REGISTRY.registerItem("rare_golden_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GOLDEN_HOE_CARD = REGISTRY.registerItem("rare_golden_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GOLDEN_HORSE_ARMOR_CARD = REGISTRY.registerItem("rare_golden_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GOLDEN_LEGGINGS_CARD = REGISTRY.registerItem("rare_golden_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GOLDEN_PICKAXE_CARD = REGISTRY.registerItem("rare_golden_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GOLDEN_SHOVEL_CARD = REGISTRY.registerItem("rare_golden_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GOLDEN_SWORD_CARD = REGISTRY.registerItem("rare_golden_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_GOLD_INGOT_CARD = REGISTRY.registerItem("rare_gold_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_HEART_OF_THE_SEA_CARD = REGISTRY.registerItem("rare_heart_of_the_sea_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_HONEYCOMB_CARD = REGISTRY.registerItem("rare_honeycomb_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_HORSE_CARD = REGISTRY.registerItem("rare_horse_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_IRON_AXE_CARD = REGISTRY.registerItem("rare_iron_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_IRON_BOOTS_CARD = REGISTRY.registerItem("rare_iron_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_IRON_CHESTPLATE_CARD = REGISTRY.registerItem("rare_iron_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_IRON_HELMET_CARD = REGISTRY.registerItem("rare_iron_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_IRON_HOE_CARD = REGISTRY.registerItem("rare_iron_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_IRON_HORSE_ARMOR_CARD = REGISTRY.registerItem("rare_iron_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_IRON_INGOT_CARD = REGISTRY.registerItem("rare_iron_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_IRON_LEGGINGS_CARD = REGISTRY.registerItem("rare_iron_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_IRON_PICKAXE_CARD = REGISTRY.registerItem("rare_iron_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_IRON_SHOVEL_CARD = REGISTRY.registerItem("rare_iron_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_IRON_SWORD_CARD = REGISTRY.registerItem("rare_iron_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_JUNGLE_SAPLING_CARD = REGISTRY.registerItem("rare_jungle_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_KELP_CARD = REGISTRY.registerItem("rare_kelp_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_LANTERN_CARD = REGISTRY.registerItem("rare_lantern_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_LAPIS_LAZULI_CARD = REGISTRY.registerItem("rare_lapis_lazuli_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_LEATHER_BOOTS_CARD = REGISTRY.registerItem("rare_leather_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_LEATHER_CHESTPLATE_CARD = REGISTRY.registerItem("rare_leather_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_LEATHER_HELMET_CARD = REGISTRY.registerItem("rare_leather_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_LEATHER_HORSE_ARMOR_CARD = REGISTRY.registerItem("rare_leather_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_LEATHER_LEGGINGS_CARD = REGISTRY.registerItem("rare_leather_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_MAGMA_CUBE_CARD = REGISTRY.registerItem("rare_magma_cube_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_MELON_SLICE_CARD = REGISTRY.registerItem("rare_melon_slice_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_MUSIC_DISC_CARD = REGISTRY.registerItem("rare_music_disc_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_NAUTILUS_SHELL_CARD = REGISTRY.registerItem("rare_nautilus_shell_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_NETHERITE_AXE_CARD = REGISTRY.registerItem("rare_netherite_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_NETHERITE_BOOTS_CARD = REGISTRY.registerItem("rare_netherite_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_NETHERITE_CHESTPLATE_CARD = REGISTRY.registerItem("rare_netherite_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_NETHERITE_HELMET_CARD = REGISTRY.registerItem("rare_netherite_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_NETHERITE_HOE_CARD = REGISTRY.registerItem("rare_netherite_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_NETHERITE_INGOT_CARD = REGISTRY.registerItem("rare_netherite_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_NETHERITE_LEGGINGS_CARD = REGISTRY.registerItem("rare_netherite_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_NETHERITE_PICKAXE_CARD = REGISTRY.registerItem("rare_netherite_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_NETHERITE_SHOVEL_CARD = REGISTRY.registerItem("rare_netherite_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_NETHERITE_SWORD_CARD = REGISTRY.registerItem("rare_netherite_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_NETHER_STAR_CARD = REGISTRY.registerItem("rare_nether_star_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_NETHER_WART_CARD = REGISTRY.registerItem("rare_nether_wart_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_OAK_SAPLING_CARD = REGISTRY.registerItem("rare_oak_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_OXEYE_DAISY_CARD = REGISTRY.registerItem("rare_oxeye_daisy_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_PANDA_CARD = REGISTRY.registerItem("rare_panda_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_PARROT_CARD = REGISTRY.registerItem("rare_parrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_PIGLIN_BRUTE_CARD = REGISTRY.registerItem("rare_piglin_brute_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_PIG_CARD = REGISTRY.registerItem("rare_pig_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_PILLAGER_CARD = REGISTRY.registerItem("rare_pillager_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_POLAR_BEAR_CARD = REGISTRY.registerItem("rare_polar_bear_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_POPPY_CARD = REGISTRY.registerItem("rare_poppy_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_POTATO_CARD = REGISTRY.registerItem("rare_potato_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_REDSTONE_CARD = REGISTRY.registerItem("rare_redstone_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_RED_MUSHROOM_CARD = REGISTRY.registerItem("rare_red_mushroom_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_RED_TULIP_CARD = REGISTRY.registerItem("rare_red_tulip_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_SHEEP_CARD = REGISTRY.registerItem("rare_sheep_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_SHIELD_CARD = REGISTRY.registerItem("rare_shield_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_SKELETON_CARD = REGISTRY.registerItem("rare_skeleton_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_SLIME_CARD = REGISTRY.registerItem("rare_slime_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_SPIDER_CARD = REGISTRY.registerItem("rare_spider_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_SPRUCE_SAPLING_CARD = REGISTRY.registerItem("rare_spruce_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_SPYGLASS_CARD = REGISTRY.registerItem("rare_spyglass_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_SQUID_CARD = REGISTRY.registerItem("rare_squid_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_STONE_AXE_CARD = REGISTRY.registerItem("rare_stone_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_STONE_HOE_CARD = REGISTRY.registerItem("rare_stone_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_STONE_PICKAXE_CARD = REGISTRY.registerItem("rare_stone_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_STONE_SHOVEL_CARD = REGISTRY.registerItem("rare_stone_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_STONE_SWORD_CARD = REGISTRY.registerItem("rare_stone_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_SUGAR_CANE_CARD = REGISTRY.registerItem("rare_sugar_cane_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_SWEET_BERRIES_CARD = REGISTRY.registerItem("rare_sweet_berries_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_TURTLE_HELMET_CARD = REGISTRY.registerItem("rare_turtle_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_VILLAGER_CARD = REGISTRY.registerItem("rare_villager_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_WHEAT_CARD = REGISTRY.registerItem("rare_wheat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_WITCH_CARD = REGISTRY.registerItem("rare_witch_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_WITHER_CARD = REGISTRY.registerItem("rare_wither_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_WITHER_SKELETON_CARD = REGISTRY.registerItem("rare_wither_skeleton_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_WOLF_CARD = REGISTRY.registerItem("rare_wolf_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_WOODEN_AXE_CARD = REGISTRY.registerItem("rare_wooden_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_WOODEN_HOE_CARD = REGISTRY.registerItem("rare_wooden_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_WOODEN_PICKAXE_CARD = REGISTRY.registerItem("rare_wooden_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_WOODEN_SHOVEL_CARD = REGISTRY.registerItem("rare_wooden_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_WOODEN_SWORD_CARD = REGISTRY.registerItem("rare_wooden_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> RARE_ZOMBIE_CARD = REGISTRY.registerItem("rare_zombie_card", Item::new);
+    private static void registerBlankCards(ItemRegistryHelper helper, int count) {
+        for (int i = 0; i < count; i++) {
+            helper.registerItem("blank_card_" + (i + 1), Item::new);
+        }
+    }
 
-    public static final PlatformRegistry.Reference<Item> EPIC_ACACIA_SAPLING_CARD = REGISTRY.registerItem("epic_acacia_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_ALLIUM_CARD = REGISTRY.registerItem("epic_allium_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_AMETHYST_SHARD_CARD = REGISTRY.registerItem("epic_amethyst_shard_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_APPLE_CARD = REGISTRY.registerItem("epic_apple_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_AZURE_BLUET_CARD = REGISTRY.registerItem("epic_azure_bluet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_BAMBOO_CARD = REGISTRY.registerItem("epic_bamboo_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_BAT_CARD = REGISTRY.registerItem("epic_bat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_BEACON_CARD = REGISTRY.registerItem("epic_beacon_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_BEETROOT_CARD = REGISTRY.registerItem("epic_beetroot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_BEE_CARD = REGISTRY.registerItem("epic_bee_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_BELL_CARD = REGISTRY.registerItem("epic_bell_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_BIRCH_SAPLING_CARD = REGISTRY.registerItem("epic_birch_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_BLAZE_CARD = REGISTRY.registerItem("epic_blaze_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_BLAZE_POWDER_CARD = REGISTRY.registerItem("epic_blaze_powder_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_BLUE_ORCHID_CARD = REGISTRY.registerItem("epic_blue_orchid_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_BREWING_STAND_CARD = REGISTRY.registerItem("epic_brewing_stand_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_BROWN_MUSHROOM_CARD = REGISTRY.registerItem("epic_brown_mushroom_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_CAMPFIRE_CARD = REGISTRY.registerItem("epic_campfire_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_CARROT_CARD = REGISTRY.registerItem("epic_carrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_CAT_CARD = REGISTRY.registerItem("epic_cat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_CHAINMAIL_BOOTS_CARD = REGISTRY.registerItem("epic_chainmail_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_CHAINMAIL_CHESTPLATE_CARD = REGISTRY.registerItem("epic_chainmail_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_CHAINMAIL_HELMET_CARD = REGISTRY.registerItem("epic_chainmail_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_CHAINMAIL_LEGGINGS_CARD = REGISTRY.registerItem("epic_chainmail_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_CHICKEN_CARD = REGISTRY.registerItem("epic_chicken_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_CLOCK_CARD = REGISTRY.registerItem("epic_clock_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_COAL_CARD = REGISTRY.registerItem("epic_coal_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_COMPASS_CARD = REGISTRY.registerItem("epic_compass_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_COOKIE_CARD = REGISTRY.registerItem("epic_cookie_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_COW_CARD = REGISTRY.registerItem("epic_cow_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_CREEPER_CARD = REGISTRY.registerItem("epic_creeper_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DANDELION_CARD = REGISTRY.registerItem("epic_dandelion_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DARK_OAK_SAPLING_CARD = REGISTRY.registerItem("epic_dark_oak_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DEAD_BUSH_CARD = REGISTRY.registerItem("epic_dead_bush_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DIAMOND_AXE_CARD = REGISTRY.registerItem("epic_diamond_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DIAMOND_BOOTS_CARD = REGISTRY.registerItem("epic_diamond_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DIAMOND_CARD = REGISTRY.registerItem("epic_diamond_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DIAMOND_CHESTPLATE_CARD = REGISTRY.registerItem("epic_diamond_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DIAMOND_HELMET_CARD = REGISTRY.registerItem("epic_diamond_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DIAMOND_HOE_CARD = REGISTRY.registerItem("epic_diamond_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DIAMOND_HORSE_ARMOR_CARD = REGISTRY.registerItem("epic_diamond_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DIAMOND_LEGGINGS_CARD = REGISTRY.registerItem("epic_diamond_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DIAMOND_PICKAXE_CARD = REGISTRY.registerItem("epic_diamond_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DIAMOND_SHOVEL_CARD = REGISTRY.registerItem("epic_diamond_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_DIAMOND_SWORD_CARD = REGISTRY.registerItem("epic_diamond_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_EMERALD_CARD = REGISTRY.registerItem("epic_emerald_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_ENCHANTMENT_TABLE_CARD = REGISTRY.registerItem("epic_enchantment_table_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_ENDERMAN_CARD = REGISTRY.registerItem("epic_enderman_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_ENDER_DRAGON_CARD = REGISTRY.registerItem("epic_ender_dragon_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_ENDER_EYE_CARD = REGISTRY.registerItem("epic_ender_eye_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_ENDER_PEARL_CARD = REGISTRY.registerItem("epic_ender_pearl_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_FEATHER_CARD = REGISTRY.registerItem("epic_feather_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_FIREWORK_ROCKET_CARD = REGISTRY.registerItem("epic_firework_rocket_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_FOX_CARD = REGISTRY.registerItem("epic_fox_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GHAST_CARD = REGISTRY.registerItem("epic_ghast_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GLOWSTONE_DUST_CARD = REGISTRY.registerItem("epic_glowstone_dust_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GLOW_BERRIES_CARD = REGISTRY.registerItem("epic_glow_berries_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GOLDEN_APPLE_CARD = REGISTRY.registerItem("epic_golden_apple_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GOLDEN_AXE_CARD = REGISTRY.registerItem("epic_golden_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GOLDEN_BOOTS_CARD = REGISTRY.registerItem("epic_golden_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GOLDEN_CARROT_CARD = REGISTRY.registerItem("epic_golden_carrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GOLDEN_CHESTPLATE_CARD = REGISTRY.registerItem("epic_golden_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GOLDEN_HELMET_CARD = REGISTRY.registerItem("epic_golden_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GOLDEN_HOE_CARD = REGISTRY.registerItem("epic_golden_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GOLDEN_HORSE_ARMOR_CARD = REGISTRY.registerItem("epic_golden_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GOLDEN_LEGGINGS_CARD = REGISTRY.registerItem("epic_golden_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GOLDEN_PICKAXE_CARD = REGISTRY.registerItem("epic_golden_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GOLDEN_SHOVEL_CARD = REGISTRY.registerItem("epic_golden_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GOLDEN_SWORD_CARD = REGISTRY.registerItem("epic_golden_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_GOLD_INGOT_CARD = REGISTRY.registerItem("epic_gold_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_HEART_OF_THE_SEA_CARD = REGISTRY.registerItem("epic_heart_of_the_sea_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_HONEYCOMB_CARD = REGISTRY.registerItem("epic_honeycomb_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_HORSE_CARD = REGISTRY.registerItem("epic_horse_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_IRON_AXE_CARD = REGISTRY.registerItem("epic_iron_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_IRON_BOOTS_CARD = REGISTRY.registerItem("epic_iron_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_IRON_CHESTPLATE_CARD = REGISTRY.registerItem("epic_iron_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_IRON_HELMET_CARD = REGISTRY.registerItem("epic_iron_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_IRON_HOE_CARD = REGISTRY.registerItem("epic_iron_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_IRON_HORSE_ARMOR_CARD = REGISTRY.registerItem("epic_iron_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_IRON_INGOT_CARD = REGISTRY.registerItem("epic_iron_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_IRON_LEGGINGS_CARD = REGISTRY.registerItem("epic_iron_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_IRON_PICKAXE_CARD = REGISTRY.registerItem("epic_iron_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_IRON_SHOVEL_CARD = REGISTRY.registerItem("epic_iron_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_IRON_SWORD_CARD = REGISTRY.registerItem("epic_iron_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_JUNGLE_SAPLING_CARD = REGISTRY.registerItem("epic_jungle_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_KELP_CARD = REGISTRY.registerItem("epic_kelp_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_LANTERN_CARD = REGISTRY.registerItem("epic_lantern_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_LAPIS_LAZULI_CARD = REGISTRY.registerItem("epic_lapis_lazuli_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_LEATHER_BOOTS_CARD = REGISTRY.registerItem("epic_leather_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_LEATHER_CHESTPLATE_CARD = REGISTRY.registerItem("epic_leather_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_LEATHER_HELMET_CARD = REGISTRY.registerItem("epic_leather_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_LEATHER_HORSE_ARMOR_CARD = REGISTRY.registerItem("epic_leather_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_LEATHER_LEGGINGS_CARD = REGISTRY.registerItem("epic_leather_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_MAGMA_CUBE_CARD = REGISTRY.registerItem("epic_magma_cube_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_MELON_SLICE_CARD = REGISTRY.registerItem("epic_melon_slice_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_MUSIC_DISC_CARD = REGISTRY.registerItem("epic_music_disc_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_NAUTILUS_SHELL_CARD = REGISTRY.registerItem("epic_nautilus_shell_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_NETHERITE_AXE_CARD = REGISTRY.registerItem("epic_netherite_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_NETHERITE_BOOTS_CARD = REGISTRY.registerItem("epic_netherite_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_NETHERITE_CHESTPLATE_CARD = REGISTRY.registerItem("epic_netherite_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_NETHERITE_HELMET_CARD = REGISTRY.registerItem("epic_netherite_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_NETHERITE_HOE_CARD = REGISTRY.registerItem("epic_netherite_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_NETHERITE_INGOT_CARD = REGISTRY.registerItem("epic_netherite_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_NETHERITE_LEGGINGS_CARD = REGISTRY.registerItem("epic_netherite_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_NETHERITE_PICKAXE_CARD = REGISTRY.registerItem("epic_netherite_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_NETHERITE_SHOVEL_CARD = REGISTRY.registerItem("epic_netherite_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_NETHERITE_SWORD_CARD = REGISTRY.registerItem("epic_netherite_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_NETHER_STAR_CARD = REGISTRY.registerItem("epic_nether_star_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_NETHER_WART_CARD = REGISTRY.registerItem("epic_nether_wart_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_OAK_SAPLING_CARD = REGISTRY.registerItem("epic_oak_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_OXEYE_DAISY_CARD = REGISTRY.registerItem("epic_oxeye_daisy_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_PANDA_CARD = REGISTRY.registerItem("epic_panda_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_PARROT_CARD = REGISTRY.registerItem("epic_parrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_PIGLIN_BRUTE_CARD = REGISTRY.registerItem("epic_piglin_brute_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_PIG_CARD = REGISTRY.registerItem("epic_pig_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_PILLAGER_CARD = REGISTRY.registerItem("epic_pillager_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_POLAR_BEAR_CARD = REGISTRY.registerItem("epic_polar_bear_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_POPPY_CARD = REGISTRY.registerItem("epic_poppy_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_POTATO_CARD = REGISTRY.registerItem("epic_potato_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_REDSTONE_CARD = REGISTRY.registerItem("epic_redstone_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_RED_MUSHROOM_CARD = REGISTRY.registerItem("epic_red_mushroom_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_RED_TULIP_CARD = REGISTRY.registerItem("epic_red_tulip_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_SHEEP_CARD = REGISTRY.registerItem("epic_sheep_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_SHIELD_CARD = REGISTRY.registerItem("epic_shield_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_SKELETON_CARD = REGISTRY.registerItem("epic_skeleton_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_SLIME_CARD = REGISTRY.registerItem("epic_slime_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_SPIDER_CARD = REGISTRY.registerItem("epic_spider_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_SPRUCE_SAPLING_CARD = REGISTRY.registerItem("epic_spruce_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_SPYGLASS_CARD = REGISTRY.registerItem("epic_spyglass_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_SQUID_CARD = REGISTRY.registerItem("epic_squid_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_STONE_AXE_CARD = REGISTRY.registerItem("epic_stone_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_STONE_HOE_CARD = REGISTRY.registerItem("epic_stone_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_STONE_PICKAXE_CARD = REGISTRY.registerItem("epic_stone_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_STONE_SHOVEL_CARD = REGISTRY.registerItem("epic_stone_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_STONE_SWORD_CARD = REGISTRY.registerItem("epic_stone_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_SUGAR_CANE_CARD = REGISTRY.registerItem("epic_sugar_cane_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_SWEET_BERRIES_CARD = REGISTRY.registerItem("epic_sweet_berries_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_TURTLE_HELMET_CARD = REGISTRY.registerItem("epic_turtle_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_VILLAGER_CARD = REGISTRY.registerItem("epic_villager_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_WHEAT_CARD = REGISTRY.registerItem("epic_wheat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_WITCH_CARD = REGISTRY.registerItem("epic_witch_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_WITHER_CARD = REGISTRY.registerItem("epic_wither_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_WITHER_SKELETON_CARD = REGISTRY.registerItem("epic_wither_skeleton_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_WOLF_CARD = REGISTRY.registerItem("epic_wolf_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_WOODEN_AXE_CARD = REGISTRY.registerItem("epic_wooden_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_WOODEN_HOE_CARD = REGISTRY.registerItem("epic_wooden_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_WOODEN_PICKAXE_CARD = REGISTRY.registerItem("epic_wooden_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_WOODEN_SHOVEL_CARD = REGISTRY.registerItem("epic_wooden_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_WOODEN_SWORD_CARD = REGISTRY.registerItem("epic_wooden_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> EPIC_ZOMBIE_CARD = REGISTRY.registerItem("epic_zombie_card", Item::new);
+    private static void registerCardSets(Collection<String> cardSet, ItemRegistryHelper helper, Collection<String> sets) {
+        for (String card : cardSet) {
+            for (String set : sets) {
+                String cardId = set + "_" + card;
+                helper.registerItem(cardId, Item::new);
+            }
+        }
+    }
 
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_ACACIA_SAPLING_CARD = REGISTRY.registerItem("legendary_acacia_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_ALLIUM_CARD = REGISTRY.registerItem("legendary_allium_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_AMETHYST_SHARD_CARD = REGISTRY.registerItem("legendary_amethyst_shard_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_APPLE_CARD = REGISTRY.registerItem("legendary_apple_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_AZURE_BLUET_CARD = REGISTRY.registerItem("legendary_azure_bluet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_BAMBOO_CARD = REGISTRY.registerItem("legendary_bamboo_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_BAT_CARD = REGISTRY.registerItem("legendary_bat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_BEACON_CARD = REGISTRY.registerItem("legendary_beacon_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_BEETROOT_CARD = REGISTRY.registerItem("legendary_beetroot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_BEE_CARD = REGISTRY.registerItem("legendary_bee_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_BELL_CARD = REGISTRY.registerItem("legendary_bell_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_BIRCH_SAPLING_CARD = REGISTRY.registerItem("legendary_birch_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_BLAZE_CARD = REGISTRY.registerItem("legendary_blaze_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_BLAZE_POWDER_CARD = REGISTRY.registerItem("legendary_blaze_powder_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_BLUE_ORCHID_CARD = REGISTRY.registerItem("legendary_blue_orchid_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_BREWING_STAND_CARD = REGISTRY.registerItem("legendary_brewing_stand_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_BROWN_MUSHROOM_CARD = REGISTRY.registerItem("legendary_brown_mushroom_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_CAMPFIRE_CARD = REGISTRY.registerItem("legendary_campfire_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_CARROT_CARD = REGISTRY.registerItem("legendary_carrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_CAT_CARD = REGISTRY.registerItem("legendary_cat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_CHAINMAIL_BOOTS_CARD = REGISTRY.registerItem("legendary_chainmail_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_CHAINMAIL_CHESTPLATE_CARD = REGISTRY.registerItem("legendary_chainmail_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_CHAINMAIL_HELMET_CARD = REGISTRY.registerItem("legendary_chainmail_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_CHAINMAIL_LEGGINGS_CARD = REGISTRY.registerItem("legendary_chainmail_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_CHICKEN_CARD = REGISTRY.registerItem("legendary_chicken_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_CLOCK_CARD = REGISTRY.registerItem("legendary_clock_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_COAL_CARD = REGISTRY.registerItem("legendary_coal_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_COMPASS_CARD = REGISTRY.registerItem("legendary_compass_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_COOKIE_CARD = REGISTRY.registerItem("legendary_cookie_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_COW_CARD = REGISTRY.registerItem("legendary_cow_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_CREEPER_CARD = REGISTRY.registerItem("legendary_creeper_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DANDELION_CARD = REGISTRY.registerItem("legendary_dandelion_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DARK_OAK_SAPLING_CARD = REGISTRY.registerItem("legendary_dark_oak_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DEAD_BUSH_CARD = REGISTRY.registerItem("legendary_dead_bush_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DIAMOND_AXE_CARD = REGISTRY.registerItem("legendary_diamond_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DIAMOND_BOOTS_CARD = REGISTRY.registerItem("legendary_diamond_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DIAMOND_CARD = REGISTRY.registerItem("legendary_diamond_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DIAMOND_CHESTPLATE_CARD = REGISTRY.registerItem("legendary_diamond_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DIAMOND_HELMET_CARD = REGISTRY.registerItem("legendary_diamond_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DIAMOND_HOE_CARD = REGISTRY.registerItem("legendary_diamond_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DIAMOND_HORSE_ARMOR_CARD = REGISTRY.registerItem("legendary_diamond_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DIAMOND_LEGGINGS_CARD = REGISTRY.registerItem("legendary_diamond_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DIAMOND_PICKAXE_CARD = REGISTRY.registerItem("legendary_diamond_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DIAMOND_SHOVEL_CARD = REGISTRY.registerItem("legendary_diamond_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_DIAMOND_SWORD_CARD = REGISTRY.registerItem("legendary_diamond_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_EMERALD_CARD = REGISTRY.registerItem("legendary_emerald_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_ENCHANTMENT_TABLE_CARD = REGISTRY.registerItem("legendary_enchantment_table_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_ENDERMAN_CARD = REGISTRY.registerItem("legendary_enderman_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_ENDER_DRAGON_CARD = REGISTRY.registerItem("legendary_ender_dragon_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_ENDER_EYE_CARD = REGISTRY.registerItem("legendary_ender_eye_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_ENDER_PEARL_CARD = REGISTRY.registerItem("legendary_ender_pearl_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_FEATHER_CARD = REGISTRY.registerItem("legendary_feather_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_FIREWORK_ROCKET_CARD = REGISTRY.registerItem("legendary_firework_rocket_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_FOX_CARD = REGISTRY.registerItem("legendary_fox_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GHAST_CARD = REGISTRY.registerItem("legendary_ghast_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GLOWSTONE_DUST_CARD = REGISTRY.registerItem("legendary_glowstone_dust_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GLOW_BERRIES_CARD = REGISTRY.registerItem("legendary_glow_berries_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GOLDEN_APPLE_CARD = REGISTRY.registerItem("legendary_golden_apple_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GOLDEN_AXE_CARD = REGISTRY.registerItem("legendary_golden_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GOLDEN_BOOTS_CARD = REGISTRY.registerItem("legendary_golden_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GOLDEN_CARROT_CARD = REGISTRY.registerItem("legendary_golden_carrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GOLDEN_CHESTPLATE_CARD = REGISTRY.registerItem("legendary_golden_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GOLDEN_HELMET_CARD = REGISTRY.registerItem("legendary_golden_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GOLDEN_HOE_CARD = REGISTRY.registerItem("legendary_golden_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GOLDEN_HORSE_ARMOR_CARD = REGISTRY.registerItem("legendary_golden_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GOLDEN_LEGGINGS_CARD = REGISTRY.registerItem("legendary_golden_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GOLDEN_PICKAXE_CARD = REGISTRY.registerItem("legendary_golden_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GOLDEN_SHOVEL_CARD = REGISTRY.registerItem("legendary_golden_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GOLDEN_SWORD_CARD = REGISTRY.registerItem("legendary_golden_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_GOLD_INGOT_CARD = REGISTRY.registerItem("legendary_gold_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_HEART_OF_THE_SEA_CARD = REGISTRY.registerItem("legendary_heart_of_the_sea_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_HONEYCOMB_CARD = REGISTRY.registerItem("legendary_honeycomb_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_HORSE_CARD = REGISTRY.registerItem("legendary_horse_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_IRON_AXE_CARD = REGISTRY.registerItem("legendary_iron_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_IRON_BOOTS_CARD = REGISTRY.registerItem("legendary_iron_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_IRON_CHESTPLATE_CARD = REGISTRY.registerItem("legendary_iron_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_IRON_HELMET_CARD = REGISTRY.registerItem("legendary_iron_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_IRON_HOE_CARD = REGISTRY.registerItem("legendary_iron_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_IRON_HORSE_ARMOR_CARD = REGISTRY.registerItem("legendary_iron_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_IRON_INGOT_CARD = REGISTRY.registerItem("legendary_iron_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_IRON_LEGGINGS_CARD = REGISTRY.registerItem("legendary_iron_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_IRON_PICKAXE_CARD = REGISTRY.registerItem("legendary_iron_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_IRON_SHOVEL_CARD = REGISTRY.registerItem("legendary_iron_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_IRON_SWORD_CARD = REGISTRY.registerItem("legendary_iron_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_JUNGLE_SAPLING_CARD = REGISTRY.registerItem("legendary_jungle_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_KELP_CARD = REGISTRY.registerItem("legendary_kelp_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_LANTERN_CARD = REGISTRY.registerItem("legendary_lantern_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_LAPIS_LAZULI_CARD = REGISTRY.registerItem("legendary_lapis_lazuli_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_LEATHER_BOOTS_CARD = REGISTRY.registerItem("legendary_leather_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_LEATHER_CHESTPLATE_CARD = REGISTRY.registerItem("legendary_leather_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_LEATHER_HELMET_CARD = REGISTRY.registerItem("legendary_leather_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_LEATHER_HORSE_ARMOR_CARD = REGISTRY.registerItem("legendary_leather_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_LEATHER_LEGGINGS_CARD = REGISTRY.registerItem("legendary_leather_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_MAGMA_CUBE_CARD = REGISTRY.registerItem("legendary_magma_cube_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_MELON_SLICE_CARD = REGISTRY.registerItem("legendary_melon_slice_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_MUSIC_DISC_CARD = REGISTRY.registerItem("legendary_music_disc_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_NAUTILUS_SHELL_CARD = REGISTRY.registerItem("legendary_nautilus_shell_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_NETHERITE_AXE_CARD = REGISTRY.registerItem("legendary_netherite_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_NETHERITE_BOOTS_CARD = REGISTRY.registerItem("legendary_netherite_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_NETHERITE_CHESTPLATE_CARD = REGISTRY.registerItem("legendary_netherite_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_NETHERITE_HELMET_CARD = REGISTRY.registerItem("legendary_netherite_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_NETHERITE_HOE_CARD = REGISTRY.registerItem("legendary_netherite_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_NETHERITE_INGOT_CARD = REGISTRY.registerItem("legendary_netherite_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_NETHERITE_LEGGINGS_CARD = REGISTRY.registerItem("legendary_netherite_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_NETHERITE_PICKAXE_CARD = REGISTRY.registerItem("legendary_netherite_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_NETHERITE_SHOVEL_CARD = REGISTRY.registerItem("legendary_netherite_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_NETHERITE_SWORD_CARD = REGISTRY.registerItem("legendary_netherite_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_NETHER_STAR_CARD = REGISTRY.registerItem("legendary_nether_star_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_NETHER_WART_CARD = REGISTRY.registerItem("legendary_nether_wart_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_OAK_SAPLING_CARD = REGISTRY.registerItem("legendary_oak_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_OXEYE_DAISY_CARD = REGISTRY.registerItem("legendary_oxeye_daisy_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_PANDA_CARD = REGISTRY.registerItem("legendary_panda_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_PARROT_CARD = REGISTRY.registerItem("legendary_parrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_PIGLIN_BRUTE_CARD = REGISTRY.registerItem("legendary_piglin_brute_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_PIG_CARD = REGISTRY.registerItem("legendary_pig_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_PILLAGER_CARD = REGISTRY.registerItem("legendary_pillager_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_POLAR_BEAR_CARD = REGISTRY.registerItem("legendary_polar_bear_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_POPPY_CARD = REGISTRY.registerItem("legendary_poppy_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_POTATO_CARD = REGISTRY.registerItem("legendary_potato_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_REDSTONE_CARD = REGISTRY.registerItem("legendary_redstone_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_RED_MUSHROOM_CARD = REGISTRY.registerItem("legendary_red_mushroom_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_RED_TULIP_CARD = REGISTRY.registerItem("legendary_red_tulip_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_SHEEP_CARD = REGISTRY.registerItem("legendary_sheep_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_SHIELD_CARD = REGISTRY.registerItem("legendary_shield_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_SKELETON_CARD = REGISTRY.registerItem("legendary_skeleton_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_SLIME_CARD = REGISTRY.registerItem("legendary_slime_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_SPIDER_CARD = REGISTRY.registerItem("legendary_spider_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_SPRUCE_SAPLING_CARD = REGISTRY.registerItem("legendary_spruce_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_SPYGLASS_CARD = REGISTRY.registerItem("legendary_spyglass_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_SQUID_CARD = REGISTRY.registerItem("legendary_squid_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_STONE_AXE_CARD = REGISTRY.registerItem("legendary_stone_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_STONE_HOE_CARD = REGISTRY.registerItem("legendary_stone_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_STONE_PICKAXE_CARD = REGISTRY.registerItem("legendary_stone_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_STONE_SHOVEL_CARD = REGISTRY.registerItem("legendary_stone_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_STONE_SWORD_CARD = REGISTRY.registerItem("legendary_stone_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_SUGAR_CANE_CARD = REGISTRY.registerItem("legendary_sugar_cane_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_SWEET_BERRIES_CARD = REGISTRY.registerItem("legendary_sweet_berries_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_TURTLE_HELMET_CARD = REGISTRY.registerItem("legendary_turtle_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_VILLAGER_CARD = REGISTRY.registerItem("legendary_villager_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_WHEAT_CARD = REGISTRY.registerItem("legendary_wheat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_WITCH_CARD = REGISTRY.registerItem("legendary_witch_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_WITHER_CARD = REGISTRY.registerItem("legendary_wither_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_WITHER_SKELETON_CARD = REGISTRY.registerItem("legendary_wither_skeleton_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_WOLF_CARD = REGISTRY.registerItem("legendary_wolf_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_WOODEN_AXE_CARD = REGISTRY.registerItem("legendary_wooden_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_WOODEN_HOE_CARD = REGISTRY.registerItem("legendary_wooden_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_WOODEN_PICKAXE_CARD = REGISTRY.registerItem("legendary_wooden_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_WOODEN_SHOVEL_CARD = REGISTRY.registerItem("legendary_wooden_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_WOODEN_SWORD_CARD = REGISTRY.registerItem("legendary_wooden_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> LEGENDARY_ZOMBIE_CARD = REGISTRY.registerItem("legendary_zombie_card", Item::new);
+    private static void registerCardPacks(ItemRegistryHelper helper, Collection<String> sets) {
+        List<String> repackedPacks = new ArrayList<>();
+        List<String> customPacks = new ArrayList<>();
+        for (String set : sets) {
+            String id = set + "_card_pack";
+            helper.registerItem(id, props -> createPackDropsItem(helper.getNamespace(), id, props));
+            repackedPacks.add(set + "_repacked_card_pack");
+            customPacks.add(set + "_custom_card_pack");
+        }
+        // register at the end for better ordering
+        repackedPacks.forEach(pack -> helper.registerItem(pack, props -> createPackDropsItem(helper.getNamespace(), pack, props)));
+        customPacks.forEach(pack -> helper.registerItem(pack, Item::new));
+    }
 
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_ACACIA_SAPLING_CARD = REGISTRY.registerItem("mythical_acacia_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_ALLIUM_CARD = REGISTRY.registerItem("mythical_allium_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_AMETHYST_SHARD_CARD = REGISTRY.registerItem("mythical_amethyst_shard_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_APPLE_CARD = REGISTRY.registerItem("mythical_apple_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_AZURE_BLUET_CARD = REGISTRY.registerItem("mythical_azure_bluet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_BAMBOO_CARD = REGISTRY.registerItem("mythical_bamboo_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_BAT_CARD = REGISTRY.registerItem("mythical_bat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_BEACON_CARD = REGISTRY.registerItem("mythical_beacon_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_BEETROOT_CARD = REGISTRY.registerItem("mythical_beetroot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_BEE_CARD = REGISTRY.registerItem("mythical_bee_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_BELL_CARD = REGISTRY.registerItem("mythical_bell_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_BIRCH_SAPLING_CARD = REGISTRY.registerItem("mythical_birch_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_BLAZE_CARD = REGISTRY.registerItem("mythical_blaze_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_BLAZE_POWDER_CARD = REGISTRY.registerItem("mythical_blaze_powder_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_BLUE_ORCHID_CARD = REGISTRY.registerItem("mythical_blue_orchid_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_BREWING_STAND_CARD = REGISTRY.registerItem("mythical_brewing_stand_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_BROWN_MUSHROOM_CARD = REGISTRY.registerItem("mythical_brown_mushroom_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_CAMPFIRE_CARD = REGISTRY.registerItem("mythical_campfire_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_CARROT_CARD = REGISTRY.registerItem("mythical_carrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_CAT_CARD = REGISTRY.registerItem("mythical_cat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_CHAINMAIL_BOOTS_CARD = REGISTRY.registerItem("mythical_chainmail_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_CHAINMAIL_CHESTPLATE_CARD = REGISTRY.registerItem("mythical_chainmail_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_CHAINMAIL_HELMET_CARD = REGISTRY.registerItem("mythical_chainmail_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_CHAINMAIL_LEGGINGS_CARD = REGISTRY.registerItem("mythical_chainmail_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_CHICKEN_CARD = REGISTRY.registerItem("mythical_chicken_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_CLOCK_CARD = REGISTRY.registerItem("mythical_clock_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_COAL_CARD = REGISTRY.registerItem("mythical_coal_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_COMPASS_CARD = REGISTRY.registerItem("mythical_compass_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_COOKIE_CARD = REGISTRY.registerItem("mythical_cookie_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_COW_CARD = REGISTRY.registerItem("mythical_cow_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_CREEPER_CARD = REGISTRY.registerItem("mythical_creeper_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DANDELION_CARD = REGISTRY.registerItem("mythical_dandelion_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DARK_OAK_SAPLING_CARD = REGISTRY.registerItem("mythical_dark_oak_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DEAD_BUSH_CARD = REGISTRY.registerItem("mythical_dead_bush_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DIAMOND_AXE_CARD = REGISTRY.registerItem("mythical_diamond_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DIAMOND_BOOTS_CARD = REGISTRY.registerItem("mythical_diamond_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DIAMOND_CARD = REGISTRY.registerItem("mythical_diamond_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DIAMOND_CHESTPLATE_CARD = REGISTRY.registerItem("mythical_diamond_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DIAMOND_HELMET_CARD = REGISTRY.registerItem("mythical_diamond_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DIAMOND_HOE_CARD = REGISTRY.registerItem("mythical_diamond_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DIAMOND_HORSE_ARMOR_CARD = REGISTRY.registerItem("mythical_diamond_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DIAMOND_LEGGINGS_CARD = REGISTRY.registerItem("mythical_diamond_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DIAMOND_PICKAXE_CARD = REGISTRY.registerItem("mythical_diamond_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DIAMOND_SHOVEL_CARD = REGISTRY.registerItem("mythical_diamond_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_DIAMOND_SWORD_CARD = REGISTRY.registerItem("mythical_diamond_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_EMERALD_CARD = REGISTRY.registerItem("mythical_emerald_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_ENCHANTMENT_TABLE_CARD = REGISTRY.registerItem("mythical_enchantment_table_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_ENDERMAN_CARD = REGISTRY.registerItem("mythical_enderman_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_ENDER_DRAGON_CARD = REGISTRY.registerItem("mythical_ender_dragon_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_ENDER_EYE_CARD = REGISTRY.registerItem("mythical_ender_eye_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_ENDER_PEARL_CARD = REGISTRY.registerItem("mythical_ender_pearl_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_FEATHER_CARD = REGISTRY.registerItem("mythical_feather_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_FIREWORK_ROCKET_CARD = REGISTRY.registerItem("mythical_firework_rocket_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_FOX_CARD = REGISTRY.registerItem("mythical_fox_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GHAST_CARD = REGISTRY.registerItem("mythical_ghast_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GLOWSTONE_DUST_CARD = REGISTRY.registerItem("mythical_glowstone_dust_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GLOW_BERRIES_CARD = REGISTRY.registerItem("mythical_glow_berries_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GOLDEN_APPLE_CARD = REGISTRY.registerItem("mythical_golden_apple_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GOLDEN_AXE_CARD = REGISTRY.registerItem("mythical_golden_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GOLDEN_BOOTS_CARD = REGISTRY.registerItem("mythical_golden_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GOLDEN_CARROT_CARD = REGISTRY.registerItem("mythical_golden_carrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GOLDEN_CHESTPLATE_CARD = REGISTRY.registerItem("mythical_golden_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GOLDEN_HELMET_CARD = REGISTRY.registerItem("mythical_golden_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GOLDEN_HOE_CARD = REGISTRY.registerItem("mythical_golden_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GOLDEN_HORSE_ARMOR_CARD = REGISTRY.registerItem("mythical_golden_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GOLDEN_LEGGINGS_CARD = REGISTRY.registerItem("mythical_golden_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GOLDEN_PICKAXE_CARD = REGISTRY.registerItem("mythical_golden_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GOLDEN_SHOVEL_CARD = REGISTRY.registerItem("mythical_golden_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GOLDEN_SWORD_CARD = REGISTRY.registerItem("mythical_golden_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_GOLD_INGOT_CARD = REGISTRY.registerItem("mythical_gold_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_HEART_OF_THE_SEA_CARD = REGISTRY.registerItem("mythical_heart_of_the_sea_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_HONEYCOMB_CARD = REGISTRY.registerItem("mythical_honeycomb_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_HORSE_CARD = REGISTRY.registerItem("mythical_horse_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_IRON_AXE_CARD = REGISTRY.registerItem("mythical_iron_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_IRON_BOOTS_CARD = REGISTRY.registerItem("mythical_iron_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_IRON_CHESTPLATE_CARD = REGISTRY.registerItem("mythical_iron_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_IRON_HELMET_CARD = REGISTRY.registerItem("mythical_iron_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_IRON_HOE_CARD = REGISTRY.registerItem("mythical_iron_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_IRON_HORSE_ARMOR_CARD = REGISTRY.registerItem("mythical_iron_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_IRON_INGOT_CARD = REGISTRY.registerItem("mythical_iron_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_IRON_LEGGINGS_CARD = REGISTRY.registerItem("mythical_iron_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_IRON_PICKAXE_CARD = REGISTRY.registerItem("mythical_iron_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_IRON_SHOVEL_CARD = REGISTRY.registerItem("mythical_iron_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_IRON_SWORD_CARD = REGISTRY.registerItem("mythical_iron_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_JUNGLE_SAPLING_CARD = REGISTRY.registerItem("mythical_jungle_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_KELP_CARD = REGISTRY.registerItem("mythical_kelp_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_LANTERN_CARD = REGISTRY.registerItem("mythical_lantern_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_LAPIS_LAZULI_CARD = REGISTRY.registerItem("mythical_lapis_lazuli_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_LEATHER_BOOTS_CARD = REGISTRY.registerItem("mythical_leather_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_LEATHER_CHESTPLATE_CARD = REGISTRY.registerItem("mythical_leather_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_LEATHER_HELMET_CARD = REGISTRY.registerItem("mythical_leather_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_LEATHER_HORSE_ARMOR_CARD = REGISTRY.registerItem("mythical_leather_horse_armor_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_LEATHER_LEGGINGS_CARD = REGISTRY.registerItem("mythical_leather_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_MAGMA_CUBE_CARD = REGISTRY.registerItem("mythical_magma_cube_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_MELON_SLICE_CARD = REGISTRY.registerItem("mythical_melon_slice_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_MUSIC_DISC_CARD = REGISTRY.registerItem("mythical_music_disc_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_NAUTILUS_SHELL_CARD = REGISTRY.registerItem("mythical_nautilus_shell_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_NETHERITE_AXE_CARD = REGISTRY.registerItem("mythical_netherite_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_NETHERITE_BOOTS_CARD = REGISTRY.registerItem("mythical_netherite_boots_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_NETHERITE_CHESTPLATE_CARD = REGISTRY.registerItem("mythical_netherite_chestplate_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_NETHERITE_HELMET_CARD = REGISTRY.registerItem("mythical_netherite_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_NETHERITE_HOE_CARD = REGISTRY.registerItem("mythical_netherite_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_NETHERITE_INGOT_CARD = REGISTRY.registerItem("mythical_netherite_ingot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_NETHERITE_LEGGINGS_CARD = REGISTRY.registerItem("mythical_netherite_leggings_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_NETHERITE_PICKAXE_CARD = REGISTRY.registerItem("mythical_netherite_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_NETHERITE_SHOVEL_CARD = REGISTRY.registerItem("mythical_netherite_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_NETHERITE_SWORD_CARD = REGISTRY.registerItem("mythical_netherite_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_NETHER_STAR_CARD = REGISTRY.registerItem("mythical_nether_star_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_NETHER_WART_CARD = REGISTRY.registerItem("mythical_nether_wart_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_OAK_SAPLING_CARD = REGISTRY.registerItem("mythical_oak_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_OXEYE_DAISY_CARD = REGISTRY.registerItem("mythical_oxeye_daisy_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_PANDA_CARD = REGISTRY.registerItem("mythical_panda_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_PARROT_CARD = REGISTRY.registerItem("mythical_parrot_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_PIGLIN_BRUTE_CARD = REGISTRY.registerItem("mythical_piglin_brute_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_PIG_CARD = REGISTRY.registerItem("mythical_pig_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_PILLAGER_CARD = REGISTRY.registerItem("mythical_pillager_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_POLAR_BEAR_CARD = REGISTRY.registerItem("mythical_polar_bear_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_POPPY_CARD = REGISTRY.registerItem("mythical_poppy_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_POTATO_CARD = REGISTRY.registerItem("mythical_potato_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_REDSTONE_CARD = REGISTRY.registerItem("mythical_redstone_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_RED_MUSHROOM_CARD = REGISTRY.registerItem("mythical_red_mushroom_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_RED_TULIP_CARD = REGISTRY.registerItem("mythical_red_tulip_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_SHEEP_CARD = REGISTRY.registerItem("mythical_sheep_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_SHIELD_CARD = REGISTRY.registerItem("mythical_shield_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_SKELETON_CARD = REGISTRY.registerItem("mythical_skeleton_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_SLIME_CARD = REGISTRY.registerItem("mythical_slime_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_SPIDER_CARD = REGISTRY.registerItem("mythical_spider_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_SPRUCE_SAPLING_CARD = REGISTRY.registerItem("mythical_spruce_sapling_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_SPYGLASS_CARD = REGISTRY.registerItem("mythical_spyglass_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_SQUID_CARD = REGISTRY.registerItem("mythical_squid_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_STONE_AXE_CARD = REGISTRY.registerItem("mythical_stone_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_STONE_HOE_CARD = REGISTRY.registerItem("mythical_stone_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_STONE_PICKAXE_CARD = REGISTRY.registerItem("mythical_stone_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_STONE_SHOVEL_CARD = REGISTRY.registerItem("mythical_stone_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_STONE_SWORD_CARD = REGISTRY.registerItem("mythical_stone_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_SUGAR_CANE_CARD = REGISTRY.registerItem("mythical_sugar_cane_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_SWEET_BERRIES_CARD = REGISTRY.registerItem("mythical_sweet_berries_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_TURTLE_HELMET_CARD = REGISTRY.registerItem("mythical_turtle_helmet_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_VILLAGER_CARD = REGISTRY.registerItem("mythical_villager_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_WHEAT_CARD = REGISTRY.registerItem("mythical_wheat_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_WITCH_CARD = REGISTRY.registerItem("mythical_witch_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_WITHER_CARD = REGISTRY.registerItem("mythical_wither_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_WITHER_SKELETON_CARD = REGISTRY.registerItem("mythical_wither_skeleton_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_WOLF_CARD = REGISTRY.registerItem("mythical_wolf_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_WOODEN_AXE_CARD = REGISTRY.registerItem("mythical_wooden_axe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_WOODEN_HOE_CARD = REGISTRY.registerItem("mythical_wooden_hoe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_WOODEN_PICKAXE_CARD = REGISTRY.registerItem("mythical_wooden_pickaxe_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_WOODEN_SHOVEL_CARD = REGISTRY.registerItem("mythical_wooden_shovel_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_WOODEN_SWORD_CARD = REGISTRY.registerItem("mythical_wooden_sword_card", Item::new);
-    public static final PlatformRegistry.Reference<Item> MYTHICAL_ZOMBIE_CARD = REGISTRY.registerItem("mythical_zombie_card", Item::new);
+    private static Item createPackDropsItem(String namespace, String id, Item.Properties properties) {
+        return new Item(properties.component(ItemDataComponentRegistry.PACK_DROPS_TABLE.get(), Identifier.fromNamespaceAndPath(namespace, id)));
+    }
 
-    //public static final PlatformRegistry.Reference<BlockItem> TRADING_STATION = REGISTRY.registerItem("trading_station", props -> new BlockItem(BlockRegistry.TRADING_STATION.get(), props));
+    private static List<String> getDefaultCards() {
+        return List.of(
+                "wooden_sword_card",
+                "wooden_pickaxe_card",
+                "wooden_axe_card",
+                "wooden_shovel_card",
+                "wooden_hoe_card",
+                "stone_sword_card",
+                "stone_pickaxe_card",
+                "stone_axe_card",
+                "stone_shovel_card",
+                "stone_hoe_card",
+                "iron_sword_card",
+                "iron_pickaxe_card",
+                "iron_axe_card",
+                "iron_shovel_card",
+                "iron_hoe_card",
+                "golden_sword_card",
+                "golden_pickaxe_card",
+                "golden_axe_card",
+                "golden_shovel_card",
+                "golden_hoe_card",
+                "diamond_sword_card",
+                "diamond_pickaxe_card",
+                "diamond_axe_card",
+                "diamond_shovel_card",
+                "diamond_hoe_card",
+                "netherite_sword_card",
+                "netherite_pickaxe_card",
+                "netherite_axe_card",
+                "netherite_shovel_card",
+                "netherite_hoe_card",
 
-    static {
-        // blank cards for datapack makers
-        for (int i = 0; i < 90; i++) {
-            REGISTRY.registerItem("blank_card_" + (i + 1), Item::new);
+                "leather_helmet_card",
+                "leather_chestplate_card",
+                "leather_leggings_card",
+                "leather_boots_card",
+                "iron_helmet_card",
+                "iron_chestplate_card",
+                "iron_leggings_card",
+                "iron_boots_card",
+                "chainmail_helmet_card",
+                "chainmail_chestplate_card",
+                "chainmail_leggings_card",
+                "chainmail_boots_card",
+                "golden_helmet_card",
+                "golden_chestplate_card",
+                "golden_leggings_card",
+                "golden_boots_card",
+                "diamond_helmet_card",
+                "diamond_chestplate_card",
+                "diamond_leggings_card",
+                "diamond_boots_card",
+                "netherite_helmet_card",
+                "netherite_chestplate_card",
+                "netherite_leggings_card",
+                "netherite_boots_card",
+                "leather_horse_armor_card",
+                "iron_horse_armor_card",
+                "golden_horse_armor_card",
+                "diamond_horse_armor_card",
+                "shield_card",
+                "turtle_helmet_card",
+
+                "blaze_card",
+                "zombie_card",
+                "skeleton_card",
+                "creeper_card",
+                "spider_card",
+                "slime_card",
+                "witch_card",
+                "piglin_brute_card",
+                "pillager_card",
+                "wither_skeleton_card",
+                "magma_cube_card",
+                "ghast_card",
+                "ender_dragon_card",
+                "wither_card",
+                "enderman_card",
+                "bee_card",
+                "panda_card",
+                "cow_card",
+                "chicken_card",
+                "pig_card",
+                "fox_card",
+                "horse_card",
+                "parrot_card",
+                "sheep_card",
+                "squid_card",
+                "cat_card",
+                "bat_card",
+                "wolf_card",
+                "villager_card",
+                "polar_bear_card",
+
+                "oak_sapling_card",
+                "spruce_sapling_card",
+                "birch_sapling_card",
+                "jungle_sapling_card",
+                "acacia_sapling_card",
+                "dark_oak_sapling_card",
+                "dead_bush_card",
+                "dandelion_card",
+                "poppy_card",
+                "blue_orchid_card",
+                "allium_card",
+                "azure_bluet_card",
+                "red_tulip_card",
+                "oxeye_daisy_card",
+                "brown_mushroom_card",
+                "red_mushroom_card",
+                "wheat_card",
+                "sugar_cane_card",
+                "apple_card",
+                "golden_apple_card",
+                "melon_slice_card",
+                "carrot_card",
+                "potato_card",
+                "beetroot_card",
+                "golden_carrot_card",
+                "kelp_card",
+                "bamboo_card",
+                "sweet_berries_card",
+                "glow_berries_card",
+                "nether_wart_card",
+
+                "enchantment_table_card",
+                "beacon_card",
+                "brewing_stand_card",
+                "coal_card",
+                "iron_ingot_card",
+                "gold_ingot_card",
+                "diamond_card",
+                "emerald_card",
+                "nether_star_card",
+                "redstone_card",
+                "glowstone_dust_card",
+                "lapis_lazuli_card",
+                "compass_card",
+                "clock_card",
+                "cookie_card",
+                "ender_pearl_card",
+                "ender_eye_card",
+                "blaze_powder_card",
+                "firework_rocket_card",
+                "heart_of_the_sea_card",
+                "nautilus_shell_card",
+                "music_disc_card",
+                "bell_card",
+                "campfire_card",
+                "lantern_card",
+                "honeycomb_card",
+                "amethyst_shard_card",
+                "netherite_ingot_card",
+                "feather_card",
+                "spyglass_card"
+        );
+    }
+
+    private record ItemRegistryHelper(RegistrationManager<Item> manager) {
+
+        public <T extends Item> Reference<T> registerItem(String name, Function<Item.Properties, T> constructor) {
+            return this.manager.register(name, identifier -> {
+                ResourceKey<Item> resourceKey = ResourceKey.create(Registries.ITEM, identifier);
+                var props = new Item.Properties().setId(resourceKey);
+                return constructor.apply(props);
+            });
+        }
+
+        public String getNamespace() {
+            return this.manager.getNamespace();
         }
     }
 }

@@ -5,7 +5,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import team.tnt.collectorsalbum.platform.registration.PlatformRegistry;
+import team.tnt.collectorsalbum.platform.registration.Reference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public final class MenuScreenRegistration {
 
     private static List<Holder<?, ?>> holders = new ArrayList<>();
 
-    public static <M extends AbstractContainerMenu, S extends Screen & MenuAccess<M>> void registerScreenFactory(PlatformRegistry.Reference<MenuType<M>> ref, MenuScreens.ScreenConstructor<M, S> factory) {
+    public static <M extends AbstractContainerMenu, S extends Screen & MenuAccess<M>> void registerScreenFactory(Reference<MenuType<M>> ref, MenuScreens.ScreenConstructor<M, S> factory) {
         Holder<M, S> holder = new Holder<>(ref, factory);
         holders.add(holder);
     }
@@ -33,5 +33,5 @@ public final class MenuScreenRegistration {
         holders = null;
     }
 
-    private record Holder<M extends AbstractContainerMenu, S extends Screen & MenuAccess<M>>(PlatformRegistry.Reference<MenuType<M>> referenceHolder, MenuScreens.ScreenConstructor<M, S> factory) {}
+    private record Holder<M extends AbstractContainerMenu, S extends Screen & MenuAccess<M>>(Reference<MenuType<M>> referenceHolder, MenuScreens.ScreenConstructor<M, S> factory) {}
 }

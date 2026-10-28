@@ -1,26 +1,37 @@
 package team.tnt.collectorsalbum;
 
+import com.mojang.serialization.MapCodec;
 import dev.toma.configuration.Configuration;
 import dev.toma.configuration.config.format.ConfigFormats;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import team.tnt.collectorsalbum.common.init.ItemDataComponentRegistry;
+import team.tnt.collectorsalbum.common.AlbumCategory;
+import team.tnt.collectorsalbum.common.card.AlbumCard;
+import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.item.PackContents;
 import team.tnt.collectorsalbum.common.resource.AlbumCardManager;
 import team.tnt.collectorsalbum.common.resource.CardPackDropManager;
+import team.tnt.collectorsalbum.common.resource.bonus.AlbumBonus;
 import team.tnt.collectorsalbum.common.resource.drops.ItemDropProvider;
+import team.tnt.collectorsalbum.common.resource.function.NumberProvider;
 import team.tnt.collectorsalbum.common.resource.util.ActionContext;
 import team.tnt.collectorsalbum.common.resource.util.ListBasedOutputBuilder;
 import team.tnt.collectorsalbum.common.tracking.PlayerAlbumTracker;
@@ -30,7 +41,9 @@ import team.tnt.collectorsalbum.integrations.trinkets_updated.TrinketsUpdatedPlu
 import team.tnt.collectorsalbum.network.NetworkManager;
 import team.tnt.collectorsalbum.network.S2C_OpenCardPackScreen;
 import team.tnt.collectorsalbum.network.S2C_SendDatapackResources;
+import team.tnt.collectorsalbum.platform.Platform;
 import team.tnt.collectorsalbum.platform.network.PlatformNetworkManager;
+import team.tnt.collectorsalbum.platform.registration.RegistrationManager;
 import team.tnt.collectorsalbum.util.PageInfo;
 
 import java.util.Collections;
@@ -44,12 +57,43 @@ public class CollectorsAlbum {
     public static final StreamCodec<ByteBuf, PageInfo<Identifier>> ALBUM_PAGE_STREAM_CODEC = PageInfo.streamCodec(Identifier.STREAM_CODEC);
     private static CollectorsAlbumConfig config;
 
+    // Custom registries
+    @Deprecated public static final Registry<MapCodec<? extends AlbumCard>> CARD_TYPE = Platform.INSTANCE.createRegistry(MOD_ID, "card_type");
+    @Deprecated public static final Registry<MapCodec<? extends AlbumCategory>> CATEGORY = Platform.INSTANCE.createRegistry(MOD_ID, "category");
+    public static final Registry<MapCodec<? extends NumberProvider>> NUMBER_PROVIDER = Platform.INSTANCE.createRegistry(MOD_ID, "number_provider");
+    public static final Registry<MapCodec<? extends ItemDropProvider>> ITEM_DROP_PROVIDER = Platform.INSTANCE.createRegistry(MOD_ID, "item_drop_provider");
+    public static final Registry<MapCodec<? extends AlbumBonus>> ALBUM_BONUS = Platform.INSTANCE.createRegistry(MOD_ID, "album_bonus");
+
+    // Registry managers
+    public static final RegistrationManager<DataComponentType<?>> DATA_COMPONENT_REGISTRY = Platform.INSTANCE.createRegistryManager(BuiltInRegistries.DATA_COMPONENT_TYPE);
+    public static final RegistrationManager<Item> ITEM_REGISTRY = Platform.INSTANCE.createRegistryManager(BuiltInRegistries.ITEM);
+    public static final RegistrationManager<CreativeModeTab> ITEM_GROUP_REGISTRY = Platform.INSTANCE.createRegistryManager(BuiltInRegistries.CREATIVE_MODE_TAB);
+    public static final RegistrationManager<SoundEvent> SOUND_REGISTRY = Platform.INSTANCE.createRegistryManager(BuiltInRegistries.SOUND_EVENT);
+    public static final RegistrationManager<MenuType<?>> MENU_REGISTRY = Platform.INSTANCE.createRegistryManager(BuiltInRegistries.MENU);
+    @Deprecated public static final RegistrationManager<MapCodec<? extends AlbumCard>> CARD_TYPE_REGISTRY = Platform.INSTANCE.createRegistryManager(CARD_TYPE);
+    @Deprecated public static final RegistrationManager<MapCodec<? extends AlbumCategory>> CATEGORY_REGISTRY = Platform.INSTANCE.createRegistryManager(CATEGORY);
+    public static final RegistrationManager<MapCodec<? extends NumberProvider>> NUMBER_PROVIDER_REGISTRY = Platform.INSTANCE.createRegistryManager(NUMBER_PROVIDER);
+    public static final RegistrationManager<MapCodec<? extends ItemDropProvider>> ITEM_DROP_PROVIDER_REGISTRY = Platform.INSTANCE.createRegistryManager(ITEM_DROP_PROVIDER);
+    public static final RegistrationManager<MapCodec<? extends AlbumBonus>> ALBUM_BONUS_REGISTRY = Platform.INSTANCE.createRegistryManager(ALBUM_BONUS);
+
     public static final Component WARN_NO_DROPS = Component.translatable("collectorsalbum.label.pack_empty").withStyle(ChatFormatting.GOLD);
     public static final Component USAGE = Component.translatable("collectorsalbum.label.use_open").withStyle(ChatFormatting.GRAY);
     public static final Component LABEL_UNSET = Component.translatable("collectorsalbum.label.not_set").withStyle(ChatFormatting.RED);
 
     public static void init() {
         config = Configuration.registerConfig(CollectorsAlbumConfig.class, ConfigFormats.YAML).getConfigInstance();
+
+        ItemDataComponentRegistry.init(DATA_COMPONENT_REGISTRY);
+        ItemRegistry.init(ITEM_REGISTRY);
+        ItemGroupRegistry.init(ITEM_GROUP_REGISTRY);
+        SoundRegistry.init(SOUND_REGISTRY);
+        MenuRegistry.init(MENU_REGISTRY);
+        CardTypeRegistry.init(CARD_TYPE_REGISTRY);
+        CategoryRegistry.init(CATEGORY_REGISTRY);
+        NumberProviderRegistry.init(NUMBER_PROVIDER_REGISTRY);
+        ItemDropProviderRegistry.init(ITEM_DROP_PROVIDER_REGISTRY);
+        AlbumBonusRegistry.init(ALBUM_BONUS_REGISTRY);
+
         registerPackets();
         PlatformIntegrations.registerStartupPlugin("trinkets_updated", TrinketsUpdatedPlugin::instance);
         PlatformIntegrations.onStartup();

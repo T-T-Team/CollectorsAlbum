@@ -9,8 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import team.tnt.collectorsalbum.CollectorsAlbum;
 import team.tnt.collectorsalbum.common.AlbumCategory;
-import team.tnt.collectorsalbum.common.CollectorsAlbumRegistries;
 import team.tnt.collectorsalbum.common.resource.AlbumCategoryManager;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.function.Predicate;
 
 public interface AlbumCard extends Comparable<AlbumCard>, Predicate<CardFilter> {
 
-    Codec<AlbumCard> CODEC = CollectorsAlbumRegistries.CARD_TYPE.byNameCodec().dispatch(AlbumCard::codec, Function.identity());
+    Codec<AlbumCard> CODEC = CollectorsAlbum.CARD_TYPE.byNameCodec().dispatch(AlbumCard::codec, Function.identity());
 
     Identifier identifier();
 

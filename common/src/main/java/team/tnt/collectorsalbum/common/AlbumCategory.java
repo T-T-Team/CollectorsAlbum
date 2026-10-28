@@ -5,12 +5,13 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import team.tnt.collectorsalbum.CollectorsAlbum;
 
 import java.util.function.Function;
 
 public interface AlbumCategory {
 
-    Codec<AlbumCategory> CODEC = CollectorsAlbumRegistries.CATEGORY.byNameCodec().dispatch(AlbumCategory::codec, Function.identity());
+    Codec<AlbumCategory> CODEC = CollectorsAlbum.CATEGORY.byNameCodec().dispatch(AlbumCategory::codec, Function.identity());
 
     Identifier identifier();
 

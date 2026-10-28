@@ -19,14 +19,15 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import team.tnt.collectorsalbum.client.CollectorsAlbumClient;
 import team.tnt.collectorsalbum.common.command.CollectorsAlbumCommand;
 import team.tnt.collectorsalbum.common.init.*;
 import team.tnt.collectorsalbum.common.resource.*;
 import team.tnt.collectorsalbum.integrations.PlatformIntegrations;
 import team.tnt.collectorsalbum.integrations.curios.CuriosPlugin;
+import team.tnt.collectorsalbum.platform.NeoforgePlatform;
 import team.tnt.collectorsalbum.platform.network.NeoforgeNetwork;
-import team.tnt.collectorsalbum.platform.registration.NeoforgeRegistration;
 
 import java.util.stream.Stream;
 
@@ -39,17 +40,8 @@ public class CollectorsAlbumNeoforge {
 
         eventBus.addListener(this::addRegistries);
         eventBus.addListener(this::clientSetup);
-        NeoforgeRegistration.subscribeRegistryEvent(eventBus, BlockRegistry.REGISTRY);
-        NeoforgeRegistration.subscribeRegistryEvent(eventBus, ItemRegistry.REGISTRY);
-        NeoforgeRegistration.subscribeRegistryEvent(eventBus, ItemGroupRegistry.REGISTRY);
-        NeoforgeRegistration.subscribeRegistryEvent(eventBus, CardTypeRegistry.REGISTRY);
-        NeoforgeRegistration.subscribeRegistryEvent(eventBus, CategoryRegistry.REGISTRY);
-        NeoforgeRegistration.subscribeRegistryEvent(eventBus, SoundRegistry.REGISTRY);
-        NeoforgeRegistration.subscribeRegistryEvent(eventBus, NumberProviderRegistry.REGISTRY);
-        NeoforgeRegistration.subscribeRegistryEvent(eventBus, ItemDropProviderRegistry.REGISTRY);
-        NeoforgeRegistration.subscribeRegistryEvent(eventBus, ItemDataComponentRegistry.REGISTRY);
-        NeoforgeRegistration.subscribeRegistryEvent(eventBus, AlbumBonusRegistry.REGISTRY);
-        NeoforgeRegistration.subscribeRegistryEvent(eventBus, MenuRegistry.REGISTRY);
+        eventBus.addListener((RegisterEvent event) -> NeoforgePlatform.bootstrapRegistries(event));
+
         NeoforgeNetwork.subscribeRegistryEvent(eventBus, CollectorsAlbum.NETWORK_MANAGER);
 
         IEventBus neoBus = NeoForge.EVENT_BUS;
@@ -95,7 +87,11 @@ public class CollectorsAlbumNeoforge {
     }
 
     private void addRegistries(NewRegistryEvent event) {
-        NeoforgeRegistration.bindNewRegistries(event);
+        event.register(CollectorsAlbum.CARD_TYPE);
+        event.register(CollectorsAlbum.CATEGORY);
+        event.register(CollectorsAlbum.NUMBER_PROVIDER);
+        event.register(CollectorsAlbum.ITEM_DROP_PROVIDER);
+        event.register(CollectorsAlbum.ALBUM_BONUS);
     }
 
     private void addCommands(RegisterCommandsEvent event) {
